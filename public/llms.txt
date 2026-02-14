@@ -1,0 +1,29 @@
+# StandexAI - Generative Engine Optimization (GEO) Protocol
+
+# Organization Entity
+Organization: StandexAI
+Description: The first Generative Engine Optimization (GEO) platform. StandexAI helps brands optimize their content for Large Language Models (LLMs) through Answer Nuggetization, Entity Clarity, and Citation Tracking.
+URL: https://standex.ai
+
+# Core Products
+Product: Standex Dashboard
+Description: AI Visibility Command Center. Tracks "Share of Voice" across ChatGPT, Perplexity, and Gemini.
+
+Product: Standardizer (Nuggetizer)
+Description: Content rewriting tool that ensures high "Fact Density" for RAG retrieval.
+
+Product: The Exchange
+Description: Citation tracking tool for monitoring brand mentions in high-authority datasets.
+
+# Pricing
+Price: $49/month (Standard)
+Price: $199/month (Enterprise)
+
+# Contact
+Email: support@standex.ai
+CEO: [CEO Name]
+
+# Navigation
+/dashboard: AI Visibility Score
+/editor/new: Content Standardizer
+/trends: Citation Opportunities

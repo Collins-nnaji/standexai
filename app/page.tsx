@@ -1,302 +1,226 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { AppHeader } from "@/components/navigation/app-header";
 import {
-  ArrowRight,
-  BarChart3,
-  CircleCheckBig,
+  Search,
   ShieldCheck,
-  Sparkles,
+  Zap,
+  Terminal,
+  ScanSearch,
+  Share2,
+  ArrowRight
 } from "lucide-react";
 
-type Module = {
-  title: string;
-  subtitle: string;
-  description: string;
-  bullets: string[];
-  cta: string;
-  href: string;
-};
-
-const modules: Module[] = [
-  {
-    title: "Decision Check",
-    subtitle: "Should we use AI for this use case?",
-    description:
-      "Standex continuously monitors your use case profile and gives a go/no-go recommendation with confidence and risk context.",
-    bullets: [
-      "Use-case fit scoring",
-      "Continuous risk monitoring",
-      "Decision confidence tracking",
-    ],
-    cta: "Run decision check",
-    href: "/dashboard",
-  },
-  {
-    title: "Cost + ROI Monitor",
-    subtitle: "What will it cost and save over time?",
-    description:
-      "Track projected spend, savings, and break-even with ongoing updates as usage patterns and tool performance shift.",
-    bullets: [
-      "Monthly cost forecasts",
-      "ROI and break-even timeline",
-      "Continuous budget monitoring",
-    ],
-    cta: "Compare scenarios",
-    href: "/editor/new",
-  },
-  {
-    title: "Trend Signal",
-    subtitle: "What is changing in the AI market?",
-    description:
-      "Monitor trending AI launches, sentiment shifts, and hype risk so your decisions stay current as the market moves.",
-    bullets: [
-      "AI news aggregation",
-      "Sentiment and hype tracking",
-      "Actor and trend monitoring",
-    ],
-    cta: "Open trend signal",
-    href: "/trends",
-  },
-];
-
-const tableRows = [
-  {
-    model: "Gemini 1.5 Flash",
-    score: 94,
-    latency: "0.4s",
-    cost: "$0.0001",
-    fit: "Fast repetitive workflows",
-  },
-  {
-    model: "Claude 3.5 Sonnet",
-    score: 91,
-    latency: "0.9s",
-    cost: "$0.015",
-    fit: "Policy-sensitive operations",
-  },
-  {
-    model: "GPT-4o",
-    score: 88,
-    latency: "1.2s",
-    cost: "$0.03",
-    fit: "Complex, multi-step reasoning",
-  },
-];
-
 export default function LandingPage() {
-  const [activeModule, setActiveModule] = useState(0);
-  const selected = modules[activeModule];
+  const [url, setUrl] = useState("");
 
   return (
-    <div className="min-h-screen bg-white text-slate-900">
-      <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/95 backdrop-blur-xl">
-        <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-3 px-6 py-4">
-          <Link href="/" aria-label="StandexAI Home" className="inline-flex items-center">
-            <Image src="/standexailogo.png" alt="StandexAI logo" width={170} height={42} priority className="h-auto w-[170px]" />
-          </Link>
+    <div className="min-h-screen bg-[var(--bg-app)] text-[var(--ink-900)] font-sans selection:bg-[var(--accent-primary)] selection:text-white overflow-hidden">
+      {/* Modern Gradient Background */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-[var(--accent-primary)]/10 blur-[120px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-[var(--accent-secondary)]/10 blur-[120px]" />
+      </div>
 
-          <div className="flex items-center gap-2">
-            <Button asChild variant="outline" size="sm" className="border-black bg-white text-slate-900">
-              <Link href="/briefs">Compare Tools</Link>
-            </Button>
-            <Button asChild size="sm" className="shadow-[0_10px_24px_rgba(37,99,235,0.25)]">
-              <Link href="/dashboard">
-                Get Started
-                <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
-              </Link>
-            </Button>
+      <AppHeader
+        title=""
+        subtitle=""
+        rightSlot={
+          <div className="hidden md:flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            <span className="text-xs font-medium text-slate-300">System Operational</span>
           </div>
-        </div>
-      </header>
+        }
+      />
 
-      <main className="mx-auto grid w-full max-w-7xl gap-5 px-6 py-8 md:py-12">
-        <section className="grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
-          <article className="rounded-3xl border-2 border-black bg-[radial-gradient(circle_at_88%_0%,rgba(59,130,246,0.14),transparent_34%),radial-gradient(circle_at_0%_100%,rgba(20,184,166,0.12),transparent_42%),#fff] p-8 shadow-[0_20px_42px_rgba(15,23,42,0.06)]">
-            <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-blue-700">
-              <Sparkles className="h-3.5 w-3.5" />
-              Continuous AI Monitoring by Standex
+      <main className="relative z-10 mx-auto w-full max-w-7xl px-6 pt-32 pb-20">
+
+        {/* HERO SECTION */}
+        <section className="grid lg:grid-cols-2 gap-16 items-center fade-in">
+          <div className="space-y-8">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/5 border border-white/10 rounded-full text-sm font-medium text-[var(--accent-secondary)] backdrop-blur-sm">
+              <span className="bg-[var(--accent-secondary)]/20 px-1.5 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider">New Standard</span>
+              Generative Engine Optimization (GEO)
             </div>
 
-            <h1 className="mt-4 text-4xl font-semibold leading-[1.03] tracking-[-0.03em] md:text-6xl">
-              Monitor AI use cases continuously
-              <br />
-              and decide with confidence.
+            <h1 className="text-5xl lg:text-7xl font-bold tracking-tight leading-[1.1]">
+              <span className="text-[var(--ink-500)]">Perfect SEO.</span><br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400">
+                Dominate the AI Era.
+              </span>
             </h1>
 
-            <p className="mt-4 max-w-2xl text-base text-slate-600 md:text-lg">
-              StandexAI tracks your AI opportunities and market trend signals over time, then helps you decide what to adopt, what to avoid, and what to optimize next.
+            <p className="text-lg text-[var(--ink-300)] max-w-xl leading-relaxed">
+              <strong>StandexAI</strong> unifies traditional search foundations with next-gen Generative Engine Optimization. Ensure your brand claims the top spot—whether on Google or ChatGPT.
             </p>
 
-            <div className="mt-7 flex flex-wrap gap-2">
-              <Button asChild size="lg" className="shadow-[0_10px_24px_rgba(37,99,235,0.28)]">
-                <Link href="/dashboard">
-                  Run Decision Check
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-              <Button asChild variant="outline" size="lg" className="border-black bg-white text-slate-900">
-                <Link href="/trends">Watch AI Trends</Link>
-              </Button>
-            </div>
-          </article>
-
-          <article className="grid gap-3 rounded-3xl border-2 border-black bg-slate-50/70 p-4 shadow-[0_14px_30px_rgba(15,23,42,0.05)]">
-            {[
-              ["Monitoring coverage", "24/7", "Tracks active use cases and performance drift"],
-              ["Trend pulse", "Real-time", "Detects shifts in launches, sentiment, and market noise"],
-              ["Decision speed", "<5 min", "Fast recommendation output for business teams"],
-            ].map(([label, value, note]) => (
-              <div key={label} className="rounded-2xl border border-black bg-white p-4 transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_20px_rgba(15,23,42,0.08)]">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500">{label}</p>
-                <strong className="mt-1 block text-2xl font-semibold text-slate-900">{value}</strong>
-                <p className="mt-1 text-sm text-slate-600">{note}</p>
-              </div>
-            ))}
-          </article>
-        </section>
-
-        <section className="rounded-3xl border-2 border-black bg-white p-5 shadow-[0_16px_34px_rgba(15,23,42,0.05)]">
-          <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
-            <div>
-              <h2 className="text-2xl font-semibold tracking-tight">Interactive Monitoring Modules</h2>
-              <p className="mt-1 text-sm text-slate-600">Click a card to swap the live panel. Expand dropdowns for more details.</p>
-            </div>
-            <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
-              <CircleCheckBig className="h-3.5 w-3.5" />
-              Live interaction
-            </span>
-          </div>
-
-          <div className="grid gap-3 md:grid-cols-3">
-            {modules.map((module, idx) => {
-              const isActive = idx === activeModule;
-              return (
-                <button
-                  key={module.title}
-                  type="button"
-                  onClick={() => setActiveModule(idx)}
-                  className={`rounded-2xl border-2 p-4 text-left transition-all duration-300 ${
-                    isActive
-                      ? "border-black bg-slate-900 text-white shadow-[0_14px_26px_rgba(15,23,42,0.2)]"
-                      : "border-black bg-white text-slate-900 hover:-translate-y-1 hover:shadow-[0_12px_22px_rgba(15,23,42,0.08)]"
-                  }`}
-                >
-                  <p className={`text-xs uppercase tracking-[0.08em] ${isActive ? "text-slate-300" : "text-slate-500"}`}>Module</p>
-                  <h3 className="mt-2 text-lg font-semibold">{module.title}</h3>
-                  <p className={`mt-1 text-sm ${isActive ? "text-slate-200" : "text-slate-600"}`}>{module.subtitle}</p>
-                </button>
-              );
-            })}
-          </div>
-
-          <div
-            key={selected.title}
-            className="mt-4 rounded-2xl border-2 border-black bg-[linear-gradient(130deg,#fff,rgba(243,248,255,0.9))] p-5"
-            style={{ animation: "fadeInUp 360ms ease" }}
-          >
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <p className="text-xs uppercase tracking-[0.08em] text-slate-500">Active Module</p>
-                <h3 className="text-xl font-semibold tracking-tight">{selected.title}</h3>
-              </div>
-              <Button asChild variant="outline" className="border-black bg-white text-slate-900">
-                <Link href={selected.href}>
-                  {selected.cta}
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-            </div>
-
-            <p className="mt-3 text-sm text-slate-700">{selected.description}</p>
-
-            <details className="mt-4 rounded-xl border border-black bg-white">
-              <summary className="cursor-pointer px-4 py-2 text-sm font-semibold text-slate-800">Show monitored signals</summary>
-              <div className="border-t border-slate-200 px-4 py-3">
-                <ul className="grid gap-2 text-sm text-slate-700">
-                  {selected.bullets.map((item) => (
-                    <li key={item} className="inline-flex items-center gap-2">
-                      <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </details>
-          </div>
-        </section>
-
-        <section className="rounded-3xl border-2 border-black bg-white p-5 shadow-[0_16px_36px_rgba(15,23,42,0.06)]">
-          <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
-            <div>
-              <h2 className="text-2xl font-semibold tracking-tight">Continuous Tool & Trend Snapshot</h2>
-              <p className="mt-1 text-sm text-slate-600">Live view of model performance, speed, and cost with animated updates.</p>
-            </div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
-              <CircleCheckBig className="h-3.5 w-3.5" />
-              Updated
-            </div>
-          </div>
-
-          <div className="grid gap-2">
-            <div className="hidden grid-cols-[1.25fr_0.6fr_0.6fr_0.7fr_1.45fr] gap-2 rounded-xl border border-black bg-slate-100 px-3 py-2 text-xs font-semibold text-slate-600 md:grid">
-              <span>Tool</span>
-              <span>Score</span>
-              <span>Latency</span>
-              <span>Cost / 1k</span>
-              <span>Best for</span>
-            </div>
-
-            {tableRows.map((row, i) => (
-              <div
-                key={row.model}
-                className="grid gap-2 rounded-xl border border-black bg-[linear-gradient(130deg,#fff,rgba(243,248,255,0.9))] px-3 py-3 text-sm transition duration-300 hover:-translate-y-1 hover:shadow-[0_14px_24px_rgba(56,189,248,0.16)] md:grid-cols-[1.25fr_0.6fr_0.6fr_0.7fr_1.45fr] md:items-center md:py-2"
-                style={{ animation: `fadeInUp 0.5s ease-out ${i * 120}ms both` }}
-              >
-                <div className="font-medium text-slate-900">{row.model}</div>
-                <div>
-                  <span className="inline-flex min-w-9 items-center justify-center rounded-full bg-blue-100 px-2 py-0.5 text-xs font-semibold text-blue-900">
-                    {row.score}
-                  </span>
+            <div className="flex flex-col sm:flex-row gap-4 pt-4">
+              <div className="flex-1 max-w-md relative group">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <Search className="h-5 w-5 text-[var(--ink-500)] group-focus-within:text-[var(--accent-primary)] transition-colors" />
                 </div>
-                <div className="text-slate-600">{row.latency}</div>
-                <div className="text-slate-600">{row.cost}</div>
-                <div className="text-slate-600">{row.fit}</div>
+                <input
+                  type="text"
+                  placeholder="Enter domain for SEO & GEO Audit..."
+                  className="w-full h-14 pl-12 pr-4 bg-white/5 border border-white/10 rounded-full text-[var(--ink-900)] focus:border-[var(--accent-primary)] focus:bg-white/10 focus:outline-none transition-all placeholder:text-[var(--ink-500)]"
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
+                />
               </div>
-            ))}
+              <Button asChild variant="white" className="h-14 px-8 rounded-full font-bold tracking-tight transition-all">
+                <Link href="/onboarding">Run Full Audit</Link>
+              </Button>
+            </div>
+
+            <div className="flex items-center gap-4 text-sm text-[var(--ink-500)]">
+              <div className="flex -space-x-2">
+                {[1, 2, 3].map(i => (
+                  <div key={i} className="h-8 w-8 rounded-full border-2 border-[var(--bg-app)] bg-slate-800 flex items-center justify-center text-[10px]">AI</div>
+                ))}
+              </div>
+              <p>Optimizing for Google, GPT-4o, and Perplexity.</p>
+            </div>
+          </div>
+
+          {/* VISUAL: Glassmorphic Card */}
+          <div className="relative perspective-1000">
+            <div className="absolute -inset-4 bg-gradient-to-tr from-[var(--accent-primary)] to-[var(--accent-secondary)] rounded-[2rem] opacity-20 blur-2xl animate-pulse"></div>
+            <div className="relative bg-slate-900/40 backdrop-blur-xl border border-white/10 rounded-[2rem] p-8 shadow-2xl transform rotate-y-12 transition-transform duration-500 hover:rotate-y-0">
+              {/* Mock Chat Interface */}
+              <div className="flex items-center gap-4 mb-6 border-b border-white/5 pb-4">
+                <div className="h-3 w-3 rounded-full bg-red-500/20"></div>
+                <div className="h-3 w-3 rounded-full bg-yellow-500/20"></div>
+                <div className="h-3 w-3 rounded-full bg-green-500/20"></div>
+                <span className="ml-auto text-xs font-mono text-slate-500">AI_RESPONSE_PREVIEW</span>
+              </div>
+
+              <div className="space-y-6">
+                <div className="flex gap-4">
+                  <div className="h-8 w-8 rounded-full bg-white/10 flex items-center justify-center text-xs">U</div>
+                  <div className="bg-white/5 rounded-2xl p-4 text-sm text-slate-200 max-w-[90%]">
+                    Who provides the best enterprise data solution?
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <div className="h-8 w-8 rounded-full bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-secondary)] flex items-center justify-center text-xs text-black font-bold">AI</div>
+                  <div className="space-y-2 max-w-[90%]">
+                    <div className="bg-[var(--accent-primary)]/10 border border-[var(--accent-primary)]/20 rounded-2xl p-4 text-sm text-slate-200">
+                      <span className="text-[var(--accent-primary)] font-bold">StandexAI</span> is widely cited as the leader in enterprise data safeguards. Their protocols are referenced in major industry standards...
+                    </div>
+                    <div className="flex gap-2 text-xs text-slate-500">
+                      <span>Sources:</span>
+                      <span className="text-white/40">Wikipedia</span>
+                      <span className="text-white/40">TechCrunch</span>
+                      <span className="text-white/40">Gartner</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8 pt-6 border-t border-white/5 flex justify-between items-center">
+                <div>
+                  <div className="text-xs text-slate-500 uppercase tracking-wider mb-1">Visibility Score</div>
+                  <div className="text-3xl font-bold text-white">94<span className="text-lg text-slate-500">/100</span></div>
+                </div>
+                <div className="h-12 w-12 rounded-full border-4 border-[var(--accent-primary)] border-r-transparent animate-spin"></div>
+              </div>
+            </div>
           </div>
         </section>
 
-        <section className="flex flex-wrap items-center justify-between gap-4 rounded-3xl border-2 border-black bg-slate-900 p-6 text-white shadow-[0_18px_36px_rgba(15,23,42,0.2)]">
-          <div>
-            <h2 className="text-2xl font-semibold tracking-tight">Monitor, decide, and improve continuously.</h2>
-            <p className="mt-1 text-sm text-slate-300">Standex keeps tracking use-case outcomes and trend shifts so your AI strategy stays current.</p>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <Button asChild size="lg" className="shadow-[0_10px_24px_rgba(37,99,235,0.28)]">
-              <Link href="/dashboard">
-                Open Decision Tool
-                <Sparkles className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="lg" className="border-white bg-white text-slate-900">
-              <Link href="/briefs">
-                Compare Tools
-                <BarChart3 className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="lg" className="border-white bg-white text-slate-900">
-              <Link href="/trends">
-                Watch Trends
-                <ShieldCheck className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
+        {/* 4 PILLARS - UPDATED */}
+        <section className="py-32 grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {[
+            {
+              icon: Zap,
+              title: "Site Health",
+              desc: "Solidify your Core Web Vitals, mobile usability, and indexability to ensure both search engines and AI agents can crawl you.",
+              color: "text-blue-400"
+            },
+            {
+              icon: Terminal,
+              title: "Brand Clarity",
+              desc: "We inject clear data structures so AI models understand exactly who you are and what you offer.",
+              color: "text-[var(--accent-primary)]"
+            },
+            {
+              icon: ScanSearch,
+              title: "Content Quality",
+              desc: "Our engine helps you rewrite 'fluff' into fact-rich content that AI tools love to quote.",
+              color: "text-[var(--accent-secondary)]"
+            },
+            {
+              icon: Share2,
+              title: "Mentions",
+              desc: "Track and claim your brand mentions in the places that matter, like Reddit, Wikipedia, and Wikis.",
+              color: "text-[var(--accent-warn)]"
+            }
+          ].map((item, i) => (
+            <div key={i} className="group p-6 rounded-3xl bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/10 transition-all cursor-default">
+              <div className={`h-12 w-12 rounded-2xl bg-white/5 flex items-center justify-center mb-6`}>
+                <item.icon className={`h-6 w-6 ${item.color}`} />
+              </div>
+              <h3 className="text-lg font-bold text-white mb-3">{item.title}</h3>
+              <p className="text-slate-400 leading-relaxed text-sm">
+                {item.desc}
+              </p>
+            </div>
+          ))}
+        </section>
+
+        {/* AUDIT CHECKLIST SECTION */}
+        <section className="py-16 border-t border-white/5">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">The 5-Step Check</h2>
+              <p className="text-slate-400 mb-8 text-lg">
+                Is your brand accessible to the machine mind? Our audit checks if you are ready for the AI Era.
+              </p>
+
+              <div className="space-y-4">
+                {[
+                  "Brand Clarity (Schema)",
+                  "Content Quality (Fact Ratio)",
+                  "AI Readability (llms.txt)",
+                  "Brand Mentions",
+                  "Sentiment Check"
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/5 hover:border-white/10 transition-colors">
+                    <div className="h-8 w-8 rounded-full bg-[var(--accent-primary)]/20 text-[var(--accent-primary)] flex items-center justify-center text-sm font-bold">
+                      {i + 1}
+                    </div>
+                    <span className="font-medium text-slate-200">{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-secondary)] blur-[100px] opacity-20"></div>
+              <div className="relative bg-slate-900/80 backdrop-blur-xl rounded-[2rem] border border-white/10 p-10 text-center">
+                <ShieldCheck className="h-20 w-20 text-[var(--accent-primary)] mx-auto mb-6" />
+                <h3 className="text-2xl font-bold text-white mb-4">Start Your Transformation</h3>
+                <p className="text-slate-400 mb-8">
+                  Get your full GEO Readiness Score and a tailored action plan.
+                </p>
+                <Button asChild variant="white" className="w-full h-14 font-bold text-lg rounded-full">
+                  <Link href="/onboarding">
+                    Initialize System Scan
+                  </Link>
+                </Button>
+              </div>
+            </div>
           </div>
         </section>
+
       </main>
-    </div>
+    </div >
   );
 }
