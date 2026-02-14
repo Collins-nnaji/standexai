@@ -5,10 +5,10 @@
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
-  /* Backgrounds */
-  --bg-app: #050505;
-  --bg-panel: #0A0A0A;
-  --bg-card: #111111;
+  /* Backgrounds - Deep Slate Theme */
+  --bg-app: #0B0E14;
+  --bg-panel: #151922;
+  --bg-card: #1E2330;
 
   /* Text */
   --ink-900: #EDEDED;
@@ -52,6 +52,30 @@
   --border: 0 0% 12%;
   --input: 0 0% 12%;
   --ring: 155 100% 50%;
+}
+
+.theme-light {
+  /* Backgrounds - Clean Light Theme */
+  --bg-app: #F8FAFC;
+  /* Slate 50 */
+  --bg-panel: #FFFFFF;
+  /* White */
+  --bg-card: #F1F5F9;
+  /* Slate 100 */
+
+  /* Text */
+  --ink-900: #0F172A;
+  /* Slate 900 */
+  --ink-500: #64748B;
+  /* Slate 500 */
+  --ink-300: #94A3B8;
+  /* Slate 400 */
+
+  /* Borders */
+  --line: #E2E8F0;
+  /* Slate 200 */
+  --line-active: #CBD5E1;
+  /* Slate 300 */
 }
 
 body {

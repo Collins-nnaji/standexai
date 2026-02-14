@@ -15,10 +15,7 @@ type AppHeaderProps = {
 };
 
 const NAV_ITEMS = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/vault", label: "Brand Facts", icon: Lock },
-  { href: "/editor/new", label: "Editor", icon: BrainCircuit },
-  { href: "/trends", label: "Opportunities", icon: Signal },
+  { href: "/dashboard", label: "Platform", icon: LayoutDashboard },
 ];
 
 export function AppHeader({ title, subtitle, rightSlot }: AppHeaderProps) {
