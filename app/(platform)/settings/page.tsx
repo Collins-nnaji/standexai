@@ -1,15 +1,40 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { User, Building2, Shield, Bell, Key } from "lucide-react";
+
+type ProfileData = {
+  id: string;
+  email: string;
+  name: string;
+  role: "ADMIN" | "WRITER" | "REVIEWER" | "VIEWER";
+  industry: "FINTECH" | "INSURANCE" | "HEALTHCARE" | "LENDING" | "SAAS" | "INVESTMENT" | "CRYPTO" | null;
+  companyName: string;
+  avatar: string;
+};
+
+const emptyProfile: ProfileData = {
+  id: "",
+  email: "",
+  name: "",
+  role: "WRITER",
+  industry: null,
+  companyName: "",
+  avatar: "",
+};
 
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState("profile");
+  const [profile, setProfile] = useState<ProfileData>(emptyProfile);
+  const [loadingProfile, setLoadingProfile] = useState(true);
+  const [savingProfile, setSavingProfile] = useState(false);
+  const [saveMessage, setSaveMessage] = useState<string | null>(null);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   const tabs = [
     { id: "profile", label: "Profile", icon: User },
     { id: "company", label: "Company", icon: Building2 },
-    { id: "compliance", label: "Compliance Rules", icon: Shield },
+    { id: "compliance", label: "Policy & Compliance", icon: Shield },
     { id: "notifications", label: "Notifications", icon: Bell },
     { id: "api", label: "API Keys", icon: Key },
   ];
@@ -56,22 +81,66 @@ export default function SettingsPage() {
     },
   ];
 
+  useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        setLoadingProfile(true);
+        const response = await fetch("/api/settings/profile", { cache: "no-store" });
+        const data = (await response.json()) as { profile?: ProfileData; error?: string };
+        if (!response.ok) throw new Error(data.error || "Failed to load profile");
+        if (data.profile) setProfile(data.profile);
+      } catch (error) {
+        setSaveError(error instanceof Error ? error.message : "Failed to load profile");
+      } finally {
+        setLoadingProfile(false);
+      }
+    };
+    void loadProfile();
+  }, []);
+
+  const persistProfile = async (successMessage: string) => {
+    try {
+      setSavingProfile(true);
+      setSaveError(null);
+      setSaveMessage(null);
+      const response = await fetch("/api/settings/profile", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: profile.name,
+          role: profile.role,
+          companyName: profile.companyName,
+          industry: profile.industry,
+          avatar: profile.avatar,
+        }),
+      });
+      const data = (await response.json()) as { profile?: ProfileData; error?: string };
+      if (!response.ok) throw new Error(data.error || "Failed to save profile");
+      if (data.profile) setProfile(data.profile);
+      setSaveMessage(successMessage);
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : "Failed to save profile");
+    } finally {
+      setSavingProfile(false);
+    }
+  };
+
   return (
-    <div className="flex h-screen flex-col bg-white">
-      <header className="border-b border-[#E5E5EA] bg-white px-6 py-4">
+    <div className="flex min-h-screen flex-col bg-white">
+      <header className="border-b border-[#E5E5EA] bg-white px-4 py-4 sm:px-6">
         <h1 className="text-2xl font-semibold text-[#1D1D1F]">Settings</h1>
-        <p className="mt-1 text-sm text-[#6E6E73]">Manage your account and preferences</p>
+        <p className="mt-1 text-sm text-[#6E6E73]">Manage GEO audits, Content Studio guardrails, and account preferences</p>
       </header>
 
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 flex-col overflow-hidden md:flex-row">
         {/* Tabs Sidebar */}
-        <aside className="w-64 border-r border-[#E5E5EA] bg-[#F5F5F7] p-4">
-          <nav className="space-y-1">
+        <aside className="w-full border-b border-[#E5E5EA] bg-[#F5F5F7] p-3 md:w-64 md:border-b-0 md:border-r md:p-4">
+          <nav className="flex gap-2 overflow-x-auto pb-1 md:block md:space-y-1">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition ${
+                className={`flex flex-shrink-0 items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition md:w-full ${
                   activeTab === tab.id
                     ? "bg-white text-[#1D1D1F] shadow-sm"
                     : "text-[#6E6E73] hover:bg-white hover:text-[#1D1D1F]"
@@ -85,8 +154,17 @@ export default function SettingsPage() {
         </aside>
 
         {/* Content */}
-        <main className="flex-1 overflow-auto p-6">
+        <main className="flex-1 overflow-auto p-4 sm:p-6">
           <div className="mx-auto max-w-3xl">
+            {(saveError || saveMessage) && (
+              <div
+                className={`mb-4 rounded-xl border px-4 py-2.5 text-sm ${
+                  saveError ? "border-red-200 bg-red-50 text-red-700" : "border-emerald-200 bg-emerald-50 text-emerald-700"
+                }`}
+              >
+                {saveError ?? saveMessage}
+              </div>
+            )}
             {activeTab === "profile" && (
               <div className="space-y-6">
                 <div className="rounded-2xl border border-[#E5E5EA] bg-white p-6">
@@ -97,7 +175,9 @@ export default function SettingsPage() {
                       <label className="mb-2 block text-sm text-[#6E6E73]">Full Name</label>
                       <input
                         type="text"
-                        defaultValue="John Doe"
+                        value={profile.name}
+                        onChange={(e) => setProfile((prev) => ({ ...prev, name: e.target.value }))}
+                        disabled={loadingProfile}
                         className="w-full rounded-xl border border-[#E5E5EA] bg-white px-4 py-2.5 text-[#1D1D1F] outline-none focus:border-[#1D1D1F]"
                       />
                     </div>
@@ -106,26 +186,55 @@ export default function SettingsPage() {
                       <label className="mb-2 block text-sm text-[#6E6E73]">Email</label>
                       <input
                         type="email"
-                        defaultValue="john@company.com"
-                        className="w-full rounded-xl border border-[#E5E5EA] bg-white px-4 py-2.5 text-[#1D1D1F] outline-none focus:border-[#1D1D1F]"
+                        value={profile.email}
+                        readOnly
+                        className="w-full rounded-xl border border-[#E5E5EA] bg-[#F8F8FA] px-4 py-2.5 text-[#6E6E73] outline-none"
                       />
                     </div>
 
                     <div>
                       <label className="mb-2 block text-sm text-[#6E6E73]">Role</label>
-                      <select className="w-full rounded-xl border border-[#E5E5EA] bg-white px-4 py-2.5 text-[#1D1D1F] outline-none focus:border-[#1D1D1F]">
-                        <option>Writer</option>
-                        <option>Reviewer</option>
-                        <option>Admin</option>
+                      <select
+                        value={profile.role}
+                        onChange={(e) => setProfile((prev) => ({ ...prev, role: e.target.value as ProfileData["role"] }))}
+                        disabled={loadingProfile}
+                        className="w-full rounded-xl border border-[#E5E5EA] bg-white px-4 py-2.5 text-[#1D1D1F] outline-none focus:border-[#1D1D1F]"
+                      >
+                        <option value="WRITER">Writer</option>
+                        <option value="REVIEWER">Reviewer</option>
+                        <option value="ADMIN">Admin</option>
+                        <option value="VIEWER">Viewer</option>
                       </select>
+                    </div>
+
+                    <div>
+                      <label className="mb-2 block text-sm text-[#6E6E73]">Avatar URL</label>
+                      <input
+                        type="url"
+                        placeholder="https://..."
+                        value={profile.avatar}
+                        onChange={(e) => setProfile((prev) => ({ ...prev, avatar: e.target.value }))}
+                        disabled={loadingProfile}
+                        className="w-full rounded-xl border border-[#E5E5EA] bg-white px-4 py-2.5 text-[#1D1D1F] placeholder-[#AEAEB2] outline-none focus:border-[#1D1D1F]"
+                      />
                     </div>
                   </div>
 
                   <div className="mt-6 flex gap-3">
-                    <button className="rounded-full bg-[#1D1D1F] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#333]">
-                      Save Changes
+                    <button
+                      onClick={() => void persistProfile("Profile details saved.")}
+                      disabled={savingProfile || loadingProfile}
+                      className="rounded-full bg-[#1D1D1F] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#333] disabled:opacity-60"
+                    >
+                      {savingProfile ? "Saving..." : "Save Changes"}
                     </button>
-                    <button className="rounded-full border border-[#D1D1D6] px-4 py-2 text-sm font-medium text-[#6E6E73] transition hover:border-[#1D1D1F] hover:text-[#1D1D1F]">
+                    <button
+                      onClick={() => {
+                        setSaveError(null);
+                        setSaveMessage(null);
+                      }}
+                      className="rounded-full border border-[#D1D1D6] px-4 py-2 text-sm font-medium text-[#6E6E73] transition hover:border-[#1D1D1F] hover:text-[#1D1D1F]"
+                    >
                       Cancel
                     </button>
                   </div>
@@ -143,37 +252,45 @@ export default function SettingsPage() {
                       <label className="mb-2 block text-sm text-[#6E6E73]">Company Name</label>
                       <input
                         type="text"
-                        defaultValue="Acme Corporation"
+                        value={profile.companyName}
+                        onChange={(e) => setProfile((prev) => ({ ...prev, companyName: e.target.value }))}
+                        disabled={loadingProfile}
                         className="w-full rounded-xl border border-[#E5E5EA] bg-white px-4 py-2.5 text-[#1D1D1F] outline-none focus:border-[#1D1D1F]"
                       />
                     </div>
 
                     <div>
                       <label className="mb-2 block text-sm text-[#6E6E73]">Industry</label>
-                      <select className="w-full rounded-xl border border-[#E5E5EA] bg-white px-4 py-2.5 text-[#1D1D1F] outline-none focus:border-[#1D1D1F]">
-                        <option>SaaS</option>
-                        <option>Healthcare</option>
-                        <option>FinTech</option>
-                        <option>Insurance</option>
-                        <option>Lending</option>
-                        <option>Investment</option>
-                        <option>Crypto</option>
+                      <select
+                        value={profile.industry ?? ""}
+                        onChange={(e) =>
+                          setProfile((prev) => ({
+                            ...prev,
+                            industry: (e.target.value || null) as ProfileData["industry"],
+                          }))
+                        }
+                        disabled={loadingProfile}
+                        className="w-full rounded-xl border border-[#E5E5EA] bg-white px-4 py-2.5 text-[#1D1D1F] outline-none focus:border-[#1D1D1F]"
+                      >
+                        <option value="">Select industry</option>
+                        <option value="SAAS">SaaS</option>
+                        <option value="HEALTHCARE">Healthcare</option>
+                        <option value="FINTECH">FinTech</option>
+                        <option value="INSURANCE">Insurance</option>
+                        <option value="LENDING">Lending</option>
+                        <option value="INVESTMENT">Investment</option>
+                        <option value="CRYPTO">Crypto</option>
                       </select>
-                    </div>
-
-                    <div>
-                      <label className="mb-2 block text-sm text-[#6E6E73]">Website</label>
-                      <input
-                        type="url"
-                        placeholder="https://company.com"
-                        className="w-full rounded-xl border border-[#E5E5EA] bg-white px-4 py-2.5 text-[#1D1D1F] placeholder-[#AEAEB2] outline-none focus:border-[#1D1D1F]"
-                      />
                     </div>
                   </div>
 
                   <div className="mt-6">
-                    <button className="rounded-full bg-[#1D1D1F] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#333]">
-                      Update Company Info
+                    <button
+                      onClick={() => void persistProfile("Company details updated.")}
+                      disabled={savingProfile || loadingProfile}
+                      className="rounded-full bg-[#1D1D1F] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#333] disabled:opacity-60"
+                    >
+                      {savingProfile ? "Saving..." : "Update Company Info"}
                     </button>
                   </div>
                 </div>
@@ -183,9 +300,9 @@ export default function SettingsPage() {
             {activeTab === "compliance" && (
               <div className="space-y-6">
                 <div className="rounded-2xl border border-[#E5E5EA] bg-white p-6">
-                  <h2 className="mb-4 text-lg font-semibold text-[#1D1D1F]">Active Compliance Rules</h2>
+                  <h2 className="mb-4 text-lg font-semibold text-[#1D1D1F]">Policy Rules For Editor + Audits</h2>
                   <p className="mb-6 text-sm text-[#6E6E73]">
-                    Configure industry-specific compliance rules for automated content checking
+                    Configure the guardrails applied inside the writing editor and fix recommendations.
                   </p>
 
                   <div className="space-y-4">
@@ -207,7 +324,7 @@ export default function SettingsPage() {
                           </label>
                         </summary>
 
-                        <div className="mt-4 grid gap-4 md:grid-cols-3">
+                        <div className="mt-4 grid gap-4 lg:grid-cols-3">
                           <div className="rounded-lg border border-[#E5E5EA] bg-white p-3">
                             <p className="text-xs font-semibold text-[#1D1D1F]">Included Content</p>
                             <ul className="mt-2 text-xs text-[#6E6E73]">
@@ -246,7 +363,7 @@ export default function SettingsPage() {
                   <div className="mb-6 flex items-center justify-between">
                     <div>
                       <h2 className="text-lg font-semibold text-[#1D1D1F]">API Keys</h2>
-                      <p className="mt-1 text-sm text-[#6E6E73]">Manage API keys for programmatic access</p>
+                      <p className="mt-1 text-sm text-[#6E6E73]">Manage API keys for scans, reports, and editor automations</p>
                     </div>
                     <button className="rounded-full bg-[#1D1D1F] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#333]">
                       Generate New Key
@@ -279,6 +396,7 @@ export default function SettingsPage() {
                 </div>
               </div>
             )}
+
           </div>
         </main>
       </div>

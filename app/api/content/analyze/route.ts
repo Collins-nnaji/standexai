@@ -66,7 +66,7 @@ function analyzeCompliance(text: string, industry: string): ComplianceFlag[] {
   return flags;
 }
 
-function calculateScores(text: string): { seo: number; geo: number; compliance: number } {
+function calculateScores(text: string, industry: string): { seo: number; geo: number; compliance: number } {
   const wordCount = text.split(/\s+/).length;
   const hasH1 = text.includes("# ") || text.includes("<h1");
   const hasH2 = text.includes("## ") || text.includes("<h2");
@@ -83,7 +83,7 @@ function calculateScores(text: string): { seo: number; geo: number; compliance: 
   if (hasH2) geo += 15;
   if (text.includes("?")) geo += 15; // Question-based content
 
-  const flags = analyzeCompliance(text, "HEALTHCARE");
+  const flags = analyzeCompliance(text, industry);
   let compliance = 100;
   flags.forEach((flag) => {
     if (flag.severity === "CRITICAL") compliance -= 20;
@@ -104,7 +104,7 @@ export async function POST(req: Request) {
     }
 
     const flags = analyzeCompliance(text, industry);
-    const scores = calculateScores(text);
+    const scores = calculateScores(text, industry);
 
     // If contentId is provided, save analysis
     if (contentId) {

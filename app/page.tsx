@@ -1,12 +1,34 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { ArrowRight, Shield, ShieldCheck, WandSparkles, Cpu, CheckCircle2, FileText, AlertTriangle } from "lucide-react";
+import { ArrowRight, Shield, CheckCircle2, FileText, AlertTriangle, Terminal } from "lucide-react";
+import { neonAuthClient } from "@/lib/neon/auth-client";
+
+const CORE_SCROLL_LINES = [
+  "Standex-Core checks how likely AI models are to cite your brand.",
+  "It analyzes model share, sentiment, and competitor mentions.",
+  "It tracks where AI gets information: Reddit, Wikipedia, and niche sources.",
+  "It calculates a GEO Predictor Score before you publish.",
+  "It flags Hallucination Risk when your brand facts are inconsistent.",
+  "It compares your content against high-authority topic pages.",
+  "It measures your semantic gap from what AI sees as the authority.",
+  "It recommends fixes: structure, claims, citations, and llms.txt updates.",
+  "It combines GPT, Gemini, and Claude signals into one decision layer.",
+  "Output: clearer actions to improve AI visibility and citation chance.",
+  "Processing: indexing source signals...",
+  "Processing: mapping semantic alignment...",
+  "Processing: scoring citation probability...",
+  "Processing complete: Standex-Core report ready.",
+];
 
 export default function Home() {
   const router = useRouter();
+  const session = neonAuthClient.useSession();
+  const user = session.data?.user;
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const [confirmSignOut, setConfirmSignOut] = useState(false);
 
   useEffect(() => {
     const elements = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
@@ -29,10 +51,23 @@ export default function Home() {
     return () => observer.disconnect();
   }, []);
 
+  const signOut = async () => {
+    await neonAuthClient.signOut();
+    router.refresh();
+  };
+
+  const handleSignOutClick = async () => {
+    if (!confirmSignOut) {
+      setConfirmSignOut(true);
+      return;
+    }
+    await signOut();
+  };
+
   return (
     <div className="min-h-screen bg-white text-[#1D1D1F]">
       {/* Navigation */}
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
+      <nav className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6 sm:py-5">
         <div className="flex items-center gap-2">
           <Image
             src="/standexai-logo-final.png"
@@ -43,167 +78,353 @@ export default function Home() {
             priority
           />
         </div>
-        <div className="flex items-center gap-3">
+        <div className="relative ml-auto flex flex-wrap items-center justify-end gap-2 rounded-full border border-[#E5E5EA] bg-white/85 px-2 py-1.5 sm:gap-2">
           <button
             onClick={() => router.push("/dashboard")}
-            className="text-sm font-medium text-[#6E6E73] transition hover:text-[#1D1D1F]"
+            className="rounded-full px-3 py-1.5 text-[13px] font-semibold tracking-[0.01em] text-[#5A5A61] transition hover:bg-[#F5F5F7] hover:text-[#141418]"
           >
-            Dashboard
+            SEO/GEO Audit
           </button>
           <button
-            onClick={() => router.push("/dashboard")}
-            className="rounded-full border border-[#1D1D1F] px-5 py-2.5 text-sm font-medium text-[#1D1D1F] transition hover:bg-[#1D1D1F] hover:text-white"
+            onClick={() => router.push("/studio/editor")}
+            className="rounded-full px-3 py-1.5 text-[13px] font-semibold tracking-[0.01em] text-[#5A5A61] transition hover:bg-[#F5F5F7] hover:text-[#141418]"
           >
-            Get started
+            Content Studio
           </button>
+          {user ? (
+            <>
+              <button
+                onClick={() => {
+                  setProfileMenuOpen((prev) => !prev);
+                  setConfirmSignOut(false);
+                }}
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-[#1D1D1F] text-sm font-semibold text-white"
+                aria-label="Open profile"
+                title={user.name ?? user.email ?? "Profile"}
+              >
+                {(user.name?.[0] ?? user.email?.[0] ?? "U").toUpperCase()}
+              </button>
+
+              {profileMenuOpen && (
+                <div className="absolute right-0 top-12 z-20 min-w-48 rounded-2xl border border-[#E5E5EA] bg-white p-2">
+                  <button
+                    onClick={() => {
+                      setProfileMenuOpen(false);
+                      router.push("/settings");
+                    }}
+                    className="w-full rounded-xl px-3 py-2 text-left text-sm font-medium text-[#1D1D1F] transition hover:bg-[#F5F5F7]"
+                  >
+                    Profile settings
+                  </button>
+                  <button
+                    onClick={() => void handleSignOutClick()}
+                    className={`mt-1 w-full rounded-xl px-3 py-2 text-left text-sm font-medium transition ${
+                      confirmSignOut ? "bg-red-50 text-red-700 hover:bg-red-100" : "text-[#6E6E73] hover:bg-[#F5F5F7]"
+                    }`}
+                  >
+                    {confirmSignOut ? "Click again to sign out" : "Sign out"}
+                  </button>
+                </div>
+              )}
+            </>
+          ) : (
+            <>
+              <button
+                onClick={() => router.push("/auth/sign-up")}
+                className="rounded-full border border-[#1D1D1F] px-5 py-2.5 text-sm font-medium text-[#1D1D1F] transition hover:bg-[#1D1D1F] hover:text-white"
+              >
+                Get started
+              </button>
+              <button
+                onClick={() => router.push("/auth/sign-in")}
+                className="rounded-full px-3 py-1.5 text-[13px] font-semibold tracking-[0.01em] text-[#5A5A61] transition hover:bg-[#F5F5F7] hover:text-[#141418]"
+              >
+                Sign in
+              </button>
+            </>
+          )}
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="mx-auto max-w-7xl px-6 pb-24 pt-16">
-        <div data-reveal data-reveal-dir="up" style={{ ["--delay" as string]: "0ms" }}>
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#E5E5EA] bg-[#F5F5F7] px-4 py-1.5 text-sm text-[#6E6E73]">
-            <span className="h-2 w-2 rounded-full bg-emerald-500" />
-            Now available for regulated industries
+      <section className="mx-auto max-w-7xl px-4 pb-14 pt-8 sm:px-6 sm:pb-20 sm:pt-12">
+        <div className="grid gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
+          <div>
+            <div data-reveal data-reveal-dir="up" style={{ ["--delay" as string]: "0ms" }}>
+              <div className="inline-flex items-center gap-2 rounded-full border border-[#E5E5EA] bg-[#F5F5F7] px-4 py-1.5 text-sm text-[#6E6E73]">
+                <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                GEO visibility + compliance workflows
+              </div>
+            </div>
+
+            <h1
+              data-reveal
+              data-reveal-dir="up"
+              style={{ ["--delay" as string]: "120ms" }}
+              className="mt-6 max-w-4xl text-4xl font-semibold leading-[1.08] tracking-tight text-[#1D1D1F] sm:mt-8 sm:text-5xl lg:text-[3.6rem] lg:leading-[1.05]"
+            >
+              Get cited by AI,
+              <br />
+              <span className="text-[#AEAEB2]">without compliance risk</span>
+            </h1>
+
+            <p
+              data-reveal
+              data-reveal-dir="up"
+              style={{ ["--delay" as string]: "180ms" }}
+              className="mt-6 max-w-xl text-lg leading-relaxed text-[#6E6E73]"
+            >
+              Run SEO/GEO audits to see how AI models position your brand, then
+              fix gaps in one workflow with ownership verification and a built-in
+              content studio.
+            </p>
+
+            <div data-reveal data-reveal-dir="up" style={{ ["--delay" as string]: "240ms" }} className="mt-8 flex flex-wrap items-center gap-3 sm:gap-4">
+              <button
+                onClick={() => router.push("/dashboard")}
+                className="group flex items-center gap-2 rounded-full bg-[#1D1D1F] px-7 py-3.5 text-sm font-medium text-white transition hover:bg-[#333]"
+              >
+                Start SEO/GEO Audit
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </button>
+              <button
+                onClick={() => router.push("/studio/editor")}
+                className="rounded-full border border-[#D1D1D6] px-7 py-3.5 text-sm font-medium text-[#1D1D1F] transition hover:border-[#1D1D1F]"
+              >
+                Open Content Studio
+              </button>
+            </div>
+
+          </div>
+
+          <div
+            data-reveal
+            data-reveal-dir="left"
+            style={{ ["--delay" as string]: "220ms" }}
+            className="p-1"
+          >
+            <div data-reveal data-reveal-dir="left" style={{ ["--delay" as string]: "290ms" }} className="max-w-xl rounded-2xl border border-[#1F2430] bg-[#0D111A] p-4 text-white">
+              <div className="mb-2 flex items-center justify-between gap-2">
+                <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-white/70">System Access: Standex-Core v4.1</p>
+                <Terminal className="h-4 w-4 text-white/75" />
+              </div>
+              <p className="text-sm leading-relaxed text-white/85">
+                Most tools are generic wrappers. Standex-Core is our proprietary GEO engine tuned for citation probability, hallucination risk, and vector alignment signals.
+              </p>
+              <div className="mt-3 rounded-xl border border-white/10 bg-black/25 p-2.5">
+                <div className="mb-2 flex items-center justify-between">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-emerald-300/75">Core Stream</p>
+                  <p className="text-[10px] uppercase tracking-[0.14em] text-white/55">Live analysis</p>
+                </div>
+                <div className="relative h-64 overflow-hidden rounded-lg border border-white/10 bg-[#0A0D14] px-2 py-1.5 font-mono text-[11px] text-emerald-200/85 sm:h-80">
+                  <div className="core-scroll-track space-y-1.5">
+                    {[...CORE_SCROLL_LINES, ...CORE_SCROLL_LINES].map((line, idx) => (
+                      <p key={`${line}-${idx}`}>{line}</p>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <p className="mt-3 text-[10px] uppercase tracking-[0.16em] text-white/55">Optimized for 2026 model weights</p>
+            </div>
           </div>
         </div>
 
-        <h1
-          data-reveal
-          data-reveal-dir="up"
-          style={{ ["--delay" as string]: "120ms" }}
-          className="mt-8 max-w-4xl text-[4rem] font-semibold leading-[1.05] tracking-tight text-[#1D1D1F]"
-        >
-          Compliance-first content
-          <br />
-          <span className="text-[#AEAEB2]">operations, powered by AI</span>
-        </h1>
-
-        <p
-          data-reveal
-          data-reveal-dir="up"
-          style={{ ["--delay" as string]: "180ms" }}
-          className="mt-6 max-w-xl text-lg leading-relaxed text-[#6E6E73]"
-        >
-          StandexAI takes content compliance to the next level, helping you
-          create performant, regulation-ready content like never before.
-        </p>
-
-        <div data-reveal data-reveal-dir="up" style={{ ["--delay" as string]: "240ms" }} className="mt-10 flex items-center gap-4">
-          <button
-            onClick={() => router.push("/dashboard")}
-            className="group flex items-center gap-2 rounded-full bg-[#1D1D1F] px-7 py-3.5 text-sm font-medium text-white transition hover:bg-[#333]"
-          >
-            Get started
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </button>
-          <button
-            onClick={() => router.push("/dashboard")}
-            className="rounded-full border border-[#D1D1D6] px-7 py-3.5 text-sm font-medium text-[#1D1D1F] transition hover:border-[#1D1D1F]"
-          >
-            View demo
-          </button>
-        </div>
-
-        {/* Hero Visual - Product Preview */}
-        <div data-reveal data-reveal-dir="up" style={{ ["--delay" as string]: "320ms" }} className="mt-16">
+        {/* Hero Visual - Scan Result Demo */}
+        <div data-reveal data-reveal-dir="up" style={{ ["--delay" as string]: "320ms" }} className="mt-10 sm:mt-14">
           <div className="overflow-hidden rounded-2xl border border-[#D1D1D6] bg-white p-2 shadow-2xl shadow-black/10">
-            <div className="overflow-hidden rounded-xl bg-[#0D1018]">
-              {/* Mock Browser Chrome */}
-              <div className="flex items-center gap-2 border-b border-white/10 bg-black/30 px-4 py-3">
+            <div className="overflow-x-auto rounded-xl border border-[#D8DCE6] bg-[linear-gradient(170deg,#f8f9fc_0%,#eef2f9_65%,#eaedf5_100%)]">
+              <div className="flex items-center gap-2 border-b border-[#D8DCE6] bg-[#121722] px-4 py-3">
                 <div className="flex gap-1.5">
                   <div className="h-3 w-3 rounded-full bg-[#FF5F57]" />
                   <div className="h-3 w-3 rounded-full bg-[#FEBC2E]" />
                   <div className="h-3 w-3 rounded-full bg-[#28C840]" />
                 </div>
-                <div className="mx-auto rounded-lg border border-white/10 bg-white/10 px-4 py-1 text-xs text-white/60">
+                <div className="mx-auto rounded-lg border border-white/10 bg-white/10 px-4 py-1 text-xs text-white/70">
                   app.standexai.com/dashboard
                 </div>
               </div>
 
-              {/* Mock Dashboard UI */}
-              <div className="flex">
-                <div className="flex-1 p-6">
-                  <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-                    <div className="mb-3 flex items-center justify-between">
-                      <div>
-                        <p className="text-[10px] uppercase tracking-[0.2em] text-white/40">Overview</p>
-                        <p className="text-sm font-semibold text-white">Core Metrics</p>
-                      </div>
-                      <div className="rounded-full border border-white/10 bg-white/10 px-2 py-0.5 text-[10px] text-white/70">
-                        Live
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-4 gap-2">
-                      <div className="rounded-lg border border-white/10 bg-white/5 p-2">
-                        <p className="text-[9px] uppercase text-white/40">Projects</p>
-                        <p className="text-lg font-semibold text-white">12</p>
-                      </div>
-                      <div className="rounded-lg border border-white/10 bg-white/5 p-2">
-                        <p className="text-[9px] uppercase text-white/40">Published</p>
-                        <p className="text-lg font-semibold text-white">8</p>
-                      </div>
-                      <div className="rounded-lg border border-white/10 bg-white/5 p-2">
-                        <p className="text-[9px] uppercase text-white/40">SEO</p>
-                        <p className="text-lg font-semibold text-white">78</p>
-                      </div>
-                      <div className="rounded-lg border border-white/10 bg-white/5 p-2">
-                        <p className="text-[9px] uppercase text-white/40">GEO</p>
-                        <p className="text-lg font-semibold text-white">74</p>
-                      </div>
-                    </div>
+              <div className="min-w-[900px] p-5">
+                <div className="rounded-xl border border-[#D7DCE7] bg-white p-4">
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="text-[10px] uppercase tracking-[0.2em] text-[#8E8E93]">SEO/GEO Audit Workspace</p>
+                    <span className="rounded-full border border-[#D1D1D6] bg-[#F7F8FC] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#545762]">
+                      Report Sample (Demo)
+                    </span>
                   </div>
-                  <div className="mt-3 rounded-xl border border-white/10 bg-white/5 p-3">
-                    <div className="mb-2 flex items-center justify-between">
-                      <p className="text-[10px] uppercase tracking-[0.2em] text-white/40">Model Coverage</p>
-                      <p className="text-[10px] text-white/60">4 engines</p>
+                  <div className="mt-3 grid gap-2 md:grid-cols-[1.2fr_1fr_auto]">
+                    <div className="rounded-lg border border-[#D8DCE6] bg-[#FAFBFF] px-3 py-2 text-sm text-[#1D1D1F]">
+                      acmehealth.com
                     </div>
-                    <div className="space-y-2">
-                      <div className="h-6 rounded-md border border-white/10 bg-white/5" />
-                      <div className="h-6 rounded-md border border-white/10 bg-white/5" />
-                      <div className="h-6 rounded-md border border-white/10 bg-white/5" />
+                    <div className="rounded-lg border border-[#D8DCE6] bg-[#FAFBFF] px-3 py-2 text-sm text-[#1D1D1F]">
+                      best ai healthcare platform
                     </div>
+                    <button className="rounded-lg bg-[#111827] px-3 py-2 text-xs font-semibold text-white">Generate Report</button>
                   </div>
                 </div>
-                <div className="w-64 border-l border-white/10 bg-black/25 p-4">
-                  <p className="text-xs font-semibold text-white">Scores</p>
-                  <div className="mt-3 space-y-2">
-                    <div className="rounded-lg border border-white/10 bg-white/5 p-2">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] text-white/60">SEO</span>
-                        <span className="text-xs font-semibold text-emerald-300">85</span>
+
+                <div className="mt-3 grid gap-3 md:grid-cols-[1.35fr_0.65fr]">
+                  <div className="rounded-xl border border-[#D7DCE7] bg-white p-4">
+                    <div className="mb-3 flex items-center justify-between">
+                      <p className="text-xs font-semibold text-[#1D1D1F]">GEO Health Report Sample</p>
+                      <span className="rounded-full border border-emerald-300 bg-emerald-50 px-2 py-0.5 text-[10px] text-emerald-700">Live</span>
+                    </div>
+                    <div className="grid grid-cols-4 gap-2">
+                      <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-2">
+                        <p className="text-[10px] text-emerald-700">GEO Score</p>
+                        <p className="text-lg font-semibold text-emerald-700">72</p>
                       </div>
-                      <div className="mt-1 h-1 rounded-full bg-white/10">
-                        <div className="h-1 w-[85%] rounded-full bg-emerald-300" />
+                      <div className="rounded-lg border border-[#D8DCE6] bg-[#F8F9FD] p-2">
+                        <p className="text-[10px] text-[#6E6E73]">Share of Model</p>
+                        <p className="text-lg font-semibold text-[#1D1D1F]">61%</p>
+                      </div>
+                      <div className="rounded-lg border border-[#F2D88B] bg-[#FFF8E5] p-2">
+                        <p className="text-[10px] text-[#8A6A00]">Sentiment</p>
+                        <p className="text-lg font-semibold text-[#8A6A00]">Neutral</p>
+                      </div>
+                      <div className="rounded-lg border border-[#D8DCE6] bg-[#F8F9FD] p-2">
+                        <p className="text-[10px] text-[#6E6E73]">Citation Sources</p>
+                        <p className="text-lg font-semibold text-[#1D1D1F]">3</p>
                       </div>
                     </div>
-                    <div className="rounded-lg border border-white/10 bg-white/5 p-2">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] text-white/60">GEO</span>
-                        <span className="text-xs font-semibold text-yellow-300">68</span>
+
+                    <div className="mt-3 grid gap-2 md:grid-cols-2">
+                      <div className="rounded-lg border border-[#D8DCE6] bg-[#FAFBFF] p-2.5">
+                        <p className="mb-1 text-[11px] font-semibold text-[#1D1D1F]">Model Results</p>
+                        <p className="text-[11px] text-[#6E6E73]">GPT-4o: mentioned, neutral</p>
+                        <p className="text-[11px] text-[#6E6E73]">Claude 3.5: mentioned, positive</p>
+                        <p className="text-[11px] text-[#6E6E73]">Gemini: not mentioned</p>
                       </div>
-                      <div className="mt-1 h-1 rounded-full bg-white/10">
-                        <div className="h-1 w-[68%] rounded-full bg-yellow-300" />
+                      <div className="rounded-lg border border-[#D8DCE6] bg-[#FAFBFF] p-2.5">
+                        <p className="mb-1 text-[11px] font-semibold text-[#1D1D1F]">Citation Audit</p>
+                        <p className="text-[11px] text-[#6E6E73]">Reddit: high signal</p>
+                        <p className="text-[11px] text-[#6E6E73]">Wikipedia: weak signal</p>
+                        <p className="text-[11px] text-[#6E6E73]">Hacker News: not found</p>
                       </div>
                     </div>
-                    <div className="rounded-lg border border-white/10 bg-white/5 p-2">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] text-white/60">Compliance</span>
-                        <span className="text-xs font-semibold text-red-300">42</span>
-                      </div>
-                      <div className="mt-1 h-1 rounded-full bg-white/10">
-                        <div className="h-1 w-[42%] rounded-full bg-red-300" />
-                      </div>
+
+                    <div className="mt-3 space-y-2">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-[#8E8E93]">Red Areas (Fix First)</p>
+                      <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700">No llms.txt found on root domain.</div>
+                      <div className="rounded-lg border border-yellow-200 bg-yellow-50 px-3 py-2 text-xs text-yellow-700">Model mentions are mostly competitor-biased.</div>
+                      <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs text-emerald-700">Quick win: add FAQ schema to core landing page.</div>
                     </div>
                   </div>
-                  <div className="mt-3 rounded-lg border border-red-300/30 bg-red-500/10 p-2">
-                    <div className="flex items-center gap-1.5">
-                      <AlertTriangle className="h-3 w-3 text-red-300" />
-                      <span className="text-[10px] font-medium text-red-200">2 critical issues</span>
+
+                  <div className="space-y-3">
+                    <div className="rounded-xl border border-[#D7DCE7] bg-white p-4">
+                      <p className="text-xs font-semibold text-[#1D1D1F]">Fix-It Output Sample</p>
+                      <div className="mt-2 rounded-lg border border-[#D8DCE6] bg-[#FAFBFF] p-2">
+                        <p className="text-[10px] uppercase tracking-[0.16em] text-[#8E8E93]">AI-Optimized Blurb</p>
+                        <p className="mt-1 text-xs text-[#555560]">AcmeHealth helps care teams automate operations with compliant AI workflows...</p>
+                      </div>
+                      <button className="mt-3 w-full rounded-lg bg-[#1D1D1F] px-3 py-2 text-xs font-semibold text-white">
+                        Send To Editor
+                      </button>
+                    </div>
+
+                    <div className="rounded-xl border border-[#D7DCE7] bg-[#111827] p-4">
+                      <p className="text-[10px] uppercase tracking-[0.16em] text-white/60">Technical Fix</p>
+                      <div className="mt-2 rounded-lg border border-white/15 bg-black/20 p-2 font-mono text-[10px] text-white/80">
+                        llms.txt ready<br />
+                        site: https://acmehealth.com<br />
+                        keyword_focus: best ai healthcare platform
+                      </div>
+                      <button className="mt-3 w-full rounded-lg bg-white px-3 py-2 text-xs font-semibold text-[#111827]">
+                        Download llms.txt
+                      </button>
+                      <div className="mt-2 flex items-center gap-1.5 rounded-lg border border-red-300/30 bg-red-500/15 px-2 py-1.5 text-[10px] text-red-100">
+                        <AlertTriangle className="h-3 w-3" />
+                        1 hallucinated claim detected.
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* How It Works - Merged Into Hero */}
+        <div className="mt-12 border-t border-[#E5E5EA] pt-12 sm:mt-14 sm:pt-14">
+          <div className="grid gap-8 lg:grid-cols-[0.92fr_1.08fr]">
+            <div data-reveal data-reveal-dir="left" className="space-y-5">
+              <p className="text-xs uppercase tracking-[0.3em] text-[#8E8E93]">How It Works</p>
+              <h2 className="text-4xl font-semibold leading-[1.03] tracking-tight text-[#141418] sm:text-[2.8rem]">
+                From scan to publish
+              </h2>
+              <p className="max-w-md text-[17px] leading-relaxed text-[#57575f]">
+                One continuous workflow: generate a report sample, unlock fixes with verification, then ship from Content Studio.
+              </p>
+              <div className="max-w-md rounded-2xl border border-[#D6DBE7] bg-[linear-gradient(160deg,#f8f9fc_0%,#f1f4fa_55%,#eef1f8_100%)] p-4">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.17em] text-[#6A6F7A]">System Rail</p>
+                <div className="mt-3 space-y-2">
+                  {[
+                    { label: "Scan", icon: Shield },
+                    { label: "Verify", icon: CheckCircle2 },
+                    { label: "Publish", icon: FileText },
+                  ].map((step) => (
+                    <div key={step.label} className="flex items-center gap-2 rounded-lg border border-white/70 bg-white/80 px-3 py-2">
+                      <step.icon className="h-4 w-4 text-[#1D1D1F]" />
+                      <p className="text-sm font-semibold text-[#1D1D1F]">{step.label}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div data-reveal data-reveal-dir="right" className="rounded-2xl border border-[#D6DBE7] bg-[linear-gradient(180deg,#ffffff_0%,#f8faff_100%)] p-4 shadow-[0_18px_46px_rgba(17,17,26,0.1)] sm:p-5">
+              <div className="mb-4 flex items-center justify-between">
+                <p className="text-xs uppercase tracking-[0.22em] text-[#8E8E93]">Execution Sequence</p>
+                <span className="rounded-full border border-[#D1D1D6] bg-white px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#61656F]">
+                  Operator View
+                </span>
+              </div>
+              <div className="space-y-3.5">
+                {[
+                  {
+                    num: "01",
+                    title: "Run visibility report",
+                    desc: "Enter URL + keyword. StandexAI returns GEO score, model share, sentiment, and citation source findings.",
+                    icon: Shield,
+                  },
+                  {
+                    num: "02",
+                    title: "Unlock fix mode",
+                    desc: "Verify ownership through llms.txt, meta tag, or DNS to activate strategy actions and correction workflows.",
+                    icon: CheckCircle2,
+                  },
+                  {
+                    num: "03",
+                    title: "Ship in Content Studio",
+                    desc: "Send recommendations to Content Studio, rewrite with guardrails, and publish with confidence.",
+                    icon: FileText,
+                  },
+                ].map((step, idx) => (
+                  <div key={step.num} className="group relative rounded-xl border border-[#E2E6F0] bg-white p-4 transition hover:-translate-y-0.5 hover:border-[#C9D0DF]">
+                    {idx < 2 ? <div className="absolute left-8 top-full h-4 w-px bg-[#D9DEE8]" /> : null}
+                    <div className="flex items-start gap-3">
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#13141A] text-[11px] font-semibold text-white">
+                        {step.num}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2">
+                          <step.icon className="h-4 w-4 text-[#5F6470]" />
+                          <h3 className="text-[15px] font-semibold text-[#16181D]">{step.title}</h3>
+                        </div>
+                        <p className="mt-1.5 text-[13px] leading-relaxed text-[#555B66]">{step.desc}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <button
+                onClick={() => router.push("/dashboard")}
+                className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#141418] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-black"
+              >
+                Open SEO/GEO Audit
+                <ArrowRight className="h-4 w-4" />
+              </button>
             </div>
           </div>
         </div>
@@ -211,196 +432,16 @@ export default function Home() {
 
       {/* Trusted By / Social Proof */}
       <section className="border-t border-[#E5E5EA] bg-[#FAFAFA]">
-        <div data-reveal data-reveal-dir="up" className="mx-auto max-w-7xl px-6 py-12">
+        <div data-reveal data-reveal-dir="up" className="mx-auto max-w-7xl px-6 py-10">
           <p className="text-center text-sm font-medium text-[#AEAEB2]">
-            Built for teams in healthcare, finance, insurance, and SaaS
+            Built for growth teams and regulated industries
           </p>
           <div className="mt-6 flex items-center justify-center gap-12">
-            {["HIPAA", "FTC", "SEC", "GDPR", "SOC 2"].map((item) => (
+            {["GEO", "SEO", "HIPAA", "FTC", "SEC"].map((item) => (
               <span key={item} className="text-lg font-semibold tracking-wide text-[#D1D1D6]">
                 {item}
               </span>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Why Section */}
-      <section className="mx-auto max-w-7xl px-6 py-24">
-        <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr]">
-          <div data-reveal data-reveal-dir="left" className="sticky top-8 h-fit space-y-5">
-            <p className="text-xs uppercase tracking-[0.3em] text-[#AEAEB2]">Why StandexAI</p>
-            <h2 className="text-[2.4rem] font-semibold leading-[1.1] tracking-tight text-[#1D1D1F]">
-              Why teams choose
-              <br />
-              StandexAI
-            </h2>
-            <p className="max-w-md text-base leading-relaxed text-[#6E6E73]">
-              StandexAI takes content compliance to the next level, helping you
-              build compliant, performant, and optimized content like never before.
-            </p>
-            <button
-              onClick={() => router.push("/dashboard")}
-              className="inline-flex items-center gap-2 rounded-full border border-[#1D1D1F] px-5 py-2.5 text-sm font-medium text-[#1D1D1F] transition hover:bg-[#1D1D1F] hover:text-white"
-            >
-              Explore product
-              <ArrowRight className="h-4 w-4" />
-            </button>
-          </div>
-
-          <div className="space-y-4">
-            {[
-              {
-                eyebrow: "Compliance checks as you type",
-                badge: "HIPAA compliant",
-                title: "Real-Time Compliance",
-                desc: "Catch regulatory violations as you type with industry-specific rules for healthcare, finance, and more.",
-                icon: ShieldCheck,
-                accent: "emerald",
-              },
-              {
-                eyebrow: "Intelligent content suggestions",
-                badge: "AI-powered",
-                title: "AI Co-Pilot",
-                desc: "Get intelligent suggestions, automated improvements, and content generation powered by advanced AI.",
-                icon: WandSparkles,
-                accent: "blue",
-              },
-              {
-                eyebrow: "SEO + GEO optimization",
-                badge: "Dual engine",
-                title: "Dual Optimization",
-                desc: "Optimize for both traditional SEO and GEO, including AI answer engines like ChatGPT and Perplexity.",
-                icon: Cpu,
-                accent: "violet",
-              },
-            ].map((item, idx) => (
-              <div
-                data-reveal
-                data-reveal-dir="right"
-                key={item.title}
-                className="group rounded-2xl border border-[#E5E5EA] bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/5"
-                style={{ ["--delay" as string]: `${100 + idx * 90}ms` }}
-              >
-                <div className="flex items-start gap-4">
-                  <div
-                    className="rounded-xl bg-emerald-50 p-3"
-                  >
-                    <item.icon className="h-5 w-5 text-emerald-600" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-xs font-medium uppercase tracking-[0.18em] text-[#AEAEB2]">{item.eyebrow}</p>
-                    <div className="mt-1 flex items-center gap-2">
-                      <h3 className="text-lg font-semibold text-[#1D1D1F]">{item.title}</h3>
-                      <span
-                        className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${
-                          item.accent === "emerald"
-                            ? "bg-emerald-100 text-emerald-700"
-                            : item.accent === "blue"
-                              ? "bg-blue-100 text-blue-700"
-                              : "bg-violet-100 text-violet-700"
-                        }`}
-                      >
-                        {item.badge}
-                      </span>
-                    </div>
-                    <p className="mt-2 text-sm leading-relaxed text-[#6E6E73]">{item.desc}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works Section */}
-      <section className="border-t border-[#E5E5EA] bg-[#FAFAFA]">
-        <div className="mx-auto max-w-7xl px-6 py-24">
-          <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-            <div data-reveal data-reveal-dir="left" className="space-y-4">
-              <p className="text-xs uppercase tracking-[0.3em] text-[#AEAEB2]">Workflow</p>
-              <h2 className="text-[2.4rem] font-semibold leading-[1.1] tracking-tight text-[#1D1D1F]">How it works</h2>
-              <p className="max-w-md text-base leading-relaxed text-[#6E6E73]">
-                From draft to publish, StandexAI keeps your content compliant and optimized at every step.
-              </p>
-            </div>
-
-            <div className="space-y-3">
-              {[
-                { num: "01", title: "Write or import", desc: "Start writing in the editor or import existing content. AI assists you from the first word.", icon: FileText },
-                { num: "02", title: "Scan and optimize", desc: "Real-time compliance checks and SEO/GEO scoring ensure your content meets all standards.", icon: Shield },
-                { num: "03", title: "Publish with confidence", desc: "Export compliant, optimized content ready for any platform or CMS.", icon: CheckCircle2 },
-              ].map((step, i) => (
-                <div
-                  data-reveal
-                  data-reveal-dir="right"
-                  key={step.num}
-                  className="group flex items-start gap-4 rounded-2xl border border-[#E5E5EA] bg-white p-4 transition-all duration-300 hover:border-[#D1D1D6] hover:shadow-lg hover:shadow-black/5"
-                  style={{ ["--delay" as string]: `${120 + i * 90}ms` }}
-                >
-                  <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-[#F5F5F7] text-sm font-semibold text-[#1D1D1F]">
-                    {step.num}
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <step.icon className="h-4 w-4 text-[#6E6E73]" />
-                      <h3 className="text-base font-semibold text-[#1D1D1F]">{step.title}</h3>
-                    </div>
-                    <p className="mt-1.5 text-sm leading-relaxed text-[#6E6E73]">{step.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="border-t border-[#E5E5EA] bg-[#F5F5F7]">
-        <div className="mx-auto max-w-7xl px-6 py-24">
-          <div className="grid gap-8 md:grid-cols-4">
-            {[
-              { value: "94%", label: "Compliance pass rate" },
-              { value: "3x", label: "Faster content creation" },
-              { value: "50+", label: "Compliance rules built-in" },
-              { value: "SEO + GEO", label: "Dual optimization engine" },
-            ].map((stat, idx) => (
-              <div
-                data-reveal
-                data-reveal-dir="up"
-                key={stat.label}
-                style={{ ["--delay" as string]: `${idx * 80}ms` }}
-                className="group text-center"
-              >
-                <p className="text-4xl font-semibold tracking-tight text-[#1D1D1F] transition-transform duration-300 group-hover:scale-105">
-                  {stat.value}
-                </p>
-                <p className="mt-2 text-sm text-[#6E6E73]">{stat.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="border-t border-[#E5E5EA] bg-white">
-        <div data-reveal data-reveal-dir="up" className="mx-auto max-w-7xl px-6 py-24 text-center">
-          <h2 className="text-[2.5rem] font-semibold leading-[1.15] tracking-tight text-[#1D1D1F]">
-            Ready to transform your
-            <br />
-            content operations?
-          </h2>
-          <p className="mx-auto mt-4 max-w-md text-base leading-relaxed text-[#6E6E73]">
-            Join teams creating compliant, high-performing content at scale.
-          </p>
-          <div className="mt-10 flex justify-center gap-4">
-            <button
-              onClick={() => router.push("/dashboard")}
-              className="group flex items-center gap-2 rounded-full bg-[#1D1D1F] px-7 py-3.5 text-sm font-medium text-white transition hover:bg-[#333]"
-            >
-              Launch Dashboard
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </button>
           </div>
         </div>
       </section>
@@ -471,6 +512,32 @@ export default function Home() {
             transform: none !important;
             filter: none !important;
             transition: none !important;
+          }
+        }
+
+        .scroll-strip {
+          scrollbar-width: thin;
+        }
+
+        .scroll-strip::-webkit-scrollbar {
+          height: 8px;
+        }
+
+        .scroll-strip::-webkit-scrollbar-thumb {
+          background: #d1d1d6;
+          border-radius: 9999px;
+        }
+
+        .core-scroll-track {
+          animation: coreVerticalScroll 26s linear infinite;
+        }
+
+        @keyframes coreVerticalScroll {
+          from {
+            transform: translateY(0);
+          }
+          to {
+            transform: translateY(-50%);
           }
         }
       `}</style>
