@@ -1,81 +1,64 @@
 @import "tailwindcss";
 
 :root {
-  /* Tech Standard Palette - High Contrast, Data-First */
-  --font-sans: 'Inter', system-ui, sans-serif;
+  /* Clean Light Theme */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
-  /* Backgrounds - Deep Slate Theme */
+  /* Backgrounds - Light Theme */
+  --bg-app: #FFFFFF;
+  --bg-panel: #FFFFFF;
+  --bg-card: #F5F5F7;
+
+  /* Text */
+  --ink-900: #1D1D1F;
+  --ink-500: #6E6E73;
+  --ink-300: #AEAEB2;
+
+  /* Accents */
+  --accent-primary: #00D9A1;
+  --accent-secondary: #007AFF;
+  --accent-alert: #FF3B30;
+  --accent-warn: #FF9500;
+
+  /* Borders */
+  --line: #E5E5EA;
+  --line-active: #D1D1D6;
+
+  --radius: 0.75rem;
+
+  /* SHADCN COMPATIBILITY */
+  --background: 0 0% 100%;
+  --foreground: 0 0% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 11%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 11%;
+  --primary: 160 100% 43%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 240 5% 96%;
+  --secondary-foreground: 0 0% 11%;
+  --muted: 240 5% 96%;
+  --muted-foreground: 0 0% 43%;
+  --accent: 240 5% 96%;
+  --accent-foreground: 0 0% 11%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 0 0% 90%;
+  --input: 0 0% 90%;
+  --ring: 160 100% 43%;
+}
+
+.theme-dark {
+  /* Dark theme override */
   --bg-app: #0B0E14;
   --bg-panel: #151922;
   --bg-card: #1E2330;
-
-  /* Text */
   --ink-900: #EDEDED;
   --ink-500: #888888;
   --ink-300: #444444;
-
-  /* Accents - Terminal Colors */
-  --accent-primary: #00FF94;
-  /* Data Green */
-  --accent-secondary: #00E1FF;
-  /* Cyber Blue */
-  --accent-alert: #FF3366;
-  /* Error Red */
-  --accent-warn: #FFC107;
-  /* Warning Amber */
-
-  /* Borders */
   --line: #222222;
   --line-active: #333333;
-
-  --radius: 0.25rem;
-  /* Sharper corners for technical feel */
-
-  /* SHADCN COMPATIBILITY */
-  --background: 0 0% 2%;
-  --foreground: 0 0% 93%;
-  --card: 0 0% 4%;
-  --card-foreground: 0 0% 93%;
-  --popover: 0 0% 4%;
-  --popover-foreground: 0 0% 93%;
-  --primary: 155 100% 50%;
-  --primary-foreground: 0 0% 0%;
-  --secondary: 0 0% 8%;
-  --secondary-foreground: 0 0% 93%;
-  --muted: 0 0% 8%;
-  --muted-foreground: 0 0% 60%;
-  --accent: 0 0% 12%;
-  --accent-foreground: 0 0% 98%;
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 0 0% 98%;
-  --border: 0 0% 12%;
-  --input: 0 0% 12%;
-  --ring: 155 100% 50%;
-}
-
-.theme-light {
-  /* Backgrounds - Clean Light Theme */
-  --bg-app: #F8FAFC;
-  /* Slate 50 */
-  --bg-panel: #FFFFFF;
-  /* White */
-  --bg-card: #F1F5F9;
-  /* Slate 100 */
-
-  /* Text */
-  --ink-900: #0F172A;
-  /* Slate 900 */
-  --ink-500: #64748B;
-  /* Slate 500 */
-  --ink-300: #94A3B8;
-  /* Slate 400 */
-
-  /* Borders */
-  --line: #E2E8F0;
-  /* Slate 200 */
-  --line-active: #CBD5E1;
-  /* Slate 300 */
 }
 
 body {
@@ -110,7 +93,7 @@ h4,
 h5,
 h6 {
   color: var(--ink-900);
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.025em;
   line-height: 1.15;
 }
@@ -118,22 +101,22 @@ h6 {
 /* ==================== UTILITIES ==================== */
 
 .glass-panel {
-  background: rgba(15, 23, 42, 0.6);
+  background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--line);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .text-gradient {
-  background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
+  background: linear-gradient(135deg, #1D1D1F 0%, #6E6E73 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .text-gradient-primary {
-  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+  background: linear-gradient(135deg, #00D9A1 0%, #00a87a 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -148,7 +131,7 @@ h6 {
   position: absolute;
   inset: -1px;
   border-radius: inherit;
-  background: linear-gradient(45deg, rgba(59, 130, 246, 0.5), rgba(20, 184, 166, 0.5));
+  background: linear-gradient(45deg, rgba(0, 217, 161, 0.3), rgba(0, 122, 255, 0.3));
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   mask-composite: xor;
@@ -234,15 +217,146 @@ button,
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg);
+  background: var(--bg-app);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--line-light);
+  background: var(--line);
   border-radius: 8px;
-  border: 2px solid var(--bg);
+  border: 2px solid var(--bg-app);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--ink-500);
+  background: var(--ink-300);
+}
+
+/* ==================== TIPTAP EDITOR STYLES ==================== */
+
+.ProseMirror {
+  outline: none;
+  min-height: 500px;
+  padding: 2rem;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: #AEAEB2;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.ProseMirror h1 {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: #1D1D1F;
+}
+
+.ProseMirror h2 {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  font-weight: 600;
+  margin-top: 1.75rem;
+  margin-bottom: 0.875rem;
+  color: #1D1D1F;
+}
+
+.ProseMirror h3 {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: #1D1D1F;
+}
+
+.ProseMirror p {
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.75rem;
+  color: #6E6E73;
+}
+
+.ProseMirror ul,
+.ProseMirror ol {
+  padding-left: 1.5rem;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.ProseMirror ul {
+  list-style-type: disc;
+}
+
+.ProseMirror ol {
+  list-style-type: decimal;
+}
+
+.ProseMirror li {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  color: #6E6E73;
+}
+
+.ProseMirror blockquote {
+  border-left: 4px solid #1D1D1F;
+  padding-left: 1rem;
+  margin-left: 0;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-style: italic;
+  color: #AEAEB2;
+}
+
+.ProseMirror mark {
+  background-color: rgba(255, 59, 48, 0.1);
+  border-radius: 0.25rem;
+  padding: 0.125rem 0.25rem;
+  border-bottom: 2px solid rgba(255, 59, 48, 0.4);
+}
+
+.ProseMirror a {
+  color: #007AFF;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.ProseMirror a:hover {
+  color: #0056CC;
+}
+
+.ProseMirror strong {
+  font-weight: 700;
+  color: #1D1D1F;
+}
+
+.ProseMirror em {
+  font-style: italic;
+}
+
+.ProseMirror code {
+  background-color: #F5F5F7;
+  border-radius: 0.25rem;
+  padding: 0.125rem 0.375rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.875rem;
+  color: #1D1D1F;
+}
+
+.ProseMirror pre {
+  background-color: #F5F5F7;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  overflow-x: auto;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.ProseMirror pre code {
+  background-color: transparent;
+  padding: 0;
+  color: #1D1D1F;
 }
