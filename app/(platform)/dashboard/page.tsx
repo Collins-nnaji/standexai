@@ -57,6 +57,11 @@ type AuditResponse = {
   semanticCheck: SemanticCheck;
   modelResults: ModelResult[];
   citationAudit: CitationSource[];
+  topRankingSites?: Array<{
+    domain: string;
+    reason: string;
+    source: "live" | "simulated";
+  }>;
   aiOptimizedBlurb: string;
   llmsTxt: string;
 };
@@ -220,6 +225,7 @@ export default function DashboardPage() {
       `GEO Score: ${report.geoReport.geoScore}`,
       `Model Share: ${report.geoReport.modelShare}%`,
       `Sentiment: ${report.geoReport.sentiment}`,
+      `Top Ranking Sites: ${(report.topRankingSites ?? []).map((s) => s.domain).join(", ") || "None"}`,
       `Top Issues: ${report.semanticCheck.issues.slice(0, 5).join("; ") || "None"}`,
       `Quick Wins: ${report.semanticCheck.quickWins.slice(0, 5).join("; ") || "None"}`,
       "Task: Rewrite this into AI-answer-engine-friendly content with clear claims, fact anchors, concise Q&A, and schema-aware structure.",
@@ -403,11 +409,11 @@ export default function DashboardPage() {
 
           {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
 
-          <div className="mt-5 rounded-2xl border border-[#E5E5EA] bg-white p-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#AEAEB2]">Backend Scan Process</p>
+          <div className="mt-5 rounded-2xl border border-[#2A2A2E] bg-[#0F1014] p-4 text-white">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/70">Backend Scan Process</p>
             <div className="mt-2 flex flex-wrap gap-2">
               {processSteps.map((step) => (
-                <span key={step} className="rounded-full border border-[#D1D1D6] bg-[#FAFAFA] px-3 py-1 text-xs text-[#6E6E73]">
+                <span key={step} className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs text-white">
                   {step}
                 </span>
               ))}
@@ -416,8 +422,8 @@ export default function DashboardPage() {
         </section>
 
         {report && (
-          <section className="reveal reveal-2 grid gap-7 lg:grid-cols-[1.1fr_0.9fr]">
-            <div className="rounded-3xl border border-[#E5E5EA] bg-white p-5 sm:p-7 md:p-8">
+          <section className="reveal reveal-2 grid items-stretch gap-7 font-['Consolas','Monaco','Menlo','monospace'] xl:grid-cols-2">
+            <div className="h-full rounded-3xl border border-[#E5E5EA] bg-white p-5 sm:p-7 md:p-8">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <p className="text-xs uppercase tracking-[0.2em] text-[#AEAEB2]">GEO Health Report</p>
@@ -501,14 +507,38 @@ export default function DashboardPage() {
                 </div>
               </div>
 
-              <div className="mt-5 grid gap-4 md:grid-cols-2">
-                <div className="min-w-0">
+              <div className="mt-4 rounded-2xl border border-[#E5E5EA] bg-[#FAFAFA] p-3">
+                <div className="mb-2 flex items-center justify-between">
+                  <p className="text-xs font-semibold uppercase tracking-[0.17em] text-[#8E8E93]">Top Ranking Sites For Keyword</p>
+                  <span className="rounded-full border border-[#D1D1D6] bg-white px-2 py-0.5 text-[10px] uppercase text-[#6E6E73]">
+                    {(report.topRankingSites ?? []).length} tracked
+                  </span>
+                </div>
+                <div className="space-y-2">
+                  {(report.topRankingSites ?? []).length === 0 ? (
+                    <p className="text-xs text-[#6E6E73]">No ranking-site signals yet.</p>
+                  ) : (
+                    (report.topRankingSites ?? []).slice(0, 5).map((site, idx) => (
+                      <div key={`${site.domain}-${idx}`} className="rounded-xl border border-[#E1E4EC] bg-white px-3 py-2">
+                        <div className="flex items-center justify-between gap-2">
+                          <p className="text-sm font-semibold text-[#1D1D1F]">{idx + 1}. {site.domain}</p>
+                          <span className="rounded-full border border-[#D1D1D6] bg-white px-2 py-0.5 text-[10px] uppercase text-[#6E6E73]">{site.source}</span>
+                        </div>
+                        <p className="mt-1 text-xs text-[#6E6E73]">{site.reason}</p>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+
+              <div className="mt-5 grid gap-4 xl:grid-cols-2">
+                <div className="min-w-0 rounded-2xl border border-[#E5E5EA] bg-[#FCFCFD] p-3.5">
                   <p className="mb-2 text-sm font-semibold">Model Results</p>
                   <div className="space-y-2">
                     {report.modelResults.map((model) => (
-                      <div key={model.engine} className="rounded-xl border border-[#E5E5EA] bg-[#FAFAFA] p-3">
+                      <div key={model.engine} className="rounded-xl border border-[#E5E5EA] bg-white p-3">
                         <div className="flex items-center justify-between">
-                          <p className="text-sm font-semibold text-[#1D1D1F]">{model.engine}</p>
+                          <p className="text-sm font-semibold text-[#1D1D1F] break-words">{model.engine}</p>
                           <div className="flex items-center gap-1.5">
                             <span className="rounded-full border border-[#D1D1D6] bg-white px-2 py-0.5 text-[10px] uppercase text-[#6E6E73]">{model.source}</span>
                             <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${model.mentioned ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-700"}`}>
@@ -517,7 +547,7 @@ export default function DashboardPage() {
                           </div>
                         </div>
                         <p className="mt-1 text-xs text-[#6E6E73]">Sentiment: <span className="font-medium capitalize">{model.sentiment}</span></p>
-                        <p className="mt-1 text-xs text-[#6E6E73]">Top competitors: {model.competitors.slice(0, 3).join(", ") || "None"}</p>
+                        <p className="mt-1 break-words text-xs text-[#6E6E73]">Top competitors: {model.competitors.slice(0, 3).join(", ") || "None"}</p>
                         {model.descriptors.length > 0 && (
                           <div className="mt-2 flex flex-wrap gap-1.5">
                             {model.descriptors.slice(0, 3).map((item) => (
@@ -532,13 +562,13 @@ export default function DashboardPage() {
                   </div>
                 </div>
 
-                <div className="min-w-0">
+                <div className="min-w-0 rounded-2xl border border-[#E5E5EA] bg-[#FCFCFD] p-3.5">
                   <p className="mb-2 text-sm font-semibold">Citation Audit</p>
                   <div className="space-y-2">
                     {report.citationAudit.map((citation) => (
                       <div key={citation.source} className={`rounded-xl border p-3 ${signalClass(citation.signal)}`}>
-                        <p className="text-sm font-semibold">{citation.source}</p>
-                        <p className="mt-1 text-xs">{citation.detail}</p>
+                        <p className="text-sm font-semibold break-words">{citation.source}</p>
+                        <p className="mt-1 break-words text-xs">{citation.detail}</p>
                       </div>
                     ))}
                   </div>

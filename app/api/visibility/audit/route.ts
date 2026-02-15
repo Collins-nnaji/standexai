@@ -41,6 +41,12 @@ type CitationSource = {
   detail: string;
 };
 
+type RankingSite = {
+  domain: string;
+  reason: string;
+  source: "live" | "simulated";
+};
+
 type AiSimulationModel = {
   engine: ModelResult["engine"];
   mentioned: boolean;
@@ -91,6 +97,14 @@ function extractHostname(url: string) {
 
 function brandFromHost(host: string) {
   return host.split(".")[0]?.replace(/[-_]/g, " ") || host;
+}
+
+function toLikelyDomain(value: string) {
+  const compact = value.trim().toLowerCase();
+  if (!compact) return "";
+  if (compact.includes(".")) return compact.replace(/^https?:\/\//, "").replace(/^www\./, "").split("/")[0] ?? "";
+  const slug = compact.replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  return slug ? `${slug}.com` : "";
 }
 
 function extractFirst(html: string, regex: RegExp) {
@@ -280,6 +294,140 @@ async function runGptQuery(url: string, keyword: string, brand: string): Promise
       reasoning: "Failed to parse model response.",
       source: "simulated",
     };
+  }
+}
+
+function buildTopSitesPrompt(input: { url: string; keyword: string; brand: string; userPrompt: string }) {
+  return `You are simulating keyword ranking visibility for GEO + SEO.
+
+Context:
+- Brand URL: ${input.url}
+- Brand: ${input.brand}
+- Keyword: ${input.keyword}
+- Simulation instruction: ${input.userPrompt || "Use realistic market assumptions."}
+
+Return strict JSON only:
+{
+  "sites": [
+    { "domain": string, "reason": string }
+  ]
+}
+
+Rules:
+- Return exactly 5 sites ranked from strongest to weakest.
+- Include real-looking domain names only (no prose in domain field).
+- Reasons must be concise (max 14 words each).
+- Include the brand domain only if it is realistically top-ranking.
+- No markdown.`;
+}
+
+function fallbackTopRankingSites(input: { keyword: string; normalizedUrl: string; brand: string; modelResults: ModelResult[] }): RankingSite[] {
+  const host = extractHostname(input.normalizedUrl);
+  const competitorTerms = Array.from(new Set(input.modelResults.flatMap((m) => m.competitors))).slice(0, 4);
+  const candidateDomains = [
+    ...competitorTerms.map((item) => toLikelyDomain(item)),
+    host,
+    `${input.keyword.toLowerCase().replace(/[^a-z0-9]+/g, "").slice(0, 10) || "keyword"}hub.com`,
+  ].filter(Boolean);
+
+  const deduped = Array.from(new Set(candidateDomains)).slice(0, 5);
+  return deduped.map((domain, idx) => ({
+    domain,
+    reason: idx === 0 ? "Strong authority and broad topical coverage." : "Relevant topical pages and consistent query intent match.",
+    source: "simulated",
+  }));
+}
+
+async function runTopRankingSitesQuery(input: {
+  url: string;
+  keyword: string;
+  brand: string;
+  userPrompt: string;
+  modelResults: ModelResult[];
+}): Promise<RankingSite[]> {
+  if (!process.env.OPENAI_API_KEY) {
+    return fallbackTopRankingSites({
+      keyword: input.keyword,
+      normalizedUrl: input.url,
+      brand: input.brand,
+      modelResults: input.modelResults,
+    });
+  }
+
+  const response = await fetchWithTimeout("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+    },
+    body: JSON.stringify({
+      model: process.env.OPENAI_MODEL ?? "gpt-4.1-mini",
+      temperature: 0.25,
+      response_format: { type: "json_object" },
+      messages: [
+        {
+          role: "system",
+          content: "Return strict JSON only. No markdown fences.",
+        },
+        {
+          role: "user",
+          content: buildTopSitesPrompt(input),
+        },
+      ],
+    }),
+  });
+
+  if (!response.ok) {
+    return fallbackTopRankingSites({
+      keyword: input.keyword,
+      normalizedUrl: input.url,
+      brand: input.brand,
+      modelResults: input.modelResults,
+    });
+  }
+
+  const data = (await response.json()) as { choices?: Array<{ message?: { content?: string } }> };
+  const content = data.choices?.[0]?.message?.content;
+  if (!content) {
+    return fallbackTopRankingSites({
+      keyword: input.keyword,
+      normalizedUrl: input.url,
+      brand: input.brand,
+      modelResults: input.modelResults,
+    });
+  }
+
+  try {
+    const parsed = JSON.parse(content) as { sites?: Array<{ domain?: string; reason?: string }> };
+    const normalized = (parsed.sites ?? [])
+      .map((item) => ({
+        domain: toLikelyDomain(item.domain ?? ""),
+        reason: (item.reason ?? "").trim(),
+      }))
+      .filter((item) => item.domain)
+      .slice(0, 5)
+      .map((item) => ({
+        domain: item.domain,
+        reason: item.reason || "High relevance and authority for this query space.",
+        source: "live" as const,
+      }));
+
+    if (normalized.length === 0) {
+      return fallbackTopRankingSites({
+        keyword: input.keyword,
+        normalizedUrl: input.url,
+        brand: input.brand,
+        modelResults: input.modelResults,
+      });
+    }
+    return normalized;
+  } catch {
+    return fallbackTopRankingSites({
+      keyword: input.keyword,
+      normalizedUrl: input.url,
+      brand: input.brand,
+      modelResults: input.modelResults,
+    });
   }
 }
 
@@ -597,6 +745,13 @@ export async function POST(req: Request) {
 
     const aiBlurb = buildAiBlurb(brand, keyword, semantic, modelResults);
     const llmsTxt = buildLlmsTxt(semantic, keyword, modelResults, citations);
+    const topRankingSites = await runTopRankingSitesQuery({
+      url: normalizedUrl,
+      keyword,
+      brand,
+      userPrompt: prompt,
+      modelResults,
+    });
 
     const auditId = crypto.randomUUID();
     const userId = await getOrCreateCurrentUserId({
@@ -667,6 +822,7 @@ export async function POST(req: Request) {
       semanticCheck: semantic,
       modelResults,
       citationAudit: citations,
+      topRankingSites,
       aiOptimizedBlurb: aiBlurb,
       llmsTxt,
     });

@@ -1,6 +1,6 @@
 "use client";
 
-import { LayoutDashboard, FileEdit, Settings, LogOut, Home, PanelLeftClose, PanelLeftOpen, LogIn } from "lucide-react";
+import { LayoutDashboard, FileEdit, Settings, LogOut, Home, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
@@ -12,7 +12,6 @@ const navigation = [
   { name: "SEO/GEO Audit", href: "/dashboard", icon: LayoutDashboard },
   { name: "Studio", href: "/studio/editor", icon: FileEdit },
   { name: "Settings", href: "/settings", icon: Settings },
-  { name: "Auth", href: "/auth/sign-in", icon: LogIn },
 ];
 
 export default function PlatformLayout({ children }: { children: React.ReactNode }) {
@@ -50,7 +49,7 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
           <div className="mb-3 flex items-center justify-between">
             <Link href="/">
               <Image
-                src="/standexai-logo-final.png"
+                src="/standexailogo.png"
                 alt="StandexAI"
                 width={96}
                 height={26}

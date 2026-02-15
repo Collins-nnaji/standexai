@@ -70,7 +70,7 @@ export default function Home() {
       <nav className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6 sm:py-5">
         <div className="flex items-center gap-2">
           <Image
-            src="/standexai-logo-final.png"
+            src="/standexailogo.png"
             alt="StandexAI"
             width={160}
             height={48}
@@ -451,7 +451,7 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-6 py-8">
           <div className="flex items-center justify-between">
             <Image
-              src="/standexai-logo-final.png"
+              src="/standexailogo.png"
               alt="StandexAI"
               width={120}
               height={36}
