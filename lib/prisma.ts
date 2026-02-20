@@ -76,6 +76,26 @@ export async function withPrismaReconnect<T>(operation: () => Promise<T>) {
 
 export const prisma = basePrisma.$extends({
   query: {
+    async $queryRaw({ args, query }) {
+      try {
+        return await query(args);
+      } catch (error) {
+        if (!isClosedConnectionError(error)) throw error;
+        await basePrisma.$disconnect().catch(() => undefined);
+        await ensurePrismaConnected();
+        return query(args);
+      }
+    },
+    async $executeRaw({ args, query }) {
+      try {
+        return await query(args);
+      } catch (error) {
+        if (!isClosedConnectionError(error)) throw error;
+        await basePrisma.$disconnect().catch(() => undefined);
+        await ensurePrismaConnected();
+        return query(args);
+      }
+    },
     $allModels: {
       async $allOperations({ args, query }) {
         try {

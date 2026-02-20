@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { User, Building2, Shield, Bell, Key } from "lucide-react";
+import { User, Building2, Shield, Bell, Key, Save, Loader2 } from "lucide-react";
 
 type ProfileData = {
   id: string;
@@ -66,19 +66,6 @@ export default function SettingsPage() {
         "Flag misleading pricing or savings language.",
       ],
     },
-    {
-      id: "sec",
-      name: "SEC Financial Regulations",
-      summary: "Investment advice disclaimers, performance claims",
-      updatedAt: "Updated 3 weeks ago",
-      include: ["Performance data", "Risk disclosures", "Investment strategies"],
-      exclude: ["Guaranteed returns", "Personalized advice without license"],
-      contentChecks: [
-        "Require risk warnings on performance statements.",
-        "Disallow guaranteed returns or risk-free claims.",
-        "Ensure past performance is not presented as future results.",
-      ],
-    },
   ];
 
   useEffect(() => {
@@ -126,79 +113,81 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-white">
-      <header className="border-b border-[#E5E5EA] bg-white px-4 py-4 sm:px-6">
-        <h1 className="text-2xl font-semibold text-[#1D1D1F]">Settings</h1>
-        <p className="mt-1 text-sm text-[#6E6E73]">Manage GEO audits, Content Studio guardrails, and account preferences</p>
+    <div className="flex flex-1 flex-col bg-white">
+      <header className="border-b border-zinc-100 bg-white px-8 py-6">
+        <h1 className="text-2xl font-black text-zinc-950 uppercase tracking-tight">System Settings</h1>
+        <p className="mt-1 text-sm font-medium text-zinc-500 uppercase tracking-tight">Technical preferences and account control</p>
       </header>
 
       <div className="flex flex-1 flex-col overflow-hidden md:flex-row">
         {/* Tabs Sidebar */}
-        <aside className="w-full border-b border-[#E5E5EA] bg-[#F5F5F7] p-3 md:w-64 md:border-b-0 md:border-r md:p-4">
-          <nav className="flex gap-2 overflow-x-auto pb-1 md:block md:space-y-1">
+        <aside className="w-full border-b border-zinc-100 bg-[#F9FAFB] p-6 md:w-72 md:border-b-0 md:border-r">
+          <nav className="flex gap-2 overflow-x-auto pb-1 md:block md:space-y-2">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex flex-shrink-0 items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition md:w-full ${
-                  activeTab === tab.id
-                    ? "bg-white text-[#1D1D1F] shadow-sm"
-                    : "text-[#6E6E73] hover:bg-white hover:text-[#1D1D1F]"
-                }`}
+                className={`flex flex-shrink-0 items-center justify-between rounded-xl px-4 py-3 text-xs font-black uppercase tracking-widest transition-all md:w-full ${activeTab === tab.id
+                  ? "bg-white text-zinc-950 shadow-md border border-zinc-100"
+                  : "text-zinc-400 hover:bg-white hover:text-zinc-950"
+                  }`}
               >
-                <tab.icon className="h-5 w-5" />
-                {tab.label}
+                <div className="flex items-center gap-3">
+                  <tab.icon className="h-4 w-4" />
+                  {tab.label}
+                </div>
+                {activeTab === tab.id && <div className="h-1.5 w-1.5 rounded-full bg-indigo-500"></div>}
               </button>
             ))}
           </nav>
         </aside>
 
         {/* Content */}
-        <main className="flex-1 overflow-auto p-4 sm:p-6">
-          <div className="mx-auto max-w-3xl">
+        <main className="flex-1 overflow-auto p-8 lg:p-12 custom-scrollbar">
+          <div className="mx-auto max-w-4xl">
             {(saveError || saveMessage) && (
               <div
-                className={`mb-4 rounded-xl border px-4 py-2.5 text-sm ${
-                  saveError ? "border-red-200 bg-red-50 text-red-700" : "border-emerald-200 bg-emerald-50 text-emerald-700"
-                }`}
+                className={`mb-8 rounded-2xl border px-6 py-4 text-xs font-black uppercase tracking-widest ${saveError ? "border-red-100 bg-red-50 text-red-600" : "border-emerald-100 bg-emerald-50 text-emerald-600"
+                  }`}
               >
                 {saveError ?? saveMessage}
               </div>
             )}
-            {activeTab === "profile" && (
-              <div className="space-y-6">
-                <div className="rounded-2xl border border-[#E5E5EA] bg-white p-6">
-                  <h2 className="mb-6 text-lg font-semibold text-[#1D1D1F]">Profile Information</h2>
 
-                  <div className="space-y-4">
-                    <div>
-                      <label className="mb-2 block text-sm text-[#6E6E73]">Full Name</label>
+            {activeTab === "profile" && (
+              <div className="space-y-8">
+                <div className="rounded-[2.5rem] border border-zinc-100 bg-white p-10 shadow-xl">
+                  <h2 className="mb-10 text-xl font-black text-zinc-950 uppercase">Profile Core</h2>
+
+                  <div className="grid gap-8 sm:grid-cols-2">
+                    <div className="space-y-2">
+                      <label className="pl-1 text-[9px] font-black uppercase tracking-[0.3em] text-zinc-400">Full Name</label>
                       <input
                         type="text"
                         value={profile.name}
                         onChange={(e) => setProfile((prev) => ({ ...prev, name: e.target.value }))}
                         disabled={loadingProfile}
-                        className="w-full rounded-xl border border-[#E5E5EA] bg-white px-4 py-2.5 text-[#1D1D1F] outline-none focus:border-[#1D1D1F]"
+                        className="w-full rounded-2xl border border-zinc-100 bg-[#F9FAFB] px-5 py-4 text-sm font-bold text-zinc-900 outline-none focus:bg-white focus:border-indigo-100 transition shadow-inner"
                       />
                     </div>
 
-                    <div>
-                      <label className="mb-2 block text-sm text-[#6E6E73]">Email</label>
+                    <div className="space-y-2">
+                      <label className="pl-1 text-[9px] font-black uppercase tracking-[0.3em] text-zinc-400">System ID / Email</label>
                       <input
                         type="email"
                         value={profile.email}
                         readOnly
-                        className="w-full rounded-xl border border-[#E5E5EA] bg-[#F8F8FA] px-4 py-2.5 text-[#6E6E73] outline-none"
+                        className="w-full rounded-2xl border border-zinc-50 bg-zinc-50 px-5 py-4 text-sm font-bold text-zinc-400 outline-none cursor-not-allowed"
                       />
                     </div>
 
-                    <div>
-                      <label className="mb-2 block text-sm text-[#6E6E73]">Role</label>
+                    <div className="space-y-2">
+                      <label className="pl-1 text-[9px] font-black uppercase tracking-[0.3em] text-zinc-400">Role</label>
                       <select
                         value={profile.role}
                         onChange={(e) => setProfile((prev) => ({ ...prev, role: e.target.value as ProfileData["role"] }))}
                         disabled={loadingProfile}
-                        className="w-full rounded-xl border border-[#E5E5EA] bg-white px-4 py-2.5 text-[#1D1D1F] outline-none focus:border-[#1D1D1F]"
+                        className="w-full rounded-2xl border border-zinc-100 bg-[#F9FAFB] px-5 py-4 text-sm font-bold text-zinc-900 outline-none cursor-pointer hover:bg-white"
                       >
                         <option value="WRITER">Writer</option>
                         <option value="REVIEWER">Reviewer</option>
@@ -207,35 +196,27 @@ export default function SettingsPage() {
                       </select>
                     </div>
 
-                    <div>
-                      <label className="mb-2 block text-sm text-[#6E6E73]">Avatar URL</label>
+                    <div className="space-y-2">
+                      <label className="pl-1 text-[9px] font-black uppercase tracking-[0.3em] text-zinc-400">Avatar URL</label>
                       <input
                         type="url"
                         placeholder="https://..."
                         value={profile.avatar}
                         onChange={(e) => setProfile((prev) => ({ ...prev, avatar: e.target.value }))}
                         disabled={loadingProfile}
-                        className="w-full rounded-xl border border-[#E5E5EA] bg-white px-4 py-2.5 text-[#1D1D1F] placeholder-[#AEAEB2] outline-none focus:border-[#1D1D1F]"
+                        className="w-full rounded-2xl border border-zinc-100 bg-[#F9FAFB] px-5 py-4 text-sm font-bold text-zinc-900 outline-none focus:bg-white transition shadow-inner"
                       />
                     </div>
                   </div>
 
-                  <div className="mt-6 flex gap-3">
+                  <div className="mt-12 flex items-center justify-end gap-4 border-t border-zinc-50 pt-10">
                     <button
-                      onClick={() => void persistProfile("Profile details saved.")}
+                      onClick={() => void persistProfile("Profile updated.")}
                       disabled={savingProfile || loadingProfile}
-                      className="rounded-full bg-[#1D1D1F] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#333] disabled:opacity-60"
+                      className="flex items-center gap-3 rounded-2xl bg-zinc-950 px-8 py-4 text-xs font-black uppercase tracking-widest text-white transition hover:bg-black shadow-lg disabled:opacity-50"
                     >
-                      {savingProfile ? "Saving..." : "Save Changes"}
-                    </button>
-                    <button
-                      onClick={() => {
-                        setSaveError(null);
-                        setSaveMessage(null);
-                      }}
-                      className="rounded-full border border-[#D1D1D6] px-4 py-2 text-sm font-medium text-[#6E6E73] transition hover:border-[#1D1D1F] hover:text-[#1D1D1F]"
-                    >
-                      Cancel
+                      {savingProfile ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+                      Persist Changes
                     </button>
                   </div>
                 </div>
@@ -243,24 +224,24 @@ export default function SettingsPage() {
             )}
 
             {activeTab === "company" && (
-              <div className="space-y-6">
-                <div className="rounded-2xl border border-[#E5E5EA] bg-white p-6">
-                  <h2 className="mb-6 text-lg font-semibold text-[#1D1D1F]">Company Settings</h2>
+              <div className="space-y-8">
+                <div className="rounded-[2.5rem] border border-zinc-100 bg-white p-10 shadow-xl">
+                  <h2 className="mb-10 text-xl font-black text-zinc-950 uppercase">Organization Core</h2>
 
-                  <div className="space-y-4">
-                    <div>
-                      <label className="mb-2 block text-sm text-[#6E6E73]">Company Name</label>
+                  <div className="grid gap-8 sm:grid-cols-2">
+                    <div className="space-y-2">
+                      <label className="pl-1 text-[9px] font-black uppercase tracking-[0.3em] text-zinc-400">Company Name</label>
                       <input
                         type="text"
                         value={profile.companyName}
                         onChange={(e) => setProfile((prev) => ({ ...prev, companyName: e.target.value }))}
                         disabled={loadingProfile}
-                        className="w-full rounded-xl border border-[#E5E5EA] bg-white px-4 py-2.5 text-[#1D1D1F] outline-none focus:border-[#1D1D1F]"
+                        className="w-full rounded-2xl border border-zinc-100 bg-[#F9FAFB] px-5 py-4 text-sm font-bold text-zinc-900 outline-none focus:bg-white transition shadow-inner"
                       />
                     </div>
 
-                    <div>
-                      <label className="mb-2 block text-sm text-[#6E6E73]">Industry</label>
+                    <div className="space-y-2">
+                      <label className="pl-1 text-[9px] font-black uppercase tracking-[0.3em] text-zinc-400">Vertical Sector</label>
                       <select
                         value={profile.industry ?? ""}
                         onChange={(e) =>
@@ -270,7 +251,7 @@ export default function SettingsPage() {
                           }))
                         }
                         disabled={loadingProfile}
-                        className="w-full rounded-xl border border-[#E5E5EA] bg-white px-4 py-2.5 text-[#1D1D1F] outline-none focus:border-[#1D1D1F]"
+                        className="w-full rounded-2xl border border-zinc-100 bg-[#F9FAFB] px-5 py-4 text-sm font-bold text-zinc-900 outline-none cursor-pointer hover:bg-white"
                       >
                         <option value="">Select industry</option>
                         <option value="SAAS">SaaS</option>
@@ -284,13 +265,13 @@ export default function SettingsPage() {
                     </div>
                   </div>
 
-                  <div className="mt-6">
+                  <div className="mt-12 flex justify-end pt-10 border-t border-zinc-50">
                     <button
-                      onClick={() => void persistProfile("Company details updated.")}
+                      onClick={() => void persistProfile("Organization updated.")}
                       disabled={savingProfile || loadingProfile}
-                      className="rounded-full bg-[#1D1D1F] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#333] disabled:opacity-60"
+                      className="rounded-2xl bg-zinc-950 px-8 py-4 text-xs font-black uppercase tracking-widest text-white transition hover:bg-black shadow-lg"
                     >
-                      {savingProfile ? "Saving..." : "Update Company Info"}
+                      Update Organization
                     </button>
                   </div>
                 </div>
@@ -298,59 +279,51 @@ export default function SettingsPage() {
             )}
 
             {activeTab === "compliance" && (
-              <div className="space-y-6">
-                <div className="rounded-2xl border border-[#E5E5EA] bg-white p-6">
-                  <h2 className="mb-4 text-lg font-semibold text-[#1D1D1F]">Policy Rules For Editor + Audits</h2>
-                  <p className="mb-6 text-sm text-[#6E6E73]">
-                    Configure the guardrails applied inside the writing editor and fix recommendations.
+              <div className="space-y-8">
+                <div className="rounded-[2.5rem] border border-zinc-100 bg-white p-10 shadow-xl">
+                  <h2 className="mb-4 text-xl font-black text-zinc-950 uppercase">Guardrail Protocol</h2>
+                  <p className="mb-10 text-sm font-medium text-zinc-500 uppercase tracking-tight">
+                    Active filtering logic for Prompt Lab and Safety Audit simulations.
                   </p>
 
-                  <div className="space-y-4">
+                  <div className="space-y-6">
                     {complianceRules.map((rule, index) => (
-                      <details
+                      <div
                         key={rule.id}
-                        className="rounded-xl border border-[#E5E5EA] bg-[#F5F5F7] p-4 transition hover:border-[#D1D1D6]"
-                        open={index === 0}
+                        className="rounded-3xl border border-zinc-100 bg-[#F9FAFB] p-8 transition hover:bg-white hover:shadow-lg"
                       >
-                        <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
+                        <div className="flex items-center justify-between mb-8">
                           <div>
-                            <h3 className="font-medium text-[#1D1D1F]">{rule.name}</h3>
-                            <p className="text-sm text-[#6E6E73]">{rule.summary}</p>
-                            <p className="mt-1 text-xs text-[#AEAEB2]">{rule.updatedAt}</p>
+                            <h3 className="text-lg font-black text-zinc-950 uppercase">{rule.name}</h3>
+                            <p className="text-sm font-medium text-zinc-400">{rule.summary}</p>
                           </div>
                           <label className="relative inline-flex cursor-pointer items-center">
                             <input type="checkbox" defaultChecked className="peer sr-only" />
-                            <div className="peer h-6 w-11 rounded-full bg-[#D1D1D6] after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:shadow-sm after:transition-all after:content-[''] peer-checked:bg-[#1D1D1F] peer-checked:after:translate-x-full peer-focus:outline-none"></div>
+                            <div className="peer h-7 w-12 rounded-full bg-zinc-200 after:absolute after:left-[4px] after:top-[4px] after:h-5 after:w-5 after:rounded-full after:bg-white after:shadow-sm after:transition-all after:content-[''] peer-checked:bg-indigo-600 peer-checked:after:translate-x-full peer-focus:outline-none"></div>
                           </label>
-                        </summary>
+                        </div>
 
-                        <div className="mt-4 grid gap-4 lg:grid-cols-3">
-                          <div className="rounded-lg border border-[#E5E5EA] bg-white p-3">
-                            <p className="text-xs font-semibold text-[#1D1D1F]">Included Content</p>
-                            <ul className="mt-2 text-xs text-[#6E6E73]">
-                              {rule.include.map((item) => (
-                                <li key={item}>• {item}</li>
-                              ))}
+                        <div className="grid gap-6 lg:grid-cols-3">
+                          <div className="rounded-2xl bg-white border border-zinc-100 p-5 shadow-sm">
+                            <span className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-300 block mb-3">Include</span>
+                            <ul className="space-y-2 text-[10px] font-bold text-zinc-600">
+                              {rule.include.map(i => <li key={i}>• {i}</li>)}
                             </ul>
                           </div>
-                          <div className="rounded-lg border border-[#E5E5EA] bg-white p-3">
-                            <p className="text-xs font-semibold text-[#1D1D1F]">Excluded Content</p>
-                            <ul className="mt-2 text-xs text-[#6E6E73]">
-                              {rule.exclude.map((item) => (
-                                <li key={item}>• {item}</li>
-                              ))}
+                          <div className="rounded-2xl bg-white border border-zinc-100 p-5 shadow-sm">
+                            <span className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-300 block mb-3">Exclude</span>
+                            <ul className="space-y-2 text-[10px] font-bold text-red-500">
+                              {rule.exclude.map(i => <li key={i}>• {i}</li>)}
                             </ul>
                           </div>
-                          <div className="rounded-lg border border-[#E5E5EA] bg-white p-3">
-                            <p className="text-xs font-semibold text-[#1D1D1F]">Key Checks</p>
-                            <ul className="mt-2 text-xs text-[#6E6E73]">
-                              {rule.contentChecks.map((item) => (
-                                <li key={item}>• {item}</li>
-                              ))}
+                          <div className="rounded-2xl bg-zinc-950 border border-zinc-800 p-5 shadow-xl text-white">
+                            <span className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-500 block mb-3">Logic Checks</span>
+                            <ul className="space-y-2 text-[10px] font-bold text-zinc-300">
+                              {rule.contentChecks.map(i => <li key={i}>• {i}</li>)}
                             </ul>
                           </div>
                         </div>
-                      </details>
+                      </div>
                     ))}
                   </div>
                 </div>
@@ -358,38 +331,38 @@ export default function SettingsPage() {
             )}
 
             {activeTab === "api" && (
-              <div className="space-y-6">
-                <div className="rounded-2xl border border-[#E5E5EA] bg-white p-6">
-                  <div className="mb-6 flex items-center justify-between">
+              <div className="space-y-8">
+                <div className="rounded-[2.5rem] border border-zinc-100 bg-white p-10 shadow-xl">
+                  <div className="mb-10 flex items-center justify-between">
                     <div>
-                      <h2 className="text-lg font-semibold text-[#1D1D1F]">API Keys</h2>
-                      <p className="mt-1 text-sm text-[#6E6E73]">Manage API keys for scans, reports, and editor automations</p>
+                      <h2 className="text-xl font-black text-zinc-950 uppercase">Gateway Keys</h2>
+                      <p className="mt-1 text-sm font-medium text-zinc-500 uppercase tracking-tight">Active API endpoints for model routing</p>
                     </div>
-                    <button className="rounded-full bg-[#1D1D1F] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#333]">
-                      Generate New Key
+                    <button className="rounded-2xl bg-zinc-950 px-6 py-3.5 text-xs font-black uppercase tracking-widest text-white shadow-xl hover:bg-black transition">
+                      Generate Key
                     </button>
                   </div>
 
-                  <div className="space-y-3">
-                    <div className="rounded-xl border border-[#E5E5EA] bg-[#F5F5F7] p-4">
+                  <div className="space-y-4">
+                    <div className="group rounded-3xl border border-zinc-100 bg-[#F9FAFB] p-8 transition hover:bg-white hover:shadow-lg">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <h3 className="font-medium text-[#1D1D1F]">Production API Key</h3>
-                          <p className="mt-1 font-mono text-sm text-[#6E6E73]">sk_live_••••••••••••3x8k</p>
-                          <p className="mt-2 text-xs text-[#AEAEB2]">Last used: 2 hours ago</p>
+                          <h3 className="text-xs font-black text-zinc-950 uppercase mb-2">Production Protocol</h3>
+                          <p className="font-mono text-sm font-bold text-zinc-400">sk_live_••••••••••••3x8k</p>
+                          <p className="mt-4 text-[9px] font-black uppercase tracking-widest text-zinc-300">Last Ping: 2 Hours Ago</p>
                         </div>
-                        <button className="text-sm text-red-500 hover:text-red-600">Revoke</button>
+                        <button className="text-[10px] font-black uppercase tracking-widest text-red-400 hover:text-red-600">Revoke</button>
                       </div>
                     </div>
 
-                    <div className="rounded-xl border border-[#E5E5EA] bg-[#F5F5F7] p-4">
+                    <div className="group rounded-3xl border border-zinc-100 bg-[#F9FAFB] p-8 transition hover:bg-white hover:shadow-lg">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <h3 className="font-medium text-[#1D1D1F]">Development API Key</h3>
-                          <p className="mt-1 font-mono text-sm text-[#6E6E73]">sk_test_••••••••••••7m2p</p>
-                          <p className="mt-2 text-xs text-[#AEAEB2]">Last used: Never</p>
+                          <h3 className="text-xs font-black text-zinc-950 uppercase mb-2">Sandbox Protocol</h3>
+                          <p className="font-mono text-sm font-bold text-zinc-400">sk_test_••••••••••••7m2p</p>
+                          <p className="mt-4 text-[9px] font-black uppercase tracking-widest text-zinc-300">Last Ping: Inactive</p>
                         </div>
-                        <button className="text-sm text-red-500 hover:text-red-600">Revoke</button>
+                        <button className="text-[10px] font-black uppercase tracking-widest text-red-400 hover:text-red-600">Revoke</button>
                       </div>
                     </div>
                   </div>
@@ -400,6 +373,13 @@ export default function SettingsPage() {
           </div>
         </main>
       </div>
+
+      <style dangerouslySetInnerHTML={{
+        __html: `
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #E4E4E7; border-radius: 10px; }
+      `}} />
     </div>
   );
 }

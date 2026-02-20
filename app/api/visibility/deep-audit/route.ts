@@ -705,37 +705,9 @@ export async function POST(req: Request) {
     const semanticPromise = runSemanticCheck(normalizedUrl).catch((error) =>
       fallbackSemanticCheck(normalizedUrl, error instanceof Error ? error.message : "unreachable or blocked"),
     );
-    const semantic = await semanticPromise;
-
-    // PART 1: Fast return for partial payload (Robustness split)
-    if (body.simulation === false && !prompt && body.url) {
-      // we check for a custom explicit 'part' logic but the safest way from existing UI is just accepting an explicit property
-    }
-    const isBasicOnly = (body as any).part === "basic";
-
-    if (isBasicOnly) {
-      return NextResponse.json({
-        auditId: crypto.randomUUID(),
-        keyword,
-        simulation: { enabled: false, usedPrompt: null, provider: null, model: null },
-        dataQuality: { liveModels: 0, simulatedModels: 0 },
-        geoReport: {
-          geoScore: Math.round(semantic.score * 0.8), // simulated preliminary score
-          modelShare: 0,
-          sentiment: "neutral",
-          citationSources: [],
-          status: semantic.score >= 75 ? "green" : semantic.score >= 55 ? "yellow" : "red",
-        },
-        semanticCheck: semantic,
-        modelResults: [],
-        citationAudit: [],
-        topRankingSites: [],
-        aiOptimizedBlurb: "Complete deep scan to generate your AI-optimized summary blurb.",
-        llmsTxt: "Complete deep scan to generate targeted llms.txt directives.",
-      });
-    }
-
     const citationPromise = runCitationAudit(host, brand);
+
+    const semantic = await semanticPromise;
     const citations = await citationPromise;
 
     const shouldUseAiSimulation = Boolean(prompt) || body.simulation === true;
