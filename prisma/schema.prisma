@@ -29,32 +29,28 @@ enum Industry {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  email         String    @unique
-  name          String?
-  passwordHash  String
-  role          UserRole  @default(WRITER)
-  industry      Industry?
-  companyName   String?
-  avatar        String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id           String    @id @default(cuid())
+  email        String    @unique
+  name         String?
+  passwordHash String
+  role         UserRole  @default(WRITER)
+  companyName  String?
+  avatar       String?
+  industry     Industry?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 
   // Relations
-  content          Content[]
-  contentVersions  ContentVersion[]
-  approvals        Approval[]
-  comments         Comment[]
-  briefs           ContentBrief[]
-  teamMemberships  TeamMember[]
-  apiKeys          ApiKey[]
-  accounts         Account[]
-  sessions         Session[]
+  teamMemberships TeamMember[]
+  apiKeys         ApiKey[]
+  accounts        Account[]
+  sessions        Session[]
+  content         Content[]
 
   @@index([email])
 }
 
-// NextAuth models
+// NextAuth / Neon Auth models
 model Account {
   id                String  @id @default(cuid())
   userId            String
@@ -91,7 +87,7 @@ model VerificationToken {
 }
 
 // ============================================================================
-// TEAM MANAGEMENT (v1.5)
+// TEAM MANAGEMENT
 // ============================================================================
 
 enum TeamRole {
@@ -105,15 +101,11 @@ model Team {
   id        String   @id @default(cuid())
   name      String
   slug      String   @unique
-  industry  Industry
-  settings  Json     // team preferences, compliance frameworks
+  settings  Json     // team preferences
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  members  TeamMember[]
-  content  Content[]
-  rules    ComplianceRule[]
-  templates ContentTemplate[]
+  members TeamMember[]
 }
 
 model TeamMember {
@@ -132,255 +124,7 @@ model TeamMember {
 }
 
 // ============================================================================
-// CONTENT MANAGEMENT
-// ============================================================================
-
-enum ContentStatus {
-  DRAFT
-  IN_REVIEW
-  APPROVED
-  REJECTED
-  PUBLISHED
-}
-
-enum RiskLevel {
-  LOW
-  MEDIUM
-  HIGH
-  CRITICAL
-}
-
-model Content {
-  id              String        @id @default(cuid())
-  userId          String
-  teamId          String?
-  title           String
-  body            Json          // Tiptap JSON document
-  status          ContentStatus @default(DRAFT)
-  complianceScore Int?          // 0-100
-  seoScore        Int?          // 0-100
-  riskLevel       RiskLevel?
-  industry        Industry
-  targetKeyword   String?
-  metaDescription String?
-  slug            String?
-  publishedAt     DateTime?
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-
-  // Relations
-  user        User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  team        Team?              @relation(fields: [teamId], references: [id], onDelete: SetNull)
-  flags       ComplianceFlag[]
-  versions    ContentVersion[]
-  approvals   Approval[]
-  comments    Comment[]
-  seoAnalysis SeoAnalysis[]
-
-  @@index([userId])
-  @@index([teamId])
-  @@index([status])
-  @@index([riskLevel])
-  @@index([updatedAt(sort: Desc)])
-}
-
-// ============================================================================
-// VERSION CONTROL & AUDIT TRAIL
-// ============================================================================
-
-model ContentVersion {
-  id              String     @id @default(cuid())
-  contentId       String
-  version         Int
-  body            Json
-  complianceScore Int?
-  seoScore        Int?
-  riskLevel       RiskLevel?
-  userId          String
-  changeNote      String?
-  createdAt       DateTime   @default(now())
-
-  content Content @relation(fields: [contentId], references: [id], onDelete: Cascade)
-  user    User    @relation(fields: [userId], references: [id])
-
-  @@unique([contentId, version])
-  @@index([contentId, createdAt(sort: Desc)])
-}
-
-// ============================================================================
-// COMPLIANCE SYSTEM
-// ============================================================================
-
-enum RuleType {
-  PROHIBITED_CLAIM
-  MISSING_DISCLOSURE
-  UNSUPPORTED_STAT
-  MEDICAL_ADVICE
-  GUARANTEE_LANGUAGE
-  RISK_WARNING
-  LICENSING_INFO
-  PERFORMANCE_CLAIM
-  TESTIMONIAL
-  COMPARISON
-}
-
-enum Severity {
-  CRITICAL
-  WARNING
-  INFO
-}
-
-model ComplianceRule {
-  id                  String   @id @default(cuid())
-  teamId              String?  // null = system rule, set = custom team rule
-  industry            Industry
-  ruleName            String
-  ruleType            RuleType
-  severity            Severity
-  pattern             String   // regex pattern or keyword
-  explanation         String   @db.Text
-  regulationReference String?  @db.Text
-  alternatives        Json     // array of compliant alternatives
-  active              Boolean  @default(true)
-  isSystemRule        Boolean  @default(false)
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
-
-  team  Team?            @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  flags ComplianceFlag[]
-
-  @@index([industry, active])
-  @@index([teamId])
-}
-
-enum FlagStatus {
-  ACTIVE
-  FIXED
-  DISMISSED
-  ACKNOWLEDGED
-}
-
-model ComplianceFlag {
-  id                  String     @id @default(cuid())
-  contentId           String
-  ruleId              String
-  flaggedText         String     @db.Text
-  severity            Severity
-  explanation         String     @db.Text
-  regulationReference String?    @db.Text
-  alternatives        Json
-  status              FlagStatus @default(ACTIVE)
-  lineNumber          Int?
-  charPosition        Int?
-  dismissedBy         String?
-  dismissedAt         DateTime?
-  fixedAt             DateTime?
-  createdAt           DateTime   @default(now())
-
-  content Content        @relation(fields: [contentId], references: [id], onDelete: Cascade)
-  rule    ComplianceRule @relation(fields: [ruleId], references: [id])
-
-  @@index([contentId, status])
-  @@index([severity])
-}
-
-// ============================================================================
-// SEO ANALYSIS
-// ============================================================================
-
-model SeoAnalysis {
-  id                String   @id @default(cuid())
-  contentId         String
-  keyword           String?
-  keywordDensity    Float?
-  readabilityScore  Int?
-  wordCount         Int
-  structureAnalysis Json
-  suggestions       Json
-  metaSuggestions   Json
-  createdAt         DateTime @default(now())
-
-  content Content @relation(fields: [contentId], references: [id], onDelete: Cascade)
-
-  @@index([contentId])
-}
-
-// ============================================================================
-// CONTENT BRIEF GENERATOR
-// ============================================================================
-
-model ContentBrief {
-  id                   String   @id @default(cuid())
-  userId               String
-  teamId               String?
-  topic                String
-  industry             Industry
-  targetKeyword        String?
-  competitorUrls       Json     // array of URLs
-  competitiveAnalysis  Json     // analysis results
-  recommendedOutline   Json
-  complianceGuidelines Json
-  targetMetrics        Json
-  createdAt            DateTime @default(now())
-
-  user User @relation(fields: [userId], references: [id])
-
-  @@index([userId])
-  @@index([createdAt(sort: Desc)])
-}
-
-// ============================================================================
-// APPROVAL WORKFLOW
-// ============================================================================
-
-enum ApprovalStatus {
-  APPROVED
-  REJECTED
-  CHANGES_REQUESTED
-}
-
-model Approval {
-  id         String         @id @default(cuid())
-  contentId  String
-  reviewerId String
-  status     ApprovalStatus
-  comments   String?        @db.Text
-  version    Int?
-  createdAt  DateTime       @default(now())
-
-  content  Content @relation(fields: [contentId], references: [id], onDelete: Cascade)
-  reviewer User    @relation(fields: [reviewerId], references: [id])
-
-  @@index([contentId])
-  @@index([reviewerId])
-}
-
-// ============================================================================
-// COMMENTS & COLLABORATION (v1.5)
-// ============================================================================
-
-model Comment {
-  id         String   @id @default(cuid())
-  contentId  String
-  userId     String
-  text       String   @db.Text
-  lineNumber Int?
-  resolved   Boolean  @default(false)
-  parentId   String?  // for threaded comments
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-
-  content Content   @relation(fields: [contentId], references: [id], onDelete: Cascade)
-  user    User      @relation(fields: [userId], references: [id])
-  parent  Comment?  @relation("CommentThread", fields: [parentId], references: [id], onDelete: Cascade)
-  replies Comment[] @relation("CommentThread")
-
-  @@index([contentId])
-  @@index([userId])
-}
-
-// ============================================================================
-// API ACCESS (v2.0)
+// API ACCESS
 // ============================================================================
 
 model ApiKey {
@@ -400,7 +144,7 @@ model ApiKey {
 }
 
 // ============================================================================
-// ANALYTICS & REPORTING
+// ANALYTICS
 // ============================================================================
 
 model AnalyticsEvent {
@@ -417,36 +161,114 @@ model AnalyticsEvent {
 }
 
 // ============================================================================
-// CONTENT TEMPLATES (v1.5)
+// CONTENT & COMPLIANCE
 // ============================================================================
 
-model ContentTemplate {
-  id          String   @id @default(cuid())
-  teamId      String?
-  name        String
-  description String?  @db.Text
-  industry    Industry
-  body        Json     // Tiptap JSON template
-  isPublic    Boolean  @default(false)
-  createdAt   DateTime @default(now())
+model Content {
+  id               String    @id @default(cuid())
+  userId           String
+  title            String
+  body             Json      // Tiptap JSON
+  industry         Industry?
+  targetKeyword    String?
+  metaDescription  String?
+  status           String    @default("DRAFT") // DRAFT | IN_REVIEW | APPROVED | PUBLISHED
+  seoScore         Int?
+  complianceScore  Int?
+  riskLevel        String?   // low | medium | high | critical
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 
-  team Team? @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user  User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  flags ContentFlag[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([updatedAt(sort: Desc)])
+}
+
+model ContentFlag {
+  id        String   @id @default(cuid())
+  contentId String
+  createdAt DateTime @default(now())
+
+  content Content @relation(fields: [contentId], references: [id], onDelete: Cascade)
+
+  @@index([contentId])
+}
+
+model ContentBrief {
+  id            String   @id @default(cuid())
+  topic         String
+  targetKeyword String?
+  createdAt     DateTime @default(now())
+
+  @@index([createdAt(sort: Desc)])
+}
+
+enum RuleType {
+  PROHIBITED_CLAIM
+  UNSUPPORTED_STAT
+  MISSING_DISCLOSURE
+  PERFORMANCE_CLAIM
+  COMPARISON
+  MEDICAL_ADVICE
+  RISK_WARNING
+}
+
+enum Severity {
+  CRITICAL
+  WARNING
+  INFO
+}
+
+model ComplianceRule {
+  id                   String   @id @default(cuid())
+  industry             Industry
+  ruleName             String
+  ruleType             RuleType
+  severity             Severity
+  pattern              String   @db.Text
+  explanation          String   @db.Text
+  regulationReference  String   @db.Text
+  alternatives         String   @db.Text // JSON array
+  isSystemRule         Boolean  @default(false)
+  active               Boolean  @default(true)
+  createdAt            DateTime @default(now())
 
   @@index([industry])
-  @@index([teamId])
+  @@index([isSystemRule])
 }
 
 // ============================================================================
-// INTEGRATION SETTINGS (v2.0)
+// STANDEX SCORE — AI REPRESENTATION MANAGEMENT
+// ============================================================================
+
+model StandexScoreScan {
+  id           String   @id @default(cuid())
+  brand        String
+  standexScore Int      // 0-100
+  tier         String   // excellent | moderate | high | critical (matches API-created table)
+  breakdown    Json     // { factualAccuracy, crossModelConsensus, dataFreshness, hallucinationDensity }
+  models       Json     // [{ model, text, flags: [{ claim, reason, severity }] }]
+  flagCount    Int      @default(0)
+  email        String?  // lead capture
+  createdAt    DateTime @default(now())
+
+  @@index([brand])
+  @@index([createdAt(sort: Desc)])
+  @@index([tier])
+}
+
+// ============================================================================
+// INTEGRATIONS
 // ============================================================================
 
 enum IntegrationType {
-  WORDPRESS
   HUBSPOT
-  MARKETO
   SLACK
-  GOOGLE_DOCS
   GOOGLE_ANALYTICS
+  WEBHOOK
 }
 
 model Integration {
@@ -454,7 +276,7 @@ model Integration {
   userId    String
   teamId    String?
   type      IntegrationType
-  config    Json            // integration-specific settings
+  config    Json
   active    Boolean         @default(true)
   createdAt DateTime        @default(now())
 

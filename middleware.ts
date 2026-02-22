@@ -5,5 +5,12 @@ export default neonAuth.middleware({
 });
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/studio/:path*", "/settings/:path*"],
+  matcher: [
+    "/dashboard/:path*",
+    "/studio/:path*",
+    "/settings/:path*",
+    "/prompt-lab/:path*",
+    "/brand-pulse/:path*",
+    "/standex-score-ledger/:path*",
+  ],
 };

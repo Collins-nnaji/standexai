@@ -14,11 +14,11 @@ function normalizePoolerUrl(rawUrl: string | undefined) {
   try {
     const parsed = new URL(rawUrl);
     const isNeonPooler = parsed.hostname.includes("neon.tech") && parsed.hostname.includes("-pooler.");
-    if (isNeonPooler && !parsed.searchParams.has("pgbouncer")) {
-      parsed.searchParams.set("pgbouncer", "true");
-    }
-    if (isNeonPooler && !parsed.searchParams.has("connect_timeout")) {
-      parsed.searchParams.set("connect_timeout", "15");
+    if (isNeonPooler) {
+      if (!parsed.searchParams.has("pgbouncer")) parsed.searchParams.set("pgbouncer", "true");
+      if (!parsed.searchParams.has("connect_timeout")) parsed.searchParams.set("connect_timeout", "15");
+      // Serverless: avoid holding many connections; reconnect when closed
+      if (!parsed.searchParams.has("connection_limit")) parsed.searchParams.set("connection_limit", "1");
     }
     return parsed.toString();
   } catch {
@@ -59,8 +59,16 @@ export async function ensurePrismaConnected() {
 }
 
 function isClosedConnectionError(error: unknown) {
-  const message = error instanceof Error ? error.message : String(error ?? "");
-  return message.includes("Error in PostgreSQL connection") || message.includes("kind: Closed");
+  const message =
+    (error instanceof Error ? error.message : null) ?? String(error ?? "");
+  const str = message.toLowerCase();
+  return (
+    str.includes("postgresql connection") ||
+    str.includes("kind: closed") ||
+    str.includes("connection closed") ||
+    str.includes("econnreset") ||
+    str.includes("connection refused")
+  );
 }
 
 export async function withPrismaReconnect<T>(operation: () => Promise<T>) {
