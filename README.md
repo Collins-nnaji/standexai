@@ -1,12 +1,12 @@
-# StandexAI 2.0 - Compliance-First Content Operations Platform
+# StandexAI 2.0 - AI Data Analysis & Modeling Platform
 
-**AI-powered content platform built for regulated industries.** Real-time compliance checking, dual SEO+GEO optimization, and collaborative workflows.
+**AI-powered data readiness platform.** Schema profiling, data quality diagnostics, and model-readiness scoring for regulated industries.
 
 ---
 
 ## 🚀 What's New in 2.0
 
-StandexAI has been completely transformed from a simple form-based SEO generator into a **professional enterprise content platform**:
+StandexAI has been completely transformed from a simple form-based SEO generator into a **professional enterprise data readiness platform**:
 
 ### **Before (v1.0)**
 - Basic form to generate SEO content
@@ -14,48 +14,48 @@ StandexAI has been completely transformed from a simple form-based SEO generator
 - Single-page interface
 
 ### **After (v2.0)**
-- ✨ **Rich Text Editor** with TipTap - professional writing experience
-- 🛡️ **Real-Time Compliance Checking** - catch violations as you type
-- 📊 **Multi-Score Dashboard** - SEO, GEO, and Compliance scores
-- 🎯 **Content Briefs** - AI-powered competitive analysis
+- ✨ **Schema-Aware Editor** (PromptLab) - define data model intents
+- 🧪 **Live Data Diagnostics** - detect quality risks and schema drift
+- 📊 **Multi-Score Dashboard** - readiness, quality, and governance scores
+- 🧭 **Modeling Briefs** - AI-powered feature and KPI suggestions
 - 👥 **Team Collaboration** - built-in workflows and approvals
 - 🏢 **Industry-Specific** - Healthcare, FinTech, Insurance, and more
-- 🔄 **Project Management** - track drafts, reviews, and published content
+- 🔄 **Project Management** - track datasets, versions, and releases
 
 ---
 
 ## 🎨 Core Features
 
 ### 1. **Modern Dashboard**
-- Project overview with status tracking
-- Performance analytics (SEO/GEO/Compliance scores)
+- Dataset overview with status tracking
+- Readiness analytics (Quality/Governance/Model-fit)
 - Quick actions and filtering
 - Real-time updates
 
-### 2. **Rich Content Editor**
-- TipTap-powered WYSIWYG editor
-- **AI Co-Pilot** - intelligent suggestions inline
-- **Live Compliance Sidebar** - flags issues as you type
-- **Multi-score tracking** - SEO, GEO, Compliance
+### 2. **Schema Editor (PromptLab)**
+- TipTap-powered modeling brief editor
+- **AI Co-Pilot** - dataset and schema suggestions
+- **Live Diagnostics Sidebar** - flags quality risks
+- **Multi-score tracking** - readiness, quality, governance
 - Format toolbar with shortcuts
 - Auto-save and version history ready
 
-### 3. **Compliance System**
+### 3. **Data Governance System**
 - Industry-specific rule sets (HIPAA, FTC, SEC)
 - Real-time flagging with severity levels
 - Automatic suggestions for fixes
-- Custom rule builder (coming soon)
+- Data contracts & lineage (coming soon)
 - Regulatory reference citations
 
-### 4. **Content Briefs**
-- Competitive analysis powered by AI
-- Target keyword research
-- Recommended content structure
-- Topic gap analysis
+### 4. **Modeling Briefs**
+- Feature suggestions powered by AI
+- KPI definitions and metric registry
+- Recommended schema structure
+- Data gap analysis
 - Performance benchmarks
 
 ### 5. **Team Workflow**
-- Role-based access (Admin, Writer, Reviewer, Viewer)
+- Role-based access (Admin, Analyst, Reviewer, Viewer)
 - Draft → Review → Approve → Publish pipeline
 - Comments and collaboration (coming soon)
 - Activity tracking and audit trail
@@ -75,10 +75,10 @@ StandexAI has been completely transformed from a simple form-based SEO generator
 ### **Database Schema**
 Comprehensive schema supporting:
 - Users & Teams with role-based access
-- Content with version control
-- Compliance rules & flags
-- SEO analysis & tracking
-- Content briefs & templates
+- Datasets with version control
+- Data rules & flags
+- Quality analysis & tracking
+- Modeling briefs & templates
 - Comments & approvals
 - API keys & integrations
 
@@ -153,10 +153,12 @@ Open [http://localhost:3000](http://localhost:3000)
 
 ### **Main Routes**
 - `/` - Landing page with feature overview
-- `/dashboard` - Project dashboard with analytics
-- `/studio/editor` - Rich text editor with AI assistance
-- `/studio/briefs` - Content brief generator
-- `/settings` - Account and compliance settings
+- `/dashboard` - Data dashboard with analytics
+- `/studio/editor` - Schema editor with AI assistance
+- `/studio/briefs` - Modeling brief generator
+- `/settings` - Account and governance settings
+### **Data Routes**
+- `/data-diagnostics` - Live data diagnostics
 
 ### **Legacy Routes (Still Available)**
 - Original form-based generator is preserved in the codebase
@@ -174,7 +176,7 @@ Open [http://localhost:3000](http://localhost:3000)
 - **General:** Advertising guidelines, truthful marketing
 
 ### **Compliance Features**
-- Real-time content scanning
+- Real-time data quality scanning
 - Severity-based flagging (Critical, Warning, Info)
 - Contextual suggestions
 - Regulatory reference linking
@@ -184,21 +186,21 @@ Open [http://localhost:3000](http://localhost:3000)
 
 ## 📊 Scoring System
 
-### **SEO Score (0-100)**
-- Keyword optimization
-- Heading structure
-- Word count targets
-- Meta descriptions
-- Internal linking
+### **Readiness Score (0-100)**
+- Schema integrity
+- Missingness thresholds
+- Join stability
+- Data freshness
+- Governance coverage
 
-### **GEO Score (0-100)**
-- AI search engine optimization
-- Question-based content
-- Citation-worthiness
-- Snippet formatting
-- Answer box optimization
+### **Quality Score (0-100)**
+- Outlier detection
+- Consistency checks
+- Distribution drift
+- Duplicate detection
+- Validation pass rate
 
-### **Compliance Score (0-100)**
+### **Governance Score (0-100)**
 - Regulatory adherence
 - Risk level assessment
 - Flag severity weighting
@@ -228,10 +230,10 @@ npm run start
 
 ### **Phase 1 (Current)**
 - ✅ Dashboard & navigation
-- ✅ Rich text editor
-- ✅ Compliance checking
+- ✅ Schema editor (PromptLab)
+- ✅ Data diagnostics
 - ✅ Multi-score system
-- ✅ Content briefs
+- ✅ Modeling briefs
 
 ### **Phase 2 (Next)**
 - 🔄 Real authentication (NextAuth)

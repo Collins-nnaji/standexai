@@ -7,42 +7,42 @@ import {
 } from "lucide-react";
 
 const LIVE_EVENTS = [
-  { model: "GPT-4o", brand: "Monzo", issue: "misquoted AER savings rate", severity: "critical", ago: "2m" },
-  { model: "Gemini", brand: "Revolut", issue: "deprecated Premium tier referenced", severity: "warning", ago: "11m" },
-  { model: "Claude", brand: "HSBC", issue: "outdated mortgage rates cited", severity: "critical", ago: "28m" },
-  { model: "GPT-4o", brand: "Stripe", issue: "wrong fee structure for EU cards", severity: "warning", ago: "41m" },
-  { model: "Gemini", brand: "Wise", issue: "incorrect transfer limit", severity: "critical", ago: "1h 3m" },
+  { model: "GPT-4o", dataset: "Payments", issue: "missing FX fee column", severity: "critical", ago: "2m" },
+  { model: "Gemini", dataset: "CRM", issue: "deprecated churn labels", severity: "warning", ago: "11m" },
+  { model: "Claude", dataset: "Finance", issue: "outdated revenue mapping", severity: "critical", ago: "28m" },
+  { model: "GPT-4o", dataset: "Support", issue: "null category rate spiked", severity: "warning", ago: "41m" },
+  { model: "Gemini", dataset: "Growth", issue: "ambiguous primary key", severity: "critical", ago: "1h 3m" },
 ];
 
 const STANDEX_PIPELINE = [
   {
-    name: "Brand Pulse",
-    label: "Monitor",
-    desc: "Run live cross-model brand scans. See exactly what GPT-4o, Claude, and Gemini say about any brand — side by side.",
+    name: "Data Diagnostics",
+    label: "Profile",
+    desc: "Run live cross-model diagnostics. See how GPT-4o, Claude, and Gemini interpret datasets — side by side.",
     icon: Search,
     color: "text-indigo-600",
     bg: "bg-indigo-50",
-    href: "/brand-pulse",
-    status: "Live Scanning",
+    href: "/data-diagnostics",
+    status: "Live Profiling",
     statusColor: "text-indigo-600",
     dotColor: "bg-indigo-500",
   },
   {
-    name: "Standex Score Ledger",
+    name: "Readiness Ledger",
     label: "Score & Certify",
-    desc: "Review the full Standex Score breakdown, historical accuracy trends, and export Standex Score Certificates for compliance filings.",
+    desc: "Review readiness breakdowns, historical quality trends, and export readiness certificates for compliance filings.",
     icon: FileBarChart,
     color: "text-emerald-600",
     bg: "bg-emerald-50",
-    href: "/standex-score-ledger",
+    href: "/readiness-ledger",
     status: "Certified",
     statusColor: "text-emerald-600",
     dotColor: "bg-emerald-500",
   },
   {
     name: "Prompt Lab",
-    label: "Correct & Build",
-    desc: "Define brand truth and representation guardrails. Craft prompts that stay aligned with your brand; then run them through Brand Pulse for Standex Score.",
+    label: "Model & Align",
+    desc: "Define dataset truth and schema guardrails. Craft modeling briefs; then run diagnostics for readiness scoring.",
     icon: Shield,
     color: "text-violet-600",
     bg: "bg-violet-50",
@@ -54,10 +54,10 @@ const STANDEX_PIPELINE = [
 ];
 
 const STANDEX_SCORES = [
-  { brand: "Monzo", score: 47, tier: "critical", delta: -3 },
-  { brand: "Revolut", score: 87, tier: "moderate", delta: +2 },
-  { brand: "Stripe", score: 94, tier: "excellent", delta: +1 },
-  { brand: "HSBC", score: 61, tier: "high", delta: -5 },
+  { dataset: "Payments", score: 47, tier: "critical", delta: -3 },
+  { dataset: "CRM", score: 87, tier: "moderate", delta: +2 },
+  { dataset: "Finance", score: 94, tier: "excellent", delta: +1 },
+  { dataset: "Ops", score: 61, tier: "high", delta: -5 },
 ];
 
 const TIER_COLOR: Record<string, string> = {
@@ -92,21 +92,21 @@ export default function DashboardPage() {
         <div>
           <div className="flex items-center gap-3 mb-2">
             <div className="h-2 w-2 rounded-full bg-indigo-500 animate-pulse" />
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-400">Standex Score Infrastructure — Live</span>
+          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-400">Data Readiness Infrastructure — Live</span>
           </div>
           <h1 className="text-3xl font-black tracking-tight text-zinc-950 lg:text-4xl">
-            AI Representation Monitor
+          AI Data Readiness Monitor
           </h1>
           <p className="mt-2 text-zinc-500 font-medium text-base">
-            Real-time brand accuracy across GPT-4o, Claude &amp; Gemini. One score, full traceability.
+          Real-time dataset quality across GPT-4o, Claude &amp; Gemini. One score, full traceability.
           </p>
         </div>
         <button
-          onClick={() => router.push("/brand-pulse")}
+          onClick={() => router.push("/data-diagnostics")}
           className="flex items-center gap-3 rounded-2xl bg-indigo-600 px-8 py-4 text-sm font-black uppercase tracking-widest text-white transition hover:bg-indigo-700 shadow-xl shadow-indigo-600/20"
         >
           <Search className="h-4 w-4" />
-          Scan a Brand
+          Run Diagnostics
         </button>
       </div>
 
@@ -115,7 +115,7 @@ export default function DashboardPage() {
         {/* Left column */}
         <div className="space-y-8">
 
-          {/* Standex Score pipeline cards */}
+          {/* Readiness pipeline cards */}
           <div className="grid gap-5 sm:grid-cols-3">
             {STANDEX_PIPELINE.map((step) => (
               <button
@@ -146,18 +146,18 @@ export default function DashboardPage() {
             ))}
           </div>
 
-          {/* Live Standex Scores table */}
+          {/* Live Readiness Scores table */}
           <div className="rounded-[2rem] bg-[#F9FAFB] border border-zinc-100 p-8">
             <div className="flex items-center justify-between mb-7">
               <div>
                 <h3 className="text-sm font-black text-zinc-950 uppercase tracking-tight flex items-center gap-2">
                   <TrendingUp className="h-4 w-4 text-indigo-600" />
-                  Live Standex Scores
+                  Live Readiness Scores
                 </h3>
-                <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-[0.25em] mt-1">Monitored brands — updated continuously</p>
+                <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-[0.25em] mt-1">Monitored datasets — updated continuously</p>
               </div>
               <button
-                onClick={() => router.push("/standex-score-ledger")}
+                onClick={() => router.push("/readiness-ledger")}
                 className="text-[10px] font-black uppercase tracking-widest text-indigo-600 hover:underline"
               >
                 Full Ledger →
@@ -166,10 +166,10 @@ export default function DashboardPage() {
 
             <div className="space-y-4">
               {STANDEX_SCORES.map((b) => (
-                <div key={b.brand} className="flex items-center gap-4 rounded-2xl bg-white border border-zinc-100 px-6 py-4 shadow-sm hover:shadow-md transition-shadow">
+                <div key={b.dataset} className="flex items-center gap-4 rounded-2xl bg-white border border-zinc-100 px-6 py-4 shadow-sm hover:shadow-md transition-shadow">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-2">
-                      <span className="text-sm font-black text-zinc-950 uppercase tracking-tight">{b.brand}</span>
+                      <span className="text-sm font-black text-zinc-950 uppercase tracking-tight">{b.dataset}</span>
                       <span className={`text-[9px] font-black uppercase tracking-widest ${b.delta > 0 ? "text-emerald-500" : "text-red-500"}`}>
                         {b.delta > 0 ? `+${b.delta}` : b.delta}
                       </span>
@@ -195,11 +195,11 @@ export default function DashboardPage() {
         {/* Right sidebar */}
         <div className="space-y-6">
 
-          {/* Live hallucination ticker */}
+          {/* Live diagnostics feed */}
           <div className="rounded-[2rem] bg-[#18181B] border border-zinc-800 p-7">
             <h3 className="text-sm font-black text-white uppercase tracking-tight flex items-center gap-3 mb-6">
               <Activity className="h-4 w-4 text-red-400" />
-              Live Hallucination Feed
+              Live Diagnostics Feed
               <span className="ml-auto flex items-center gap-1.5 text-[9px] font-black text-red-400">
                 <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" />
                 LIVE
@@ -219,7 +219,7 @@ export default function DashboardPage() {
                     </div>
                   </div>
                   <p className="text-[11px] text-zinc-300 font-medium leading-snug">
-                    <span className="text-white font-black">{ev.brand}</span> — {ev.issue}
+                    <span className="text-white font-black">{ev.dataset}</span> — {ev.issue}
                     <span className="ml-1.5">{ev.severity === "critical" ? "🔴" : "⚠️"}</span>
                   </p>
                 </div>
@@ -227,7 +227,7 @@ export default function DashboardPage() {
             </div>
 
             <button
-              onClick={() => router.push("/brand-pulse")}
+              onClick={() => router.push("/data-diagnostics")}
               className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-white/5 border border-white/10 py-3.5 text-[10px] font-black uppercase tracking-widest text-zinc-400 hover:text-white hover:bg-white/10 transition"
             >
               View All Events
@@ -235,18 +235,18 @@ export default function DashboardPage() {
             </button>
           </div>
 
-          {/* Standex Score formula breakdown */}
+          {/* Readiness score formula breakdown */}
           <div className="rounded-[2rem] bg-[#F9FAFB] border border-zinc-100 p-7">
             <h3 className="text-sm font-black text-zinc-950 uppercase tracking-tight flex items-center gap-2 mb-6">
               <Zap className="h-4 w-4 text-indigo-600" />
-              Standex Score Formula
+              Readiness Score Formula
             </h3>
             <div className="space-y-4">
               {[
-                { label: "Factual Accuracy", weight: "40%", color: "bg-indigo-500", w: "40%" },
-                { label: "Cross-Model Consensus", weight: "25%", color: "bg-violet-500", w: "25%" },
+                { label: "Schema Integrity", weight: "40%", color: "bg-indigo-500", w: "40%" },
+                { label: "Quality Signals", weight: "25%", color: "bg-violet-500", w: "25%" },
                 { label: "Data Freshness", weight: "20%", color: "bg-blue-500", w: "20%" },
-                { label: "Hallucination Density", weight: "15%", color: "bg-red-400", w: "15%" },
+                { label: "Governance Coverage", weight: "15%", color: "bg-red-400", w: "15%" },
               ].map((f) => (
                 <div key={f.label}>
                   <div className="flex items-center justify-between mb-1.5">
@@ -267,7 +267,7 @@ export default function DashboardPage() {
             <Shield className="h-8 w-8 text-indigo-200 mb-4 relative z-10" />
             <h3 className="text-lg font-black mb-2 relative z-10">Prompt Lab</h3>
             <p className="text-sm text-indigo-100 font-medium mb-6 leading-relaxed relative z-10">
-              Define brand truth and representation guardrails, then verify with Standex Score in Brand Pulse.
+              Define dataset truth and schema guardrails, then verify with readiness diagnostics.
             </p>
             <button
               onClick={() => router.push("/prompt-lab")}

@@ -244,18 +244,18 @@ model ComplianceRule {
 // STANDEX SCORE — AI REPRESENTATION MANAGEMENT
 // ============================================================================
 
-model StandexScoreScan {
-  id           String   @id @default(cuid())
-  brand        String
-  standexScore Int      // 0-100
-  tier         String   // excellent | moderate | high | critical (matches API-created table)
-  breakdown    Json     // { factualAccuracy, crossModelConsensus, dataFreshness, hallucinationDensity }
-  models       Json     // [{ model, text, flags: [{ claim, reason, severity }] }]
-  flagCount    Int      @default(0)
-  email        String?  // lead capture
-  createdAt    DateTime @default(now())
+model ReadinessScan {
+  id             String   @id @default(cuid())
+  dataset        String
+  readinessScore Int      // 0-100
+  tier           String   // excellent | moderate | high | critical
+  breakdown      Json     // { schemaIntegrity, qualitySignals, dataFreshness, governanceCoverage }
+  models         Json     // [{ model, text, flags: [{ claim, reason, severity }] }]
+  flagCount      Int      @default(0)
+  email          String?  // lead capture
+  createdAt      DateTime @default(now())
 
-  @@index([brand])
+  @@index([dataset])
   @@index([createdAt(sort: Desc)])
   @@index([tier])
 }

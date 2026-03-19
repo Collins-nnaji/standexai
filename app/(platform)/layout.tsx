@@ -8,8 +8,8 @@ import { useState } from "react";
 import { neonAuthClient } from "@/lib/neon/auth-client";
 
 const navigation = [
-  { name: "Brand Pulse", href: "/brand-pulse", icon: Search },
-  { name: "Standex Score Ledger", href: "/standex-score-ledger", icon: FileBarChart },
+  { name: "Data Diagnostics", href: "/data-diagnostics", icon: Search },
+  { name: "Readiness Ledger", href: "/readiness-ledger", icon: FileBarChart },
   { name: "Prompt Lab", href: "/prompt-lab", icon: FlaskConical },
   { name: "Settings", href: "/settings", icon: Settings },
 ];

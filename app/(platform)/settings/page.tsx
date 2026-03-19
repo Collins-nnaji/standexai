@@ -283,7 +283,7 @@ export default function SettingsPage() {
                 <div className="rounded-[2.5rem] border border-zinc-100 bg-white p-10 shadow-xl">
                   <h2 className="mb-4 text-xl font-black text-zinc-950 uppercase">Guardrail Protocol</h2>
                   <p className="mb-10 text-sm font-medium text-zinc-500 uppercase tracking-tight">
-                    Active filtering logic for Prompt Lab and Brand Pulse runs.
+                    Active filtering logic for Prompt Lab and Data Diagnostics runs.
                   </p>
 
                   <div className="space-y-6">

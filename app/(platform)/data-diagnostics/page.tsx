@@ -1,9 +1,9 @@
  "use client";
  
- import { useEffect, useState } from "react";
- import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
  import Image from "next/image";
- import { ArrowRight, AlertTriangle, Shield, LayoutGrid, TrendingUp, Eye, Lock } from "lucide-react";
+import { ArrowRight, AlertTriangle, Shield, LayoutGrid, TrendingUp, Eye, Lock, Database, CheckCircle2 } from "lucide-react";
  import { neonAuthClient } from "@/lib/neon/auth-client";
  
  const TICKER_EVENTS = [
@@ -16,7 +16,16 @@
    { model: "Claude", dataset: "Ops", issue: "invalid timezone normalization", severity: "warning", ago: "1 hr ago" },
  ];
  
- const DEMO_DATASETS = [
+type DatasetProfile = {
+  name: string;
+  gptScore: number;
+  claudeScore: number;
+  geminiScore: number;
+  readinessScore: number;
+  tier: "critical" | "moderate" | "excellent";
+};
+
+const DEMO_DATASETS: DatasetProfile[] = [
    {
      name: "Payments",
      gptScore: 62,
@@ -60,13 +69,56 @@
    moderate: "Moderate Risk",
    critical: "Critical",
  };
+
+const SCHEMA_SNAPSHOTS: Record<string, { primaryKey: string; joinKeys: string[]; qualityChecks: string[] }> = {
+  Payments: {
+    primaryKey: "txn_id",
+    joinKeys: ["customer_id", "account_id"],
+    qualityChecks: ["missingness < 5%", "duplicate txn_id < 0.2%", "amount outliers (p99.5)"],
+  },
+  CRM: {
+    primaryKey: "contact_id",
+    joinKeys: ["account_id", "segment_id"],
+    qualityChecks: ["null rate < 3%", "segment coverage > 98%", "churn label drift < 2%"],
+  },
+  Finance: {
+    primaryKey: "invoice_id",
+    joinKeys: ["customer_id", "fiscal_period"],
+    qualityChecks: ["revenue duplicates = 0", "currency consistency", "period alignment"],
+  },
+};
+
+const DEFAULT_SNAPSHOT = {
+  primaryKey: "id",
+  joinKeys: ["entity_id", "date_id"],
+  qualityChecks: ["missingness < 5%", "duplicate rate < 1%", "schema drift alerts"],
+};
+
+const CONNECTORS = [
+  { name: "Postgres", status: "Ready", detail: "Direct read-only sync" },
+  { name: "Snowflake", status: "Beta", detail: "Warehouse profiling" },
+  { name: "BigQuery", status: "Beta", detail: "Dataset sampling" },
+  { name: "CSV Upload", status: "Ready", detail: "One-off profiling" },
+];
  
- export default function Home() {
+ export default function DataDiagnosticsPage() {
    const router = useRouter();
+  const searchParams = useSearchParams();
    const session = neonAuthClient.useSession();
    const user = session.data?.user;
    const [tickerIdx, setTickerIdx] = useState(0);
    const [selectedDataset, setSelectedDataset] = useState(DEMO_DATASETS[0]);
+  const [customDataset, setCustomDataset] = useState<DatasetProfile | null>(null);
+  const [isRunning, setIsRunning] = useState(false);
+  const [lastScanId, setLastScanId] = useState<string | null>(null);
+  const [lastScanAt, setLastScanAt] = useState<string | null>(null);
+  const [scanError, setScanError] = useState<string | null>(null);
+
+  const datasetParam = searchParams.get("dataset")?.trim();
+  const datasetOptions = useMemo(
+    () => (customDataset ? [...DEMO_DATASETS, customDataset] : DEMO_DATASETS),
+    [customDataset]
+  );
  
    useEffect(() => {
      const interval = setInterval(() => {
@@ -74,6 +126,26 @@
      }, 3500);
      return () => clearInterval(interval);
    }, []);
+
+  useEffect(() => {
+    if (!datasetParam) return;
+    const match = DEMO_DATASETS.find((d) => d.name.toLowerCase() === datasetParam.toLowerCase());
+    if (match) {
+      setCustomDataset(null);
+      setSelectedDataset(match);
+      return;
+    }
+    const synthesized: DatasetProfile = {
+      name: datasetParam,
+      gptScore: 72,
+      claudeScore: 74,
+      geminiScore: 70,
+      readinessScore: 72,
+      tier: "moderate",
+    };
+    setCustomDataset(synthesized);
+    setSelectedDataset(synthesized);
+  }, [datasetParam]);
  
    useEffect(() => {
      const elements = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
@@ -91,7 +163,30 @@
      return () => observer.disconnect();
    }, []);
  
-   const currentEvent = TICKER_EVENTS[tickerIdx];
+  const currentEvent = TICKER_EVENTS[tickerIdx];
+  const snapshot = SCHEMA_SNAPSHOTS[selectedDataset.name] ?? DEFAULT_SNAPSHOT;
+
+  const runDiagnostics = async () => {
+    setIsRunning(true);
+    setScanError(null);
+    try {
+      const res = await fetch("/api/readiness-score", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ dataset: selectedDataset.name }),
+      });
+      const data = await res.json() as { scanId?: string; cachedAt?: string; error?: string };
+      if (!res.ok) {
+        throw new Error(data.error ?? "Diagnostics run failed");
+      }
+      setLastScanId(data.scanId ?? "latest");
+      setLastScanAt(data.cachedAt ?? new Date().toISOString());
+    } catch (error) {
+      setScanError(error instanceof Error ? error.message : "Diagnostics run failed");
+    } finally {
+      setIsRunning(false);
+    }
+  };
  
    return (
      <div className="min-h-screen bg-white text-[#18181B] font-sans selection:bg-indigo-500/30">
@@ -254,7 +349,7 @@
  
            {/* Dataset selector tabs */}
            <div data-reveal data-reveal-dir="up" style={{ ["--delay" as string]: "100ms" }} className="flex flex-wrap justify-center gap-3 mb-8">
-             {DEMO_DATASETS.map((d) => (
+            {datasetOptions.map((d) => (
                <button
                  key={d.name}
                  onClick={() => setSelectedDataset(d)}
@@ -343,7 +438,121 @@
                </div>
              ))}
            </div>
+
+          {/* Schema snapshot */}
+          <div data-reveal data-reveal-dir="up" style={{ ["--delay" as string]: "220ms" }} className="mb-8">
+            <div className="rounded-[2rem] bg-white border border-zinc-100 shadow-xl p-8">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h3 className="text-sm font-black uppercase tracking-[0.2em] text-indigo-600">Schema Snapshot</h3>
+                  <p className="text-xs text-zinc-500 font-medium mt-1">{selectedDataset.name} schema signals</p>
+                </div>
+                <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Auto-profiled</span>
+              </div>
+              <div className="grid gap-6 md:grid-cols-3">
+                <div className="rounded-2xl bg-[#F9FAFB] border border-zinc-100 p-5">
+                  <div className="text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-2">Primary key</div>
+                  <div className="text-sm font-black text-zinc-950">{snapshot.primaryKey}</div>
+                </div>
+                <div className="rounded-2xl bg-[#F9FAFB] border border-zinc-100 p-5">
+                  <div className="text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-2">Join keys</div>
+                  <div className="text-sm font-black text-zinc-950">{snapshot.joinKeys.join(", ")}</div>
+                </div>
+                <div className="rounded-2xl bg-[#F9FAFB] border border-zinc-100 p-5">
+                  <div className="text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-2">Quality checks</div>
+                  <div className="text-sm font-black text-zinc-950">{snapshot.qualityChecks.join(", ")}</div>
+                </div>
+              </div>
+              <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
+                <div className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-400">
+                  {lastScanAt ? `Last run: ${new Date(lastScanAt).toLocaleString()}` : "No diagnostics run yet"}
+                </div>
+                <button
+                  onClick={runDiagnostics}
+                  disabled={isRunning}
+                  className="flex items-center gap-2 rounded-2xl bg-zinc-950 px-6 py-3 text-[10px] font-black uppercase tracking-widest text-white transition hover:bg-black disabled:opacity-60"
+                >
+                  {isRunning ? "Running..." : "Run diagnostics"}
+                </button>
+              </div>
+              {lastScanId && (
+                <div className="mt-3 text-[10px] font-black uppercase tracking-widest text-indigo-600">
+                  Scan ID: {lastScanId}
+                </div>
+              )}
+              {scanError && (
+                <div className="mt-3 text-[10px] font-black uppercase tracking-widest text-red-500">
+                  {scanError}
+                </div>
+              )}
+            </div>
+          </div>
  
+          {/* Data source connectors */}
+          <div data-reveal data-reveal-dir="up" style={{ ["--delay" as string]: "250ms" }} className="mb-8">
+            <div className="rounded-[2rem] bg-white border border-zinc-100 shadow-xl p-8">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h3 className="text-sm font-black uppercase tracking-[0.2em] text-indigo-600">Data Sources</h3>
+                  <p className="text-xs text-zinc-500 font-medium mt-1">Connect and profile your data estate</p>
+                </div>
+                <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Connectors</span>
+              </div>
+              <div className="grid gap-4 md:grid-cols-2">
+                {CONNECTORS.map((connector) => (
+                  <div key={connector.name} className="rounded-2xl border border-zinc-100 bg-[#F9FAFB] p-5 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-2xl bg-indigo-50 text-indigo-600 border border-indigo-100 flex items-center justify-center">
+                        <Database className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <div className="text-sm font-black text-zinc-950">{connector.name}</div>
+                        <div className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">{connector.detail}</div>
+                      </div>
+                    </div>
+                    <span className={`text-[10px] font-black uppercase tracking-widest ${connector.status === "Ready" ? "text-emerald-600" : "text-amber-500"}`}>
+                      {connector.status}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <button
+                onClick={() => router.push("/settings")}
+                className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-zinc-950 py-4 text-[10px] font-black uppercase tracking-widest text-white shadow-xl hover:bg-black transition"
+              >
+                Configure Data Sources
+                <ArrowRight className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          </div>
+
+          {/* Modeling checklist */}
+          <div data-reveal data-reveal-dir="up" style={{ ["--delay" as string]: "270ms" }} className="mb-8">
+            <div className="rounded-[2rem] bg-white border border-zinc-100 shadow-xl p-8">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h3 className="text-sm font-black uppercase tracking-[0.2em] text-indigo-600">Modeling Checklist</h3>
+                  <p className="text-xs text-zinc-500 font-medium mt-1">Pre-flight steps before training</p>
+                </div>
+                <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Governance</span>
+              </div>
+              <div className="grid gap-3">
+                {[
+                  "Primary keys validated and stable",
+                  "Join paths documented and tested",
+                  "PII fields tagged and masked",
+                  "Missingness thresholds approved",
+                  "Outlier strategy defined",
+                ].map((item) => (
+                  <div key={item} className="flex items-center gap-3 rounded-2xl bg-[#F9FAFB] border border-zinc-100 px-4 py-3">
+                    <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                    <span className="text-xs font-bold text-zinc-700 uppercase tracking-widest">{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
            {/* Data Readiness Score Panel */}
            <div data-reveal data-reveal-dir="up" style={{ ["--delay" as string]: "280ms" }}>
              <div className={`rounded-[2rem] border p-8 flex flex-col md:flex-row items-center justify-between gap-8 shadow-xl ${SCORE_TIER_BG[selectedDataset.tier]}`}>

@@ -144,7 +144,7 @@ export default function PeerxPresentationPage() {
       },
       {
         id: "04",
-        title: "Live Brand Pulse Dashboard",
+        title: "Live Data Diagnostics Dashboard",
         subtitle: "Product demo + lead engine + category benchmark",
         theme: "bg-white text-zinc-900",
         content: (
@@ -214,7 +214,7 @@ export default function PeerxPresentationPage() {
                 <Database className="mb-3 h-6 w-6 text-indigo-500" />
                 <p className="text-sm font-black uppercase tracking-[0.2em] text-indigo-700">Data & evidence layer</p>
                 <ul className="mt-3 space-y-1.5 text-sm font-medium text-zinc-700">
-                  <li><strong>Postgres</strong> — <code className="text-xs bg-zinc-100 px-1 rounded">StandexScoreScan</code>, per-scan factor breakdowns, claim-level and flag history; time-series for trends and compliance exports.</li>
+                  <li><strong>Postgres</strong> — <code className="text-xs bg-zinc-100 px-1 rounded">ReadinessScan</code>, per-scan factor breakdowns, claim-level and flag history; time-series for trends and compliance exports.</li>
                   <li>Evidence bundle generation for certificates (what was measured, when, and how the score was derived). Hosting: Next.js on Vercel for UX; serverless/API for the pipeline.</li>
                 </ul>
               </div>
@@ -404,7 +404,7 @@ export default function PeerxPresentationPage() {
             <div className="rounded-2xl border border-indigo-400/40 bg-indigo-500/10 p-6">
               <CheckCircle2 className="mb-2 h-6 w-6 text-indigo-600" />
               <p className="text-sm font-black uppercase tracking-[0.2em] text-indigo-700">Live Demo Path</p>
-              <p className="mt-2 text-xl font-bold text-zinc-900">Brand Pulse → Standex Score Ledger</p>
+              <p className="mt-2 text-xl font-bold text-zinc-900">Data Diagnostics → Readiness Ledger</p>
               <p className="text-base text-zinc-600">StandexAI Team</p>
             </div>
           </div>

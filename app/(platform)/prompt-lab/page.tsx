@@ -15,7 +15,7 @@ import {
   Heading1, Heading2, Highlighter, Italic, Link2, List,
   ListOrdered, Loader2, Quote, RotateCw, Save, Sparkles,
   Shield, TrendingUp, Underline as UnderlineIcon,
-  WandSparkles, Zap, ChevronRight, Activity, Terminal, CheckCircle2
+  WandSparkles, Zap, ChevronRight, Activity, Database, CheckCircle2
 } from "lucide-react";
 
 type ComplianceFlag = {
@@ -99,7 +99,7 @@ function MenuBar({
           className="flex items-center gap-2 rounded-2xl bg-zinc-950 px-6 py-2.5 text-xs font-black uppercase tracking-widest text-white transition hover:bg-black shadow-lg shadow-zinc-950/20 disabled:opacity-60"
         >
           {aiBusy ? <RotateCw className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
-          Align to brand
+          Optimize analysis
         </button>
       </div>
     </div>
@@ -108,7 +108,7 @@ function MenuBar({
 
 export default function PromptLabPage() {
   const router = useRouter();
-  const [title, setTitle] = useState("Brand Truth Blueprint");
+  const [title, setTitle] = useState("Data Model Blueprint");
   const [wordCount, setWordCount] = useState(0);
   const [isSaving, setIsSaving] = useState(false);
   const [aiBusy, setAiBusy] = useState(false);
@@ -121,9 +121,9 @@ export default function PromptLabPage() {
       Link.configure({ openOnClick: false }),
       Highlight.configure({ multicolor: true }),
       Typography,
-      Placeholder.configure({ placeholder: "Define brand truth, key facts, and how AI should represent your brand..." }),
+      Placeholder.configure({ placeholder: "Define datasets, schemas, constraints, and how AI should interpret the data..." }),
     ],
-    content: "<h1>Brand representation brief</h1><p>Define how your brand should be represented in AI outputs. Use the Representation Guardrails panel to set brand truth and constraints; then run this in Brand Pulse to get your Standex Score.</p>",
+    content: "<h1>Data model brief</h1><p>Define data sources, schema assumptions, and analytical goals. Use the Schema Guardrails panel to lock constraints, quality thresholds, and modeling intent; then run diagnostics to validate readiness.</p>",
     editorProps: {
       attributes: {
         class: "prose prose-zinc max-w-none min-h-[600px] px-10 py-12 focus:outline-none",
@@ -141,7 +141,7 @@ export default function PromptLabPage() {
     setTimeout(() => {
       setAiBusy(false);
       if (editor) {
-        editor.commands.setContent(editor.getHTML() + "<p><strong>[Representation alignment]:</strong> Brand constraints applied. Factual anchors and consistency checks aligned for Standex Score readiness.</p>");
+        editor.commands.setContent(editor.getHTML() + "<p><strong>[Analysis alignment]:</strong> Data constraints applied. Quality checks and modeling assumptions aligned for diagnostics readiness.</p>");
       }
     }, 1500);
   };
@@ -159,18 +159,18 @@ export default function PromptLabPage() {
         <div className="mx-auto flex w-full items-center justify-between gap-4">
           <div className="flex items-center gap-5">
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 border border-blue-100">
-              <Terminal className="h-6 w-6" />
+              <Database className="h-6 w-6" />
             </div>
             <div>
               <input
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 className="bg-transparent text-2xl font-black text-zinc-950 outline-none placeholder:text-zinc-300 tracking-tight"
-                placeholder="e.g. Brand Truth Blueprint"
+                placeholder="e.g. Data Model Blueprint"
               />
               <div className="flex items-center gap-3 mt-1">
                 <span className="text-[10px] uppercase font-black tracking-[0.2em] text-zinc-400">Status</span>
-                <span className="text-[10px] uppercase font-black tracking-[0.2em] text-blue-600">Representation studio</span>
+                <span className="text-[10px] uppercase font-black tracking-[0.2em] text-blue-600">Data modeling studio</span>
                 {isSaving && <Loader2 className="h-3 w-3 animate-spin text-zinc-400" />}
               </div>
             </div>
@@ -178,11 +178,11 @@ export default function PromptLabPage() {
 
           <div className="flex items-center gap-4">
             <button
-              onClick={() => router.push("/brand-pulse")}
+              onClick={() => router.push("/data-diagnostics")}
               className="flex items-center gap-3 rounded-2xl bg-indigo-600 px-8 py-4 text-xs font-black uppercase tracking-widest text-white transition hover:bg-indigo-700 shadow-xl shadow-indigo-600/20"
             >
               <Shield className="h-4 w-4" />
-              Run in Brand Pulse
+              Run data diagnostics
             </button>
             <button onClick={handleSave} className="rounded-2xl border border-zinc-100 bg-[#F9FAFB] p-4 text-zinc-400 hover:text-zinc-950 transition hover:bg-white hover:shadow-md">
               <Save className="h-5 w-5" />
@@ -211,7 +211,7 @@ export default function PromptLabPage() {
               </div>
               <div className="text-[10px] font-black uppercase tracking-widest text-zinc-400 flex items-center gap-2">
                 <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
-                Ready for Brand Pulse
+                Ready for analysis run
               </div>
             </div>
           </div>
@@ -225,8 +225,8 @@ export default function PromptLabPage() {
             <div className="rounded-[2.5rem] bg-white p-8 shadow-xl border border-zinc-100">
               <div className="mb-8 flex items-center justify-between">
                 <div>
-                  <h3 className="text-lg font-black text-zinc-950 uppercase tracking-tight">Representation Guardrails</h3>
-                  <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mt-1">Brand truth & alignment</p>
+                  <h3 className="text-lg font-black text-zinc-950 uppercase tracking-tight">Schema Guardrails</h3>
+                  <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mt-1">Data truth & modeling intent</p>
                 </div>
                 <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600 border border-indigo-100">
                   <WandSparkles className="h-5 w-5" />
@@ -235,16 +235,16 @@ export default function PromptLabPage() {
 
               <div className="space-y-6">
                 <div className="space-y-2">
-                  <label className="pl-1 text-[9px] font-black uppercase tracking-[0.3em] text-zinc-400">Brand truth / key facts</label>
+                  <label className="pl-1 text-[9px] font-black uppercase tracking-[0.3em] text-zinc-400">Dataset overview / key fields</label>
                   <textarea
-                    placeholder="What should AI say about your brand? Core claims, differentiators, and facts that must stay consistent across models..."
+                    placeholder="Summarize sources, business definitions, critical fields, and analytical goals. Note PII handling and expected joins..."
                     className="min-h-[120px] w-full rounded-[1.5rem] border border-zinc-50 bg-[#F9FAFB] px-5 py-4 text-sm font-medium text-zinc-900 outline-none focus:bg-white focus:border-indigo-100 transition shadow-inner"
                   />
                 </div>
 
                 <div className="space-y-4 pt-2">
                   <div className="flex items-center justify-between">
-                    <label className="text-[9px] font-black uppercase tracking-[0.3em] text-zinc-400">Reasoning Depth (Temp)</label>
+                    <label className="text-[9px] font-black uppercase tracking-[0.3em] text-zinc-400">Profiling depth</label>
                     <span className="text-[10px] font-bold text-indigo-600">0.7</span>
                   </div>
                   <input type="range" className="w-full accent-indigo-600 h-1 bg-zinc-100 rounded-full appearance-none cursor-pointer" />
@@ -252,22 +252,22 @@ export default function PromptLabPage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="pl-1 text-[9px] font-black uppercase tracking-[0.3em] text-zinc-400">Top P</label>
-                    <input type="number" step="0.1" defaultValue="0.9" className="w-full rounded-2xl border border-zinc-50 bg-[#F9FAFB] px-4 py-3 text-xs font-bold text-zinc-700 outline-none" />
+                    <label className="pl-1 text-[9px] font-black uppercase tracking-[0.3em] text-zinc-400">Missing value threshold</label>
+                    <input type="number" step="0.05" defaultValue="0.1" className="w-full rounded-2xl border border-zinc-50 bg-[#F9FAFB] px-4 py-3 text-xs font-bold text-zinc-700 outline-none" />
                   </div>
                   <div className="space-y-2">
-                    <label className="pl-1 text-[9px] font-black uppercase tracking-[0.3em] text-zinc-400">Frequency Penalty</label>
-                    <input type="number" step="0.1" defaultValue="0.0" className="w-full rounded-2xl border border-zinc-50 bg-[#F9FAFB] px-4 py-3 text-xs font-bold text-zinc-700 outline-none" />
+                    <label className="pl-1 text-[9px] font-black uppercase tracking-[0.3em] text-zinc-400">Outlier sensitivity</label>
+                    <input type="number" step="0.1" defaultValue="1.5" className="w-full rounded-2xl border border-zinc-50 bg-[#F9FAFB] px-4 py-3 text-xs font-bold text-zinc-700 outline-none" />
                   </div>
                 </div>
 
                 <div className="space-y-3 pt-4 border-t border-zinc-50">
-                  <label className="pl-1 text-[9px] font-black uppercase tracking-[0.3em] text-zinc-400 block mb-2">Representation constraints</label>
+                  <label className="pl-1 text-[9px] font-black uppercase tracking-[0.3em] text-zinc-400 block mb-2">Data constraints</label>
                   {[
-                    { name: "Zero Hallucination", active: true },
-                    { name: "Factual lock (brand claims)", active: true },
-                    { name: "Format strictness", active: true },
-                    { name: "Adversarial filter", active: true }
+                    { name: "Schema lock", active: true },
+                    { name: "PII redaction", active: true },
+                    { name: "Referential integrity", active: true },
+                    { name: "Anomaly guardrails", active: true }
                   ].map(c => (
                     <div key={c.name} className="flex items-center justify-between p-3 rounded-2xl bg-[#F9FAFB] border border-zinc-50">
                       <span className="text-[10px] font-black uppercase text-zinc-600 tracking-tight">{c.name}</span>
@@ -285,30 +285,30 @@ export default function PromptLabPage() {
               </div>
             </div>
 
-            {/* Representation readiness */}
+            {/* Modeling readiness */}
             <div className="space-y-4">
-              <h3 className="pl-2 text-[10px] font-black uppercase tracking-[0.3em] text-zinc-400">Representation readiness</h3>
+              <h3 className="pl-2 text-[10px] font-black uppercase tracking-[0.3em] text-zinc-400">Modeling readiness</h3>
               <div className="grid gap-4">
-                <ScoreCard score={92} label="Factual clarity" icon={TrendingUp} />
-                <ScoreCard score={86} label="Consensus-ready" icon={Zap} />
-                <ScoreCard score={98} label="Representation integrity" icon={Shield} />
+                <ScoreCard score={92} label="Schema clarity" icon={TrendingUp} />
+                <ScoreCard score={86} label="Quality readiness" icon={Zap} />
+                <ScoreCard score={98} label="Model-fit integrity" icon={Shield} />
               </div>
             </div>
 
-            {/* Representation risks */}
+            {/* Data risks */}
             <div className="rounded-[2rem] bg-red-50/50 border border-red-100 p-8 shadow-sm">
               <div className="mb-6 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <AlertTriangle className="h-4 w-4 text-red-500" />
-                  <h3 className="text-sm font-black text-red-600 uppercase tracking-tight">Representation risks</h3>
+                  <h3 className="text-sm font-black text-red-600 uppercase tracking-tight">Data risks</h3>
                 </div>
                 <span className="text-[10px] font-black text-red-600">1 Detected</span>
               </div>
               <div className="rounded-2xl border border-white bg-white p-5 shadow-sm">
-                <div className="text-[10px] font-black text-zinc-950 uppercase mb-2">&quot;Unclear brand attribution&quot;</div>
-                <p className="text-xs text-zinc-500 font-medium leading-relaxed mb-4">One claim could be read as generic; tighten wording so it clearly reflects your brand.</p>
+                <div className="text-[10px] font-black text-zinc-950 uppercase mb-2">&quot;Ambiguous primary key&quot;</div>
+                <p className="text-xs text-zinc-500 font-medium leading-relaxed mb-4">One table lacks a stable primary key; this can skew joins and downstream modeling.</p>
                 <div className="text-[10px] font-black text-indigo-600 uppercase bg-indigo-50 px-3 py-2 rounded-xl border border-indigo-100">
-                  Fix: Add explicit brand anchor.
+                  Fix: Define a primary key or composite key.
                 </div>
               </div>
             </div>

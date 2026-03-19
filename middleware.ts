@@ -11,6 +11,7 @@ export const config = {
     "/settings/:path*",
     "/prompt-lab/:path*",
     "/brand-pulse/:path*",
-    "/standex-score-ledger/:path*",
+    "/data-diagnostics/:path*",
+    "/readiness-ledger/:path*",
   ],
 };
