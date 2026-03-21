@@ -1,6 +1,6 @@
- "use client";
- 
-import { useEffect, useMemo, useState } from "react";
+"use client";
+
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
  import Image from "next/image";
 import { ArrowRight, AlertTriangle, Shield, LayoutGrid, TrendingUp, Eye, Lock, Database, CheckCircle2 } from "lucide-react";
@@ -101,7 +101,7 @@ const CONNECTORS = [
   { name: "CSV Upload", status: "Ready", detail: "One-off profiling" },
 ];
  
- export default function DataDiagnosticsPage() {
+function DataDiagnosticsContent() {
    const router = useRouter();
   const searchParams = useSearchParams();
    const session = neonAuthClient.useSession();
@@ -188,7 +188,7 @@ const CONNECTORS = [
     }
   };
  
-   return (
+  return (
      <div className="min-h-screen bg-white text-[#18181B] font-sans selection:bg-indigo-500/30">
  
        {/* Navigation */}
@@ -768,3 +768,19 @@ const CONNECTORS = [
      </div>
    );
  }
+
+export default function DataDiagnosticsPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-white text-[#18181B] font-sans flex items-center justify-center">
+          <div className="rounded-2xl border border-zinc-100 bg-white px-6 py-4 text-[10px] font-black uppercase tracking-[0.3em] text-zinc-400">
+            Loading diagnostics
+          </div>
+        </div>
+      }
+    >
+      <DataDiagnosticsContent />
+    </Suspense>
+  );
+}

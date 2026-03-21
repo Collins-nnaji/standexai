@@ -1,1 +1,2 @@
-export { GET, POST, runtime } from "../readiness-score/route";
+export const runtime = "nodejs";
+export { GET, POST } from "../readiness-score/route";
