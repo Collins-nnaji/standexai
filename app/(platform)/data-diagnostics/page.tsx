@@ -333,6 +333,27 @@ const CONNECTORS = [
            </div>
          </div>
        </section>
+
+      {/* Diagnostic summary */}
+      <section className="mx-auto max-w-7xl px-4 pb-12 sm:px-6">
+        <div className="grid gap-4 md:grid-cols-4">
+          {[
+            { label: "Tables scanned", value: "124", accent: "text-indigo-600", bg: "bg-indigo-50" },
+            { label: "PII fields tagged", value: "38", accent: "text-emerald-600", bg: "bg-emerald-50" },
+            { label: "Schema drift alerts", value: "6", accent: "text-amber-600", bg: "bg-amber-50" },
+            { label: "SLA coverage", value: "94%", accent: "text-blue-600", bg: "bg-blue-50" },
+          ].map((stat) => (
+            <div key={stat.label} className="rounded-[2rem] border border-zinc-100 bg-white p-6 shadow-sm hover:shadow-md transition">
+              <div className="flex items-center justify-between mb-4">
+                <span className={`text-[9px] font-black uppercase tracking-[0.3em] ${stat.accent}`}>{stat.label}</span>
+                <div className={`h-8 w-8 rounded-2xl ${stat.bg} border border-zinc-100`} />
+              </div>
+              <div className="text-3xl font-black text-zinc-950 tracking-tight">{stat.value}</div>
+              <div className="mt-2 text-[10px] font-bold uppercase tracking-widest text-zinc-400">Last 24 hours</div>
+            </div>
+          ))}
+        </div>
+      </section>
  
        {/* Live Data Diagnostics Demo */}
        <section className="bg-[#F4F4F5] py-20 sm:py-28 border-y border-[#E4E4E8]">
