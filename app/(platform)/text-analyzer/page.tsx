@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   FileText, Sparkles, Loader2, AlertTriangle, AlertCircle, Info,
@@ -50,6 +50,14 @@ function ScoreRing({ score, label, size = 72, color }: { score: number; label: s
 }
 
 export default function TextAnalyzerPage() {
+  return (
+    <Suspense fallback={<div className="flex flex-1 items-center justify-center"><Loader2 className="h-6 w-6 animate-spin text-zinc-400" /></div>}>
+      <TextAnalyzerInner />
+    </Suspense>
+  );
+}
+
+function TextAnalyzerInner() {
   const searchParams = useSearchParams();
   const [text, setText] = useState("");
   const [analyzing, setAnalyzing] = useState(false);

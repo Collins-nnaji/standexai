@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   PenTool, Sparkles, Loader2, Copy, CheckCircle2, RefreshCw,
@@ -37,6 +37,14 @@ const colorMap: Record<string, { bg: string; border: string; text: string; activ
 };
 
 export default function RewriteStudioPage() {
+  return (
+    <Suspense fallback={<div className="flex flex-1 items-center justify-center"><Loader2 className="h-6 w-6 animate-spin text-zinc-400" /></div>}>
+      <RewriteStudioInner />
+    </Suspense>
+  );
+}
+
+function RewriteStudioInner() {
   const searchParams = useSearchParams();
   const [text, setText] = useState("");
   const [mode, setMode] = useState<Mode>("professional");
