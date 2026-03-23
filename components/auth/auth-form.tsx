@@ -2,6 +2,8 @@
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { Sparkles } from "lucide-react";
 import { neonAuthClient } from "@/lib/neon/auth-client";
 
 export type AuthMode = "sign-in" | "sign-up";
@@ -38,7 +40,6 @@ export function AuthForm({ mode: initialMode }: AuthFormProps) {
           email: email.trim(),
           password,
         });
-
         if (result.error) {
           setError(result.error.message || "Sign-up failed");
           setBusy(false);
@@ -49,14 +50,12 @@ export function AuthForm({ mode: initialMode }: AuthFormProps) {
           email: email.trim(),
           password,
         });
-
         if (result.error) {
           setError(result.error.message || "Sign-in failed");
           setBusy(false);
           return;
         }
       }
-
       router.push("/dashboard");
       router.refresh();
     } catch (authError) {
@@ -64,7 +63,6 @@ export function AuthForm({ mode: initialMode }: AuthFormProps) {
       setBusy(false);
       return;
     }
-
     setBusy(false);
   };
 
@@ -84,12 +82,10 @@ export function AuthForm({ mode: initialMode }: AuthFormProps) {
   const continueWithGoogle = async () => {
     setBusy(true);
     setError(null);
-
     const result = await neonAuthClient.signIn.social({
       provider: "google",
       callbackURL: "/dashboard",
     });
-
     if (result.error) {
       setError(result.error.message || "Google sign-in failed");
       setBusy(false);
@@ -98,100 +94,119 @@ export function AuthForm({ mode: initialMode }: AuthFormProps) {
   };
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-7xl items-center justify-center px-6 py-16">
-      <div className="w-full max-w-md rounded-2xl border border-[#E5E5EA] bg-white p-6 shadow-sm">
-        <h1 className="text-2xl font-semibold text-[#1D1D1F]">Neon Authentication</h1>
-        <p className="mt-2 text-sm text-[#6E6E73]">
-          {isSignedIn
-            ? `Signed in as ${session.data?.user?.email ?? "user"}`
-            : mode === "sign-up"
-              ? "Create your account."
-              : "Sign in to your account."}
-        </p>
-
-        {isSignedIn ? (
-          <div className="mt-6 space-y-3">
-            <button
-              onClick={() => router.push("/dashboard")}
-              className="w-full rounded-full bg-[#1D1D1F] px-4 py-2.5 text-sm font-medium text-white transition hover:bg-[#333]"
-            >
-              Go to dashboard
-            </button>
-            <button
-              onClick={signOut}
-              disabled={busy}
-              className="w-full rounded-full border border-[#D1D1D6] px-4 py-2.5 text-sm font-medium text-[#1D1D1F] transition hover:border-[#1D1D1F] disabled:opacity-60"
-            >
-              {busy ? "Signing out..." : "Sign out"}
-            </button>
+    <main className="flex min-h-screen items-center justify-center bg-zinc-50 px-6 py-16">
+      <div className="w-full max-w-md">
+        <div className="mb-8 text-center">
+          <Image
+            src="/standexailogo.png"
+            alt="StandexAI"
+            width={140}
+            height={40}
+            className="h-8 w-auto object-contain mx-auto mb-4"
+            priority
+          />
+          <div className="flex items-center justify-center gap-1.5 text-xs text-zinc-400">
+            <Sparkles className="h-3 w-3 text-indigo-500" />
+            <span>AI Communication Coach</span>
           </div>
-        ) : (
-          <form onSubmit={submit} className="mt-6 space-y-4">
-            {mode === "sign-up" && (
+        </div>
+
+        <div className="rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm">
+          <h1 className="text-xl font-bold text-zinc-900">
+            {isSignedIn ? "Welcome back" : mode === "sign-up" ? "Create your account" : "Sign in"}
+          </h1>
+          <p className="mt-1 text-sm text-zinc-500">
+            {isSignedIn
+              ? `Signed in as ${session.data?.user?.email ?? "user"}`
+              : mode === "sign-up"
+                ? "Start analyzing and improving your communication."
+                : "Continue to your communication dashboard."}
+          </p>
+
+          {isSignedIn ? (
+            <div className="mt-6 space-y-3">
+              <button
+                onClick={() => router.push("/dashboard")}
+                className="w-full rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700 shadow-lg shadow-indigo-600/20"
+              >
+                Open Dashboard
+              </button>
+              <button
+                onClick={signOut}
+                disabled={busy}
+                className="w-full rounded-xl border border-zinc-200 px-4 py-3 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-50 disabled:opacity-60"
+              >
+                {busy ? "Signing out..." : "Sign out"}
+              </button>
+            </div>
+          ) : (
+            <form onSubmit={submit} className="mt-6 space-y-4">
+              {mode === "sign-up" && (
+                <div>
+                  <label className="mb-1.5 block text-xs font-semibold text-zinc-500">Name</label>
+                  <input
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none focus:bg-white focus:border-indigo-200 transition"
+                    placeholder="Your name"
+                  />
+                </div>
+              )}
               <div>
-                <label className="mb-1 block text-sm text-[#6E6E73]">Name</label>
+                <label className="mb-1.5 block text-xs font-semibold text-zinc-500">Email</label>
                 <input
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full rounded-xl border border-[#E5E5EA] px-3 py-2.5 text-sm text-[#1D1D1F] outline-none focus:border-[#1D1D1F]"
-                  placeholder="Your name"
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none focus:bg-white focus:border-indigo-200 transition"
+                  placeholder="you@company.com"
                 />
               </div>
-            )}
-            <div>
-              <label className="mb-1 block text-sm text-[#6E6E73]">Email</label>
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-xl border border-[#E5E5EA] px-3 py-2.5 text-sm text-[#1D1D1F] outline-none focus:border-[#1D1D1F]"
-                placeholder="you@company.com"
-              />
-            </div>
-            <div>
-              <label className="mb-1 block text-sm text-[#6E6E73]">Password</label>
-              <input
-                type="password"
-                required
-                minLength={8}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-xl border border-[#E5E5EA] px-3 py-2.5 text-sm text-[#1D1D1F] outline-none focus:border-[#1D1D1F]"
-                placeholder="••••••••"
-              />
-            </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold text-zinc-500">Password</label>
+                <input
+                  type="password"
+                  required
+                  minLength={8}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none focus:bg-white focus:border-indigo-200 transition"
+                  placeholder="Min. 8 characters"
+                />
+              </div>
 
-            {error && (
-              <p className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>
-            )}
+              {error && (
+                <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>
+              )}
 
-            <button
-              type="submit"
-              disabled={busy}
-              className="w-full rounded-full bg-[#1D1D1F] px-4 py-2.5 text-sm font-medium text-white transition hover:bg-[#333] disabled:opacity-60"
-            >
-              {busy ? "Please wait..." : mode === "sign-up" ? "Create account" : "Sign in"}
-            </button>
+              <button
+                type="submit"
+                disabled={busy}
+                className="w-full rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700 shadow-lg shadow-indigo-600/20 disabled:opacity-60"
+              >
+                {busy ? "Please wait..." : mode === "sign-up" ? "Create account" : "Sign in"}
+              </button>
 
-            <button
-              type="button"
-              onClick={continueWithGoogle}
-              disabled={busy}
-              className="w-full rounded-full border border-[#D1D1D6] px-4 py-2.5 text-sm font-medium text-[#1D1D1F] transition hover:border-[#1D1D1F] disabled:opacity-60"
-            >
-              Continue with Google
-            </button>
+              <button
+                type="button"
+                onClick={continueWithGoogle}
+                disabled={busy}
+                className="w-full rounded-xl border border-zinc-200 px-4 py-3 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-50 disabled:opacity-60"
+              >
+                Continue with Google
+              </button>
 
-            <button
-              type="button"
-              onClick={() => router.push(mode === "sign-up" ? "/auth/sign-in" : "/auth/sign-up")}
-              className="w-full text-sm text-[#6E6E73] underline-offset-2 hover:text-[#1D1D1F] hover:underline"
-            >
-              {mode === "sign-up" ? "Already have an account? Sign in" : "No account? Create one"}
-            </button>
-          </form>
-        )}
+              <button
+                type="button"
+                onClick={() => router.push(mode === "sign-up" ? "/auth/sign-in" : "/auth/sign-up")}
+                className="w-full text-sm text-zinc-500 hover:text-indigo-600 transition"
+              >
+                {mode === "sign-up" ? "Already have an account? Sign in" : "No account? Create one"}
+              </button>
+            </form>
+          )}
+        </div>
       </div>
     </main>
   );

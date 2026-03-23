@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "StandexAI | Compliance-First Content Operations Platform",
+  title: "StandexAI | AI Communication Coach & Safety Layer",
   description:
-    "AI-powered content platform built for regulated industries. Real-time compliance, dual SEO+GEO optimization, and team collaboration.",
+    "AI-powered communication assistant that helps you analyze, improve, and de-risk text and speech in real time. Say the right thing, the right way — every time.",
 };
 
 export default function RootLayout({
@@ -14,7 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="font-sans">
+      <body className="font-sans antialiased">
         {children}
       </body>
     </html>

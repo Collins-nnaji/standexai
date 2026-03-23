@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { User, Building2, Shield, Bell, Key, Save, Loader2 } from "lucide-react";
+import {
+  User, Shield, Bell, Sliders, Mic, Save, Loader2
+} from "lucide-react";
 
 type ProfileData = {
   id: string;
@@ -14,13 +16,8 @@ type ProfileData = {
 };
 
 const emptyProfile: ProfileData = {
-  id: "",
-  email: "",
-  name: "",
-  role: "WRITER",
-  industry: null,
-  companyName: "",
-  avatar: "",
+  id: "", email: "", name: "", role: "WRITER",
+  industry: null, companyName: "", avatar: "",
 };
 
 export default function SettingsPage() {
@@ -31,41 +28,24 @@ export default function SettingsPage() {
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
 
+  // StandexAI preferences
+  const [sensitivity, setSensitivity] = useState("balanced");
+  const [preferredTone, setPreferredTone] = useState("professional");
+  const [speakerMode, setSpeakerMode] = useState(true);
+  const [detections, setDetections] = useState({
+    tone: true,
+    risk: true,
+    clarity: true,
+    ai: true,
+    intent: true,
+    filler: true,
+  });
+
   const tabs = [
     { id: "profile", label: "Profile", icon: User },
-    { id: "company", label: "Company", icon: Building2 },
-    { id: "compliance", label: "Policy & Compliance", icon: Shield },
+    { id: "analysis", label: "Analysis Preferences", icon: Sliders },
+    { id: "speaker", label: "Speaker Mode", icon: Mic },
     { id: "notifications", label: "Notifications", icon: Bell },
-    { id: "api", label: "API Keys", icon: Key },
-  ];
-
-  const complianceRules = [
-    {
-      id: "hipaa",
-      name: "HIPAA Healthcare Rules",
-      summary: "Medical claims, patient privacy, PHI handling",
-      updatedAt: "Updated 2 days ago",
-      include: ["Patient testimonials", "Treatment benefits", "Clinical outcomes"],
-      exclude: ["PHI identifiers", "Guaranteed outcomes", "Unapproved cures"],
-      contentChecks: [
-        "Block absolute guarantees like “cure” or “guaranteed results”.",
-        "Require disclaimers for medical advice.",
-        "Mask or flag patient-identifying data (PHI).",
-      ],
-    },
-    {
-      id: "ftc",
-      name: "FTC Advertising Guidelines",
-      summary: "Truthful claims, substantiation, endorsements",
-      updatedAt: "Updated 1 week ago",
-      include: ["Comparative claims", "Testimonials", "Pricing promotions"],
-      exclude: ["Unsubstantiated superlatives", "Hidden endorsements"],
-      contentChecks: [
-        "Enforce evidence for comparative claims (best/fastest/only).",
-        "Require disclosure for endorsements and incentives.",
-        "Flag misleading pricing or savings language.",
-      ],
-    },
   ];
 
   useEffect(() => {
@@ -85,7 +65,7 @@ export default function SettingsPage() {
     void loadProfile();
   }, []);
 
-  const persistProfile = async (successMessage: string) => {
+  const persistProfile = async (msg: string) => {
     try {
       setSavingProfile(true);
       setSaveError(null);
@@ -94,164 +74,104 @@ export default function SettingsPage() {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: profile.name,
-          role: profile.role,
-          companyName: profile.companyName,
-          industry: profile.industry,
-          avatar: profile.avatar,
+          name: profile.name, role: profile.role,
+          companyName: profile.companyName, industry: profile.industry, avatar: profile.avatar,
         }),
       });
       const data = (await response.json()) as { profile?: ProfileData; error?: string };
-      if (!response.ok) throw new Error(data.error || "Failed to save profile");
+      if (!response.ok) throw new Error(data.error || "Failed to save");
       if (data.profile) setProfile(data.profile);
-      setSaveMessage(successMessage);
+      setSaveMessage(msg);
     } catch (error) {
-      setSaveError(error instanceof Error ? error.message : "Failed to save profile");
+      setSaveError(error instanceof Error ? error.message : "Failed to save");
     } finally {
       setSavingProfile(false);
     }
   };
 
+  const ToggleSwitch = ({ checked, onChange }: { checked: boolean; onChange: (v: boolean) => void }) => (
+    <button
+      type="button"
+      onClick={() => onChange(!checked)}
+      className={`relative h-6 w-11 rounded-full transition-colors ${checked ? "bg-indigo-600" : "bg-zinc-200"}`}
+    >
+      <div className={`absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white shadow-sm transition-transform ${checked ? "translate-x-5" : "translate-x-0"}`} />
+    </button>
+  );
+
   return (
     <div className="flex flex-1 flex-col bg-white">
-      <header className="border-b border-zinc-100 bg-white px-8 py-6">
-        <h1 className="text-2xl font-black text-zinc-950 uppercase tracking-tight">System Settings</h1>
-        <p className="mt-1 text-sm font-medium text-zinc-500 uppercase tracking-tight">Technical preferences and account control</p>
+      <header className="border-b border-zinc-100 bg-white px-8 py-5">
+        <h1 className="text-xl font-bold text-zinc-900">Settings</h1>
+        <p className="mt-1 text-xs text-zinc-400">Customize your StandexAI experience</p>
       </header>
 
       <div className="flex flex-1 flex-col overflow-hidden md:flex-row">
-        {/* Tabs Sidebar */}
-        <aside className="w-full border-b border-zinc-100 bg-[#F9FAFB] p-6 md:w-72 md:border-b-0 md:border-r">
-          <nav className="flex gap-2 overflow-x-auto pb-1 md:block md:space-y-2">
+        <aside className="w-full border-b border-zinc-100 bg-zinc-50/50 p-4 md:w-56 md:border-b-0 md:border-r">
+          <nav className="flex gap-1 overflow-x-auto md:block md:space-y-1">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex flex-shrink-0 items-center justify-between rounded-xl px-4 py-3 text-xs font-black uppercase tracking-widest transition-all md:w-full ${activeTab === tab.id
-                  ? "bg-white text-zinc-950 shadow-md border border-zinc-100"
-                  : "text-zinc-400 hover:bg-white hover:text-zinc-950"
-                  }`}
+                className={`flex flex-shrink-0 items-center gap-2.5 rounded-lg px-3 py-2.5 text-xs font-semibold transition md:w-full ${
+                  activeTab === tab.id
+                    ? "bg-white text-zinc-900 shadow-sm border border-zinc-100"
+                    : "text-zinc-400 hover:bg-white hover:text-zinc-700"
+                }`}
               >
-                <div className="flex items-center gap-3">
-                  <tab.icon className="h-4 w-4" />
-                  {tab.label}
-                </div>
-                {activeTab === tab.id && <div className="h-1.5 w-1.5 rounded-full bg-indigo-500"></div>}
+                <tab.icon className="h-4 w-4" />
+                {tab.label}
               </button>
             ))}
           </nav>
         </aside>
 
-        {/* Content */}
-        <main className="flex-1 overflow-auto p-8 lg:p-12 custom-scrollbar">
-          <div className="mx-auto max-w-4xl">
+        <main className="flex-1 overflow-auto p-6 lg:p-10">
+          <div className="mx-auto max-w-2xl">
             {(saveError || saveMessage) && (
-              <div
-                className={`mb-8 rounded-2xl border px-6 py-4 text-xs font-black uppercase tracking-widest ${saveError ? "border-red-100 bg-red-50 text-red-600" : "border-emerald-100 bg-emerald-50 text-emerald-600"
-                  }`}
-              >
+              <div className={`mb-6 rounded-xl border px-4 py-3 text-xs font-semibold ${
+                saveError ? "border-red-100 bg-red-50 text-red-600" : "border-emerald-100 bg-emerald-50 text-emerald-600"
+              }`}>
                 {saveError ?? saveMessage}
               </div>
             )}
 
             {activeTab === "profile" && (
-              <div className="space-y-8">
-                <div className="rounded-[2.5rem] border border-zinc-100 bg-white p-10 shadow-xl">
-                  <h2 className="mb-10 text-xl font-black text-zinc-950 uppercase">Profile Core</h2>
-
-                  <div className="grid gap-8 sm:grid-cols-2">
-                    <div className="space-y-2">
-                      <label className="pl-1 text-[9px] font-black uppercase tracking-[0.3em] text-zinc-400">Full Name</label>
+              <div className="space-y-6">
+                <h2 className="text-lg font-bold text-zinc-900">Profile</h2>
+                <div className="rounded-2xl border border-zinc-100 bg-white p-6 space-y-5">
+                  <div className="grid gap-5 sm:grid-cols-2">
+                    <div>
+                      <label className="text-xs font-semibold text-zinc-500 mb-1.5 block">Full Name</label>
                       <input
                         type="text"
                         value={profile.name}
-                        onChange={(e) => setProfile((prev) => ({ ...prev, name: e.target.value }))}
+                        onChange={(e) => setProfile(p => ({ ...p, name: e.target.value }))}
                         disabled={loadingProfile}
-                        className="w-full rounded-2xl border border-zinc-100 bg-[#F9FAFB] px-5 py-4 text-sm font-bold text-zinc-900 outline-none focus:bg-white focus:border-indigo-100 transition shadow-inner"
+                        className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none focus:bg-white focus:border-indigo-200 transition"
                       />
                     </div>
-
-                    <div className="space-y-2">
-                      <label className="pl-1 text-[9px] font-black uppercase tracking-[0.3em] text-zinc-400">System ID / Email</label>
-                      <input
-                        type="email"
-                        value={profile.email}
-                        readOnly
-                        className="w-full rounded-2xl border border-zinc-50 bg-zinc-50 px-5 py-4 text-sm font-bold text-zinc-400 outline-none cursor-not-allowed"
-                      />
+                    <div>
+                      <label className="text-xs font-semibold text-zinc-500 mb-1.5 block">Email</label>
+                      <input type="email" value={profile.email} readOnly className="w-full rounded-xl border border-zinc-100 bg-zinc-50 px-4 py-3 text-sm text-zinc-400 cursor-not-allowed" />
                     </div>
-
-                    <div className="space-y-2">
-                      <label className="pl-1 text-[9px] font-black uppercase tracking-[0.3em] text-zinc-400">Role</label>
-                      <select
-                        value={profile.role}
-                        onChange={(e) => setProfile((prev) => ({ ...prev, role: e.target.value as ProfileData["role"] }))}
-                        disabled={loadingProfile}
-                        className="w-full rounded-2xl border border-zinc-100 bg-[#F9FAFB] px-5 py-4 text-sm font-bold text-zinc-900 outline-none cursor-pointer hover:bg-white"
-                      >
-                        <option value="WRITER">Writer</option>
-                        <option value="REVIEWER">Reviewer</option>
-                        <option value="ADMIN">Admin</option>
-                        <option value="VIEWER">Viewer</option>
-                      </select>
-                    </div>
-
-                    <div className="space-y-2">
-                      <label className="pl-1 text-[9px] font-black uppercase tracking-[0.3em] text-zinc-400">Avatar URL</label>
-                      <input
-                        type="url"
-                        placeholder="https://..."
-                        value={profile.avatar}
-                        onChange={(e) => setProfile((prev) => ({ ...prev, avatar: e.target.value }))}
-                        disabled={loadingProfile}
-                        className="w-full rounded-2xl border border-zinc-100 bg-[#F9FAFB] px-5 py-4 text-sm font-bold text-zinc-900 outline-none focus:bg-white transition shadow-inner"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="mt-12 flex items-center justify-end gap-4 border-t border-zinc-50 pt-10">
-                    <button
-                      onClick={() => void persistProfile("Profile updated.")}
-                      disabled={savingProfile || loadingProfile}
-                      className="flex items-center gap-3 rounded-2xl bg-zinc-950 px-8 py-4 text-xs font-black uppercase tracking-widest text-white transition hover:bg-black shadow-lg disabled:opacity-50"
-                    >
-                      {savingProfile ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-                      Persist Changes
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {activeTab === "company" && (
-              <div className="space-y-8">
-                <div className="rounded-[2.5rem] border border-zinc-100 bg-white p-10 shadow-xl">
-                  <h2 className="mb-10 text-xl font-black text-zinc-950 uppercase">Organization Core</h2>
-
-                  <div className="grid gap-8 sm:grid-cols-2">
-                    <div className="space-y-2">
-                      <label className="pl-1 text-[9px] font-black uppercase tracking-[0.3em] text-zinc-400">Company Name</label>
+                    <div>
+                      <label className="text-xs font-semibold text-zinc-500 mb-1.5 block">Company</label>
                       <input
                         type="text"
                         value={profile.companyName}
-                        onChange={(e) => setProfile((prev) => ({ ...prev, companyName: e.target.value }))}
+                        onChange={(e) => setProfile(p => ({ ...p, companyName: e.target.value }))}
                         disabled={loadingProfile}
-                        className="w-full rounded-2xl border border-zinc-100 bg-[#F9FAFB] px-5 py-4 text-sm font-bold text-zinc-900 outline-none focus:bg-white transition shadow-inner"
+                        className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none focus:bg-white focus:border-indigo-200 transition"
                       />
                     </div>
-
-                    <div className="space-y-2">
-                      <label className="pl-1 text-[9px] font-black uppercase tracking-[0.3em] text-zinc-400">Vertical Sector</label>
+                    <div>
+                      <label className="text-xs font-semibold text-zinc-500 mb-1.5 block">Industry</label>
                       <select
                         value={profile.industry ?? ""}
-                        onChange={(e) =>
-                          setProfile((prev) => ({
-                            ...prev,
-                            industry: (e.target.value || null) as ProfileData["industry"],
-                          }))
-                        }
+                        onChange={(e) => setProfile(p => ({ ...p, industry: (e.target.value || null) as ProfileData["industry"] }))}
                         disabled={loadingProfile}
-                        className="w-full rounded-2xl border border-zinc-100 bg-[#F9FAFB] px-5 py-4 text-sm font-bold text-zinc-900 outline-none cursor-pointer hover:bg-white"
+                        className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none cursor-pointer"
                       >
                         <option value="">Select industry</option>
                         <option value="SAAS">SaaS</option>
@@ -264,122 +184,165 @@ export default function SettingsPage() {
                       </select>
                     </div>
                   </div>
-
-                  <div className="mt-12 flex justify-end pt-10 border-t border-zinc-50">
+                  <div className="flex justify-end pt-4 border-t border-zinc-50">
                     <button
-                      onClick={() => void persistProfile("Organization updated.")}
+                      onClick={() => void persistProfile("Profile saved.")}
                       disabled={savingProfile || loadingProfile}
-                      className="rounded-2xl bg-zinc-950 px-8 py-4 text-xs font-black uppercase tracking-widest text-white transition hover:bg-black shadow-lg"
+                      className="flex items-center gap-2 rounded-xl bg-indigo-600 px-6 py-3 text-xs font-semibold text-white transition hover:bg-indigo-700 shadow-lg disabled:opacity-50"
                     >
-                      Update Organization
+                      {savingProfile ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+                      Save Changes
                     </button>
                   </div>
                 </div>
               </div>
             )}
 
-            {activeTab === "compliance" && (
-              <div className="space-y-8">
-                <div className="rounded-[2.5rem] border border-zinc-100 bg-white p-10 shadow-xl">
-                  <h2 className="mb-4 text-xl font-black text-zinc-950 uppercase">Guardrail Protocol</h2>
-                  <p className="mb-10 text-sm font-medium text-zinc-500 uppercase tracking-tight">
-                    Active filtering logic for Prompt Lab and Data Diagnostics runs.
-                  </p>
+            {activeTab === "analysis" && (
+              <div className="space-y-6">
+                <h2 className="text-lg font-bold text-zinc-900">Analysis Preferences</h2>
 
-                  <div className="space-y-6">
-                    {complianceRules.map((rule, index) => (
-                      <div
-                        key={rule.id}
-                        className="rounded-3xl border border-zinc-100 bg-[#F9FAFB] p-8 transition hover:bg-white hover:shadow-lg"
-                      >
-                        <div className="flex items-center justify-between mb-8">
+                <div className="rounded-2xl border border-zinc-100 bg-white p-6 space-y-6">
+                  <div>
+                    <label className="text-xs font-semibold text-zinc-500 mb-3 block">Sensitivity Level</label>
+                    <div className="flex gap-2">
+                      {["strict", "balanced", "relaxed"].map((s) => (
+                        <button
+                          key={s}
+                          onClick={() => setSensitivity(s)}
+                          className={`flex-1 rounded-xl px-4 py-3 text-xs font-semibold capitalize transition ${
+                            sensitivity === s
+                              ? "bg-indigo-600 text-white shadow-md"
+                              : "bg-zinc-50 border border-zinc-200 text-zinc-600 hover:bg-zinc-100"
+                          }`}
+                        >
+                          {s}
+                        </button>
+                      ))}
+                    </div>
+                    <p className="text-[11px] text-zinc-400 mt-2">
+                      {sensitivity === "strict" && "Flags even mildly concerning language. Best for regulated industries."}
+                      {sensitivity === "balanced" && "Balanced detection for most communication contexts."}
+                      {sensitivity === "relaxed" && "Only flags clearly problematic language. Best for casual communication."}
+                    </p>
+                  </div>
+
+                  <div className="border-t border-zinc-50 pt-6">
+                    <label className="text-xs font-semibold text-zinc-500 mb-3 block">Preferred Tone Style</label>
+                    <div className="grid grid-cols-3 gap-2">
+                      {["professional", "friendly", "neutral", "persuasive", "formal", "casual"].map((t) => (
+                        <button
+                          key={t}
+                          onClick={() => setPreferredTone(t)}
+                          className={`rounded-xl px-3 py-2.5 text-xs font-semibold capitalize transition ${
+                            preferredTone === t
+                              ? "bg-indigo-50 border border-indigo-200 text-indigo-700"
+                              : "bg-zinc-50 border border-zinc-100 text-zinc-500 hover:bg-zinc-100"
+                          }`}
+                        >
+                          {t}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="border-t border-zinc-50 pt-6">
+                    <label className="text-xs font-semibold text-zinc-500 mb-4 block">Detection Types</label>
+                    <div className="space-y-3">
+                      {[
+                        { key: "tone", label: "Tone Analysis", desc: "Analyze emotional tone and appropriateness" },
+                        { key: "risk", label: "Risk Detection", desc: "Flag legal, HR, and compliance risks" },
+                        { key: "clarity", label: "Clarity Check", desc: "Assess readability and clarity" },
+                        { key: "ai", label: "AI Detection", desc: "Check for AI-generated content" },
+                        { key: "intent", label: "Intent Analysis", desc: "Detect manipulation and hidden tactics" },
+                        { key: "filler", label: "Filler Word Detection", desc: "Identify filler words in speeches" },
+                      ].map((d) => (
+                        <div key={d.key} className="flex items-center justify-between rounded-xl bg-zinc-50 border border-zinc-100 px-4 py-3">
                           <div>
-                            <h3 className="text-lg font-black text-zinc-950 uppercase">{rule.name}</h3>
-                            <p className="text-sm font-medium text-zinc-400">{rule.summary}</p>
+                            <p className="text-xs font-semibold text-zinc-700">{d.label}</p>
+                            <p className="text-[10px] text-zinc-400">{d.desc}</p>
                           </div>
-                          <label className="relative inline-flex cursor-pointer items-center">
-                            <input type="checkbox" defaultChecked className="peer sr-only" />
-                            <div className="peer h-7 w-12 rounded-full bg-zinc-200 after:absolute after:left-[4px] after:top-[4px] after:h-5 after:w-5 after:rounded-full after:bg-white after:shadow-sm after:transition-all after:content-[''] peer-checked:bg-indigo-600 peer-checked:after:translate-x-full peer-focus:outline-none"></div>
-                          </label>
+                          <ToggleSwitch
+                            checked={detections[d.key as keyof typeof detections]}
+                            onChange={(v) => setDetections(prev => ({ ...prev, [d.key]: v }))}
+                          />
                         </div>
-
-                        <div className="grid gap-6 lg:grid-cols-3">
-                          <div className="rounded-2xl bg-white border border-zinc-100 p-5 shadow-sm">
-                            <span className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-300 block mb-3">Include</span>
-                            <ul className="space-y-2 text-[10px] font-bold text-zinc-600">
-                              {rule.include.map(i => <li key={i}>• {i}</li>)}
-                            </ul>
-                          </div>
-                          <div className="rounded-2xl bg-white border border-zinc-100 p-5 shadow-sm">
-                            <span className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-300 block mb-3">Exclude</span>
-                            <ul className="space-y-2 text-[10px] font-bold text-red-500">
-                              {rule.exclude.map(i => <li key={i}>• {i}</li>)}
-                            </ul>
-                          </div>
-                          <div className="rounded-2xl bg-zinc-950 border border-zinc-800 p-5 shadow-xl text-white">
-                            <span className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-500 block mb-3">Logic Checks</span>
-                            <ul className="space-y-2 text-[10px] font-bold text-zinc-300">
-                              {rule.contentChecks.map(i => <li key={i}>• {i}</li>)}
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {activeTab === "api" && (
-              <div className="space-y-8">
-                <div className="rounded-[2.5rem] border border-zinc-100 bg-white p-10 shadow-xl">
-                  <div className="mb-10 flex items-center justify-between">
-                    <div>
-                      <h2 className="text-xl font-black text-zinc-950 uppercase">Gateway Keys</h2>
-                      <p className="mt-1 text-sm font-medium text-zinc-500 uppercase tracking-tight">Active API endpoints for model routing</p>
-                    </div>
-                    <button className="rounded-2xl bg-zinc-950 px-6 py-3.5 text-xs font-black uppercase tracking-widest text-white shadow-xl hover:bg-black transition">
-                      Generate Key
-                    </button>
-                  </div>
-
-                  <div className="space-y-4">
-                    <div className="group rounded-3xl border border-zinc-100 bg-[#F9FAFB] p-8 transition hover:bg-white hover:shadow-lg">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <h3 className="text-xs font-black text-zinc-950 uppercase mb-2">Production Protocol</h3>
-                          <p className="font-mono text-sm font-bold text-zinc-400">sk_live_••••••••••••3x8k</p>
-                          <p className="mt-4 text-[9px] font-black uppercase tracking-widest text-zinc-300">Last Ping: 2 Hours Ago</p>
-                        </div>
-                        <button className="text-[10px] font-black uppercase tracking-widest text-red-400 hover:text-red-600">Revoke</button>
-                      </div>
-                    </div>
-
-                    <div className="group rounded-3xl border border-zinc-100 bg-[#F9FAFB] p-8 transition hover:bg-white hover:shadow-lg">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <h3 className="text-xs font-black text-zinc-950 uppercase mb-2">Sandbox Protocol</h3>
-                          <p className="font-mono text-sm font-bold text-zinc-400">sk_test_••••••••••••7m2p</p>
-                          <p className="mt-4 text-[9px] font-black uppercase tracking-widest text-zinc-300">Last Ping: Inactive</p>
-                        </div>
-                        <button className="text-[10px] font-black uppercase tracking-widest text-red-400 hover:text-red-600">Revoke</button>
-                      </div>
+                      ))}
                     </div>
                   </div>
                 </div>
               </div>
             )}
 
+            {activeTab === "speaker" && (
+              <div className="space-y-6">
+                <h2 className="text-lg font-bold text-zinc-900">Speaker Mode</h2>
+
+                <div className="rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-50 to-indigo-50 p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <Mic className="h-5 w-5 text-violet-600" />
+                      <div>
+                        <p className="text-sm font-bold text-zinc-900">Speaker Mode</p>
+                        <p className="text-xs text-zinc-500">Optimize analysis for speech and presentation</p>
+                      </div>
+                    </div>
+                    <ToggleSwitch checked={speakerMode} onChange={setSpeakerMode} />
+                  </div>
+                  <p className="text-xs text-zinc-600 leading-relaxed">
+                    When enabled, the analyzer focuses on verbal delivery qualities: clarity, engagement, emotional impact, pacing, and filler word detection. Perfect for speeches, presentations, podcasts, and interviews.
+                  </p>
+                </div>
+
+                {speakerMode && (
+                  <div className="rounded-2xl border border-zinc-100 bg-white p-6 space-y-5">
+                    <h3 className="text-sm font-semibold text-zinc-700">Speaker Preferences</h3>
+                    <div className="space-y-4">
+                      {[
+                        { label: "Pacing Suggestions", desc: "Get feedback on speech speed and rhythm", defaultOn: true },
+                        { label: "Emphasis Coaching", desc: "Highlight words that should be stressed", defaultOn: true },
+                        { label: "Audience Adaptation", desc: "Suggest audience-friendly rewrites", defaultOn: true },
+                        { label: "Engagement Scoring", desc: "Rate how engaging the speech content is", defaultOn: true },
+                        { label: "Body Language Cues", desc: "Suggest gesture and movement timing", defaultOn: false },
+                      ].map((p) => (
+                        <div key={p.label} className="flex items-center justify-between rounded-xl bg-zinc-50 border border-zinc-100 px-4 py-3">
+                          <div>
+                            <p className="text-xs font-semibold text-zinc-700">{p.label}</p>
+                            <p className="text-[10px] text-zinc-400">{p.desc}</p>
+                          </div>
+                          <ToggleSwitch checked={p.defaultOn} onChange={() => {}} />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeTab === "notifications" && (
+              <div className="space-y-6">
+                <h2 className="text-lg font-bold text-zinc-900">Notifications</h2>
+                <div className="rounded-2xl border border-zinc-100 bg-white p-6 space-y-4">
+                  {[
+                    { label: "Analysis Complete", desc: "Get notified when your analysis is ready", defaultOn: true },
+                    { label: "Weekly Summary", desc: "Receive a weekly communication improvement report", defaultOn: true },
+                    { label: "Risk Alerts", desc: "Immediate alerts for high-risk content", defaultOn: true },
+                    { label: "Tips & Insights", desc: "Personalized improvement suggestions", defaultOn: false },
+                  ].map((n) => (
+                    <div key={n.label} className="flex items-center justify-between rounded-xl bg-zinc-50 border border-zinc-100 px-4 py-3">
+                      <div>
+                        <p className="text-xs font-semibold text-zinc-700">{n.label}</p>
+                        <p className="text-[10px] text-zinc-400">{n.desc}</p>
+                      </div>
+                      <ToggleSwitch checked={n.defaultOn} onChange={() => {}} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </main>
       </div>
-
-      <style dangerouslySetInnerHTML={{
-        __html: `
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #E4E4E7; border-radius: 10px; }
-      `}} />
     </div>
   );
 }
