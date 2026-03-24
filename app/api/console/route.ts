@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import { neonAuth } from "@/lib/neon/auth-server";
-import { ensurePrismaConnected, prisma, withPrismaReconnect } from "@/lib/prisma";
+import {
+  ensurePrismaConnected,
+  prisma,
+  prismaDb,
+  withPrismaReconnect,
+} from "@/lib/prisma";
 import { getOrCreateCurrentUserId } from "@/lib/server/current-user";
 import { getActiveLlmProvider, getDefaultChatModelLabel } from "@/lib/llm-client";
 
@@ -148,7 +153,7 @@ async function getAnalyticsRows(userId: string) {
 
 async function getCommunicationAnalyses(userId: string) {
   try {
-    return await prisma.communicationAnalysis.findMany({
+    return await prismaDb.communicationAnalysis.findMany({
       where: { userId },
       orderBy: { createdAt: "desc" },
       take: 40,

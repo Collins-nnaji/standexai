@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { neonAuth } from "@/lib/neon/auth-server";
-import { ensurePrismaConnected, prisma, withPrismaReconnect } from "@/lib/prisma";
+import {
+  ensurePrismaConnected,
+  prismaDb,
+  withPrismaReconnect,
+} from "@/lib/prisma";
 import { getOrCreateCurrentUserId } from "@/lib/server/current-user";
 
 export const runtime = "nodejs";
@@ -43,7 +47,7 @@ export async function POST(req: Request) {
     const kind = (body.kind ?? "full").slice(0, 32) || "full";
 
     const row = await withPrismaReconnect(() =>
-      prisma.communicationAnalysis.create({
+      prismaDb.communicationAnalysis.create({
         data: {
           userId,
           title,

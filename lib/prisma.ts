@@ -118,3 +118,9 @@ export const prisma = basePrisma.$extends({
     },
   },
 });
+
+/**
+ * Same runtime client as `prisma`. Prisma's `$extends` can narrow TypeScript so model
+ * delegates are missing; this cast restores `PrismaClient` typings for all models.
+ */
+export const prismaDb = prisma as unknown as PrismaClient;
