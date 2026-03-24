@@ -1,29 +1,31 @@
 @import "tailwindcss";
 
-:root {
-  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --font-mono: 'Consolas', 'Monaco', 'Menlo', 'Courier New', monospace;
+@theme inline {
+  --font-sans: var(--font-standex-sans), ui-sans-serif, system-ui, sans-serif;
+}
 
-  --bg-app: #FFFFFF;
+:root {
+  --font-sans: var(--font-standex-sans), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  --bg-app: #FAFAFA;
   --bg-panel: #FFFFFF;
-  --bg-card: #F5F5F7;
+  --bg-card: #F4F4F5;
 
   --ink-900: #18181B;
   --ink-500: #52525B;
   --ink-300: #D4D4D8;
 
-  --accent-primary: #6366F1;
-  --accent-secondary: #8B5CF6;
-  --accent-success: #10B981;
-  --accent-alert: #EF4444;
-  --accent-warn: #F59E0B;
+  --accent-primary: #4F46E5;
+  --accent-secondary: #6366F1;
+  --accent-muted: #A5B4FC;
 
-  --line: #E4E4E8;
+  --line: #E4E4E7;
   --line-active: #D4D4D8;
 
   --radius: 0.75rem;
 
-  --background: 0 0% 100%;
+  --background: 0 0% 98%;
   --foreground: 0 0% 11%;
   --card: 0 0% 100%;
   --card-foreground: 0 0% 11%;
@@ -35,22 +37,28 @@
   --secondary-foreground: 0 0% 11%;
   --muted: 240 5% 96%;
   --muted-foreground: 0 0% 43%;
-  --accent: 240 5% 96%;
+  --accent: 240 5% 92%;
   --accent-foreground: 0 0% 11%;
-  --destructive: 0 84% 60%;
+  --destructive: 240 6% 32%;
   --destructive-foreground: 0 0% 98%;
   --border: 0 0% 90%;
   --input: 0 0% 90%;
   --ring: 239 84% 67%;
 }
 
+html {
+  overflow-x: clip;
+}
+
 body {
   background-color: var(--bg-app);
   color: var(--ink-900);
   font-family: var(--font-sans);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  min-height: 100dvh;
+  text-rendering: optimizeLegibility;
 }
 
 a {
@@ -61,8 +69,8 @@ a {
 h1, h2, h3, h4, h5, h6 {
   color: var(--ink-900);
   font-weight: 700;
-  letter-spacing: -0.025em;
-  line-height: 1.2;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
 }
 
 button, .button {
@@ -81,8 +89,8 @@ button, .button {
 }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 15px -5px rgba(99, 102, 241, 0.4); }
-  50% { box-shadow: 0 0 25px -5px rgba(99, 102, 241, 0.7); }
+  0%, 100% { box-shadow: 0 0 15px -5px rgba(24, 24, 27, 0.15); }
+  50% { box-shadow: 0 0 25px -5px rgba(24, 24, 27, 0.25); }
 }
 
 @keyframes shimmer {
@@ -91,7 +99,7 @@ button, .button {
 }
 
 .animate-shimmer {
-  background: linear-gradient(90deg, transparent 0%, rgba(99,102,241,0.08) 50%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(24, 24, 27, 0.06) 50%, transparent 100%);
   background-size: 200% 100%;
   animation: shimmer 2s infinite;
 }
@@ -113,11 +121,11 @@ button, .button {
   transition: stroke-dashoffset 1s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ==================== HIGHLIGHT STYLES ==================== */
+/* ==================== HIGHLIGHT STYLES (monochrome) ==================== */
 
 .highlight-danger {
-  background-color: rgba(239, 68, 68, 0.12);
-  border-bottom: 2px solid rgba(239, 68, 68, 0.5);
+  background-color: rgba(244, 63, 94, 0.12);
+  border-bottom: 2px solid rgba(225, 29, 72, 0.45);
   border-radius: 2px;
   padding: 1px 2px;
   cursor: pointer;
@@ -125,12 +133,12 @@ button, .button {
 }
 
 .highlight-danger:hover {
-  background-color: rgba(239, 68, 68, 0.2);
+  background-color: rgba(244, 63, 94, 0.2);
 }
 
 .highlight-warning {
   background-color: rgba(245, 158, 11, 0.12);
-  border-bottom: 2px solid rgba(245, 158, 11, 0.5);
+  border-bottom: 2px solid rgba(217, 119, 6, 0.45);
   border-radius: 2px;
   padding: 1px 2px;
   cursor: pointer;
@@ -143,7 +151,7 @@ button, .button {
 
 .highlight-info {
   background-color: rgba(99, 102, 241, 0.1);
-  border-bottom: 2px solid rgba(99, 102, 241, 0.4);
+  border-bottom: 2px solid rgba(79, 70, 229, 0.4);
   border-radius: 2px;
   padding: 1px 2px;
   cursor: pointer;
@@ -151,7 +159,7 @@ button, .button {
 }
 
 .highlight-info:hover {
-  background-color: rgba(99, 102, 241, 0.18);
+  background-color: rgba(99, 102, 241, 0.16);
 }
 
 /* ==================== SCROLLBAR ==================== */
@@ -178,8 +186,15 @@ button, .button {
 
 .ProseMirror {
   outline: none;
-  min-height: 400px;
-  padding: 1.5rem;
+  min-height: 280px;
+  padding: 1rem;
+}
+
+@media (min-width: 640px) {
+  .ProseMirror {
+    min-height: 400px;
+    padding: 1.5rem;
+  }
 }
 
 .ProseMirror p.is-editor-empty:first-child::before {
@@ -199,7 +214,7 @@ button, .button {
 .ProseMirror ol { list-style-type: decimal; }
 .ProseMirror li { margin: 0.25rem 0; color: #3F3F46; }
 .ProseMirror blockquote { border-left: 3px solid #E4E4E7; padding-left: 1rem; margin: 1rem 0; color: #71717A; font-style: italic; }
-.ProseMirror mark { background-color: rgba(99, 102, 241, 0.15); border-radius: 2px; padding: 1px 3px; }
-.ProseMirror a { color: #6366F1; text-decoration: underline; }
+.ProseMirror mark { background-color: rgba(99, 102, 241, 0.12); border-radius: 2px; padding: 1px 3px; }
+.ProseMirror a { color: #4F46E5; text-decoration: underline; font-weight: 500; }
 .ProseMirror strong { font-weight: 700; color: #18181B; }
 .ProseMirror code { background: #F4F4F5; border-radius: 4px; padding: 2px 6px; font-family: var(--font-mono); font-size: 0.875rem; }

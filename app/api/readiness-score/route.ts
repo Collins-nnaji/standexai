@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { ensurePrismaConnected, prisma } from "@/lib/prisma";
+import { createChatCompletionsRequest, isLlmConfigured, llmMissingConfigMessage } from "@/lib/llm-client";
 
 export const runtime = "nodejs";
 
@@ -84,27 +85,22 @@ async function ensureTable() {
   await prisma.$executeRaw`DROP TABLE IF EXISTS "ARMScan"`;
 }
 
-// All three model calls use the same OpenAI API key but different model IDs.
-// GPT-4o = gpt-4o, Claude = gpt-4o (simulated via system prompt persona), Gemini = gpt-4.1-mini
-// For the live demo all run through OpenAI; swap individual keys when ready.
+// Three persona simulations through one Azure text deployment (system prompt only differs).
 const MODEL_CONFIGS = [
   {
     id: "gpt-4o",
     label: "GPT-4o",
-    openaiModel: "gpt-4o",
     persona: "You are GPT-4o by OpenAI. Answer factually and concisely.",
   },
   {
     id: "claude",
     label: "Claude",
-    openaiModel: process.env.OPENAI_MODEL ?? "gpt-4.1-mini",
     persona:
       "You are Claude by Anthropic. Answer factually and concisely, citing the most up-to-date information available in your training data.",
   },
   {
     id: "gemini",
     label: "Gemini",
-    openaiModel: process.env.OPENAI_MODEL ?? "gpt-4.1-mini",
     persona:
       "You are Gemini by Google. Answer factually and concisely. Focus on product details, pricing, and recent changes.",
   },
@@ -167,26 +163,19 @@ function computeTier(score: number): ReadinessScoreResult["tier"] {
   return "critical";
 }
 
-async function callOpenAI(model: string, system: string, user: string): Promise<string> {
-  const response = await fetch("https://api.openai.com/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-    },
-    body: JSON.stringify({
-      model,
-      temperature: 0.3,
-      max_tokens: 400,
-      messages: [
-        { role: "system", content: system },
-        { role: "user", content: user },
-      ],
-    }),
+async function callAzureChat(system: string, user: string): Promise<string> {
+  const { url, init } = createChatCompletionsRequest({
+    temperature: 0.3,
+    max_tokens: 400,
+    messages: [
+      { role: "system", content: system },
+      { role: "user", content: user },
+    ],
   });
+  const response = await fetch(url, init);
 
   if (!response.ok) {
-    throw new Error(`OpenAI error: ${await response.text()}`);
+    throw new Error(`Azure OpenAI error: ${await response.text()}`);
   }
 
   const data = (await response.json()) as {
@@ -208,21 +197,20 @@ export async function POST(req: Request) {
     if (!datasetName) {
       return NextResponse.json({ error: "dataset is required" }, { status: 400 });
     }
-    if (!process.env.OPENAI_API_KEY) {
-      return NextResponse.json({ error: "OPENAI_API_KEY is not configured" }, { status: 500 });
+    if (!isLlmConfigured()) {
+      return NextResponse.json({ error: llmMissingConfigMessage() }, { status: 500 });
     }
 
     // Step 1: Query all three model personas in parallel
     const modelTexts = await Promise.all(
       MODEL_CONFIGS.map(async (cfg) => {
-        const text = await callOpenAI(cfg.openaiModel, cfg.persona, DATASET_PROMPT(datasetName));
+        const text = await callAzureChat(cfg.persona, DATASET_PROMPT(datasetName));
         return { id: cfg.id, label: cfg.label, text };
       })
     );
 
-    // Step 2: Send all three responses to analyser (uses gpt-4o for best accuracy)
-    const analysisRaw = await callOpenAI(
-      "gpt-4o",
+    // Step 2: Send all three responses to analyser (same text deployment)
+    const analysisRaw = await callAzureChat(
       "You are a precise AI data readiness auditor. Return valid JSON only.",
       ANALYSIS_PROMPT(datasetName, modelTexts.map((m) => ({ label: m.label, text: m.text })))
     );

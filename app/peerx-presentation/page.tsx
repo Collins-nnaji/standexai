@@ -30,6 +30,8 @@ type Slide = {
   content: React.ReactNode;
 };
 
+const SLIDE_THEME = "bg-gradient-to-br from-zinc-100 via-white to-zinc-50 text-zinc-900";
+
 export default function PeerxPresentationPage() {
   const slides = useMemo<Slide[]>(
     () => [
@@ -37,11 +39,10 @@ export default function PeerxPresentationPage() {
         id: "01",
         title: "StandexAI",
         subtitle: "The Vanta for AI representation accuracy",
-        theme:
-          "bg-[radial-gradient(circle_at_10%_20%,#dbeafe_0%,#e0e7ff_32%,#f8fafc_72%)] text-zinc-900",
+        theme: SLIDE_THEME,
         content: (
           <div className="space-y-6">
-            <div className="rounded-2xl border border-indigo-100 bg-white/90 p-6">
+            <div className="rounded-2xl border border-zinc-200 bg-white/90 p-6">
               <p className="text-2xl font-semibold leading-relaxed text-zinc-800">
                 &quot;StandexAI is the compliance infrastructure that monitors, corrects, and certifies how AI models represent brands — in text, and across every modality AI touches.&quot;
               </p>
@@ -58,7 +59,7 @@ export default function PeerxPresentationPage() {
                 const Icon = item.icon;
                 return (
                 <div key={item.label} className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
-                  <Icon className="mb-2 h-6 w-6 text-indigo-500" />
+                  <Icon className="mb-2 h-6 w-6 text-zinc-600" />
                   <p className="text-xs font-black uppercase tracking-[0.2em] text-zinc-500">{item.label}</p>
                   <p className="mt-2 text-lg font-bold leading-snug text-zinc-900">{item.value}</p>
                 </div>
@@ -71,7 +72,7 @@ export default function PeerxPresentationPage() {
         id: "02",
         title: "The Big Picture",
         subtitle: "StandexAI is infrastructure, not a point tool",
-        theme: "bg-[linear-gradient(155deg,#eef2ff_0%,#f8fafc_45%,#ffffff_100%)] text-zinc-900",
+        theme: SLIDE_THEME,
         content: (
           <div className="space-y-5">
             <div className="rounded-2xl border border-zinc-200 bg-white p-6">
@@ -92,8 +93,8 @@ export default function PeerxPresentationPage() {
                 const Icon = item.icon;
                 return (
                 <div key={item.layer} className="rounded-2xl border border-zinc-200 bg-white p-5">
-                  <Icon className="mb-2 h-6 w-6 text-indigo-500" />
-                  <p className="text-sm font-black tracking-[0.2em] text-indigo-600">{item.layer}</p>
+                  <Icon className="mb-2 h-6 w-6 text-zinc-600" />
+                  <p className="text-sm font-black tracking-[0.2em] text-zinc-800">{item.layer}</p>
                   <p className="mt-3 text-sm font-medium leading-relaxed text-zinc-700">{item.detail}</p>
                 </div>
               );})}
@@ -105,8 +106,7 @@ export default function PeerxPresentationPage() {
         id: "03",
         title: "Why Now",
         subtitle: "Regulatory pressure creates the wedge",
-        theme:
-          "bg-[linear-gradient(160deg,#eff6ff_0%,#eef2ff_45%,#f5f3ff_100%)] text-zinc-900",
+        theme: SLIDE_THEME,
         content: (
           <div className="grid gap-4 md:grid-cols-3">
             {[
@@ -128,14 +128,14 @@ export default function PeerxPresentationPage() {
             ].map((card) => {
               const Icon = card.icon;
               return (
-              <div key={card.h} className="rounded-2xl border border-indigo-100 bg-white p-6 shadow-sm">
-                <Icon className="mb-3 h-7 w-7 text-indigo-500" />
+              <div key={card.h} className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
+                <Icon className="mb-3 h-7 w-7 text-zinc-600" />
                 <h3 className="text-xl font-black tracking-tight text-zinc-900">{card.h}</h3>
                 <p className="mt-3 text-sm font-medium leading-relaxed text-zinc-700">{card.p}</p>
               </div>
             );})}
-            <div className="md:col-span-3 rounded-2xl border border-indigo-200 bg-indigo-50 p-6">
-              <p className="text-base font-semibold leading-relaxed text-indigo-900">
+            <div className="md:col-span-3 rounded-2xl border border-zinc-300 bg-zinc-100 p-6">
+              <p className="text-base font-semibold leading-relaxed text-zinc-900">
                 StandexAI is the bridge between what AI says and what brands need AI to say for commercial trust and legal defensibility.
               </p>
             </div>
@@ -151,7 +151,7 @@ export default function PeerxPresentationPage() {
           <div className="space-y-5">
             <div className="grid gap-4 md:grid-cols-2">
               <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6">
-                <Eye className="mb-3 h-6 w-6 text-indigo-500" />
+                <Eye className="mb-3 h-6 w-6 text-zinc-600" />
                 <p className="text-sm font-black uppercase tracking-[0.2em] text-zinc-500">What it is</p>
                 <p className="mt-3 text-base font-medium leading-relaxed text-zinc-700">
                   Public real-time tool showing side-by-side output from <strong>GPT-4o</strong>, <strong>Claude</strong>, and <strong>Gemini</strong> for any searched brand.
@@ -159,7 +159,7 @@ export default function PeerxPresentationPage() {
                 <p className="mt-2 text-xs font-medium text-zinc-500">Tech: serverless fan-out, normalized schema, live API calls.</p>
               </div>
               <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6">
-                <TrendingUp className="mb-3 h-6 w-6 text-indigo-500" />
+                <TrendingUp className="mb-3 h-6 w-6 text-zinc-600" />
                 <p className="text-sm font-black uppercase tracking-[0.2em] text-zinc-500">What it does commercially</p>
                 <p className="mt-3 text-base font-medium leading-relaxed text-zinc-700">
                   Converts curiosity into qualified inbound by exposing concrete brand-risk signals before a sales conversation.
@@ -177,7 +177,7 @@ export default function PeerxPresentationPage() {
                 const Icon = item.icon;
                 return (
                 <div key={item.text} className="rounded-xl border border-zinc-200 bg-white p-4 text-sm font-semibold text-zinc-800 flex items-start gap-3">
-                  <Icon className="h-5 w-5 shrink-0 text-indigo-500 mt-0.5" />
+                  <Icon className="h-5 w-5 shrink-0 text-zinc-600 mt-0.5" />
                   {item.text}
                 </div>
               );})}
@@ -189,30 +189,30 @@ export default function PeerxPresentationPage() {
         id: "05",
         title: "Technical Stack",
         subtitle: "How the system works in production",
-        theme: "bg-[linear-gradient(160deg,#eef2ff_0%,#e0e7ff_45%,#ffffff_100%)] text-zinc-900",
+        theme: SLIDE_THEME,
         content: (
           <div className="grid gap-4 md:grid-cols-2">
-              <div className="rounded-2xl border border-indigo-100 bg-white p-6">
-                <Cpu className="mb-3 h-6 w-6 text-indigo-500" />
-                <p className="text-sm font-black uppercase tracking-[0.2em] text-indigo-700">Ingestion & normalization</p>
+              <div className="rounded-2xl border border-zinc-200 bg-white p-6">
+                <Cpu className="mb-3 h-6 w-6 text-zinc-600" />
+                <p className="text-sm font-black uppercase tracking-[0.2em] text-zinc-800">Ingestion & normalization</p>
                 <ul className="mt-4 space-y-2 text-sm font-medium text-zinc-700">
                   <li><strong>Canonical representation schema</strong> — claim-level structure (entity, claim, source model, confidence) so GPT-4o, Claude, Gemini outputs are comparable.</li>
                   <li><strong>Model-specific adapters</strong> — per-provider request shaping, response parsing, and error handling; new models plug in without changing the core pipeline.</li>
                   <li>Single brand query → parallel fan-out → raw responses transformed into canonical claims before any scoring.</li>
                 </ul>
               </div>
-              <div className="rounded-2xl border border-indigo-100 bg-white p-6">
-                <Zap className="mb-3 h-6 w-6 text-indigo-500" />
-                <p className="text-sm font-black uppercase tracking-[0.2em] text-indigo-700">Discrepancy & scoring engine</p>
+              <div className="rounded-2xl border border-zinc-200 bg-white p-6">
+                <Zap className="mb-3 h-6 w-6 text-zinc-600" />
+                <p className="text-sm font-black uppercase tracking-[0.2em] text-zinc-800">Discrepancy & scoring engine</p>
                 <ul className="mt-4 space-y-2 text-sm font-medium text-zinc-700">
                   <li><strong>Discrepancy engine</strong> — cross-model comparison, contradiction detection, and stale-claim flagging (proprietary rules + thresholds).</li>
                   <li><strong>Standex scoring pipeline</strong> — deterministic weighted factors (40/25/20/15), tier assignment, and factor-level breakdown persisted for audit.</li>
                   <li>Flags and scores are computed in our stack; providers only return raw text.</li>
                 </ul>
               </div>
-              <div className="rounded-2xl border border-indigo-100 bg-white p-6 md:col-span-2">
-                <Database className="mb-3 h-6 w-6 text-indigo-500" />
-                <p className="text-sm font-black uppercase tracking-[0.2em] text-indigo-700">Data & evidence layer</p>
+              <div className="rounded-2xl border border-zinc-200 bg-white p-6 md:col-span-2">
+                <Database className="mb-3 h-6 w-6 text-zinc-600" />
+                <p className="text-sm font-black uppercase tracking-[0.2em] text-zinc-800">Data & evidence layer</p>
                 <ul className="mt-3 space-y-1.5 text-sm font-medium text-zinc-700">
                   <li><strong>Postgres</strong> — <code className="text-xs bg-zinc-100 px-1 rounded">ReadinessScan</code>, per-scan factor breakdowns, claim-level and flag history; time-series for trends and compliance exports.</li>
                   <li>Evidence bundle generation for certificates (what was measured, when, and how the score was derived). Hosting: Next.js on Vercel for UX; serverless/API for the pipeline.</li>
@@ -225,13 +225,12 @@ export default function PeerxPresentationPage() {
         id: "06",
         title: "Standex Score Mechanics",
         subtitle: "One number, decomposed into auditable factors",
-        theme:
-          "bg-[radial-gradient(circle_at_90%_10%,#ddd6fe_0%,#eef2ff_40%,#ffffff_80%)] text-zinc-900",
+        theme: SLIDE_THEME,
         content: (
           <div className="space-y-5">
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="rounded-2xl border border-zinc-200 bg-white p-6">
-                <BarChart3 className="mb-3 h-6 w-6 text-indigo-500" />
+                <BarChart3 className="mb-3 h-6 w-6 text-zinc-600" />
                 <p className="text-sm font-black uppercase tracking-[0.2em] text-zinc-500">Weighted Factors</p>
                 <ul className="mt-3 space-y-2 text-sm font-semibold text-zinc-800">
                   <li>40% Factual Accuracy</li>
@@ -241,7 +240,7 @@ export default function PeerxPresentationPage() {
                 </ul>
               </div>
               <div className="rounded-2xl border border-zinc-200 bg-white p-6">
-                <Gauge className="mb-3 h-6 w-6 text-indigo-500" />
+                <Gauge className="mb-3 h-6 w-6 text-zinc-600" />
                 <p className="text-sm font-black uppercase tracking-[0.2em] text-zinc-500">Tiers</p>
                 <ul className="mt-3 space-y-2 text-sm font-semibold text-zinc-800">
                   <li>90-100: Excellent</li>
@@ -252,7 +251,7 @@ export default function PeerxPresentationPage() {
               </div>
             </div>
             <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6">
-              <FileCheck className="inline h-5 w-5 mr-2 text-indigo-500 align-middle" />
+              <FileCheck className="inline h-5 w-5 mr-2 text-zinc-600 align-middle" />
               <span className="text-sm font-semibold leading-relaxed text-zinc-700">
                 This score is designed for decision velocity: one headline number for leadership, with full factor-level traceability for operators and compliance teams.
               </span>
@@ -264,7 +263,7 @@ export default function PeerxPresentationPage() {
         id: "07",
         title: "UX Flow",
         subtitle: "Screen-by-screen narrative",
-        theme: "bg-[linear-gradient(160deg,#f1f5f9_0%,#eef2ff_45%,#ffffff_100%)] text-zinc-900",
+        theme: SLIDE_THEME,
         content: (
           <div className="space-y-4">
             {[
@@ -292,7 +291,7 @@ export default function PeerxPresentationPage() {
               const Icon = step.icon;
               return (
               <div key={step.h} className="rounded-2xl border border-zinc-200 bg-zinc-50 p-5">
-                <Icon className="mb-2 h-5 w-5 text-indigo-500" />
+                <Icon className="mb-2 h-5 w-5 text-zinc-600" />
                 <h3 className="text-lg font-black tracking-tight text-zinc-900">{step.h}</h3>
                 <p className="mt-2 text-sm font-medium leading-relaxed text-zinc-700">{step.p}</p>
               </div>
@@ -304,7 +303,7 @@ export default function PeerxPresentationPage() {
         id: "08",
         title: "Scalability & Architecture",
         subtitle: "Designed for high-volume brand monitoring",
-        theme: "bg-[linear-gradient(155deg,#ecfeff_0%,#eff6ff_45%,#faf5ff_100%)] text-zinc-900",
+        theme: SLIDE_THEME,
         content: (
           <div className="grid gap-4 md:grid-cols-2">
               {[
@@ -317,8 +316,8 @@ export default function PeerxPresentationPage() {
               ].map((item) => {
                 const Icon = item.icon;
                 return (
-                <div key={item.id} className="rounded-xl border border-cyan-100 bg-white p-5 text-sm font-medium leading-relaxed text-zinc-800 flex items-start gap-3">
-                  <Icon className="h-5 w-5 shrink-0 text-cyan-500 mt-0.5" />
+                <div key={item.id} className="rounded-xl border border-zinc-200 bg-white p-5 text-sm font-medium leading-relaxed text-zinc-800 flex items-start gap-3">
+                  <Icon className="h-5 w-5 shrink-0 text-zinc-700 mt-0.5" />
                   {item.text}
                 </div>
               );})}
@@ -332,8 +331,8 @@ export default function PeerxPresentationPage() {
         theme: "bg-white text-zinc-900",
         content: (
           <div className="space-y-5">
-            <div className="rounded-2xl border border-indigo-200 bg-indigo-50/80 p-5">
-              <p className="text-base font-semibold leading-relaxed text-indigo-900">
+            <div className="rounded-2xl border border-zinc-300 bg-zinc-100/80 p-5">
+              <p className="text-base font-semibold leading-relaxed text-zinc-900">
                 The combination of multi-model comparison, a single auditable score, and certifiable evidence is novel. Replicating it requires methodology, data history, and workflow integration — not just API calls.
               </p>
             </div>
@@ -358,7 +357,7 @@ export default function PeerxPresentationPage() {
                 const Icon = card.icon;
                 return (
                 <div key={card.h} className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6">
-                  <Icon className="mb-3 h-6 w-6 text-indigo-500" />
+                  <Icon className="mb-3 h-6 w-6 text-zinc-600" />
                   <h3 className="text-xl font-black tracking-tight text-zinc-900">{card.h}</h3>
                   <p className="mt-3 text-sm font-medium leading-relaxed text-zinc-700">{card.p}</p>
                 </div>
@@ -371,8 +370,7 @@ export default function PeerxPresentationPage() {
         id: "10",
         title: "Action Plan & Next Steps",
         subtitle: "Execution priorities",
-        theme:
-          "bg-[radial-gradient(circle_at_90%_10%,#ddd6fe_0%,#eef2ff_40%,#ffffff_80%)] text-zinc-900",
+        theme: SLIDE_THEME,
         content: (
           <div className="space-y-4">
             {[
@@ -384,7 +382,7 @@ export default function PeerxPresentationPage() {
               const Icon = item.icon;
               return (
               <div key={item.text} className="rounded-xl border border-zinc-200 bg-white p-5 text-base font-semibold leading-relaxed text-zinc-800 flex items-start gap-3">
-                <Icon className="h-5 w-5 shrink-0 text-indigo-500 mt-0.5" />
+                <Icon className="h-5 w-5 shrink-0 text-zinc-600 mt-0.5" />
                 {item.text}
               </div>
             );})}
@@ -395,15 +393,15 @@ export default function PeerxPresentationPage() {
         id: "11",
         title: "Close",
         subtitle: "StandexAI makes AI brand risk measurable, actionable, and certifiable",
-        theme: "bg-[linear-gradient(155deg,#eef2ff_0%,#f8fafc_45%,#ffffff_100%)] text-zinc-900",
+        theme: SLIDE_THEME,
         content: (
           <div className="space-y-6">
             <p className="max-w-3xl text-2xl font-semibold leading-relaxed text-zinc-700">
               We are building the operating system for brand truth in the AI channel.
             </p>
-            <div className="rounded-2xl border border-indigo-400/40 bg-indigo-500/10 p-6">
-              <CheckCircle2 className="mb-2 h-6 w-6 text-indigo-600" />
-              <p className="text-sm font-black uppercase tracking-[0.2em] text-indigo-700">Live Demo Path</p>
+            <div className="rounded-2xl border border-zinc-400 bg-zinc-200/60 p-6">
+              <CheckCircle2 className="mb-2 h-6 w-6 text-zinc-800" />
+              <p className="text-sm font-black uppercase tracking-[0.2em] text-zinc-800">Live Demo Path</p>
               <p className="mt-2 text-xl font-bold text-zinc-900">Data Diagnostics → Readiness Ledger</p>
               <p className="text-base text-zinc-600">StandexAI Team</p>
             </div>
@@ -434,7 +432,7 @@ export default function PeerxPresentationPage() {
                   priority={index === 0}
                 />
               </div>
-              <p className="text-xs font-black uppercase tracking-[0.28em] text-indigo-500">Slide {String(index + 1).padStart(2, "0")}</p>
+              <p className="text-xs font-black uppercase tracking-[0.28em] text-zinc-600">Slide {String(index + 1).padStart(2, "0")}</p>
               <h1 className="mt-3 text-5xl font-black tracking-tight sm:text-6xl">{slide.title}</h1>
               {slide.subtitle ? (
                 <p className="mt-4 max-w-4xl text-xl font-semibold leading-relaxed text-zinc-700">

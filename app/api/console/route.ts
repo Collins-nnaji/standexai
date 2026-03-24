@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { neonAuth } from "@/lib/neon/auth-server";
+import { ensurePrismaConnected, prisma, withPrismaReconnect } from "@/lib/prisma";
+import { getOrCreateCurrentUserId } from "@/lib/server/current-user";
+import { getActiveLlmProvider, getDefaultChatModelLabel } from "@/lib/llm-client";
 
 export const runtime = "nodejs";
 
@@ -39,7 +42,7 @@ type GeoEngineCoverage = {
 };
 
 const KNOWN_GEO_ENGINES: Array<{ engine: string; provider: string; matchers: string[] }> = [
-  { engine: "ChatGPT", provider: "openai", matchers: ["openai", "gpt"] },
+  { engine: "ChatGPT", provider: "openai", matchers: ["openai", "gpt", "azure"] },
   { engine: "Claude", provider: "anthropic", matchers: ["anthropic", "claude"] },
   { engine: "Gemini", provider: "google", matchers: ["google", "gemini"] },
   { engine: "Perplexity", provider: "perplexity", matchers: ["perplexity"] },
@@ -107,9 +110,10 @@ async function getGeneratedPageCount(): Promise<number> {
   }
 }
 
-async function getContentRows() {
+async function getContentRows(userId: string) {
   try {
     return await prisma.content.findMany({
+      where: { userId },
       orderBy: { updatedAt: "desc" },
       take: 30,
       select: {
@@ -129,13 +133,38 @@ async function getContentRows() {
   }
 }
 
-async function getAnalyticsRows() {
+async function getAnalyticsRows(userId: string) {
   try {
     return await prisma.analyticsEvent.findMany({
-      where: { eventType: "generation.completed" },
+      where: { eventType: "generation.completed", userId },
       orderBy: { createdAt: "desc" },
       take: 500,
       select: { createdAt: true, eventData: true },
+    });
+  } catch {
+    return [];
+  }
+}
+
+async function getCommunicationAnalyses(userId: string) {
+  try {
+    return await prisma.communicationAnalysis.findMany({
+      where: { userId },
+      orderBy: { createdAt: "desc" },
+      take: 40,
+      select: {
+        id: true,
+        title: true,
+        source: true,
+        kind: true,
+        overallScore: true,
+        toneScore: true,
+        riskScore: true,
+        clarityScore: true,
+        aiProbability: true,
+        riskLevel: true,
+        createdAt: true,
+      },
     });
   } catch {
     return [];
@@ -161,11 +190,24 @@ async function getBriefRows() {
 
 export async function GET() {
   try {
-    const [contentRows, briefRows, analyticsRows, generatedCount] = await Promise.all([
-      getContentRows(),
-      getBriefRows(),
-      getAnalyticsRows(),
-      getGeneratedPageCount(),
+    await ensurePrismaConnected();
+    const { data: session } = await neonAuth.getSession();
+    const email = session?.user?.email?.trim().toLowerCase();
+    if (!email) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const userId = await getOrCreateCurrentUserId({
+      userEmailHeader: email,
+      userNameHeader: session?.user?.name ?? undefined,
+    });
+
+    const [contentRows, briefRows, analyticsRows, generatedCount, commRows] = await Promise.all([
+      withPrismaReconnect(() => getContentRows(userId)),
+      withPrismaReconnect(() => getBriefRows()),
+      withPrismaReconnect(() => getAnalyticsRows(userId)),
+      withPrismaReconnect(() => getGeneratedPageCount()),
+      withPrismaReconnect(() => getCommunicationAnalyses(userId)),
     ]);
 
     const seoScores = contentRows.map((row) => row.seoScore ?? 0).filter((score) => score > 0);
@@ -210,7 +252,7 @@ export async function GET() {
     for (const row of analyticsRows) {
       const eventData = row.eventData as AnalyticsEventData;
       const provider = eventData.provider ?? "openai";
-      const model = eventData.model ?? (process.env.OPENAI_MODEL ?? "gpt-4.1-mini");
+      const model = eventData.model ?? getDefaultChatModelLabel();
       const key = `${provider}:${model}`;
 
       const existing = modelUsageMap.get(key);
@@ -233,13 +275,40 @@ export async function GET() {
     if (modelUsage.length === 0) {
       modelUsage = [
         {
-          provider: "openai",
-          model: process.env.OPENAI_MODEL ?? "gpt-4.1-mini",
+          provider: getActiveLlmProvider(),
+          model: getDefaultChatModelLabel(),
           count: generatedCount,
           lastUsedAt: new Date().toISOString(),
         },
       ];
     }
+
+    const commSample = commRows.slice(0, 30);
+    const nums = (pick: (row: (typeof commRows)[0]) => number | null | undefined) =>
+      commSample.map(pick).filter((n): n is number => typeof n === "number" && !Number.isNaN(n));
+
+    const communication = {
+      totalRuns: commRows.length,
+      avgOverall: average(nums((r) => r.overallScore)),
+      avgTone: average(nums((r) => r.toneScore)),
+      avgRisk: average(nums((r) => r.riskScore)),
+      avgClarity: average(nums((r) => r.clarityScore)),
+      avgAiProbability: average(nums((r) => r.aiProbability)),
+      lastRunAt: commRows[0]?.createdAt.toISOString() ?? null,
+      recent: commRows.slice(0, 12).map((r) => ({
+        id: r.id,
+        title: r.title,
+        source: r.source,
+        kind: r.kind,
+        overallScore: r.overallScore,
+        toneScore: r.toneScore,
+        riskScore: r.riskScore,
+        clarityScore: r.clarityScore,
+        aiProbability: r.aiProbability,
+        riskLevel: r.riskLevel,
+        createdAt: r.createdAt.toISOString(),
+      })),
+    };
 
     const geoCoverage: GeoEngineCoverage[] = KNOWN_GEO_ENGINES.map((engine) => {
       const matchingRows = modelUsage.filter((entry) => {
@@ -279,17 +348,18 @@ export async function GET() {
         avgComplianceScore: average(complianceScores),
         avgGeoScore: average(geoScores),
       },
+      communication,
       llm: {
         totalGenerations: analyticsRows.length || generatedCount,
         providersUsed: new Set(modelUsage.map((entry) => entry.provider)).size,
-        mostUsedModel: modelUsage[0]?.model ?? process.env.OPENAI_MODEL ?? "gpt-4.1-mini",
+        mostUsedModel: modelUsage[0]?.model ?? getDefaultChatModelLabel(),
         modelUsage,
         geoCoverage,
       },
       projects: allProjects,
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to load dashboard metrics";
+    const message = error instanceof Error ? error.message : "Failed to load console metrics";
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

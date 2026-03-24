@@ -1,6 +1,12 @@
 import { NextResponse } from "next/server";
 import { ensurePrismaConnected, prisma, withPrismaReconnect } from "@/lib/prisma";
 import { getOrCreateCurrentUserId } from "@/lib/server/current-user";
+import {
+  createChatCompletionsRequest,
+  getActiveLlmProvider,
+  getDefaultChatModelLabel,
+  isLlmConfigured,
+} from "@/lib/llm-client";
 
 export const runtime = "nodejs";
 
@@ -218,42 +224,34 @@ async function runSemanticCheck(normalizedUrl: string): Promise<SemanticCheck> {
 }
 
 async function runGptQuery(url: string, keyword: string, brand: string): Promise<ModelResult> {
-  if (!process.env.OPENAI_API_KEY) {
+  if (!isLlmConfigured()) {
     return {
       engine: "GPT-4o",
       mentioned: false,
       sentiment: "neutral",
       competitors: [],
       descriptors: [],
-      reasoning: "OpenAI key not configured.",
+      reasoning: "LLM is not configured.",
       source: "simulated",
     };
   }
 
-  const model = process.env.OPENAI_MODEL ?? "gpt-4o-mini";
-  const response = await fetchWithTimeout("https://api.openai.com/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-    },
-    body: JSON.stringify({
-      model,
-      temperature: 0.2,
-      response_format: { type: "json_object" },
-      messages: [
-        {
-          role: "system",
-          content:
-            "Return strict JSON only: {mentioned:boolean,sentiment:'positive|neutral|negative',competitors:string[],descriptors:string[],reasoning:string}.",
-        },
-        {
-          role: "user",
-          content: `Assess AI discoverability for brand "${brand}" at URL "${url}" for keyword "${keyword}". Include top 3 competitors likely shown in AI answers.`,
-        },
-      ],
-    }),
+  const { url: chatUrl, init } = createChatCompletionsRequest({
+    temperature: 0.2,
+    response_format: { type: "json_object" },
+    messages: [
+      {
+        role: "system",
+        content:
+          "Return strict JSON only: {mentioned:boolean,sentiment:'positive|neutral|negative',competitors:string[],descriptors:string[],reasoning:string}.",
+      },
+      {
+        role: "user",
+        content: `Assess AI discoverability for brand "${brand}" at URL "${url}" for keyword "${keyword}". Include top 3 competitors likely shown in AI answers.`,
+      },
+    ],
   });
+  const response = await fetchWithTimeout(chatUrl, init);
 
   if (!response.ok) {
     return {
@@ -359,7 +357,7 @@ async function runTopRankingSitesQuery(input: {
   userPrompt: string;
   modelResults: ModelResult[];
 }): Promise<RankingSite[]> {
-  if (!process.env.OPENAI_API_KEY) {
+  if (!isLlmConfigured()) {
     return fallbackTopRankingSites({
       keyword: input.keyword,
       normalizedUrl: input.url,
@@ -368,28 +366,21 @@ async function runTopRankingSitesQuery(input: {
     });
   }
 
-  const response = await fetchWithTimeout("https://api.openai.com/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-    },
-    body: JSON.stringify({
-      model: process.env.OPENAI_MODEL ?? "gpt-4.1-mini",
-      temperature: 0.25,
-      response_format: { type: "json_object" },
-      messages: [
-        {
-          role: "system",
-          content: "Return strict JSON only. No markdown fences.",
-        },
-        {
-          role: "user",
-          content: buildTopSitesPrompt(input),
-        },
-      ],
-    }),
+  const { url: chatUrl, init } = createChatCompletionsRequest({
+    temperature: 0.25,
+    response_format: { type: "json_object" },
+    messages: [
+      {
+        role: "system",
+        content: "Return strict JSON only. No markdown fences.",
+      },
+      {
+        role: "user",
+        content: buildTopSitesPrompt(input),
+      },
+    ],
   });
+  const response = await fetchWithTimeout(chatUrl, init);
 
   if (!response.ok) {
     return fallbackTopRankingSites({
@@ -498,36 +489,24 @@ async function runAiModelSimulation(input: {
   citations: CitationSource[];
   userPrompt: string;
 }): Promise<ModelResult[] | null> {
-  if (!process.env.OPENAI_API_KEY) return null;
+  if (!isLlmConfigured()) return null;
 
-  const model = process.env.OPENAI_MODEL ?? "gpt-4.1-mini";
-  const response = await fetchWithTimeout(
-    "https://api.openai.com/v1/chat/completions",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+  const { url: chatUrl, init } = createChatCompletionsRequest({
+    temperature: 0.25,
+    response_format: { type: "json_object" },
+    messages: [
+      {
+        role: "system",
+        content:
+          "You are a GEO simulation engine. Return strict JSON only. Do not include markdown fences.",
       },
-      body: JSON.stringify({
-        model,
-        temperature: 0.25,
-        response_format: { type: "json_object" },
-        messages: [
-          {
-            role: "system",
-            content:
-              "You are a GEO simulation engine. Return strict JSON only. Do not include markdown fences.",
-          },
-          {
-            role: "user",
-            content: buildAuditSimulationPrompt(input),
-          },
-        ],
-      }),
-    },
-    25000,
-  );
+      {
+        role: "user",
+        content: buildAuditSimulationPrompt(input),
+      },
+    ],
+  });
+  const response = await fetchWithTimeout(chatUrl, init, 25000);
 
   if (!response.ok) return null;
 
@@ -847,8 +826,8 @@ export async function POST(req: Request) {
       simulation: {
         enabled: shouldUseAiSimulation,
         usedPrompt: shouldUseAiSimulation ? (prompt || "Default AI simulation prompt") : null,
-        provider: shouldUseAiSimulation ? "openai" : null,
-        model: shouldUseAiSimulation ? process.env.OPENAI_MODEL ?? "gpt-4.1-mini" : null,
+        provider: shouldUseAiSimulation ? getActiveLlmProvider() : null,
+        model: shouldUseAiSimulation ? getDefaultChatModelLabel() : null,
       },
       dataQuality: {
         liveModels,

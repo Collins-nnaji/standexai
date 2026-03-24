@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 export default function PromptLabRedirect() {
   const router = useRouter();
   useEffect(() => {
-    router.replace("/text-analyzer");
+    router.replace("/writing-lab");
   }, [router]);
   return null;
 }

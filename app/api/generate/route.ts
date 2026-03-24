@@ -1,5 +1,12 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import {
+  createChatCompletionsRequest,
+  getActiveLlmProvider,
+  getDefaultChatModelLabel,
+  isLlmConfigured,
+  llmMissingConfigMessage,
+} from "@/lib/llm-client";
 
 export const runtime = "nodejs";
 
@@ -95,43 +102,36 @@ export async function POST(req: Request) {
       );
     }
 
-    if (!process.env.OPENAI_API_KEY) {
-      return NextResponse.json({ error: "OPENAI_API_KEY is not set" }, { status: 500 });
+    if (!isLlmConfigured()) {
+      return NextResponse.json({ error: llmMissingConfigMessage() }, { status: 500 });
     }
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: process.env.OPENAI_MODEL ?? "gpt-4.1-mini",
-        temperature: 0.7,
-        response_format: { type: "json_object" },
-        messages: [
-          {
-            role: "system",
-            content:
-              "You are a senior SEO content strategist. Output valid JSON only and follow input constraints exactly.",
-          },
-          {
-            role: "user",
-            content: buildPrompt({
-              mainKeyword,
-              secondaryKeywords,
-              location,
-              targetAudience,
-              tone,
-            }),
-          },
-        ],
-      }),
+    const { url, init } = createChatCompletionsRequest({
+      temperature: 0.7,
+      response_format: { type: "json_object" },
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are a senior SEO content strategist. Output valid JSON only and follow input constraints exactly.",
+        },
+        {
+          role: "user",
+          content: buildPrompt({
+            mainKeyword,
+            secondaryKeywords,
+            location,
+            targetAudience,
+            tone,
+          }),
+        },
+      ],
     });
+    const response = await fetch(url, init);
 
     if (!response.ok) {
       const errorText = await response.text();
-      return NextResponse.json({ error: `OpenAI request failed: ${errorText}` }, { status: 500 });
+      return NextResponse.json({ error: `Azure OpenAI request failed: ${errorText}` }, { status: 500 });
     }
 
     const data = (await response.json()) as {
@@ -158,7 +158,7 @@ export async function POST(req: Request) {
     const id = crypto.randomUUID();
     let saved = false;
     let saveError: string | null = null;
-    const model = process.env.OPENAI_MODEL ?? "gpt-4.1-mini";
+    const model = getDefaultChatModelLabel();
 
     try {
       await ensureTable();
@@ -205,7 +205,7 @@ export async function POST(req: Request) {
         data: {
           eventType: "generation.completed",
           eventData: {
-            provider: "openai",
+            provider: getActiveLlmProvider(),
             model,
             mainKeyword,
             generatedPageId: id,

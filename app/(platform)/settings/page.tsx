@@ -101,7 +101,7 @@ export default function SettingsPage() {
 
   return (
     <div className="flex flex-1 flex-col bg-white">
-      <header className="border-b border-zinc-100 bg-white px-8 py-5">
+      <header className="border-b border-zinc-100 bg-white px-4 py-4 sm:px-8 sm:py-5">
         <h1 className="text-xl font-bold text-zinc-900">Settings</h1>
         <p className="mt-1 text-xs text-zinc-400">Customize your StandexAI experience</p>
       </header>
@@ -126,11 +126,11 @@ export default function SettingsPage() {
           </nav>
         </aside>
 
-        <main className="flex-1 overflow-auto p-6 lg:p-10">
+        <main className="flex-1 overflow-auto p-4 sm:p-6 lg:p-10">
           <div className="mx-auto max-w-2xl">
             {(saveError || saveMessage) && (
               <div className={`mb-6 rounded-xl border px-4 py-3 text-xs font-semibold ${
-                saveError ? "border-red-100 bg-red-50 text-red-600" : "border-emerald-100 bg-emerald-50 text-emerald-600"
+                saveError ? "border-zinc-300 bg-zinc-100 text-zinc-800" : "border-zinc-200 bg-zinc-100 text-zinc-700"
               }`}>
                 {saveError ?? saveMessage}
               </div>
@@ -148,7 +148,7 @@ export default function SettingsPage() {
                         value={profile.name}
                         onChange={(e) => setProfile(p => ({ ...p, name: e.target.value }))}
                         disabled={loadingProfile}
-                        className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none focus:bg-white focus:border-indigo-200 transition"
+                        className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none focus:bg-white focus:border-zinc-400 transition"
                       />
                     </div>
                     <div>
@@ -162,7 +162,7 @@ export default function SettingsPage() {
                         value={profile.companyName}
                         onChange={(e) => setProfile(p => ({ ...p, companyName: e.target.value }))}
                         disabled={loadingProfile}
-                        className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none focus:bg-white focus:border-indigo-200 transition"
+                        className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none focus:bg-white focus:border-zinc-400 transition"
                       />
                     </div>
                     <div>
@@ -188,7 +188,7 @@ export default function SettingsPage() {
                     <button
                       onClick={() => void persistProfile("Profile saved.")}
                       disabled={savingProfile || loadingProfile}
-                      className="flex items-center gap-2 rounded-xl bg-indigo-600 px-6 py-3 text-xs font-semibold text-white transition hover:bg-indigo-700 shadow-lg disabled:opacity-50"
+                      className="flex items-center gap-2 rounded-xl bg-indigo-600 px-6 py-3 text-xs font-semibold text-white transition hover:bg-indigo-700 shadow-lg shadow-indigo-600/25 disabled:opacity-50"
                     >
                       {savingProfile ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
                       Save Changes
@@ -212,7 +212,7 @@ export default function SettingsPage() {
                           onClick={() => setSensitivity(s)}
                           className={`flex-1 rounded-xl px-4 py-3 text-xs font-semibold capitalize transition ${
                             sensitivity === s
-                              ? "bg-indigo-600 text-white shadow-md"
+                              ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/25"
                               : "bg-zinc-50 border border-zinc-200 text-zinc-600 hover:bg-zinc-100"
                           }`}
                         >
@@ -236,7 +236,7 @@ export default function SettingsPage() {
                           onClick={() => setPreferredTone(t)}
                           className={`rounded-xl px-3 py-2.5 text-xs font-semibold capitalize transition ${
                             preferredTone === t
-                              ? "bg-indigo-50 border border-indigo-200 text-indigo-700"
+                              ? "bg-zinc-100 border border-zinc-300 text-zinc-800"
                               : "bg-zinc-50 border border-zinc-100 text-zinc-500 hover:bg-zinc-100"
                           }`}
                         >
@@ -278,10 +278,10 @@ export default function SettingsPage() {
               <div className="space-y-6">
                 <h2 className="text-lg font-bold text-zinc-900">Speaker Mode</h2>
 
-                <div className="rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-50 to-indigo-50 p-6">
+                <div className="rounded-2xl border border-zinc-300 bg-gradient-to-br from-zinc-50 to-zinc-100 p-6">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <Mic className="h-5 w-5 text-violet-600" />
+                      <Mic className="h-5 w-5 text-zinc-800" />
                       <div>
                         <p className="text-sm font-bold text-zinc-900">Speaker Mode</p>
                         <p className="text-xs text-zinc-500">Optimize analysis for speech and presentation</p>

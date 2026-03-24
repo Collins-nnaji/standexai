@@ -6,14 +6,16 @@ export default neonAuth.middleware({
 
 export const config = {
   matcher: [
-    "/dashboard/:path*",
+    "/console/:path*",
+    "/writing-lab/:path*",
     "/text-analyzer/:path*",
+    "/agent/:path*",
     "/speech-analyzer/:path*",
     "/rewrite-studio/:path*",
+    "/settings/:path*",
     "/ai-detection/:path*",
     "/risk-compliance/:path*",
     "/intent-analyzer/:path*",
     "/insights/:path*",
-    "/settings/:path*",
   ],
 };

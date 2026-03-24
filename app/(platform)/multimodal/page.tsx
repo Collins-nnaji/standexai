@@ -22,7 +22,7 @@ export default function MultimodalPage() {
             id: "node_1",
             type: "text_prompt",
             status: "completed",
-            content: "The futuristic command center, rendered in obsidian and neon emerald. Volumetric lighting and 8k photorealistic quality.",
+            content: "A monochrome operations room: matte black consoles, soft volumetric light, photoreal detail.",
             model: "Foundry Blueprint"
         }
     ]);
@@ -74,14 +74,14 @@ export default function MultimodalPage() {
             {/* Studio Header */}
             <header className="flex h-20 shrink-0 items-center justify-between border-b border-zinc-100 bg-white px-8">
                 <div className="flex items-center gap-5">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-50 text-purple-600 border border-purple-100 shadow-sm">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-zinc-100 text-zinc-800 border border-zinc-200 shadow-sm">
                         <MonitorPlay className="h-6 w-6" />
                     </div>
                     <div>
                         <h1 className="text-2xl font-black text-zinc-950 uppercase tracking-tight">Studio Canvas</h1>
                         <div className="flex items-center gap-2 mt-1">
                             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">Pipeline Active</span>
-                            <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                            <div className="h-1.5 w-1.5 rounded-full bg-zinc-800 animate-pulse"></div>
                         </div>
                     </div>
                 </div>
@@ -107,7 +107,7 @@ export default function MultimodalPage() {
                         <div className="space-y-6">
                             <button className="w-full flex items-center justify-between rounded-[2rem] border border-zinc-100 bg-white p-6 transition-all hover:shadow-xl hover:scale-[1.02] group">
                                 <div className="flex items-center gap-5">
-                                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600 border border-indigo-100 shadow-sm">
+                                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-zinc-100 text-zinc-800 border border-zinc-200 shadow-sm">
                                         <Layers className="h-6 w-6" />
                                     </div>
                                     <div className="text-left">
@@ -115,19 +115,19 @@ export default function MultimodalPage() {
                                         <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Import Logic</span>
                                     </div>
                                 </div>
-                                <ArrowRight className="h-4 w-4 text-zinc-200 group-hover:text-indigo-600 transition-transform group-hover:translate-x-2" />
+                                <ArrowRight className="h-4 w-4 text-zinc-200 group-hover:text-zinc-800 transition-transform group-hover:translate-x-2" />
                             </button>
 
                             <div className="rounded-[2.5rem] border border-zinc-100 bg-white p-8 shadow-sm">
                                 <div className="mb-6 flex items-center gap-3">
-                                    <Zap className="h-4 w-4 text-emerald-500" />
+                                    <Zap className="h-4 w-4 text-zinc-600" />
                                     <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">Synthesis Injection</span>
                                 </div>
                                 <textarea
                                     value={promptInput}
                                     onChange={(e) => setPromptInput(e.target.value)}
                                     placeholder="Inject new reasoning manual..."
-                                    className="w-full bg-[#F9FAFB] border border-zinc-100 rounded-2xl px-5 py-4 min-h-[140px] text-xs font-bold text-zinc-700 outline-none focus:bg-white focus:border-indigo-100 transition shadow-inner resize-none placeholder:text-zinc-300 leading-relaxed"
+                                    className="w-full bg-[#F9FAFB] border border-zinc-100 rounded-2xl px-5 py-4 min-h-[140px] text-xs font-bold text-zinc-700 outline-none focus:bg-white focus:border-zinc-300 transition shadow-inner resize-none placeholder:text-zinc-300 leading-relaxed"
                                 />
                                 <button
                                     onClick={handleGenerateText}
@@ -143,23 +143,23 @@ export default function MultimodalPage() {
                     <div>
                         <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-zinc-300 mb-8">Unit Matrix</h2>
                         <div className="space-y-4">
-                            <div className="p-6 rounded-3xl border border-purple-100 bg-purple-50/30 flex items-center justify-between transition-all hover:bg-white hover:shadow-lg">
+                            <div className="p-6 rounded-3xl border border-zinc-200 bg-zinc-100/30 flex items-center justify-between transition-all hover:bg-white hover:shadow-lg">
                                 <div className="flex items-center gap-4">
-                                    <ImageIcon className="h-6 w-6 text-purple-600" />
+                                    <ImageIcon className="h-6 w-6 text-zinc-800" />
                                     <div>
-                                        <span className="text-xs font-black text-purple-600 uppercase">Vision Synth</span>
+                                        <span className="text-xs font-black text-zinc-800 uppercase">Vision Synth</span>
                                     </div>
                                 </div>
-                                <div className="h-2 w-2 rounded-full bg-purple-500"></div>
+                                <div className="h-2 w-2 rounded-full bg-zinc-800"></div>
                             </div>
-                            <div className="p-6 rounded-3xl border border-emerald-100 bg-emerald-50/30 flex items-center justify-between transition-all hover:bg-white hover:shadow-lg">
+                            <div className="p-6 rounded-3xl border border-zinc-200 bg-zinc-100/30 flex items-center justify-between transition-all hover:bg-white hover:shadow-lg">
                                 <div className="flex items-center gap-4">
-                                    <Video className="h-6 w-6 text-emerald-600" />
+                                    <Video className="h-6 w-6 text-zinc-700" />
                                     <div>
-                                        <span className="text-xs font-black text-emerald-600 uppercase">Motion Lab</span>
+                                        <span className="text-xs font-black text-zinc-700 uppercase">Motion Lab</span>
                                     </div>
                                 </div>
-                                <div className="h-2 w-2 rounded-full bg-emerald-500"></div>
+                                <div className="h-2 w-2 rounded-full bg-zinc-800"></div>
                             </div>
                         </div>
                     </div>
@@ -191,7 +191,7 @@ export default function MultimodalPage() {
                                         {/* Header */}
                                         <div className="bg-[#F9FAFB] px-10 py-6 border-b border-zinc-100 flex items-center justify-between">
                                             <div className="flex items-center gap-5">
-                                                <div className={`p-3 rounded-2xl ${node.type === 'text_prompt' ? 'bg-indigo-50 text-indigo-600' : node.type === 'image' ? 'bg-purple-50 text-purple-600' : 'bg-emerald-50 text-emerald-600'}`}>
+                                                <div className={`p-3 rounded-2xl ${node.type === 'text_prompt' ? 'bg-zinc-100 text-zinc-800' : node.type === 'image' ? 'bg-zinc-100 text-zinc-800' : 'bg-zinc-100 text-zinc-700'}`}>
                                                     {node.type === "text_prompt" && <Layers className="h-5 w-5" />}
                                                     {node.type === "image" && <ImageIcon className="h-5 w-5" />}
                                                     {node.type === "video" && <Video className="h-5 w-5" />}
@@ -201,7 +201,7 @@ export default function MultimodalPage() {
                                                     <span className="text-sm font-black text-zinc-950 uppercase">Profile_0{index + 1}</span>
                                                 </div>
                                             </div>
-                                            {node.status === "generating" && <Sparkles className="h-5 w-5 text-indigo-500 animate-pulse" />}
+                                            {node.status === "generating" && <Sparkles className="h-5 w-5 text-zinc-600 animate-pulse" />}
                                         </div>
 
                                         {/* Synthesis Content */}
@@ -210,8 +210,8 @@ export default function MultimodalPage() {
                                                 <div className="flex flex-col items-center justify-center py-12">
                                                     <div className="mb-8 h-16 w-16 relative flex items-center justify-center">
                                                         <div className="absolute inset-0 border-[4px] border-zinc-50 rounded-full"></div>
-                                                        <div className="absolute inset-0 border-[4px] border-indigo-600 rounded-full border-t-transparent animate-spin"></div>
-                                                        <Cpu className="h-6 w-6 text-indigo-600" />
+                                                        <div className="absolute inset-0 border-[3px] border-zinc-900 rounded-full border-t-transparent animate-spin"></div>
+                                                        <Cpu className="h-6 w-6 text-zinc-800" />
                                                     </div>
                                                     <span className="text-[11px] font-black uppercase tracking-[0.3em] text-zinc-300">Synthesizing...</span>
                                                 </div>
@@ -235,14 +235,14 @@ export default function MultimodalPage() {
                                                 {node.type === "text_prompt" && (
                                                     <button
                                                         onClick={() => executePipeline(node.id, "image")}
-                                                        className="flex-1 flex items-center justify-center gap-3 rounded-2xl bg-white py-4 text-[10px] font-black uppercase tracking-widest text-purple-600 border border-zinc-100 transition hover:bg-zinc-950 hover:text-white hover:border-zinc-950"
+                                                        className="flex-1 flex items-center justify-center gap-3 rounded-2xl bg-white py-4 text-[10px] font-black uppercase tracking-widest text-zinc-800 border border-zinc-100 transition hover:bg-zinc-950 hover:text-white hover:border-zinc-950"
                                                     >
                                                         <ImageIcon className="h-4 w-4" /> Synthesize
                                                     </button>
                                                 )}
                                                 <button
                                                     onClick={() => executePipeline(node.id, "video")}
-                                                    className="flex-1 flex items-center justify-center gap-3 rounded-2xl bg-white py-4 text-[10px] font-black uppercase tracking-widest text-emerald-600 border border-zinc-100 transition hover:bg-zinc-950 hover:text-white hover:border-zinc-950"
+                                                    className="flex-1 flex items-center justify-center gap-3 rounded-2xl bg-white py-4 text-[10px] font-black uppercase tracking-widest text-zinc-700 border border-zinc-100 transition hover:bg-zinc-950 hover:text-white hover:border-zinc-950"
                                                 >
                                                     <Video className="h-4 w-4" /> Animate
                                                 </button>

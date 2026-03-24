@@ -11,7 +11,7 @@ export default async function AuthLayout({
   const { data: session } = await neonAuth.getSession();
 
   if (session?.user) {
-    redirect("/dashboard");
+    redirect("/console");
   }
 
   return <>{children}</>;

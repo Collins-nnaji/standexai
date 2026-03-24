@@ -69,7 +69,7 @@ StandexAI has been completely transformed from a simple form-based SEO generator
 - **Database:** PostgreSQL (Neon) with Prisma ORM
 - **Editor:** TipTap (ProseMirror)
 - **UI:** Tailwind CSS + Radix UI
-- **AI:** OpenAI GPT-4 + Anthropic Claude (ready)
+- **AI:** Azure OpenAI (chat + optional Whisper)
 - **Auth:** NextAuth.js (schema ready)
 
 ### **Database Schema**
@@ -90,7 +90,7 @@ Comprehensive schema supporting:
 standexai/
 ├── app/
 │   ├── (platform)/          # Main application
-│   │   ├── dashboard/       # Project overview
+│   │   ├── console/         # Main hub (tools & shortcuts)
 │   │   ├── studio/
 │   │   │   ├── editor/      # Rich text editor
 │   │   │   └── briefs/      # Content briefs
@@ -123,8 +123,12 @@ npm install
 Create `.env` file:
 ```env
 DATABASE_URL="postgresql://..."
-OPENAI_API_KEY="sk-..."
-OPENAI_MODEL="gpt-4.1-mini"  # Optional
+AZURE_OPENAI_ENDPOINT="https://YOUR_RESOURCE.openai.azure.com"
+AZURE_OPENAI_API_KEY="..."
+AZURE_OPENAI_DEPLOYMENT_TEXT="your-chat-deployment"
+# Optional: Whisper / speech transcription (separate deployment)
+# AZURE_OPENAI_DEPLOYMENT_AUDIO="your-whisper-deployment"
+# AZURE_OPENAI_API_VERSION="2024-08-01-preview"
 NEXTAUTH_SECRET="your-secret"  # For auth (optional)
 ```
 
@@ -153,7 +157,7 @@ Open [http://localhost:3000](http://localhost:3000)
 
 ### **Main Routes**
 - `/` - Landing page with feature overview
-- `/dashboard` - Data dashboard with analytics
+- `/console` - Main console (hub into tools & workflows)
 - `/studio/editor` - Schema editor with AI assistance
 - `/studio/briefs` - Modeling brief generator
 - `/settings` - Account and governance settings

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { createChatCompletionsRequest, isLlmConfigured, llmMissingConfigMessage } from "@/lib/llm-client";
 
 export const runtime = "nodejs";
 
@@ -134,51 +135,44 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Valid mode is required: generate|improve|rewrite|format" }, { status: 400 });
     }
 
-    if (!process.env.OPENAI_API_KEY) {
-      return NextResponse.json({ error: "OPENAI_API_KEY is not set" }, { status: 500 });
+    if (!isLlmConfigured()) {
+      return NextResponse.json({ error: llmMissingConfigMessage() }, { status: 500 });
     }
 
     if (mode === "rewrite" && !body.selection?.trim()) {
       return NextResponse.json({ error: "Selection text is required for rewrite mode" }, { status: 400 });
     }
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: process.env.OPENAI_MODEL ?? "gpt-4.1-mini",
-        temperature: mode === "rewrite" || mode === "format" ? 0.4 : 0.6,
-        response_format: { type: "json_object" },
-        messages: [
-          {
-            role: "system",
-            content:
-              "You are an expert content strategist and editor. Return strict JSON only. Never output markdown fences.",
-          },
-          {
-            role: "user",
-            content: buildPrompt({
-              mode,
-              prompt: body.prompt?.trim() ?? "",
-              content: body.content?.trim() ?? "",
-              selection: body.selection?.trim() ?? "",
-              keyword: body.keyword?.trim() ?? "",
-              audience: body.audience?.trim() ?? "",
-              tone: body.tone?.trim() ?? "",
-              industry: body.industry?.trim() ?? "",
-              formatStyle: body.formatStyle ?? "readability",
-            }),
-          },
-        ],
-      }),
+    const { url, init } = createChatCompletionsRequest({
+      temperature: mode === "rewrite" || mode === "format" ? 0.4 : 0.6,
+      response_format: { type: "json_object" },
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are an expert content strategist and editor. Return strict JSON only. Never output markdown fences.",
+        },
+        {
+          role: "user",
+          content: buildPrompt({
+            mode,
+            prompt: body.prompt?.trim() ?? "",
+            content: body.content?.trim() ?? "",
+            selection: body.selection?.trim() ?? "",
+            keyword: body.keyword?.trim() ?? "",
+            audience: body.audience?.trim() ?? "",
+            tone: body.tone?.trim() ?? "",
+            industry: body.industry?.trim() ?? "",
+            formatStyle: body.formatStyle ?? "readability",
+          }),
+        },
+      ],
     });
+    const response = await fetch(url, init);
 
     if (!response.ok) {
       const errorText = await response.text();
-      return NextResponse.json({ error: `OpenAI request failed: ${errorText}` }, { status: 500 });
+      return NextResponse.json({ error: `Azure OpenAI request failed: ${errorText}` }, { status: 500 });
     }
 
     const data = (await response.json()) as {

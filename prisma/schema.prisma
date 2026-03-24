@@ -46,8 +46,32 @@ model User {
   accounts        Account[]
   sessions        Session[]
   content         Content[]
+  communicationAnalyses CommunicationAnalysis[]
 
   @@index([email])
+}
+
+// ============================================================================
+// WRITING LAB — persisted analysis runs (dashboard / history)
+// ============================================================================
+
+model CommunicationAnalysis {
+  id            String   @id @default(cuid())
+  userId        String
+  title         String
+  source        String   // TEXT | VOICE
+  kind          String   @default("full") // full | communication | run_all
+  overallScore  Int?
+  toneScore     Int?
+  riskScore     Int?
+  clarityScore  Int?
+  aiProbability Int?
+  riskLevel     String? // low | medium | high | critical (from compliance pass)
+  createdAt     DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt(sort: Desc)])
 }
 
 // NextAuth / Neon Auth models

@@ -30,7 +30,7 @@ Use this as a script or checklist when recording a video demo of the platform. G
    - The single **Readiness Score** and tier (Excellent / Moderate / Critical).
 
 4. **Go into the product**  
-   Click **“Open Portal”** (or sign-in CTA) to open the dashboard.
+   Click **“Open Portal”** (or sign-in CTA) to open the console.
 
 **Say something like:**  
 “This is the public face of StandexAI. Visitors see live data risk and can try a dataset; signing in takes them into the full platform.”
@@ -39,7 +39,7 @@ Use this as a script or checklist when recording a video demo of the platform. G
 
 ## 2. Dashboard (45–60 sec)
 
-**URL:** `/dashboard`
+**URL:** `/console`
 
 **What to do:**
 
@@ -65,7 +65,7 @@ Use this as a script or checklist when recording a video demo of the platform. G
    Click **“Run Diagnostics”** to go to Data Diagnostics.
 
 **Say something like:**  
-“The dashboard is the control room: pipeline, live scores, formula, and one click into scanning.”
+“The console is the control room: pipeline, live scores, formula, and one click into scanning.”
 
 ---
 
@@ -183,7 +183,7 @@ Use this as a script or checklist when recording a video demo of the platform. G
 | Screen           | URL                      |
 |-----------------|---------------------------|
 | Homepage        | `/`                       |
-| Dashboard       | `/dashboard`              |
+| Console         | `/console`                |
 | Data Diagnostics     | `/data-diagnostics`           |
 | Readiness Ledger  | `/readiness-ledger`  |
 | Prompt Lab      | `/prompt-lab`            |

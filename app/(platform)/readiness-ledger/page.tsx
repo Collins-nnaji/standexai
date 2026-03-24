@@ -26,28 +26,28 @@ type ReadinessScan = {
 
 const TIER_STYLE = {
   excellent: {
-    badge: "bg-emerald-100 text-emerald-700 border-emerald-200",
-    bar: "bg-emerald-500",
+    badge: "bg-zinc-100 text-zinc-800 border-zinc-300",
+    bar: "bg-zinc-800",
     icon: "✅",
-    score: "text-emerald-600",
+    score: "text-zinc-700",
   },
   moderate: {
-    badge: "bg-amber-100 text-amber-700 border-amber-200",
-    bar: "bg-amber-400",
+    badge: "bg-zinc-100 text-zinc-800 border-zinc-300",
+    bar: "bg-zinc-500",
     icon: "⚠️",
-    score: "text-amber-500",
+    score: "text-zinc-600",
   },
   high: {
-    badge: "bg-orange-100 text-orange-700 border-orange-200",
-    bar: "bg-orange-400",
+    badge: "bg-zinc-200 text-zinc-900 border-zinc-400",
+    bar: "bg-zinc-600",
     icon: "🟠",
-    score: "text-orange-500",
+    score: "text-zinc-700",
   },
   critical: {
-    badge: "bg-red-100 text-red-700 border-red-200",
-    bar: "bg-red-500",
+    badge: "bg-zinc-100 text-zinc-900 border-zinc-400",
+    bar: "bg-zinc-800",
     icon: "🔴",
-    score: "text-red-600",
+    score: "text-zinc-800",
   },
 };
 
@@ -111,7 +111,7 @@ export default function ReadinessLedgerPage() {
           <div>
             <h1 className="text-xl font-black text-zinc-950 uppercase tracking-tighter">Readiness Ledger</h1>
             <div className="flex items-center gap-2 mt-0.5">
-              <div className="h-1.5 w-1.5 rounded-full bg-indigo-500 animate-pulse" />
+              <div className="h-1.5 w-1.5 rounded-full bg-zinc-800 animate-pulse" />
               <p className="text-[9px] font-black uppercase tracking-[0.3em] text-zinc-400">Data Readiness Certificate Registry</p>
             </div>
           </div>
@@ -132,7 +132,7 @@ export default function ReadinessLedgerPage() {
           </button>
           <button
             onClick={() => window.print()}
-            className="flex items-center gap-2 rounded-[1.5rem] bg-indigo-600 px-8 py-3.5 text-[10px] font-black uppercase tracking-widest text-white transition hover:bg-indigo-700 shadow-xl shadow-indigo-600/20"
+            className="flex items-center gap-2 rounded-[1.5rem] bg-indigo-600 px-8 py-3.5 text-[10px] font-black uppercase tracking-widest text-white transition hover:bg-indigo-700 shadow-xl shadow-indigo-600/30"
           >
             <Download className="h-4 w-4" />
             Data Readiness Certificate
@@ -145,10 +145,10 @@ export default function ReadinessLedgerPage() {
         {/* Stats pulse */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mb-10">
           {[
-            { label: "Portfolio Readiness Score", val: `${avgScore}`, icon: Award, color: "text-indigo-600", bg: "bg-indigo-50" },
-            { label: "Datasets Monitored", val: scans.length, icon: Globe, color: "text-blue-600", bg: "bg-blue-50" },
-            { label: "Active Risk Alerts", val: criticalCount, icon: AlertOctagon, color: "text-red-600", bg: "bg-red-50" },
-            { label: "Total Flags Detected", val: totalFlags, icon: Activity, color: "text-amber-600", bg: "bg-amber-50" },
+            { label: "Portfolio Readiness Score", val: `${avgScore}`, icon: Award, color: "text-zinc-800", bg: "bg-zinc-100" },
+            { label: "Datasets Monitored", val: scans.length, icon: Globe, color: "text-zinc-800", bg: "bg-zinc-100" },
+            { label: "Active Risk Alerts", val: criticalCount, icon: AlertOctagon, color: "text-zinc-800", bg: "bg-zinc-100" },
+            { label: "Total Flags Detected", val: totalFlags, icon: Activity, color: "text-zinc-700", bg: "bg-zinc-100" },
           ].map((m) => (
             <div key={m.label} className="rounded-[2.5rem] bg-[#F9FAFB] border border-zinc-100 p-7 shadow-sm hover:bg-white hover:shadow-xl transition group">
               <div className="flex items-center justify-between mb-7">
@@ -164,9 +164,9 @@ export default function ReadinessLedgerPage() {
 
         {/* Placeholder notice */}
         {isPlaceholder && !loading && (
-          <div className="mb-6 flex items-center gap-3 rounded-2xl bg-indigo-50 border border-indigo-100 px-6 py-4 max-w-2xl">
-            <TrendingUp className="h-4 w-4 text-indigo-500 shrink-0" />
-            <p className="text-xs font-bold text-indigo-700">
+          <div className="mb-6 flex items-center gap-3 rounded-2xl bg-zinc-100 border border-zinc-200 px-6 py-4 max-w-2xl">
+            <TrendingUp className="h-4 w-4 text-zinc-600 shrink-0" />
+            <p className="text-xs font-bold text-zinc-800">
               Showing demo data. Run your first diagnostic to populate the ledger.{" "}
               <button onClick={() => router.push("/data-diagnostics")} className="underline font-black">
                 Run diagnostics →
@@ -180,7 +180,7 @@ export default function ReadinessLedgerPage() {
           <div className="mb-6 flex items-end justify-between gap-4">
             <div>
               <div className="flex items-center gap-3 mb-1">
-                <ShieldCheck className="h-5 w-5 text-indigo-600" />
+                <ShieldCheck className="h-5 w-5 text-zinc-800" />
                 <h2 className="text-2xl font-black text-zinc-950 uppercase tracking-tighter">Readiness Registry</h2>
               </div>
               <p className="text-[9px] font-bold text-zinc-400 uppercase tracking-[0.4em]">Dataset readiness accuracy — live scores</p>
@@ -190,7 +190,7 @@ export default function ReadinessLedgerPage() {
           <div className="rounded-[2rem] bg-white border border-zinc-100 shadow-xl overflow-hidden relative">
             {loading && (
               <div className="absolute inset-0 bg-white/70 backdrop-blur-sm z-10 flex items-center justify-center">
-                <RefreshCw className="h-8 w-8 text-indigo-600 animate-spin" />
+                <RefreshCw className="h-8 w-8 text-zinc-800 animate-spin" />
               </div>
             )}
             <div className="overflow-x-auto">
@@ -221,7 +221,7 @@ export default function ReadinessLedgerPage() {
                         {/* Dataset */}
                         <td className="px-8 py-7">
                           <div className="flex items-center gap-4">
-                            <div className="h-10 w-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 font-black text-sm group-hover:scale-110 transition-transform">
+                            <div className="h-10 w-10 rounded-xl bg-zinc-100 border border-zinc-200 flex items-center justify-center text-zinc-800 font-black text-sm group-hover:scale-110 transition-transform">
                               {scan.dataset[0].toUpperCase()}
                             </div>
                             <span className="text-base font-black text-zinc-950 uppercase tracking-tight">{scan.dataset}</span>
@@ -248,9 +248,9 @@ export default function ReadinessLedgerPage() {
                         {/* Flag count */}
                         <td className="px-8 py-7 text-center">
                           {scan.flagCount > 0 ? (
-                            <span className="text-sm font-black text-red-600">{scan.flagCount}</span>
+                            <span className="text-sm font-black text-zinc-800">{scan.flagCount}</span>
                           ) : (
-                            <ShieldCheck className="h-4 w-4 text-emerald-500 mx-auto" />
+                            <ShieldCheck className="h-4 w-4 text-zinc-600 mx-auto" />
                           )}
                         </td>
 
@@ -269,7 +269,7 @@ export default function ReadinessLedgerPage() {
                         <td className="px-8 py-7 text-right">
                           <button
                             onClick={() => router.push(`/data-diagnostics?dataset=${encodeURIComponent(scan.dataset)}`)}
-                            className="flex items-center gap-1.5 ml-auto rounded-xl border border-zinc-100 bg-[#F9FAFB] px-4 py-2.5 text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50 transition-all"
+                            className="flex items-center gap-1.5 ml-auto rounded-xl border border-zinc-100 bg-[#F9FAFB] px-4 py-2.5 text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-zinc-800 hover:border-zinc-300 hover:bg-zinc-100 transition-all"
                           >
                             Rescan
                             <ChevronRight className="h-3.5 w-3.5" />
@@ -286,12 +286,12 @@ export default function ReadinessLedgerPage() {
 
         {/* Readiness certificate info panel */}
         <div className="rounded-[2.5rem] bg-[#18181B] p-10 md:p-14 text-white relative overflow-hidden">
-          <div className="absolute top-0 right-0 h-48 w-48 bg-indigo-600/20 rounded-full blur-3xl" />
+          <div className="absolute top-0 right-0 h-48 w-48 bg-indigo-600/15 rounded-full blur-3xl" />
           <div className="relative z-10 flex flex-col md:flex-row items-start gap-10 justify-between">
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <Award className="h-6 w-6 text-indigo-400" />
-                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-indigo-400">Readiness Certification</span>
+                <Award className="h-6 w-6 text-zinc-600" />
+                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-600">Readiness Certification</span>
               </div>
               <h3 className="text-3xl font-black tracking-tight mb-4">Issue Readiness Certificates</h3>
               <p className="text-base text-zinc-400 font-medium leading-relaxed max-w-lg">
@@ -308,7 +308,7 @@ export default function ReadinessLedgerPage() {
             <div className="shrink-0 flex flex-col gap-3 w-full md:w-auto">
               <button
                 onClick={() => window.print()}
-                className="flex items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-8 py-5 text-sm font-black uppercase tracking-widest text-white hover:bg-indigo-700 transition shadow-2xl shadow-indigo-600/40"
+                className="flex items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-8 py-5 text-sm font-black uppercase tracking-widest text-white hover:bg-indigo-700 transition shadow-2xl shadow-indigo-600/30"
               >
                 <Download className="h-4 w-4" />
                 Download Certificate

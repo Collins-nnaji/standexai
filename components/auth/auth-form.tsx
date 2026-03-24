@@ -56,7 +56,7 @@ export function AuthForm({ mode: initialMode }: AuthFormProps) {
           return;
         }
       }
-      router.push("/dashboard");
+      router.push("/console");
       router.refresh();
     } catch (authError) {
       setError(authError instanceof Error ? authError.message : "Authentication failed");
@@ -84,7 +84,7 @@ export function AuthForm({ mode: initialMode }: AuthFormProps) {
     setError(null);
     const result = await neonAuthClient.signIn.social({
       provider: "google",
-      callbackURL: "/dashboard",
+      callbackURL: "/console",
     });
     if (result.error) {
       setError(result.error.message || "Google sign-in failed");
@@ -94,7 +94,7 @@ export function AuthForm({ mode: initialMode }: AuthFormProps) {
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-zinc-50 px-6 py-16">
+    <main className="flex min-h-[100dvh] items-center justify-center bg-zinc-50 px-4 py-10 pb-[max(2.5rem,env(safe-area-inset-bottom,0px))] sm:px-6 sm:py-16">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
           <Image
@@ -111,7 +111,7 @@ export function AuthForm({ mode: initialMode }: AuthFormProps) {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm">
+        <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm sm:p-8">
           <h1 className="text-xl font-bold text-zinc-900">
             {isSignedIn ? "Welcome back" : mode === "sign-up" ? "Create your account" : "Sign in"}
           </h1>
@@ -120,16 +120,16 @@ export function AuthForm({ mode: initialMode }: AuthFormProps) {
               ? `Signed in as ${session.data?.user?.email ?? "user"}`
               : mode === "sign-up"
                 ? "Start analyzing and improving your communication."
-                : "Continue to your communication dashboard."}
+                : "Continue to the console."}
           </p>
 
           {isSignedIn ? (
             <div className="mt-6 space-y-3">
               <button
-                onClick={() => router.push("/dashboard")}
-                className="w-full rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700 shadow-lg shadow-indigo-600/20"
+                onClick={() => router.push("/console")}
+                className="w-full rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700 shadow-lg shadow-indigo-600/25"
               >
-                Open Dashboard
+                Open console
               </button>
               <button
                 onClick={signOut}
@@ -147,7 +147,7 @@ export function AuthForm({ mode: initialMode }: AuthFormProps) {
                   <input
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none focus:bg-white focus:border-indigo-200 transition"
+                    className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none focus:bg-white focus:border-indigo-300 transition"
                     placeholder="Your name"
                   />
                 </div>
@@ -159,7 +159,7 @@ export function AuthForm({ mode: initialMode }: AuthFormProps) {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none focus:bg-white focus:border-indigo-200 transition"
+                  className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none focus:bg-white focus:border-indigo-300 transition"
                   placeholder="you@company.com"
                 />
               </div>
@@ -171,19 +171,19 @@ export function AuthForm({ mode: initialMode }: AuthFormProps) {
                   minLength={8}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none focus:bg-white focus:border-indigo-200 transition"
+                  className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none focus:bg-white focus:border-indigo-300 transition"
                   placeholder="Min. 8 characters"
                 />
               </div>
 
               {error && (
-                <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>
+                <p className="rounded-xl border border-zinc-400 bg-zinc-100 px-4 py-3 text-sm text-zinc-900">{error}</p>
               )}
 
               <button
                 type="submit"
                 disabled={busy}
-                className="w-full rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700 shadow-lg shadow-indigo-600/20 disabled:opacity-60"
+                className="w-full rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700 shadow-lg shadow-indigo-600/25 disabled:opacity-60"
               >
                 {busy ? "Please wait..." : mode === "sign-up" ? "Create account" : "Sign in"}
               </button>
@@ -200,7 +200,7 @@ export function AuthForm({ mode: initialMode }: AuthFormProps) {
               <button
                 type="button"
                 onClick={() => router.push(mode === "sign-up" ? "/auth/sign-in" : "/auth/sign-up")}
-                className="w-full text-sm text-zinc-500 hover:text-indigo-600 transition"
+                className="w-full text-sm text-zinc-500 hover:text-zinc-800 transition"
               >
                 {mode === "sign-up" ? "Already have an account? Sign in" : "No account? Create one"}
               </button>

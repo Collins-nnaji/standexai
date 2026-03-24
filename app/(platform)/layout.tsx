@@ -1,8 +1,8 @@
 "use client";
 
 import {
-  LayoutDashboard, Settings, LogOut, PanelLeftClose, PanelLeftOpen,
-  FileText, Mic, PenTool, ScanSearch, ShieldAlert, Brain, BarChart3, Sparkles
+  Terminal, Settings, LogOut, PanelLeftClose, PanelLeftOpen,
+  FileText, Sparkles, Bot
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -11,16 +11,8 @@ import { useState } from "react";
 import { neonAuthClient } from "@/lib/neon/auth-client";
 
 const mainNav = [
-  { name: "Text Analyzer", href: "/text-analyzer", icon: FileText },
-  { name: "Speech Analyzer", href: "/speech-analyzer", icon: Mic },
-  { name: "Rewrite Studio", href: "/rewrite-studio", icon: PenTool },
-];
-
-const toolsNav = [
-  { name: "AI Detection", href: "/ai-detection", icon: ScanSearch },
-  { name: "Risk & Compliance", href: "/risk-compliance", icon: ShieldAlert },
-  { name: "Intent Analyzer", href: "/intent-analyzer", icon: Brain },
-  { name: "Insights", href: "/insights", icon: BarChart3 },
+  { name: "Writing Lab", href: "/writing-lab", icon: FileText },
+  { name: "Coach (Agent)", href: "/agent", icon: Bot },
 ];
 
 export default function PlatformLayout({ children }: { children: React.ReactNode }) {
@@ -45,7 +37,7 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
         onClick={() => setMobileOpen(false)}
         className={`flex items-center rounded-xl px-4 py-2.5 text-[11px] font-bold tracking-wide transition-all ${
           active
-            ? "bg-indigo-50 text-indigo-700"
+            ? "bg-indigo-50 text-indigo-950"
             : "text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900"
         } ${collapsed ? "justify-center px-0" : "gap-3"}`}
         title={collapsed ? item.name : undefined}
@@ -60,7 +52,7 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
     <div className="flex min-h-screen bg-[#FAFAFA] text-zinc-900">
       <button
         onClick={() => setMobileOpen((v) => !v)}
-        className="fixed left-4 top-4 z-40 rounded-xl border border-zinc-200 bg-white p-2 text-zinc-600 shadow-sm md:hidden"
+        className="fixed left-4 top-[max(1rem,env(safe-area-inset-top,0px))] z-40 rounded-xl border border-zinc-200 bg-white p-2 text-zinc-600 shadow-sm md:hidden"
         aria-label={mobileOpen ? "Close navigation" : "Open navigation"}
       >
         {mobileOpen ? <PanelLeftClose className="h-4 w-4" /> : <PanelLeftOpen className="h-4 w-4" />}
@@ -103,7 +95,7 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
           {!collapsed && (
             <div className="mt-3 flex items-center gap-2">
               <Sparkles className="h-3 w-3 text-indigo-500" />
-              <p className="text-[10px] font-semibold tracking-wide text-zinc-400">AI Communication Coach</p>
+              <p className="text-[10px] font-semibold tracking-wide text-zinc-500">AI Communication Coach</p>
             </div>
           )}
           {collapsed && (
@@ -116,58 +108,50 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
           )}
         </div>
 
-        <nav className="flex-1 overflow-y-auto p-3 space-y-1">
+        <nav className="flex-1 space-y-1 overflow-y-auto p-3">
           <Link
-            href="/dashboard"
-            className={`flex items-center rounded-xl px-4 py-2.5 text-[11px] font-bold tracking-wide transition-all mb-2 ${
-              pathname === "/dashboard"
-                ? "bg-indigo-50 text-indigo-700"
+            href="/console"
+            className={`mb-2 flex items-center rounded-xl px-4 py-2.5 text-[11px] font-bold tracking-wide transition-all ${
+              pathname === "/console"
+                ? "bg-indigo-50 text-indigo-950"
                 : "text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900"
             } ${collapsed ? "justify-center px-0" : "gap-3"}`}
           >
-            <LayoutDashboard className={`h-4 w-4 shrink-0 ${pathname === "/dashboard" ? "text-indigo-600" : "text-zinc-400"}`} />
-            {!collapsed && "Dashboard"}
+            <Terminal className={`h-4 w-4 shrink-0 ${pathname === "/console" ? "text-indigo-600" : "text-zinc-400"}`} />
+            {!collapsed && "Console"}
           </Link>
 
           {!collapsed && (
-            <div className="px-4 pt-4 pb-1">
-              <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-zinc-300">Analyze</span>
+            <div className="px-4 pb-1 pt-4">
+              <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-zinc-400">Workspace</span>
             </div>
           )}
-          {collapsed && <div className="my-2 mx-2 h-px bg-zinc-100" />}
+          {collapsed && <div className="mx-2 my-2 h-px bg-zinc-100" />}
           {mainNav.map((item) => <NavLink key={item.name} item={item} />)}
 
           {!collapsed && (
-            <div className="px-4 pt-5 pb-1">
-              <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-zinc-300">Tools</span>
+            <div className="px-4 pb-1 pt-5">
+              <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-zinc-400">Account</span>
             </div>
           )}
-          {collapsed && <div className="my-2 mx-2 h-px bg-zinc-100" />}
-          {toolsNav.map((item) => <NavLink key={item.name} item={item} />)}
-
-          {!collapsed && (
-            <div className="px-4 pt-5 pb-1">
-              <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-zinc-300">Account</span>
-            </div>
-          )}
-          {collapsed && <div className="my-2 mx-2 h-px bg-zinc-100" />}
+          {collapsed && <div className="mx-2 my-2 h-px bg-zinc-100" />}
           <NavLink item={{ name: "Settings", href: "/settings", icon: Settings }} />
         </nav>
 
         <div className="border-t border-zinc-100 bg-zinc-50/50 p-4">
           <div className={`flex items-center ${collapsed ? "justify-center" : "gap-3"}`}>
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-indigo-50 border border-indigo-100 text-sm font-bold text-indigo-700">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-indigo-100 bg-indigo-50 text-sm font-bold text-indigo-800">
               {(user?.name?.[0] ?? user?.email?.[0] ?? "U").toUpperCase()}
             </div>
             {!collapsed && (
               <>
-                <div className="flex-1 min-w-0">
+                <div className="min-w-0 flex-1">
                   <p className="truncate text-xs font-bold text-zinc-900">{user?.name ?? "StandexAI User"}</p>
                   <p className="truncate text-[10px] text-zinc-400">{user?.email}</p>
                 </div>
                 <button
                   onClick={() => void signOut()}
-                  className="rounded-lg p-2 text-zinc-400 hover:bg-red-50 hover:text-red-600 transition-colors"
+                  className="rounded-lg p-2 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-800"
                   title="Sign out"
                 >
                   <LogOut className="h-4 w-4" />
@@ -178,7 +162,7 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
         </div>
       </aside>
 
-      <main className="flex-1 flex flex-col min-w-0 bg-[#FAFAFA]">
+      <main className="flex min-w-0 flex-1 flex-col bg-[#FAFAFA] max-md:pl-14 max-md:pt-[max(0.5rem,env(safe-area-inset-top,0px))] pb-[env(safe-area-inset-bottom,0px)]">
         {children}
       </main>
     </div>

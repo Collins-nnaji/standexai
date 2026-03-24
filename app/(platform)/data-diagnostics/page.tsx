@@ -53,15 +53,15 @@ const DEMO_DATASETS: DatasetProfile[] = [
  ];
  
  const SCORE_TIER_COLORS: Record<string, string> = {
-   excellent: "text-emerald-600",
-   moderate: "text-amber-500",
-   critical: "text-red-600",
+   excellent: "text-zinc-700",
+   moderate: "text-zinc-600",
+   critical: "text-zinc-800",
  };
  
  const SCORE_TIER_BG: Record<string, string> = {
-   excellent: "bg-emerald-50 border-emerald-100",
-   moderate: "bg-amber-50 border-amber-100",
-   critical: "bg-red-50 border-red-100",
+   excellent: "bg-zinc-100 border-zinc-200",
+   moderate: "bg-zinc-100 border-zinc-300",
+   critical: "bg-zinc-100 border-zinc-300",
  };
  
  const SCORE_TIER_LABEL: Record<string, string> = {
@@ -189,7 +189,7 @@ function DataDiagnosticsContent() {
   };
  
   return (
-     <div className="min-h-screen bg-white text-[#18181B] font-sans selection:bg-indigo-500/30">
+     <div className="min-h-screen bg-white text-[#18181B] font-sans selection:bg-zinc-300/50">
  
        {/* Navigation */}
        <nav className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6 sm:py-5 border-b border-[#E4E4E8]">
@@ -214,7 +214,7 @@ function DataDiagnosticsContent() {
                    {(user.name?.[0] ?? user.email?.[0] ?? "U").toUpperCase()}
                  </div>
                  <button
-                   onClick={() => router.push("/dashboard")}
+                   onClick={() => router.push("/console")}
                    className="flex items-center gap-2 rounded-full bg-zinc-950 px-5 py-2 text-xs font-black uppercase tracking-widest text-white transition hover:bg-black shadow-lg shadow-black/10"
                  >
                    <LayoutGrid className="h-3.5 w-3.5" />
@@ -231,7 +231,7 @@ function DataDiagnosticsContent() {
                  Sign In
                </button>
                <button
-                 onClick={() => router.push("/dashboard")}
+                 onClick={() => router.push("/console")}
                  className="flex items-center gap-2 rounded-full bg-zinc-950 px-5 py-2 text-xs font-black uppercase tracking-widest text-white transition hover:bg-black shadow-lg shadow-black/10"
                >
                  <LayoutGrid className="h-3.5 w-3.5" />
@@ -245,13 +245,13 @@ function DataDiagnosticsContent() {
        {/* Live Data Diagnostics Ticker */}
        <div className="bg-[#18181B] border-b border-zinc-800 py-3 px-4 overflow-hidden">
          <div className="mx-auto max-w-7xl flex items-center gap-4">
-           <span className="shrink-0 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-red-400 border border-red-800 rounded-full px-3 py-1">
-             <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" />
+           <span className="shrink-0 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-zinc-600 border border-zinc-800 rounded-full px-3 py-1">
+             <span className="h-1.5 w-1.5 rounded-full bg-zinc-800 animate-pulse" />
              LIVE
            </span>
            <div className="flex-1 overflow-hidden">
              <p className="text-[11px] font-bold text-zinc-300 transition-all duration-500 truncate">
-               <span className={`font-black mr-1 ${currentEvent.severity === "critical" ? "text-red-400" : "text-amber-400"}`}>
+               <span className={`font-black mr-1 ${currentEvent.severity === "critical" ? "text-zinc-600" : "text-zinc-600"}`}>
                  {currentEvent.model}
                </span>
                {currentEvent.issue} in
@@ -261,7 +261,7 @@ function DataDiagnosticsContent() {
              </p>
            </div>
            <button
-             onClick={() => router.push("/dashboard")}
+             onClick={() => router.push("/console")}
              className="shrink-0 text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-white transition"
            >
              View All →
@@ -273,8 +273,8 @@ function DataDiagnosticsContent() {
        <section className="mx-auto max-w-7xl px-4 pb-16 pt-14 sm:px-6 sm:pb-24 sm:pt-20">
          <div className="text-center max-w-4xl mx-auto">
            <div data-reveal data-reveal-dir="up" style={{ ["--delay" as string]: "0ms" }}>
-             <div className="inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-indigo-50 px-4 py-1.5 text-sm text-indigo-700 font-medium mb-6">
-               <span className="h-2 w-2 rounded-full bg-indigo-500 animate-pulse" />
+             <div className="inline-flex items-center gap-2 rounded-full border border-zinc-300 bg-zinc-100 px-4 py-1.5 text-sm text-zinc-800 font-medium mb-6">
+               <span className="h-2 w-2 rounded-full bg-zinc-800 animate-pulse" />
                AI Data Analysis Infrastructure
              </div>
            </div>
@@ -286,7 +286,7 @@ function DataDiagnosticsContent() {
              className="text-[2.75rem] font-extrabold leading-[1.08] tracking-tight text-[#18181B] sm:text-6xl lg:text-[4.5rem] mb-6"
            >
              How Ready Is Your{" "}
-             <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">
+             <span className="text-zinc-900">
                Data for AI?
              </span>
            </h1>
@@ -303,8 +303,8 @@ function DataDiagnosticsContent() {
  
            <div data-reveal data-reveal-dir="up" style={{ ["--delay" as string]: "240ms" }} className="flex flex-wrap items-center justify-center gap-4">
              <button
-               onClick={() => router.push("/dashboard")}
-               className="group flex items-center gap-2 rounded-full bg-indigo-600 px-8 py-4 text-[15px] font-bold text-white transition hover:bg-indigo-700 shadow-xl shadow-indigo-600/20"
+               onClick={() => router.push("/console")}
+               className="group flex items-center gap-2 rounded-full bg-indigo-600 px-8 py-4 text-[15px] font-bold text-white transition hover:bg-indigo-700 shadow-xl shadow-indigo-600/30"
              >
                Get Data Readiness Score
                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -338,10 +338,10 @@ function DataDiagnosticsContent() {
       <section className="mx-auto max-w-7xl px-4 pb-12 sm:px-6">
         <div className="grid gap-4 md:grid-cols-4">
           {[
-            { label: "Tables scanned", value: "124", accent: "text-indigo-600", bg: "bg-indigo-50" },
-            { label: "PII fields tagged", value: "38", accent: "text-emerald-600", bg: "bg-emerald-50" },
-            { label: "Schema drift alerts", value: "6", accent: "text-amber-600", bg: "bg-amber-50" },
-            { label: "SLA coverage", value: "94%", accent: "text-blue-600", bg: "bg-blue-50" },
+            { label: "Tables scanned", value: "124", accent: "text-zinc-800", bg: "bg-zinc-100" },
+            { label: "PII fields tagged", value: "38", accent: "text-zinc-700", bg: "bg-zinc-100" },
+            { label: "Schema drift alerts", value: "6", accent: "text-zinc-700", bg: "bg-zinc-100" },
+            { label: "SLA coverage", value: "94%", accent: "text-zinc-800", bg: "bg-zinc-100" },
           ].map((stat) => (
             <div key={stat.label} className="rounded-[2rem] border border-zinc-100 bg-white p-6 shadow-sm hover:shadow-md transition">
               <div className="flex items-center justify-between mb-4">
@@ -359,7 +359,7 @@ function DataDiagnosticsContent() {
        <section className="bg-[#F4F4F5] py-20 sm:py-28 border-y border-[#E4E4E8]">
          <div className="mx-auto max-w-7xl px-4 sm:px-6">
            <div className="mb-12 text-center max-w-3xl mx-auto" data-reveal data-reveal-dir="up">
-             <h2 className="text-base font-bold text-indigo-600 uppercase tracking-[0.2em] mb-3">Live Data Diagnostics</h2>
+             <h2 className="text-base font-bold text-zinc-800 uppercase tracking-[0.2em] mb-3">Live Data Diagnostics</h2>
              <h3 className="text-3xl font-extrabold tracking-tight text-[#18181B] sm:text-4xl mb-4">
                See How Models Interpret Your Data — Right Now
              </h3>
@@ -431,12 +431,12 @@ function DataDiagnosticsContent() {
                  <div className="px-6 py-4 border-b border-zinc-100 bg-[#F9FAFB] flex items-center justify-between">
                    <span className="text-xs font-black uppercase tracking-[0.2em] text-zinc-500">{col.model}</span>
                    <div className="flex items-center gap-2">
-                     <span className={`text-sm font-black ${col.score >= 85 ? "text-emerald-600" : col.score >= 65 ? "text-amber-500" : "text-red-600"}`}>
+                     <span className={`text-sm font-black ${col.score >= 85 ? "text-zinc-700" : col.score >= 65 ? "text-zinc-600" : "text-zinc-800"}`}>
                        {col.score}
                      </span>
                      <div className="w-10 h-1 bg-zinc-100 rounded-full overflow-hidden">
                        <div
-                         className={`h-full rounded-full ${col.score >= 85 ? "bg-emerald-500" : col.score >= 65 ? "bg-amber-400" : "bg-red-500"}`}
+                         className={`h-full rounded-full ${col.score >= 85 ? "bg-zinc-700" : col.score >= 65 ? "bg-zinc-500" : "bg-zinc-400"}`}
                          style={{ width: `${col.score}%` }}
                        />
                      </div>
@@ -445,12 +445,12 @@ function DataDiagnosticsContent() {
                  <div className="p-6 flex-1 flex flex-col gap-4">
                    <p className="text-sm text-zinc-700 leading-relaxed italic">{col.excerpt}</p>
                    {col.flag ? (
-                     <div className={`mt-auto flex items-start gap-2 rounded-xl px-4 py-3 border text-xs font-bold ${col.flag.type === "critical" ? "bg-red-50 border-red-100 text-red-700" : "bg-amber-50 border-amber-100 text-amber-700"}`}>
+                     <div className={`mt-auto flex items-start gap-2 rounded-xl px-4 py-3 border text-xs font-bold ${col.flag.type === "critical" ? "bg-zinc-100 border-zinc-300 text-zinc-900" : "bg-zinc-100 border-zinc-300 text-zinc-800"}`}>
                        <AlertTriangle className="h-3.5 w-3.5 shrink-0 mt-0.5" />
                        {col.flag.text}
                      </div>
                    ) : (
-                     <div className="mt-auto flex items-center gap-2 text-xs font-bold text-emerald-600">
+                     <div className="mt-auto flex items-center gap-2 text-xs font-bold text-zinc-700">
                        <Shield className="h-3.5 w-3.5" />
                        No quality risks detected
                      </div>
@@ -465,7 +465,7 @@ function DataDiagnosticsContent() {
             <div className="rounded-[2rem] bg-white border border-zinc-100 shadow-xl p-8">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h3 className="text-sm font-black uppercase tracking-[0.2em] text-indigo-600">Schema Snapshot</h3>
+                  <h3 className="text-sm font-black uppercase tracking-[0.2em] text-zinc-800">Schema Snapshot</h3>
                   <p className="text-xs text-zinc-500 font-medium mt-1">{selectedDataset.name} schema signals</p>
                 </div>
                 <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Auto-profiled</span>
@@ -497,12 +497,12 @@ function DataDiagnosticsContent() {
                 </button>
               </div>
               {lastScanId && (
-                <div className="mt-3 text-[10px] font-black uppercase tracking-widest text-indigo-600">
+                <div className="mt-3 text-[10px] font-black uppercase tracking-widest text-zinc-800">
                   Scan ID: {lastScanId}
                 </div>
               )}
               {scanError && (
-                <div className="mt-3 text-[10px] font-black uppercase tracking-widest text-red-500">
+                <div className="mt-3 text-[10px] font-black uppercase tracking-widest text-zinc-700">
                   {scanError}
                 </div>
               )}
@@ -514,7 +514,7 @@ function DataDiagnosticsContent() {
             <div className="rounded-[2rem] bg-white border border-zinc-100 shadow-xl p-8">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h3 className="text-sm font-black uppercase tracking-[0.2em] text-indigo-600">Data Sources</h3>
+                  <h3 className="text-sm font-black uppercase tracking-[0.2em] text-zinc-800">Data Sources</h3>
                   <p className="text-xs text-zinc-500 font-medium mt-1">Connect and profile your data estate</p>
                 </div>
                 <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Connectors</span>
@@ -523,7 +523,7 @@ function DataDiagnosticsContent() {
                 {CONNECTORS.map((connector) => (
                   <div key={connector.name} className="rounded-2xl border border-zinc-100 bg-[#F9FAFB] p-5 flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="h-10 w-10 rounded-2xl bg-indigo-50 text-indigo-600 border border-indigo-100 flex items-center justify-center">
+                      <div className="h-10 w-10 rounded-2xl bg-zinc-100 text-zinc-800 border border-zinc-200 flex items-center justify-center">
                         <Database className="h-5 w-5" />
                       </div>
                       <div>
@@ -531,7 +531,7 @@ function DataDiagnosticsContent() {
                         <div className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">{connector.detail}</div>
                       </div>
                     </div>
-                    <span className={`text-[10px] font-black uppercase tracking-widest ${connector.status === "Ready" ? "text-emerald-600" : "text-amber-500"}`}>
+                    <span className={`text-[10px] font-black uppercase tracking-widest ${connector.status === "Ready" ? "text-zinc-700" : "text-zinc-600"}`}>
                       {connector.status}
                     </span>
                   </div>
@@ -552,7 +552,7 @@ function DataDiagnosticsContent() {
             <div className="rounded-[2rem] bg-white border border-zinc-100 shadow-xl p-8">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h3 className="text-sm font-black uppercase tracking-[0.2em] text-indigo-600">Modeling Checklist</h3>
+                  <h3 className="text-sm font-black uppercase tracking-[0.2em] text-zinc-800">Modeling Checklist</h3>
                   <p className="text-xs text-zinc-500 font-medium mt-1">Pre-flight steps before training</p>
                 </div>
                 <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Governance</span>
@@ -566,7 +566,7 @@ function DataDiagnosticsContent() {
                   "Outlier strategy defined",
                 ].map((item) => (
                   <div key={item} className="flex items-center gap-3 rounded-2xl bg-[#F9FAFB] border border-zinc-100 px-4 py-3">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                    <CheckCircle2 className="h-4 w-4 text-zinc-600" />
                     <span className="text-xs font-bold text-zinc-700 uppercase tracking-widest">{item}</span>
                   </div>
                 ))}
@@ -600,7 +600,7 @@ function DataDiagnosticsContent() {
                </div>
                <div className="flex flex-col gap-3 items-end">
                  <button
-                   onClick={() => router.push("/dashboard")}
+                   onClick={() => router.push("/console")}
                    className="flex items-center gap-2 rounded-2xl bg-zinc-950 px-8 py-4 text-xs font-black uppercase tracking-widest text-white transition hover:bg-black shadow-xl"
                  >
                    Get Full Readiness Report
@@ -637,32 +637,32 @@ function DataDiagnosticsContent() {
                  title: "Continuous Data Profiling",
                  desc: "Continuously profiles schema health, missingness, and statistical drift across every data source.",
                  icon: Eye,
-                 color: "text-blue-400",
-                 bg: "bg-blue-500/10",
+                 color: "text-zinc-600",
+                 bg: "bg-zinc-900/10",
                },
                {
                  layer: "SCORE",
                  title: "Readiness Scoring",
                  desc: "Produces a single 0–100 readiness metric across data quality, consistency, lineage, and model fitness.",
                  icon: TrendingUp,
-                 color: "text-indigo-400",
-                 bg: "bg-indigo-500/10",
+                 color: "text-zinc-600",
+                 bg: "bg-zinc-200/60",
                },
                {
                  layer: "REPAIR",
                  title: "Automated Fix Signals",
                  desc: "Publishes remediation guidance and data contracts so upstream teams can resolve issues quickly.",
                  icon: Shield,
-                 color: "text-emerald-400",
-                 bg: "bg-emerald-500/10",
+                 color: "text-zinc-500",
+                 bg: "bg-zinc-900/10",
                },
                {
                  layer: "CERTIFY",
                  title: "Readiness Certificates",
                  desc: "Issues dataset readiness certificates as verifiable credentials for audits and model governance.",
                  icon: Lock,
-                 color: "text-violet-400",
-                 bg: "bg-violet-500/10",
+                 color: "text-zinc-600",
+                 bg: "bg-zinc-900/10",
                },
              ].map((item, idx) => (
                <div
@@ -690,7 +690,7 @@ function DataDiagnosticsContent() {
        <section className="bg-white py-20">
          <div className="mx-auto max-w-7xl px-4 sm:px-6">
            <div data-reveal data-reveal-dir="up" className="rounded-[2.5rem] bg-[#F9FAFB] border border-zinc-100 p-10 md:p-16 text-center">
-             <div className="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-4 py-1.5 text-sm text-red-700 font-medium mb-6">
+             <div className="inline-flex items-center gap-2 rounded-full border border-zinc-400 bg-zinc-100 px-4 py-1.5 text-sm text-zinc-900 font-medium mb-6">
                <AlertTriangle className="h-4 w-4" />
                Governance Urgency
              </div>
@@ -714,7 +714,7 @@ function DataDiagnosticsContent() {
  
        {/* Footer */}
        <footer className="bg-[#FAFAFA] border-t border-[#E4E4E8]">
-         <div className="mx-auto max-w-7xl px-6 py-10">
+         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
            <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
              <div className="flex items-center gap-3">
                <Image
