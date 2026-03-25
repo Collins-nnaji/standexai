@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-/** Legacy URL: speech is transcribed in Text Analyzer, then analyzed as text. */
+/** Legacy URL: opens professional Voice coach (speaking feedback, not writing analysis). */
 export default function SpeechAnalyzerRedirectPage() {
-  redirect("/writing-lab?voice=1");
+  redirect("/console?tab=voice&voice=1");
 }

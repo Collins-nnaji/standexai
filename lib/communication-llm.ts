@@ -1,5 +1,5 @@
 /**
- * Shared analyze + rewrite LLM calls for API routes and the communication agent.
+ * Shared analyze + rewrite LLM calls for API routes and the workspace.
  */
 import { createChatCompletionsRequest, isLlmConfigured, llmMissingConfigMessage } from "@/lib/llm-client";
 
@@ -125,19 +125,7 @@ export async function runAnalyzeLlm(text: string, type: AnalyzeType): Promise<un
   return JSON.parse(content);
 }
 
-export async function runRewriteLlm(text: string, mode: RewriteMode): Promise<unknown> {
-  if (!isLlmConfigured()) {
-    throw new Error(llmMissingConfigMessage());
-  }
-  const { url, init } = createChatCompletionsRequest({
-    temperature: 0.5,
-    response_format: { type: "json_object" },
-    messages: [
-      {
-        role: "system",
-        content: `You are an expert communication coach and rewriter. ${REWRITE_MODE_INSTRUCTIONS[mode]}
-
-Return a JSON object:
+const REWRITE_JSON_INSTRUCTION = `Return a JSON object:
 {
   "rewritten": "the full rewritten text",
   "changes": [
@@ -152,7 +140,36 @@ Return a JSON object:
   "wordCountOriginal": number,
   "wordCountRewritten": number
 }
-Return valid JSON only. Do not use markdown fences.`,
+Return valid JSON only. Do not use markdown fences.`;
+
+export async function runRewriteLlm(text: string, mode: RewriteMode): Promise<unknown> {
+  if (!isLlmConfigured()) {
+    throw new Error(llmMissingConfigMessage());
+  }
+  const directive = REWRITE_MODE_INSTRUCTIONS[mode];
+  return runRewriteLlmWithInstructions(text, directive);
+}
+
+/** Rewrite using arbitrary persona instructions (saved custom personas). */
+export async function runRewriteLlmWithInstructions(text: string, personaInstructions: string): Promise<unknown> {
+  if (!isLlmConfigured()) {
+    throw new Error(llmMissingConfigMessage());
+  }
+  const directive = personaInstructions.trim();
+  if (!directive) {
+    throw new Error("Persona instructions are empty");
+  }
+  const { url, init } = createChatCompletionsRequest({
+    temperature: 0.5,
+    response_format: { type: "json_object" },
+    messages: [
+      {
+        role: "system",
+        content: `You are an expert communication coach and rewriter. Apply the following voice and goals precisely:
+
+${directive}
+
+${REWRITE_JSON_INSTRUCTION}`,
       },
       { role: "user", content: `Rewrite this text:\n\n${text}` },
     ],
@@ -168,4 +185,50 @@ Return valid JSON only. Do not use markdown fences.`,
   const content = data.choices?.[0]?.message?.content;
   if (!content) throw new Error("No rewrite returned");
   return JSON.parse(content);
+}
+
+const PERSONA_FROM_DESCRIPTION_SYSTEM = `The user describes a writing or speaking "persona" they want for transforming text (e.g. "our VP of legal", "warm onboarding emails for SaaS", "blunt technical RFC style").
+
+Return a single JSON object (no markdown):
+{
+  "name": "short label for the persona, max 8 words, title case",
+  "instructions": "2–6 sentences of clear rewriter instructions the model will follow. Be specific about tone, vocabulary, structure, audience, and what to avoid. This text will be injected into a rewrite system prompt."
+}
+
+Rules:
+- "instructions" must be self-contained and actionable for rewriting any draft.
+- Do not include JSON inside "instructions".
+- If the description is vague, infer reasonable defaults and say so briefly in instructions.`;
+
+export type GeneratedPersonaDraft = { name: string; instructions: string };
+
+export async function runGeneratePersonaFromDescription(description: string): Promise<GeneratedPersonaDraft> {
+  if (!isLlmConfigured()) {
+    throw new Error(llmMissingConfigMessage());
+  }
+  const { url, init } = createChatCompletionsRequest({
+    temperature: 0.45,
+    response_format: { type: "json_object" },
+    messages: [
+      { role: "system", content: PERSONA_FROM_DESCRIPTION_SYSTEM },
+      { role: "user", content: description.trim() },
+    ],
+  });
+  const response = await fetch(url, init);
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Persona generation failed: ${errorText}`);
+  }
+  const data = (await response.json()) as {
+    choices?: Array<{ message?: { content?: string } }>;
+  };
+  const content = data.choices?.[0]?.message?.content;
+  if (!content) throw new Error("No persona draft returned");
+  const parsed = JSON.parse(content) as { name?: string; instructions?: string };
+  const name = typeof parsed.name === "string" ? parsed.name.trim().slice(0, 120) : "";
+  const instructions = typeof parsed.instructions === "string" ? parsed.instructions.trim() : "";
+  if (!name || !instructions) {
+    throw new Error("Invalid persona draft from model");
+  }
+  return { name, instructions };
 }

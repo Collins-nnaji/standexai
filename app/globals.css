@@ -8,6 +8,17 @@
   --font-sans: var(--font-standex-sans), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
+  /* StandexAI “AI” mark — only accents besides black (~90% of UI) */
+  --brand-teal: #3dd9c9;
+  --brand-magenta: #e940c6;
+  --brand-purple: #9333ea;
+  --brand-gradient: linear-gradient(
+    125deg,
+    var(--brand-teal) 0%,
+    var(--brand-magenta) 45%,
+    var(--brand-purple) 100%
+  );
+
   --bg-app: #FAFAFA;
   --bg-panel: #FFFFFF;
   --bg-card: #F4F4F5;
@@ -16,9 +27,9 @@
   --ink-500: #52525B;
   --ink-300: #D4D4D8;
 
-  --accent-primary: #4F46E5;
-  --accent-secondary: #6366F1;
-  --accent-muted: #A5B4FC;
+  --accent-primary: var(--brand-purple);
+  --accent-secondary: var(--brand-teal);
+  --accent-muted: color-mix(in srgb, var(--brand-teal) 35%, transparent);
 
   --line: #E4E4E7;
   --line-active: #D4D4D8;
@@ -73,6 +84,20 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.15;
 }
 
+/* Landing #how: global heading ink must not override Tailwind (globals load after utilities) */
+section#how h2.how-works-title,
+section#how h3.how-step-title {
+  color: #111110 !important;
+}
+
+section#how h2.how-works-title {
+  font-weight: 400 !important;
+}
+
+section#how h3.how-step-title {
+  font-weight: 600 !important;
+}
+
 button, .button {
   transition: all 0.2s ease;
 }
@@ -86,6 +111,174 @@ button, .button {
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* Landing page (editorial) */
+@keyframes landing-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes landing-cursor-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.landing-fade-up {
+  opacity: 0;
+  animation: landing-fade-up 0.7s ease forwards;
+}
+
+/* Landing hero photo: enter + gentle float (nested wrappers avoid transform clash) */
+@keyframes landing-hero-photo-in {
+  from {
+    opacity: 0;
+    transform: translate3d(28px, 12px, 0) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes landing-hero-photo-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -10px, 0);
+  }
+}
+
+.landing-hero-photo-frame {
+  opacity: 0;
+  animation: landing-hero-photo-in 1s cubic-bezier(0.16, 1, 0.3, 1) 0.18s forwards;
+  will-change: transform, opacity;
+}
+
+.landing-hero-photo-float {
+  height: 100%;
+  width: 100%;
+  animation: landing-hero-photo-float 8s ease-in-out infinite;
+  animation-delay: 1.1s;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-hero-photo-frame,
+  .landing-hero-photo-float {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Landing — brand gradient text */
+.landing-text-brand-gradient {
+  background-image: var(--brand-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* How it works — borderless steps, scroll-triggered */
+@keyframes landing-how-step-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 28px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes landing-how-line-grow {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes landing-how-icon-pulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 12px color-mix(in srgb, var(--brand-teal) 45%, transparent));
+  }
+  50% {
+    filter: drop-shadow(0 0 20px color-mix(in srgb, var(--brand-magenta) 55%, transparent));
+  }
+}
+
+section#how:not(.landing-how-revealed) .landing-how-step {
+  opacity: 0;
+}
+
+.landing-how-revealed .landing-how-step {
+  animation: landing-how-step-in 0.85s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.landing-how-line {
+  transform: scaleY(0);
+  transform-origin: top center;
+}
+
+.landing-how-revealed .landing-how-line {
+  animation: landing-how-line-grow 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+}
+
+.landing-how-icon {
+  animation: landing-how-icon-pulse 3.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  section#how:not(.landing-how-revealed) .landing-how-step {
+    opacity: 1;
+    transform: none;
+  }
+
+  .landing-how-revealed .landing-how-step {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .landing-how-revealed .landing-how-line {
+    animation: none;
+    transform: scaleY(1);
+  }
+  .landing-how-icon {
+    animation: none;
+    filter: drop-shadow(0 0 10px color-mix(in srgb, var(--brand-teal) 35%, transparent));
+  }
+}
+
+@keyframes console-scan-line {
+  0% {
+    transform: translateY(0);
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateY(420px);
+    opacity: 0;
+  }
+}
+
+.console-scan-overlay {
+  animation: console-scan-line 1.8s ease-in-out forwards;
 }
 
 @keyframes pulse-glow {

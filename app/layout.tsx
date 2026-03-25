@@ -1,5 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import {
+  Archivo_Black,
+  Instrument_Serif,
+  JetBrains_Mono,
+  Plus_Jakarta_Sans,
+  Syne,
+} from "next/font/google";
 import "./globals.css";
 
 const fontSans = Plus_Jakarta_Sans({
@@ -9,6 +15,36 @@ const fontSans = Plus_Jakarta_Sans({
   weight: ["400", "500", "600", "700", "800"],
 });
 
+/** Editorial landing (home) — Syne + Instrument Serif */
+const fontLandingSans = Syne({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-landing-sans",
+  weight: ["400", "500", "600", "700"],
+});
+
+const fontLandingSerif = Instrument_Serif({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-landing-serif",
+  weight: ["400"],
+});
+
+/** Hero headline — heavy geometric / “blocked” display */
+const fontLandingDisplay = Archivo_Black({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-landing-display",
+  weight: "400",
+});
+
+const fontConsoleMono = JetBrains_Mono({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-console-mono",
+  weight: ["400", "500"],
+});
+
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
@@ -16,9 +52,9 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "StandexAI | AI Communication Coach & Safety Layer",
+  title: "StandexAI — Copy that clears the bar",
   description:
-    "AI-powered communication assistant that helps you analyze, improve, and de-risk text and speech in real time. Say the right thing, the right way — every time.",
+    "Agentic copy review: agents flag weak claims and guide rewrites across voice, text, and AI-generated content — one standard before you ship.",
 };
 
 export default function RootLayout({
@@ -27,7 +63,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${fontSans.variable} ${fontSans.className}`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${fontSans.variable} ${fontSans.className} ${fontLandingSans.variable} ${fontLandingSerif.variable} ${fontLandingDisplay.variable} ${fontConsoleMono.variable}`}
+      suppressHydrationWarning
+    >
       <body className="antialiased">{children}</body>
     </html>
   );

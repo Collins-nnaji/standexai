@@ -11,7 +11,7 @@ export const runtime = "nodejs";
 
 type Body = {
   title?: string;
-  source?: "TEXT" | "VOICE";
+  source?: "TEXT" | "VOICE" | "DICTATE";
   kind?: string;
   overallScore?: number | null;
   toneScore?: number | null;
@@ -43,7 +43,9 @@ export async function POST(req: Request) {
 
     const body = (await req.json()) as Body;
     const title = clampTitle(body.title ?? "");
-    const source = body.source === "VOICE" ? "VOICE" : "TEXT";
+    const raw = body.source;
+    const source =
+      raw === "VOICE" || raw === "DICTATE" ? raw : "TEXT";
     const kind = (body.kind ?? "full").slice(0, 32) || "full";
 
     const row = await withPrismaReconnect(() =>

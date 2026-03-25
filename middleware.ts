@@ -9,7 +9,6 @@ export const config = {
     "/console/:path*",
     "/writing-lab/:path*",
     "/text-analyzer/:path*",
-    "/agent/:path*",
     "/speech-analyzer/:path*",
     "/rewrite-studio/:path*",
     "/settings/:path*",

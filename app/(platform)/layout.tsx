@@ -2,7 +2,7 @@
 
 import {
   Terminal, Settings, LogOut, PanelLeftClose, PanelLeftOpen,
-  FileText, Sparkles, Bot
+  Sparkles,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -10,17 +10,13 @@ import Image from "next/image";
 import { useState } from "react";
 import { neonAuthClient } from "@/lib/neon/auth-client";
 
-const mainNav = [
-  { name: "Writing Lab", href: "/writing-lab", icon: FileText },
-  { name: "Coach (Agent)", href: "/agent", icon: Bot },
-];
-
 export default function PlatformLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const session = neonAuthClient.useSession();
   const user = session.data?.user;
+  const immersiveConsole = pathname === "/console";
 
   const signOut = async () => {
     await neonAuthClient.signOut();
@@ -49,7 +45,8 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
   };
 
   return (
-    <div className="flex min-h-screen bg-[#FAFAFA] text-zinc-900">
+    <div className={`min-h-screen bg-[#FAFAFA] text-zinc-900 ${immersiveConsole ? "" : "flex"}`}>
+      {!immersiveConsole && (
       <button
         onClick={() => setMobileOpen((v) => !v)}
         className="fixed left-4 top-[max(1rem,env(safe-area-inset-top,0px))] z-40 rounded-xl border border-zinc-200 bg-white p-2 text-zinc-600 shadow-sm md:hidden"
@@ -57,8 +54,9 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
       >
         {mobileOpen ? <PanelLeftClose className="h-4 w-4" /> : <PanelLeftOpen className="h-4 w-4" />}
       </button>
+      )}
 
-      {mobileOpen && (
+      {!immersiveConsole && mobileOpen && (
         <button
           className="fixed inset-0 z-20 bg-black/5 backdrop-blur-[2px] md:hidden"
           onClick={() => setMobileOpen(false)}
@@ -66,6 +64,7 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
         />
       )}
 
+      {!immersiveConsole && (
       <aside
         className={`fixed inset-y-0 left-0 z-30 flex flex-col border-r border-zinc-200 bg-white transition-all duration-300 md:static ${
           mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
@@ -122,14 +121,6 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
           </Link>
 
           {!collapsed && (
-            <div className="px-4 pb-1 pt-4">
-              <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-zinc-400">Workspace</span>
-            </div>
-          )}
-          {collapsed && <div className="mx-2 my-2 h-px bg-zinc-100" />}
-          {mainNav.map((item) => <NavLink key={item.name} item={item} />)}
-
-          {!collapsed && (
             <div className="px-4 pb-1 pt-5">
               <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-zinc-400">Account</span>
             </div>
@@ -161,8 +152,15 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
           </div>
         </div>
       </aside>
+      )}
 
-      <main className="flex min-w-0 flex-1 flex-col bg-[#FAFAFA] max-md:pl-14 max-md:pt-[max(0.5rem,env(safe-area-inset-top,0px))] pb-[env(safe-area-inset-bottom,0px)]">
+      <main
+        className={
+          immersiveConsole
+            ? "flex min-h-screen min-w-0 flex-1 flex-col bg-transparent pb-[env(safe-area-inset-bottom,0px)]"
+            : "flex min-w-0 flex-1 flex-col bg-[#FAFAFA] max-md:pl-14 max-md:pt-[max(0.5rem,env(safe-area-inset-top,0px))] pb-[env(safe-area-inset-bottom,0px)]"
+        }
+      >
         {children}
       </main>
     </div>
