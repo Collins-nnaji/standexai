@@ -156,7 +156,7 @@ async function getCommunicationAnalyses(userId: string) {
     return await prismaDb.communicationAnalysis.findMany({
       where: { userId },
       orderBy: { createdAt: "desc" },
-      take: 40,
+      take: 100,
       select: {
         id: true,
         title: true,
@@ -300,7 +300,7 @@ export async function GET() {
       avgClarity: average(nums((r) => r.clarityScore)),
       avgAiProbability: average(nums((r) => r.aiProbability)),
       lastRunAt: commRows[0]?.createdAt.toISOString() ?? null,
-      recent: commRows.slice(0, 12).map((r) => ({
+      recent: commRows.slice(0, 80).map((r) => ({
         id: r.id,
         title: r.title,
         source: r.source,

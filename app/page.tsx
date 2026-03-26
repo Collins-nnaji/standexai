@@ -1,25 +1,34 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { AlignLeft, Clock, FileText, Mic, Sparkles, Wand2 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { AlignLeft, ChevronDown, Clock, LogOut, MessageSquare, Wand2 } from "lucide-react";
 import { neonAuthClient } from "@/lib/neon/auth-client";
 
-const WHO_PILLS = [
-  "Marketing & Comms",
-  "Legal & Compliance",
-  "Sales & CS",
-  "HR & People",
-  "Agencies",
-];
+/** Public asset — keep path static so next/image resolves reliably (cache-bust via filename change). */
+const HERO_IMAGE_SRC = "/STANDEXAIHERO.jpeg";
 
-/** Same filename = browser + Next cache the old bytes. Bump this (or set NEXT_PUBLIC_HERO_IMAGE_REVISION) when you replace the JPEG. */
-const HERO_IMAGE_SRC = `/STANDEXAIHERO.jpeg?v=${
-  typeof process.env.NEXT_PUBLIC_HERO_IMAGE_REVISION === "string" && process.env.NEXT_PUBLIC_HERO_IMAGE_REVISION.trim()
-    ? process.env.NEXT_PUBLIC_HERO_IMAGE_REVISION.trim()
-    : "2"
-}`;
+const GOLD = "bg-[#E8C547] text-[#0B0B0B] hover:bg-[#f0d060]";
+/** Primary copy / display — pure white per landing spec */
+const INK = "text-white";
+/** Body text on dark — high contrast on charcoal */
+const MUTED = "text-[#E6E2DA]";
+const LINE = "border-white/[0.12]";
+
+const MODEL_PROVIDERS = [
+  "OpenAI",
+  "Anthropic",
+  "Google Gemini",
+  "Azure OpenAI",
+  "Amazon Bedrock",
+  "Mistral AI",
+  "Meta Llama",
+  "Cohere",
+  "xAI",
+  "Groq",
+] as const;
 
 function NavArrow({ className }: { className?: string }) {
   return (
@@ -33,543 +42,543 @@ export default function Home() {
   const router = useRouter();
   const session = neonAuthClient.useSession();
   const user = session.data?.user;
+  const authPending = session.isPending;
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement>(null);
+
   const openConsole = () => router.push("/console");
-  const howSectionRef = useRef<HTMLElement>(null);
-  const [howRevealed, setHowRevealed] = useState(false);
+
+  const signOut = async () => {
+    setUserMenuOpen(false);
+    await neonAuthClient.signOut();
+    window.location.href = "/";
+  };
 
   useEffect(() => {
-    const el = howSectionRef.current;
-    if (!el) return;
-    const io = new IntersectionObserver(([entry]) => {
-      if (entry?.isIntersecting) setHowRevealed(true);
-    }, { threshold: 0.12, rootMargin: "-40px 0px" });
-    io.observe(el);
-    return () => io.disconnect();
+    const onDoc = (e: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) setUserMenuOpen(false);
+    };
+    document.addEventListener("mousedown", onDoc);
+    return () => document.removeEventListener("mousedown", onDoc);
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#F5F3EF] text-[#111110] antialiased [font-family:var(--font-landing-sans),sans-serif]">
-      <nav className="fixed left-0 right-0 top-0 z-[100] flex items-center justify-between border-b border-[#DDDBD5] bg-[#F5F3EF] px-6 py-5 lg:px-12 lg:py-6">
-        <button type="button" onClick={() => router.push("/")} className="flex shrink-0 items-center">
+    <div
+      className={`min-h-screen bg-[#0A0A0A] ${INK} antialiased [font-family:var(--font-standex-sans),ui-sans-serif,sans-serif] text-[16px] font-medium leading-relaxed sm:text-[17px]`}
+    >
+      {/* Nav — logo + Neon auth (same client as rest of app) */}
+      <header
+        className={`sticky top-0 z-50 flex flex-wrap items-center justify-between gap-4 border-b ${LINE} bg-[#0A0A0A]/90 px-5 py-4 backdrop-blur-md sm:px-8 lg:px-12`}
+      >
+        <Link href="/" className="flex shrink-0 items-center transition-opacity hover:opacity-90">
           <Image
             src="/standexailogo.png"
             alt="StandexAI"
-            width={168}
-            height={44}
-            className="h-8 w-auto object-contain sm:h-9"
+            width={132}
+            height={36}
+            className="h-8 w-auto object-contain brightness-0 invert opacity-[0.95]"
             priority
           />
-        </button>
-        <div className="flex items-center gap-3 sm:gap-6 lg:gap-9">
-          <ul className="hidden list-none items-center gap-9 lg:flex">
-            <li>
-              <a
-                href="#features"
-                className="text-[13px] font-medium tracking-wide text-[#6B6860] transition-colors hover:text-[var(--brand-teal)]"
+        </Link>
+
+        <nav className="flex flex-wrap items-center justify-end gap-3 sm:gap-4 md:gap-5" aria-label="Account">
+          {authPending ? (
+            <span className={`text-[12px] ${MUTED}`}>…</span>
+          ) : user ? (
+            <>
+              <Link
+                href="/console"
+                className={`inline-flex items-center gap-2 rounded-sm px-5 py-2.5 text-[11px] font-bold uppercase tracking-[0.12em] transition ${GOLD}`}
               >
-                Features
-              </a>
-            </li>
-            <li>
-              <a
-                href="#how"
-                className="text-[13px] font-medium tracking-wide text-[#6B6860] transition-colors hover:text-[var(--brand-teal)]"
-              >
-                How it works
-              </a>
-            </li>
-            {!user && (
-              <li>
+                Console
+                <NavArrow className="h-3.5 w-3.5" />
+              </Link>
+              <div className="relative" ref={userMenuRef}>
                 <button
                   type="button"
-                  onClick={() => router.push("/auth/sign-in")}
-                  className="text-[13px] font-medium tracking-wide text-[#6B6860] transition-colors hover:text-[#111110]"
+                  onClick={() => setUserMenuOpen((v) => !v)}
+                  className={`flex max-w-[220px] items-center gap-1.5 rounded-md border ${LINE} bg-white/[0.04] px-3 py-2 text-left text-[12px] font-medium text-white transition hover:bg-white/[0.08]`}
+                  aria-expanded={userMenuOpen}
+                  aria-haspopup="menu"
                 >
-                  Sign in
+                  <span className="truncate">{user.name?.trim() || user.email}</span>
+                  <ChevronDown className={`h-4 w-4 shrink-0 opacity-70 transition ${userMenuOpen ? "rotate-180" : ""}`} />
                 </button>
-              </li>
-            )}
-          </ul>
-          {!user && (
-            <button
-              type="button"
-              onClick={() => router.push("/auth/sign-in")}
-              className="text-[13px] font-medium tracking-wide text-[#6B6860] transition-colors hover:text-[#111110] lg:hidden"
-            >
-              Sign in
-            </button>
-          )}
-          <button
-            type="button"
-            onClick={openConsole}
-            className="rounded bg-[#111110] px-4 py-2 text-[13px] font-semibold tracking-wide text-[#F5F3EF] transition-opacity hover:opacity-80 sm:px-5 sm:py-2.5"
-          >
-            {user ? "Console" : "Open Console"}
-          </button>
-        </div>
-      </nav>
-
-      {/* Hero — light canvas + copy left, framed image right */}
-      <section className="relative isolate min-h-0 overflow-x-clip overflow-y-visible border-b border-[#DDDBD5] bg-[#F2EFE8] pt-[5.25rem] lg:pt-[4.75rem]">
-        {/* Subtle grid + soft shapes */}
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.35]"
-          style={{
-            backgroundImage:
-              "linear-gradient(to right, #cfc8ba 1px, transparent 1px), linear-gradient(to bottom, #cfc8ba 1px, transparent 1px)",
-            backgroundSize: "36px 36px",
-          }}
-          aria-hidden
-        />
-        <div
-          className="pointer-events-none absolute -left-32 top-1/4 h-72 w-72 rounded-full bg-[#dcd6cc]/60 blur-3xl"
-          aria-hidden
-        />
-        <div
-          className="pointer-events-none absolute -right-16 bottom-20 h-80 w-80 rounded-full bg-[#e5dfd4]/70 blur-3xl"
-          aria-hidden
-        />
-        <div
-          className="pointer-events-none absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#b8b0a2]/40 to-transparent"
-          aria-hidden
-        />
-
-        <div className="relative z-10 mx-auto grid max-w-7xl gap-8 px-5 py-8 sm:px-6 sm:py-10 lg:grid-cols-[minmax(0,1fr)_min(50vw,540px)] lg:items-center lg:gap-x-14 lg:gap-y-8 lg:px-8 lg:py-10 xl:gap-x-20 xl:px-12 2xl:px-16">
-          <div className="flex min-w-0 flex-col items-start text-left max-lg:pr-1 lg:-ml-6 lg:pr-10 xl:-ml-10 xl:pr-14 2xl:-ml-14 2xl:pr-16">
-            <span
-              className="landing-fade-up mb-4 inline-flex items-center gap-2.5 text-[11px] font-medium uppercase tracking-[0.12em] text-[#111110] [font-family:var(--font-console-mono),Consolas,ui-monospace,monospace]"
-              style={{ animationDelay: "0.1s" }}
-            >
-              <span className="block h-px w-6 bg-[#111110]/35" aria-hidden />
-              Writing analysis · Voice coach
-            </span>
-
-            <h1
-              className="landing-fade-up mb-5 w-full max-w-none text-left text-[clamp(1.55rem,4.2vw,2.85rem)] font-normal leading-[1.15] tracking-[-0.03em] [font-family:var(--font-landing-display),system-ui,sans-serif]"
-              style={{ animationDelay: "0.2s" }}
-            >
-              <span className="block lg:whitespace-nowrap">
-                <span className="text-[#111110]">Copy that </span>
-                <span className="landing-text-brand-gradient [font-family:var(--font-landing-serif),Georgia,serif] italic">
-                  &lsquo;clears the bar&rsquo;
-                </span>
-                <span className="text-[#111110]">.</span>
-              </span>
-              <span className="mt-2 block sm:mt-3 lg:whitespace-nowrap">
-                <span className="text-[#111110]">Speech that </span>
-                <span className="landing-text-brand-gradient [font-family:var(--font-landing-serif),Georgia,serif] italic">
-                  &lsquo;holds up in the room&rsquo;
-                </span>
-                <span className="text-[#111110]">.</span>
-              </span>
-            </h1>
-
-            <div className="landing-fade-up mb-6" style={{ animationDelay: "0.35s" }}>
-              <button
-                type="button"
-                onClick={openConsole}
-                className="group inline-flex items-center gap-2.5 rounded-md bg-[#111110] px-7 py-3.5 text-[12px] font-semibold uppercase tracking-[0.08em] text-[#F5F3EF] transition-opacity hover:opacity-90"
-              >
-                Open Console
-                <NavArrow className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-              </button>
-            </div>
-
-            <div
-              className="landing-fade-up w-full border-t border-[#111110]/10 pt-5"
-              style={{ animationDelay: "0.45s" }}
-            >
-              <p className="max-w-xl text-[13px] leading-[1.7] text-[#111110] [font-family:var(--font-console-mono),Consolas,ui-monospace,monospace]">
-                One console: agents stress-test what you write — claims, risk, tone, rewrites — plus a coach for clearer,
-                more professional speech.
-              </p>
-            </div>
-          </div>
-
-          <div className="relative mx-auto w-full max-w-lg lg:mx-0 lg:max-w-none lg:self-center lg:justify-self-end">
-            <div
-              className="pointer-events-none absolute -inset-3 -z-10 rounded-[2rem] bg-gradient-to-br from-[#d4cec3] via-transparent to-[#c9c2b6]/50 opacity-80 blur-sm"
-              aria-hidden
-            />
-            <div className="landing-hero-photo-frame relative h-[min(38vh,360px)] w-full overflow-hidden rounded-2xl border border-[#c9c2b6] bg-[#e8e4dd] shadow-[0_24px_48px_-20px_rgba(17,17,16,0.22),0_0_0_1px_rgba(17,17,16,0.04)] sm:h-[min(40vh,400px)] lg:h-[min(42vh,440px)]">
-              <div className="landing-hero-photo-float absolute inset-0">
-                <Image
-                  src={HERO_IMAGE_SRC}
-                  alt=""
-                  fill
-                  priority
-                  unoptimized
-                  className="object-contain object-center p-2 pb-10 sm:p-2.5 sm:pb-11 lg:p-3 lg:pb-12"
-                  sizes="(max-width: 1024px) 90vw, 640px"
-                />
-              </div>
-              <div className="absolute inset-x-0 bottom-0 z-10">
-                <div
-                  className="h-px w-full opacity-90"
-                  style={{
-                    background:
-                      "linear-gradient(90deg, transparent, var(--brand-teal), var(--brand-magenta), var(--brand-purple), transparent)",
-                  }}
-                />
-                <div className="flex items-center justify-center bg-[#0a0a0a]/88 px-3 py-2.5 backdrop-blur-md sm:px-4 sm:py-3">
-                  <p className="text-center text-[9px] font-medium leading-snug text-[#ffffff] sm:text-[10px] [font-family:var(--font-console-mono),Consolas,ui-monospace,monospace]">
-                    <span className="font-semibold uppercase tracking-[0.12em] text-white">Powered by </span>
-                    <span className="landing-text-brand-gradient text-[10px] font-semibold uppercase tracking-[0.1em] sm:text-[11px]">
-                      fine-tuned SOTA
-                    </span>
-                    <span className="font-semibold uppercase tracking-[0.12em] text-white"> Standex models</span>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div
-              className="pointer-events-none absolute -bottom-2 -right-2 hidden h-16 w-16 rounded-br-3xl border-b-2 border-r-2 border-[#111110]/15 sm:block"
-              aria-hidden
-            />
-            <div
-              className="pointer-events-none absolute -left-2 -top-2 hidden h-10 w-10 rounded-tl-2xl border-l-2 border-t-2 border-[#111110]/12 sm:block"
-              aria-hidden
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* Features — warm band, editorial grid + console preview */}
-      <section
-        id="features"
-        className="relative overflow-hidden border-b border-[#DDDBD5] bg-[#EDE9E1] px-5 py-14 sm:px-6 lg:px-10 lg:py-[5.25rem] xl:py-[5.75rem]"
-      >
-        <div
-          className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[2px] opacity-90"
-          style={{
-            background:
-              "linear-gradient(90deg, transparent 0%, var(--brand-teal) 22%, var(--brand-magenta) 50%, var(--brand-purple) 78%, transparent 100%)",
-          }}
-          aria-hidden
-        />
-        <div className="pointer-events-none absolute inset-x-0 top-[2px] z-0 h-px bg-[#DDDBD5]" aria-hidden />
-        <div
-          className="pointer-events-none absolute inset-0 z-0 opacity-[0.4]"
-          style={{
-            backgroundImage:
-              "linear-gradient(to right, #c9c2b6 1px, transparent 1px), linear-gradient(to bottom, #c9c2b6 1px, transparent 1px)",
-            backgroundSize: "40px 40px",
-          }}
-          aria-hidden
-        />
-        <div
-          className="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-px bg-gradient-to-r from-transparent via-[#b8b0a2]/45 to-transparent"
-          aria-hidden
-        />
-
-        <div className="relative z-10 mx-auto max-w-6xl">
-          <div className="mb-3 inline-flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--brand-teal)] [font-family:var(--font-console-mono),Consolas,ui-monospace,monospace]">
-            <span className="block h-px w-7 bg-[var(--brand-teal)]/50" aria-hidden />
-            Features
-          </div>
-          <div className="mb-10 flex flex-col gap-6 lg:mb-14 lg:flex-row lg:items-end lg:justify-between lg:gap-10">
-            <div className="max-w-2xl">
-              <h2 className="text-[clamp(1.85rem,3.8vw,2.85rem)] font-normal leading-[1.12] tracking-tight text-[#111110] [font-family:var(--font-landing-serif),Georgia,serif]">
-                Writing that ships.
-                <br />
-                Speaking that lands.
-              </h2>
-              <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-[#3f3e3a]">
-                One console ties it together: structured review on the page, then coaching on how you deliver it — without
-                switching tools or losing context.
-              </p>
-            </div>
-            <div className="flex shrink-0 flex-wrap gap-2">
-              <span className="rounded-full border border-[#111110]/12 bg-[#111110] px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-[#F5F3EF] shadow-sm">
-                Workspace
-              </span>
-              <span className="rounded-full border border-[#111110]/12 bg-[#111110] px-3.5 py-1.5 shadow-sm">
-                <span className="landing-text-brand-gradient text-[11px] font-semibold uppercase tracking-wide">
-                  Voice coach
-                </span>
-              </span>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-2 lg:gap-16">
-            <div className="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-              {(
-                [
-                  {
-                    Icon: AlignLeft,
-                    accent: "var(--brand-teal)",
-                    area: "Workspace",
-                    strong: "Explainable writing review",
-                    span: "Flags, risk, intent, and AI-style signals — each with reasons and suggestions, not opaque scores.",
-                  },
-                  {
-                    Icon: Wand2,
-                    accent: "var(--brand-magenta)",
-                    area: "Workspace",
-                    strong: "Transform modes",
-                    span: "Professional, safe, persuasive, and more — full rewrites when the message needs to change shape.",
-                  },
-                  {
-                    Icon: Mic,
-                    accent: "var(--brand-purple)",
-                    area: "Voice coach",
-                    strong: "Delivery & presence",
-                    span: "Transcript-based coaching on fillers, clarity, and executive tone, with a prompt for your next take.",
-                  },
-                  {
-                    Icon: Clock,
-                    accent: "var(--brand-teal)",
-                    area: "Both",
-                    strong: "One sign-in, two surfaces",
-                    span: "Switch tabs in the console: polish the page, then polish how you say it out loud.",
-                  },
-                ] as const
-              ).map(({ Icon, accent, area, strong, span }) => (
-                <div
-                  key={strong}
-                  className="group relative overflow-hidden rounded-2xl border border-[#D0CCC3] bg-[#F7F4EE] p-5 shadow-[0_1px_0_rgba(17,17,16,0.04)] transition-[border-color,box-shadow] duration-300 hover:border-[#111110]/18 hover:shadow-[0_20px_50px_-24px_rgba(17,17,16,0.18)] sm:p-6"
-                >
+                {userMenuOpen ? (
                   <div
-                    className="pointer-events-none absolute left-0 top-0 h-full w-[3px] opacity-90 transition-opacity group-hover:opacity-100"
-                    style={{ background: `linear-gradient(180deg, ${accent}, transparent)` }}
-                    aria-hidden
-                  />
-                  <div className="mb-3 flex items-center gap-3">
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#111110]/10 bg-[#111110] text-[var(--brand-teal)] shadow-inner">
-                      <Icon className="h-[18px] w-[18px]" strokeWidth={1.85} />
-                    </span>
-                    <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#111110]/40">{area}</span>
-                  </div>
-                  <strong className="mb-2 block text-[15px] font-semibold leading-snug text-[#111110]">{strong}</strong>
-                  <p className="text-[13px] leading-relaxed text-[#3f3e3a]">{span}</p>
-                </div>
-              ))}
-            </div>
-
-            <div className="lg:sticky lg:top-28">
-              <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#111110]/40 [font-family:var(--font-console-mono),Consolas,ui-monospace,monospace]">
-                Console preview
-              </p>
-              <div className="rounded-2xl border border-[#C8C3BA] bg-[#111110] shadow-[0_28px_90px_-20px_rgba(17,17,16,0.35)] ring-1 ring-[#111110]/5">
-                <div className="flex items-center gap-2 border-b border-white/[0.08] px-4 py-3.5">
-                  <span className="h-2.5 w-2.5 rounded-full bg-[#FF5F57]" />
-                  <span className="h-2.5 w-2.5 rounded-full bg-[#FEBC2E]" />
-                  <span className="h-2.5 w-2.5 rounded-full bg-[#28C840]" />
-                  <span className="ml-2 text-[11px] font-semibold uppercase tracking-[0.1em] text-white/30">
-                    StandexAI Console
-                  </span>
-                </div>
-                <div className="flex flex-col gap-4 p-5 sm:p-7">
-                  <div className="flex rounded-lg border border-white/10 bg-white/[0.04] p-1">
-                    <span className="flex-1 rounded-md bg-white/10 py-2 text-center text-[10px] font-bold uppercase tracking-wide text-white/90">
-                      Workspace
-                    </span>
-                    <span className="flex-1 py-2 text-center text-[10px] font-bold uppercase tracking-wide text-white/35">
-                      Voice coach
-                    </span>
-                  </div>
-                  <div className="rounded-lg border border-white/10 bg-white/[0.05] px-[18px] py-4 text-[13px] leading-relaxed text-white/70 [font-family:var(--font-landing-sans),ui-monospace,monospace]">
-                    Our revolutionary platform leverages cutting-edge AI to synergize your workflow…
-                    <span
-                      className="ml-0.5 inline-block h-3.5 w-0.5 translate-y-px bg-white/60 align-middle"
-                      style={{ animation: "landing-cursor-blink 1s step-end infinite" }}
-                      aria-hidden
-                    />
-                  </div>
-                  <div className="grid grid-cols-3 gap-2">
-                    <div className="rounded-lg bg-white/[0.05] px-3 py-3">
-                      <div className="mb-1 text-[9px] font-semibold uppercase tracking-[0.08em] text-white/35">Claims</div>
-                      <div className="text-lg leading-none text-[var(--brand-magenta)] [font-family:var(--font-landing-serif),Georgia,serif]">
-                        High
-                      </div>
-                      <div className="mt-1 text-[10px] text-white/40">3 flags</div>
-                    </div>
-                    <div className="rounded-lg bg-white/[0.05] px-3 py-3">
-                      <div className="mb-1 text-[9px] font-semibold uppercase tracking-[0.08em] text-white/35">AI style</div>
-                      <div className="text-lg leading-none text-[var(--brand-purple)] [font-family:var(--font-landing-serif),Georgia,serif]">
-                        74%
-                      </div>
-                      <div className="mt-1 text-[10px] text-white/40">Detected</div>
-                    </div>
-                    <div className="rounded-lg bg-white/[0.05] px-3 py-3">
-                      <div className="mb-1 text-[9px] font-semibold uppercase tracking-[0.08em] text-white/35">Tone</div>
-                      <div className="text-lg leading-none text-[var(--brand-teal)] [font-family:var(--font-landing-serif),Georgia,serif]">
-                        OK
-                      </div>
-                      <div className="mt-1 text-[10px] text-white/40">Review</div>
-                    </div>
-                  </div>
-                  <div className="rounded-lg bg-gradient-to-br from-[var(--brand-purple)]/15 to-[var(--brand-teal)]/10 px-4 py-3">
-                    <div className="mb-2 flex items-center justify-between">
-                      <span className="text-[10px] font-bold uppercase tracking-[0.1em] text-[var(--brand-teal)]">Voice coach</span>
-                      <span className="text-[10px] text-white/45">After you switch tab</span>
-                    </div>
-                    <div className="mb-2 text-[11px] leading-snug text-white/55">
-                      “So, um, what we’re trying to do here is basically…”
-                    </div>
-                    <div className="flex items-baseline justify-between gap-2">
-                      <span className="text-[10px] uppercase tracking-wide text-white/40">Delivery score</span>
-                      <span className="text-2xl font-semibold tabular-nums text-white [font-family:var(--font-landing-serif),Georgia,serif]">
-                        78
-                      </span>
-                    </div>
-                    <p className="mt-2 text-[10px] leading-relaxed text-[var(--brand-magenta)]/80">
-                      Filler words · Open stronger · Pause before numbers
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* How it works — light band, brand + hairline borders */}
-      <section
-        ref={howSectionRef}
-        id="how"
-        className={`relative overflow-hidden border-b border-[#DDDBD5] bg-[#F5F3EF] px-5 py-12 sm:px-6 lg:px-10 lg:py-16 xl:py-[4.5rem] ${howRevealed ? "landing-how-revealed" : ""}`}
-      >
-        <div
-          className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[2px] opacity-90"
-          style={{
-            background:
-              "linear-gradient(90deg, transparent 0%, var(--brand-teal) 22%, var(--brand-magenta) 50%, var(--brand-purple) 78%, transparent 100%)",
-          }}
-          aria-hidden
-        />
-        <div className="pointer-events-none absolute inset-x-0 top-[2px] z-0 h-px bg-[#DDDBD5]" aria-hidden />
-        <div
-          className="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-px bg-gradient-to-r from-transparent via-[#b8b0a2]/45 to-transparent"
-          aria-hidden
-        />
-        <div className="relative z-10 mx-auto max-w-6xl">
-          <div className="mb-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--brand-teal)] [font-family:var(--font-console-mono),Consolas,ui-monospace,monospace]">
-            How it works
-          </div>
-          <h2 className="how-works-title mb-3 max-w-2xl text-[clamp(1.85rem,3.6vw,2.65rem)] font-normal leading-tight tracking-tight text-[#111110] [font-family:var(--font-landing-serif),Georgia,serif]">
-            From draft to delivery in the same console
-          </h2>
-          <p className="mb-8 max-w-xl text-[15px] leading-relaxed text-[#3f3e3a] lg:mb-10">
-            <span className="font-semibold text-[#111110]">Workspace</span> stress-tests written copy.{" "}
-            <span className="font-semibold text-[#111110]">Voice coach</span> improves how you sound — same bar for quality,
-            two surfaces.
-          </p>
-
-          <div className="relative">
-            <div
-              className="landing-how-line pointer-events-none absolute left-[22px] top-6 hidden h-[calc(100%-3rem)] w-[2px] bg-gradient-to-b from-[var(--brand-teal)] via-[var(--brand-magenta)] to-[var(--brand-purple)] opacity-[0.72] lg:block"
-              aria-hidden
-            />
-            <div className="flex flex-col gap-9 lg:gap-12">
-              {(
-                [
-                  {
-                    n: "01",
-                    Icon: FileText,
-                    tag: "Workspace · Voice coach",
-                    t: "Bring in words or a take",
-                    d: "Type, paste, or dictate into the editor for writing review. Or open Voice coach: record audio or drop in a transcript to work on speaking.",
-                  },
-                  {
-                    n: "02",
-                    Icon: Sparkles,
-                    tag: "Workspace",
-                    t: "Run the writing agents",
-                    d: "Communication, compliance, intent, and AI-style signals — each with explanations you can act on. Transform rewrites when you need a new version, not just a score.",
-                  },
-                  {
-                    n: "03",
-                    Icon: Mic,
-                    tag: "Voice coach",
-                    t: "Coach the delivery",
-                    d: "Structured feedback on fillers, clarity, and professional tone, plus a concrete prompt for your next recording — complementary to what you fixed on the page.",
-                  },
-                ] as const
-              ).map((x, i) => {
-                const tagColors = ["var(--brand-teal)", "var(--brand-magenta)", "var(--brand-purple)"] as const;
-                const iconColors = ["var(--brand-teal)", "var(--brand-magenta)", "var(--brand-purple)"] as const;
-                return (
-                  <div
-                    key={x.n}
-                    className="landing-how-step relative z-10 flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-7 lg:gap-10"
-                    style={{ animationDelay: `${0.08 + i * 0.14}s` }}
+                    role="menu"
+                    className={`absolute right-0 top-full z-[60] mt-2 min-w-[180px] rounded-lg border ${LINE} bg-[#141412] py-1 shadow-xl ring-1 ring-black/40`}
                   >
-                    <div className="flex shrink-0 flex-row items-center gap-4 sm:w-[7rem] sm:flex-col sm:items-start sm:gap-2.5">
-                      <span className="text-[clamp(2.75rem,6vw,4.25rem)] font-bold leading-none tracking-tight landing-text-brand-gradient [font-family:var(--font-landing-display),system-ui,sans-serif]">
-                        {x.n}
-                      </span>
-                      <x.Icon
-                        className="landing-how-icon h-8 w-8 shrink-0 sm:h-9 sm:w-9"
-                        style={{ color: iconColors[i] }}
-                        strokeWidth={1.5}
-                      />
-                    </div>
-                    <div className="min-w-0 flex-1 pt-0 sm:pt-0.5">
-                      <p
-                        className="mb-2 text-[10px] font-semibold uppercase tracking-[0.16em] [font-family:var(--font-console-mono),Consolas,ui-monospace,monospace]"
-                        style={{ color: tagColors[i] }}
-                      >
-                        {x.tag}
-                      </p>
-                      <h3 className="how-step-title mb-2 text-xl font-semibold leading-snug sm:text-2xl">{x.t}</h3>
-                      <p className="max-w-2xl text-[15px] leading-[1.8] text-[#3f3e3a]">{x.d}</p>
-                    </div>
+                    <button
+                      type="button"
+                      role="menuitem"
+                      onClick={() => void signOut()}
+                      className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-[13px] text-white transition hover:bg-white/[0.06]"
+                    >
+                      <LogOut className="h-4 w-4 shrink-0 opacity-80" strokeWidth={2} />
+                      Sign out
+                    </button>
                   </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Audience + CTA — single dark band */}
-      <section className="border-t border-[#DDDBD5] px-6 pb-16 pt-12 lg:px-12 lg:pb-20 lg:pt-16">
-        <div className="mx-auto max-w-6xl overflow-hidden rounded-2xl border border-white/[0.08] bg-[#111110] shadow-[0_32px_80px_rgba(0,0,0,0.2)]">
-          <div className="bg-gradient-to-br from-[#1a1a18] via-[#111110] to-[#0a0a09] px-8 py-12 sm:px-10 sm:py-14 lg:px-14 lg:py-16">
-            <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--brand-teal)]">
-              Who it&apos;s for
-            </p>
-            <p className="mb-10 max-w-3xl text-[17px] leading-[1.65] text-[#EDE8DF] sm:text-lg">
-              Teams where{" "}
-              <span className="font-semibold text-[#F5F3EF]">what you ship in writing</span> and{" "}
-              <span className="font-semibold text-[#F5F3EF]">how you sound when it matters</span> can either defend the
-              brand or expose it — from regulated comms and legal review to revenue copy and the big meeting.
-            </p>
-            <div className="mb-12 flex flex-wrap gap-2.5 sm:gap-3">
-              {WHO_PILLS.map((label) => (
-                <span
-                  key={label}
-                  className="cursor-default rounded-full border border-white/[0.18] bg-white/[0.06] px-4 py-2.5 text-[13px] font-medium text-[#F5F3EF] backdrop-blur-sm transition-colors hover:border-white/[0.28] hover:bg-white/[0.11]"
-                >
-                  {label}
-                </span>
-              ))}
-            </div>
-
-            <div className="h-px w-full bg-gradient-to-r from-transparent via-white/20 to-transparent" aria-hidden />
-
-            <div className="mt-10 flex flex-col gap-8 lg:mt-12 lg:flex-row lg:items-end lg:justify-between lg:gap-12">
-              <h2 className="max-w-xl text-[clamp(1.65rem,3.8vw,2.85rem)] font-normal leading-[1.15] [font-family:var(--font-landing-serif),Georgia,serif]">
-                <span className="text-white">Ready to raise the bar on </span>
-                <em className="italic text-[#E8DCC8]">your pages and your delivery?</em>
-              </h2>
+                ) : null}
+              </div>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/auth/sign-in"
+                className={`text-[11px] font-semibold uppercase tracking-[0.14em] ${MUTED} transition-colors hover:text-white`}
+              >
+                Sign in
+              </Link>
+              <Link
+                href="/auth/sign-up"
+                className={`text-[11px] font-semibold uppercase tracking-[0.14em] text-white transition-colors hover:text-white/90`}
+              >
+                Sign up
+              </Link>
               <button
                 type="button"
                 onClick={openConsole}
-                className="inline-flex shrink-0 items-center gap-2.5 self-start rounded-lg bg-[#F5F3EF] px-9 py-4 text-[13px] font-semibold uppercase tracking-wider text-[#111110] shadow-lg shadow-black/30 transition-opacity hover:opacity-[0.9] lg:self-auto"
+                className={`inline-flex items-center gap-2 rounded-sm px-5 py-2.5 text-[11px] font-bold uppercase tracking-[0.12em] transition ${GOLD}`}
               >
-                Open Console
+                Open console
+                <NavArrow className="h-3.5 w-3.5" />
+              </button>
+            </>
+          )}
+        </nav>
+      </header>
+
+      {/* Hero — split layout, big serif, image preserved */}
+      <section
+        className="landing-section-reveal relative isolate border-b border-white/[0.06] [animation-delay:0ms]"
+      >
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_50%_at_50%_-10%,rgba(232,197,71,0.06),transparent_50%)]" aria-hidden />
+        <div className="mx-auto grid max-w-[1400px] gap-12 px-5 py-16 sm:px-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-16 lg:py-24 xl:px-16">
+          <div>
+            <p
+              className={`mb-8 text-[11px] font-semibold uppercase tracking-[0.2em] ${MUTED} [font-family:var(--font-console-mono),monospace]`}
+            >
+              Communications intelligence
+            </p>
+            <h1
+              className="mb-8 text-[clamp(2.75rem,6.5vw,4.75rem)] font-normal leading-[1.02] tracking-[-0.03em] text-white [font-family:var(--font-landing-serif),Georgia,serif]"
+            >
+              Govern every word your enterprise publishes
+            </h1>
+            <p className={`mb-10 max-w-xl text-[clamp(1.05rem,1.35vw,1.2rem)] leading-[1.65] ${MUTED}`}>
+              Not a writing toy — a full layer that{" "}
+              <span className="font-semibold text-white">generates, analyzes, approves, and archives</span> internal
+              and external comms with{" "}
+              <span className="font-semibold text-white">regulatory-grade controls and audit trails</span>.
+            </p>
+            <div className="mb-10 flex flex-wrap gap-3">
+              <button
+                type="button"
+                onClick={openConsole}
+                className={`inline-flex items-center gap-2.5 rounded-sm px-8 py-4 text-[12px] font-bold uppercase tracking-[0.1em] transition ${GOLD}`}
+              >
+                Start in console
                 <NavArrow className="h-4 w-4" />
               </button>
             </div>
+            <div className="flex flex-wrap gap-2">
+              {["Audit-ready history", "Multi-channel publishing", "Text + generation"].map((item) => (
+                <span
+                  key={item}
+                  className={`rounded-full border ${LINE} bg-white/[0.03] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.1em] ${MUTED}`}
+                >
+                  {item}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div className="relative">
+            <div
+              className="pointer-events-none absolute -inset-3 rounded-[2rem] bg-gradient-to-br from-[#E8C547]/[0.07] via-transparent to-[#3dd9c9]/[0.05] blur-xl"
+              aria-hidden
+            />
+            <div
+              className={`landing-hero-photo-frame relative overflow-hidden rounded-2xl border border-[#2A2824] bg-[#121110] shadow-[0_40px_100px_-40px_rgba(0,0,0,0.9)]`}
+            >
+              <div className="border-b border-white/[0.06] px-4 py-3">
+                <p className={`text-[10px] font-semibold uppercase tracking-[0.14em] ${MUTED} [font-family:var(--font-landing-serif),serif]`}>
+                  Your communications workspace
+                </p>
+              </div>
+              <div className="landing-hero-photo-float relative h-[min(52vh,480px)] w-full">
+                <Image
+                  src={HERO_IMAGE_SRC}
+                  alt="StandexAI product visualization"
+                  fill
+                  priority
+                  unoptimized
+                  className="object-contain object-center p-4 pb-10"
+                  sizes="(max-width: 1024px) 92vw, 560px"
+                />
+              </div>
+              <div className="absolute bottom-4 right-4 z-10 flex max-w-[min(100%,18rem)] items-center gap-2.5 rounded-xl border border-white/15 bg-black/75 px-2 py-1.5 shadow-lg backdrop-blur-md">
+                <div className="relative h-9 w-14 shrink-0 overflow-hidden rounded-lg ring-1 ring-white/10">
+                  <Image
+                    src={HERO_IMAGE_SRC}
+                    alt=""
+                    fill
+                    className="object-cover"
+                    sizes="56px"
+                    unoptimized
+                  />
+                </div>
+                <p className="pr-1 text-[9px] font-semibold uppercase tracking-[0.12em] text-white [font-family:var(--font-console-mono),monospace]">
+                  Powered by Standex models
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Trusted by — grid strip */}
+        <div className={`border-t ${LINE} bg-[#080807]`}>
+          <div className="mx-auto max-w-[1400px] px-5 py-6 sm:px-8 lg:px-12 xl:px-16">
+            <p className={`mb-4 text-[10px] font-semibold uppercase tracking-[0.2em] ${MUTED}`}>Trusted by teams like yours</p>
+            <div className="landing-dark-grid grid-cols-2 sm:grid-cols-4">
+              {["Financial services", "Healthcare & pharma", "Listed companies", "Public sector"].map((label) => (
+                <div key={label} className="landing-grid-node px-4 py-5 text-center">
+                  <span className={`text-[13px] font-medium ${MUTED}`}>{label}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      <footer className="flex flex-col items-center justify-between gap-3 border-t border-[#DDDBD5] px-6 py-8 sm:flex-row sm:text-left lg:px-12">
-        <span className="text-[13px] font-bold uppercase tracking-wider text-[#111110]">StandexAI</span>
-        <span className="text-xs text-[#6B6860]">&copy; {new Date().getFullYear()} StandexAI</span>
+      {/* Model providers — infinite scroll + model-agnostic positioning */}
+      <section
+        className={`landing-section-reveal border-b border-white/[0.06] bg-[#060606] py-14 sm:py-16 [animation-delay:90ms]`}
+        aria-labelledby="model-layer-heading"
+      >
+        <div className="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12 xl:px-16">
+          <div className="mb-10 max-w-2xl">
+            <p className={`mb-3 text-[11px] font-semibold uppercase tracking-[0.2em] ${MUTED}`}>Model layer</p>
+            <h2
+              id="model-layer-heading"
+              className="mb-4 text-[clamp(1.5rem,3vw,2rem)] font-normal leading-tight text-white [font-family:var(--font-landing-serif),serif]"
+            >
+              Works with the models you already trust
+            </h2>
+            <p className={`text-[1.05rem] leading-relaxed ${MUTED}`}>
+              StandexAI is <span className="font-semibold text-white">provider-agnostic</span> — route generation and
+              analysis through leading foundation APIs, swap engines as your policy evolves, and keep governance, audit,
+              and approvals in one place.
+            </p>
+          </div>
+        </div>
+        <div className={`landing-provider-marquee border-y ${LINE} bg-[#080807] py-6`}>
+          <div className="landing-provider-marquee-track" role="presentation">
+            <ul className="landing-provider-marquee-segment landing-provider-marquee-segment--primary flex shrink-0 items-center gap-10 sm:gap-14 md:gap-16">
+              {MODEL_PROVIDERS.map((name) => (
+                <li
+                  key={`a-${name}`}
+                  className="whitespace-nowrap text-[13px] font-semibold uppercase tracking-[0.14em] text-white/90"
+                >
+                  {name}
+                </li>
+              ))}
+            </ul>
+            <ul
+              className="landing-provider-marquee-segment landing-provider-marquee-segment--duplicate flex shrink-0 items-center gap-10 sm:gap-14 md:gap-16"
+              aria-hidden="true"
+            >
+              {MODEL_PROVIDERS.map((name) => (
+                <li
+                  key={`b-${name}`}
+                  className="whitespace-nowrap text-[13px] font-semibold uppercase tracking-[0.14em] text-white/90"
+                >
+                  {name}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        <div className="mx-auto max-w-[1400px] px-5 pt-8 sm:px-8 lg:px-12 xl:px-16">
+          <p className={`text-center text-[13px] leading-relaxed ${MUTED}`}>
+            No lock-in to a single vendor — your workflows, your stack, our compliance layer on top.
+          </p>
+        </div>
+      </section>
+
+      {/* Features — split: copy + console mock */}
+      <section className="landing-section-reveal border-b border-white/[0.06] px-5 py-20 sm:px-8 lg:px-12 xl:px-16 [animation-delay:160ms]">
+        <div className="mx-auto grid max-w-[1400px] gap-14 lg:grid-cols-2 lg:items-center lg:gap-20">
+          <div>
+            <div className="mb-6 flex items-center gap-3">
+              <span className="h-2 w-2 rounded-sm bg-[#E8C547]" aria-hidden />
+              <span className={`text-[11px] font-semibold uppercase tracking-[0.2em] ${MUTED}`}>Platform</span>
+            </div>
+            <h2 className="mb-4 text-[clamp(1.85rem,3.2vw,2.75rem)] font-normal leading-[1.15] text-white [font-family:var(--font-landing-serif),serif]">
+              Rigorously ship compliant communications
+            </h2>
+            <p className={`mb-10 text-[1.05rem] leading-relaxed ${MUTED}`}>
+              Audit-ready messaging — from first draft to published output — with expert-style review built in.
+            </p>
+            <ul className="space-y-6 border-l-2 border-[#E8C547]/50 pl-6">
+              {[
+                {
+                  t: "Eight analysis dimensions",
+                  d: "Communication, compliance, intent, AI-style, readability, structure, inclusion, and claims — run individually or all at once.",
+                },
+                {
+                  t: "Version clarity",
+                  d: "Transform with built-in modes or saved personas; every pass writes to your history for accountability.",
+                },
+                {
+                  t: "Voice that matches the page",
+                  d: "Transform and analysis keep spoken briefs aligned with what legal and IR approved in writing.",
+                },
+              ].map((row) => (
+                <li key={row.t}>
+                  <p className="text-[15px] font-semibold text-white">{row.t}</p>
+                  <p className={`mt-1 text-[14px] leading-relaxed ${MUTED}`}>{row.d}</p>
+                </li>
+              ))}
+            </ul>
+            <button
+              type="button"
+              onClick={openConsole}
+              className={`mt-10 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.14em] text-[#E8C547] transition hover:text-[#f0d060]`}
+            >
+              Open console
+              <NavArrow className="h-4 w-4" />
+            </button>
+          </div>
+
+          <div className="rounded-xl border border-[#2A2824] bg-[#0E0E0C] p-1 shadow-2xl ring-1 ring-white/[0.04]">
+            <div className="rounded-lg border border-white/[0.06] bg-[#121110] p-5 sm:p-7">
+              <p className={`mb-4 text-[10px] font-semibold uppercase tracking-[0.14em] ${MUTED}`}>Non-compliant → compliant</p>
+              <div className="space-y-3 rounded-lg border border-white/[0.08] bg-black/40 p-4 font-mono text-[11px] leading-relaxed text-[#C4BFB5]">
+                <div>
+                  <span className="text-[#f87171]">− </span>
+                  &quot;Guaranteed best-in-class outcomes for all patients…&quot;
+                </div>
+                <div>
+                  <span className="text-[#4ade80]">+ </span>
+                  &quot;Results varied by cohort; see prescribing information for limitations.&quot;
+                </div>
+              </div>
+              <p className={`mt-4 text-[12px] leading-relaxed ${MUTED}`}>
+                Illustrative diff — Workspace highlights risky claims and suggests supportable wording for FDA/MHRA-sensitive contexts.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Use cases — arches */}
+      <section className="landing-section-reveal relative overflow-hidden border-b border-white/[0.06] px-5 py-24 sm:px-8 lg:px-12 xl:px-16 [animation-delay:220ms]">
+        <svg
+          className="pointer-events-none absolute inset-x-0 top-0 h-64 w-full text-white/[0.04]"
+          preserveAspectRatio="none"
+          aria-hidden
+        >
+          <path
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1"
+            d="M0,120 Q400,20 800,120 T1600,120"
+          />
+          <path
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1"
+            d="M0,180 Q500,80 1000,180 T2000,180"
+          />
+        </svg>
+        <div className="relative mx-auto max-w-[1400px]">
+          <p className={`mb-3 text-center text-[11px] font-semibold uppercase tracking-[0.2em] ${MUTED}`}>Use cases</p>
+          <h2 className="mb-16 text-center text-[clamp(2rem,4vw,3rem)] font-normal leading-[1.12] text-white [font-family:var(--font-landing-serif),serif]">
+            How teams use StandexAI
+          </h2>
+          <div className="grid gap-8 md:grid-cols-3">
+            {[
+              {
+                tag: "Regulatory & IR",
+                title: "Disclosure-grade external comms",
+                body: "Earnings, RNS, and investor updates pass the same bar as your legal review — before they leave the building.",
+              },
+              {
+                tag: "Healthcare",
+                title: "Promotional language guardrails",
+                body: "Clinical and commercial teams align on FDA/MHRA-safe phrasing with claims analysis and inclusive language checks.",
+              },
+              {
+                tag: "Enterprise",
+                title: "Executive messaging at scale",
+                body: "C-suite briefing notes become structured drafts with approval routing and a searchable history of what was approved.",
+              },
+            ].map((u) => (
+              <div
+                key={u.title}
+                className="rounded-xl border border-white/[0.08] bg-[#0E0E0C] p-8 transition hover:border-[#E8C547]/25"
+              >
+                <p className={`mb-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#E8C547]/90`}>{u.tag}</p>
+                <h3 className="mb-3 text-[1.35rem] font-normal leading-snug text-white [font-family:var(--font-landing-serif),serif]">
+                  {u.title}
+                </h3>
+                <p className={`text-[15px] leading-relaxed ${MUTED}`}>{u.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Overview modules + governance — compact */}
+      <section className="landing-section-reveal px-5 py-20 sm:px-8 lg:px-12 xl:px-16 [animation-delay:280ms]">
+        <div className="mx-auto max-w-[1400px]">
+          <div className="mb-12 text-center">
+            <p className={`mb-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#E8C547]`}>What it does</p>
+            <h2 className="text-[clamp(1.75rem,3vw,2.5rem)] font-normal text-white [font-family:var(--font-landing-serif),serif]">
+              Everything your company says, perfected
+            </h2>
+          </div>
+          <div className="grid gap-px bg-white/[0.08] sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              {
+                Icon: AlignLeft,
+                area: "Generation",
+                strong: "Every format, every channel",
+                span: "Press releases, board updates, investor comms, client reports — tone-matched to policy.",
+              },
+              {
+                Icon: Wand2,
+                area: "Analysis",
+                strong: "Eight parallel passes",
+                span: "From readability to claims risk — structured scores and actionable fixes.",
+              },
+              {
+                Icon: MessageSquare,
+                area: "Workflow",
+                strong: "Brief → draft → approval",
+                span: "Structure and route drafts without losing the audit trail.",
+              },
+              {
+                Icon: Clock,
+                area: "Publishing",
+                strong: "Closed-loop analytics",
+                span: "Ship to every channel and feed performance back into the next draft.",
+              },
+            ].map(({ Icon, area, strong, span }) => (
+              <div key={strong} className="bg-[#0A0A0A] p-7">
+                <div className="mb-4 flex items-center gap-3">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/[0.1] bg-[#141412] text-[#E8C547]">
+                    <Icon className="h-5 w-5" strokeWidth={1.75} />
+                  </span>
+                  <span className={`text-[10px] font-bold uppercase tracking-[0.12em] ${MUTED}`}>{area}</span>
+                </div>
+                <h3 className="mb-2 text-[16px] font-semibold text-white">{strong}</h3>
+                <p className={`text-[14px] leading-relaxed ${MUTED}`}>{span}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-10 grid gap-6 lg:grid-cols-2">
+            <div className={`rounded-xl border ${LINE} bg-[#080807] p-8`}>
+              <p className={`mb-6 text-[11px] font-semibold uppercase tracking-[0.18em] ${MUTED}`}>Compliance & governance</p>
+              <ul className="space-y-5">
+                {[
+                  ["Regulatory checks", "Pre-publication checks against GDPR, FCA, SEC, and industry rules."],
+                  ["Approval workflows", "Custom rule sets per org, department, and region."],
+                  ["Audit trails", "Full history of drafts, edits, approvals, and publications — legal hold ready."],
+                ].map(([t, d]) => (
+                  <li key={t}>
+                    <p className="font-semibold text-white">{t}</p>
+                    <p className={`mt-1 text-[14px] leading-relaxed ${MUTED}`}>{d}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className={`rounded-xl border ${LINE} bg-[#080807] p-8`}>
+              <p className={`mb-6 text-[11px] font-semibold uppercase tracking-[0.18em] ${MUTED}`}>Who it&apos;s for</p>
+              <p className={`mb-6 text-[15px] leading-relaxed ${MUTED}`}>
+                Teams with regulatory exposure, global messaging risk, and high-stakes comms.
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {[
+                  "Financial services",
+                  "Listed companies",
+                  "Multinationals",
+                  "Professional services",
+                  "Public sector",
+                  "Healthcare & pharma",
+                ].map((label) => (
+                  <span
+                    key={label}
+                    className={`rounded-full border ${LINE} bg-white/[0.04] px-3.5 py-1.5 text-[13px] ${MUTED}`}
+                  >
+                    {label}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing */}
+      <section className="landing-section-reveal border-t border-white/[0.06] px-5 py-20 sm:px-8 lg:px-12 xl:px-16 [animation-delay:340ms]">
+        <div className="mx-auto max-w-[1400px]">
+          <p className={`mb-3 text-[11px] font-semibold uppercase tracking-[0.2em] ${MUTED}`}>Pricing</p>
+          <h2 className="mb-10 text-[clamp(1.75rem,3vw,2.35rem)] font-normal text-white [font-family:var(--font-landing-serif),serif]">
+            Seat-based enterprise SaaS
+          </h2>
+          <div className="landing-dark-grid grid-cols-1 md:grid-cols-3">
+            {[
+              { tier: "Starter", price: "~$2,000 / mo", seats: "Up to 10 users", desc: "Core generation + basic compliance" },
+              { tier: "Professional", price: "~$8,000 / mo", seats: "Up to 50 users", desc: "Full analysis suite + governance" },
+              { tier: "Enterprise", price: "Custom", seats: "Unlimited", desc: "Custom rules, workflows, dedicated support" },
+            ].map((plan) => (
+              <div key={plan.tier} className="p-8">
+                <p className={`text-[11px] font-semibold uppercase tracking-[0.15em] ${MUTED}`}>{plan.tier}</p>
+                <p className="mt-4 text-[22px] font-normal text-white [font-family:var(--font-landing-serif),serif]">{plan.price}</p>
+                <p className={`mt-2 text-[14px] ${MUTED}`}>{plan.seats}</p>
+                <p className={`mt-5 text-[15px] leading-relaxed ${MUTED}`}>{plan.desc}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-10 flex flex-wrap items-center justify-between gap-4">
+            <p className={`text-[14px] ${MUTED}`}>Annual contracts, procurement-friendly.</p>
+            <button
+              type="button"
+              onClick={openConsole}
+              className={`inline-flex items-center gap-2 rounded-sm px-7 py-3.5 text-[12px] font-bold uppercase tracking-[0.1em] transition ${GOLD}`}
+            >
+              Open console
+              <NavArrow className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <footer
+        className={`landing-section-reveal flex flex-col items-center justify-between gap-6 border-t ${LINE} bg-[#080807] px-6 py-10 sm:flex-row sm:items-start lg:px-12 [animation-delay:400ms]`}
+      >
+        <div className="flex flex-col items-center gap-4 sm:items-start">
+          <span className={`text-[12px] font-bold uppercase tracking-[0.15em] ${MUTED}`}>StandexAI</span>
+          <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-[13px] sm:justify-start" aria-label="Legal">
+            <Link href="/trust" className={`${MUTED} transition hover:text-white`}>
+              Trust Center
+            </Link>
+            <Link href="/privacy" className={`${MUTED} transition hover:text-white`}>
+              Privacy
+            </Link>
+            <Link href="/terms" className={`${MUTED} transition hover:text-white`}>
+              Terms
+            </Link>
+            <Link href="/dpa" className={`${MUTED} transition hover:text-white`}>
+              DPA
+            </Link>
+          </nav>
+        </div>
+        <span className={`text-[13px] ${MUTED}`}>&copy; {new Date().getFullYear()} StandexAI</span>
       </footer>
     </div>
   );

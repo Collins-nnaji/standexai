@@ -79,6 +79,8 @@ model CommunicationAnalysis {
   title         String
   source        String   // TEXT | VOICE | DICTATE
   kind          String   @default("full") // full | communication | run_all
+  /// Draft copy at save time — shown in Workspace when reopening from history (no re-analysis).
+  contentText   String?  @db.Text
   overallScore  Int?
   toneScore     Int?
   riskScore     Int?

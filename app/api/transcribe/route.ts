@@ -8,7 +8,8 @@ import {
 export const runtime = "nodejs";
 
 /**
- * POST multipart/form-data with field `file` (audio). Proxies to Azure OpenAI audio transcriptions.
+ * Speech-to-text only (Whisper / Azure transcriptions): POST multipart/form-data with field `file` (audio).
+ * Reserved for server-side or future integrations — not exposed as end-user upload in the product UI.
  */
 export async function POST(req: Request) {
   const url = getAzureAudioTranscriptionUrl();

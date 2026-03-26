@@ -45,7 +45,9 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
   };
 
   return (
-    <div className={`min-h-screen bg-[#FAFAFA] text-zinc-900 ${immersiveConsole ? "" : "flex"}`}>
+    <div
+      className={`min-h-screen text-zinc-900 ${immersiveConsole ? "bg-white" : "flex bg-[#FAFAFA]"}`}
+    >
       {!immersiveConsole && (
       <button
         onClick={() => setMobileOpen((v) => !v)}

@@ -3,7 +3,15 @@
  */
 import { createChatCompletionsRequest, isLlmConfigured, llmMissingConfigMessage } from "@/lib/llm-client";
 
-export type AnalyzeType = "text" | "risk" | "intent" | "detect";
+export type AnalyzeType =
+  | "text"
+  | "risk"
+  | "intent"
+  | "detect"
+  | "readability"
+  | "structure"
+  | "inclusion"
+  | "claims";
 
 export type RewriteMode = "professional" | "friendly" | "persuasive" | "safe" | "speaker" | "neutral";
 
@@ -82,6 +90,66 @@ Return valid JSON only.`,
   },
   "suggestions": ["how to make this more authentically human"],
   "summary": "overall detection assessment"
+}
+Return valid JSON only.`,
+
+  readability: `You are an expert editor focused on clarity and readability for business writing. Return JSON:
+{
+  "readingEaseScore": number (0-100, higher = easier to read),
+  "gradeLevelApprox": string (e.g. "9th grade", "college"),
+  "avgSentenceLength": number (words),
+  "longSentenceCount": number (sentences over 35 words),
+  "wordCount": number,
+  "issues": [
+    {
+      "text": "exact phrase or sentence from input",
+      "issue": "why it hurts readability",
+      "fix": "concise rewrite suggestion"
+    }
+  ],
+  "summary": "2-3 sentence assessment",
+  "recommendations": ["bullet improvements"]
+}
+Return valid JSON only.`,
+
+  structure: `You are an expert in business and corporate communications structure. Assess outline, flow, and missing elements. Return JSON:
+{
+  "documentTypeGuess": "memo" | "email" | "press_release" | "report" | "speech" | "other",
+  "hasClearAsk": boolean,
+  "missingSections": ["what is missing for this document type"],
+  "strengths": ["structural strengths"],
+  "suggestedOutline": ["ordered section headings that would improve the doc"],
+  "summary": "2-3 sentence structural assessment"
+}
+Return valid JSON only.`,
+
+  inclusion: `You are an expert in inclusive language, accessibility of wording, and respectful tone in workplace communications. Return JSON:
+{
+  "inclusionScore": number (0-100, higher = more inclusive and respectful),
+  "flags": [
+    {
+      "text": "exact phrase from input",
+      "issue": "why it may exclude or harm",
+      "suggestion": "more inclusive alternative"
+    }
+  ],
+  "summary": "overall inclusion assessment",
+  "goodPractices": ["inclusive phrasing already present"]
+}
+Return valid JSON only.`,
+
+  claims: `You are an expert in corporate disclosure and responsible marketing. Flag overstated, unverifiable, or risky factual claims. Return JSON:
+{
+  "overclaimRisk": "low" | "medium" | "high",
+  "flags": [
+    {
+      "text": "exact phrase or claim from input",
+      "concern": "why it may be problematic",
+      "suggestion": "safer, more supportable wording"
+    }
+  ],
+  "summary": "overall assessment of claims and certainty",
+  "recommendations": ["how to tighten language"]
 }
 Return valid JSON only.`,
 };

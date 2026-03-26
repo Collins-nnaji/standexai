@@ -10,10 +10,6 @@ export default async function WritingLabLegacyRedirect({
   const q = new URLSearchParams();
   q.set("tab", "lab");
   if (sp.workspace === "rewrite") q.set("workspace", "rewrite");
-  if (sp.voice === "1") {
-    q.set("tab", "voice");
-    q.set("voice", "1");
-  }
   const text = sp.text;
   if (typeof text === "string") q.set("text", text);
   const rm = sp.rewriteMode;

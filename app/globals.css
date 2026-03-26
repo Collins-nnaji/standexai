@@ -77,11 +77,19 @@ a {
   transition: color 0.2s;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  color: var(--ink-900);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 1.15;
+/* Must live in @layer base — unlayered rules override Tailwind utilities (e.g. text-white on dark landing). */
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--ink-900);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+  }
 }
 
 /* Landing #how: global heading ink must not override Tailwind (globals load after utilities) */
@@ -140,6 +148,19 @@ button, .button {
   animation: landing-fade-up 0.7s ease forwards;
 }
 
+/* Landing — staggered section entrance (home) */
+.landing-section-reveal {
+  opacity: 0;
+  animation: landing-fade-up 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-section-reveal {
+    animation: none;
+    opacity: 1;
+  }
+}
+
 /* Landing hero photo: enter + gentle float (nested wrappers avoid transform clash) */
 @keyframes landing-hero-photo-in {
   from {
@@ -168,9 +189,9 @@ button, .button {
   will-change: transform, opacity;
 }
 
+/* Do not set height: 100% here — it overrides Tailwind and collapses the hero
+   when the parent has no explicit height, breaking next/image fill. */
 .landing-hero-photo-float {
-  height: 100%;
-  width: 100%;
   animation: landing-hero-photo-float 8s ease-in-out infinite;
   animation-delay: 1.1s;
   will-change: transform;
@@ -183,6 +204,80 @@ button, .button {
     opacity: 1;
     transform: none;
   }
+}
+
+/* Landing — model provider marquee (infinite horizontal scroll) */
+@keyframes landing-provider-marquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.landing-provider-marquee {
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+}
+
+.landing-provider-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: landing-provider-marquee 55s linear infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-provider-marquee {
+    mask-image: none;
+  }
+  .landing-provider-marquee-track {
+    animation: none;
+    width: 100%;
+    max-width: 56rem;
+    margin-inline: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 0.75rem;
+    column-gap: 1.5rem;
+  }
+  .landing-provider-marquee-segment--duplicate {
+    display: none;
+  }
+  .landing-provider-marquee-segment--primary {
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 0.75rem;
+  }
+}
+
+/* Dark landing — grid lines via gap (PromptLayer-style) */
+.landing-dark-grid {
+  display: grid;
+  gap: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.landing-dark-grid > * {
+  background: #0a0a0a;
+}
+
+/* Decorative node at grid corners (case study cards) */
+.landing-grid-node {
+  position: relative;
+}
+.landing-grid-node::before {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.35);
+  top: -2.5px;
+  left: -2.5px;
+  z-index: 1;
 }
 
 /* Landing — brand gradient text */

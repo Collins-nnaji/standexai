@@ -10,9 +10,5 @@ export default async function LegacyTextAnalyzerRedirect({
   const q = new URLSearchParams();
   q.set("tab", "lab");
   if (typeof sp.text === "string") q.set("text", sp.text);
-  if (sp.voice === "1") {
-    q.set("tab", "voice");
-    q.set("voice", "1");
-  }
   redirect(`/console?${q.toString()}`);
 }

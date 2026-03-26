@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 
 if (!process.env.DATABASE_URL && process.env.NEON_DATABASE_URL) {
   process.env.DATABASE_URL = process.env.NEON_DATABASE_URL;
@@ -58,16 +58,55 @@ export async function ensurePrismaConnected() {
   await connectInFlight;
 }
 
-function isClosedConnectionError(error: unknown) {
-  const message =
-    (error instanceof Error ? error.message : null) ?? String(error ?? "");
-  const str = message.toLowerCase();
+/**
+ * Match transient DB disconnects (Neon idle close, pooler, serverless, etc.).
+ * Some drivers emit `Error { kind: Closed, cause: None }` with an empty `.message`,
+ * so we inspect `kind`, `code`, and `cause` — not only `message`.
+ */
+function isClosedConnectionError(error: unknown): boolean {
+  if (error == null) return false;
+
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    // P1017: Server has closed the connection
+    if (error.code === "P1017") return true;
+  }
+
+  if (typeof error === "object" && error !== null) {
+    const k = (error as { kind?: unknown }).kind;
+    if (k === "Closed" || k === "closed") return true;
+  }
+
+  const parts: string[] = [];
+
+  const walk = (e: unknown, depth: number) => {
+    if (e == null || depth > 5) return;
+    if (typeof e === "string") {
+      parts.push(e);
+      return;
+    }
+    if (e instanceof Error) {
+      parts.push(e.name, e.message);
+    }
+    parts.push(String(e));
+    if (typeof e === "object") {
+      const o = e as Record<string, unknown>;
+      if (typeof o.kind === "string") parts.push(o.kind);
+      if (typeof o.code === "string") parts.push(o.code);
+      if (o.cause) walk(o.cause, depth + 1);
+    }
+  };
+
+  walk(error, 0);
+
+  const str = parts.join(" ").toLowerCase();
   return (
+    str.includes("closed") ||
     str.includes("postgresql connection") ||
-    str.includes("kind: closed") ||
     str.includes("connection closed") ||
     str.includes("econnreset") ||
-    str.includes("connection refused")
+    str.includes("connection refused") ||
+    str.includes("broken pipe") ||
+    str.includes("server closed the connection")
   );
 }
 

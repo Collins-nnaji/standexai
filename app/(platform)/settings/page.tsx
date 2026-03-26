@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import {
-  User, Shield, Bell, Sliders, Mic, Save, Loader2
+  User, Shield, Bell, Sliders, Save, Loader2
 } from "lucide-react";
 
 type ProfileData = {
@@ -31,7 +31,6 @@ export default function SettingsPage() {
   // StandexAI preferences
   const [sensitivity, setSensitivity] = useState("balanced");
   const [preferredTone, setPreferredTone] = useState("professional");
-  const [speakerMode, setSpeakerMode] = useState(true);
   const [detections, setDetections] = useState({
     tone: true,
     risk: true,
@@ -44,7 +43,6 @@ export default function SettingsPage() {
   const tabs = [
     { id: "profile", label: "Profile", icon: User },
     { id: "analysis", label: "Analysis Preferences", icon: Sliders },
-    { id: "speaker", label: "Speaker Mode", icon: Mic },
     { id: "notifications", label: "Notifications", icon: Bell },
   ];
 
@@ -271,51 +269,6 @@ export default function SettingsPage() {
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
-
-            {activeTab === "speaker" && (
-              <div className="space-y-6">
-                <h2 className="text-lg font-bold text-zinc-900">Speaker Mode</h2>
-
-                <div className="rounded-2xl border border-zinc-300 bg-gradient-to-br from-zinc-50 to-zinc-100 p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      <Mic className="h-5 w-5 text-zinc-800" />
-                      <div>
-                        <p className="text-sm font-bold text-zinc-900">Speaker Mode</p>
-                        <p className="text-xs text-zinc-500">Optimize analysis for speech and presentation</p>
-                      </div>
-                    </div>
-                    <ToggleSwitch checked={speakerMode} onChange={setSpeakerMode} />
-                  </div>
-                  <p className="text-xs text-zinc-600 leading-relaxed">
-                    When enabled, the analyzer focuses on verbal delivery qualities: clarity, engagement, emotional impact, pacing, and filler word detection. Perfect for speeches, presentations, podcasts, and interviews.
-                  </p>
-                </div>
-
-                {speakerMode && (
-                  <div className="rounded-2xl border border-zinc-100 bg-white p-6 space-y-5">
-                    <h3 className="text-sm font-semibold text-zinc-700">Speaker Preferences</h3>
-                    <div className="space-y-4">
-                      {[
-                        { label: "Pacing Suggestions", desc: "Get feedback on speech speed and rhythm", defaultOn: true },
-                        { label: "Emphasis Coaching", desc: "Highlight words that should be stressed", defaultOn: true },
-                        { label: "Audience Adaptation", desc: "Suggest audience-friendly rewrites", defaultOn: true },
-                        { label: "Engagement Scoring", desc: "Rate how engaging the speech content is", defaultOn: true },
-                        { label: "Body Language Cues", desc: "Suggest gesture and movement timing", defaultOn: false },
-                      ].map((p) => (
-                        <div key={p.label} className="flex items-center justify-between rounded-xl bg-zinc-50 border border-zinc-100 px-4 py-3">
-                          <div>
-                            <p className="text-xs font-semibold text-zinc-700">{p.label}</p>
-                            <p className="text-[10px] text-zinc-400">{p.desc}</p>
-                          </div>
-                          <ToggleSwitch checked={p.defaultOn} onChange={() => {}} />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
             )}
 
