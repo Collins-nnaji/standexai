@@ -8,7 +8,7 @@ export default function ConsolePage() {
     <Suspense
       fallback={
         <div className="flex flex-1 items-center justify-center bg-white p-8 text-sm text-zinc-500">
-          Loading workspace…
+          Loading console…
         </div>
       }
     >

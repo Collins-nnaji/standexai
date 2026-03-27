@@ -175,10 +175,10 @@ export function GenerationCore({ themeMode }: Props) {
                 t.muted,
                 t.navHover,
               )}
-              title="Back to Workspace"
+              title="Back to Console"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
-              Workspace
+              Console
             </button>
             <button
               type="button"
@@ -291,7 +291,7 @@ export function GenerationCore({ themeMode }: Props) {
                 <div className="space-y-1">
                   <p className={cn("text-[15px] font-semibold", t.text)}>Draft preview</p>
                   <p className="mx-auto max-w-sm text-[13px] leading-relaxed opacity-90">
-                    Output lands here — copy, send to Workspace, or iterate on the brief.
+                    Output lands here — copy, send to Console, or iterate on the brief.
                   </p>
                 </div>
               </div>
@@ -315,10 +315,10 @@ export function GenerationCore({ themeMode }: Props) {
                         t.text,
                         t.navHover,
                       )}
-                      title="Send draft to Workspace editor"
+                      title="Send draft to Console editor"
                     >
                       <Wand2 className="h-3.5 w-3.5" />
-                      Send to Workspace
+                      Send to Console
                     </button>
                     <button
                       type="button"

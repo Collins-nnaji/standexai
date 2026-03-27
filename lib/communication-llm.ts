@@ -1,5 +1,5 @@
 /**
- * Shared analyze + rewrite LLM calls for API routes and the workspace.
+ * Shared analyze + rewrite LLM calls for API routes and the console.
  */
 import { createChatCompletionsRequest, isLlmConfigured, llmMissingConfigMessage } from "@/lib/llm-client";
 
@@ -13,7 +13,16 @@ export type AnalyzeType =
   | "inclusion"
   | "claims";
 
-export type RewriteMode = "professional" | "friendly" | "persuasive" | "safe" | "speaker" | "neutral";
+export type RewriteMode =
+  | "professional"
+  | "friendly"
+  | "persuasive"
+  | "safe"
+  | "speaker"
+  | "neutral"
+  | "concise"
+  | "executive"
+  | "empathetic";
 
 export const ANALYZE_PROMPTS: Record<AnalyzeType, string> = {
   text: `You are an expert communication analyst. Analyze the given text and return a JSON object with:
@@ -166,6 +175,12 @@ const REWRITE_MODE_INSTRUCTIONS: Record<RewriteMode, string> = {
     "Rewrite as a powerful speech/presentation script. Optimize for verbal delivery with strong openings, clear transitions, emphasis points, and a memorable closing. Add pacing cues.",
   neutral:
     "Rewrite in a balanced, objective, neutral tone. Remove any bias, emotional language, or persuasion tactics.",
+  concise:
+    "Rewrite to be tighter and shorter without losing meaning. Prefer strong verbs, remove filler, shorten sentences, and cut redundancy while staying professional.",
+  executive:
+    "Rewrite for executive and board audiences: crisp, strategic, confident. Lead with outcomes and implications; use minimal jargon; favor bullets and scannable structure where it helps.",
+  empathetic:
+    "Rewrite with genuine empathy and care while staying professional. Acknowledge the reader's perspective, use inclusive language, and keep a calm, human tone suitable for sensitive or customer-facing comms.",
 };
 
 export async function runAnalyzeLlm(text: string, type: AnalyzeType): Promise<unknown> {

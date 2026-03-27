@@ -264,6 +264,22 @@ button, .button {
   background: #0a0a0a;
 }
 
+/* Light landing — same grid treatment on white */
+.landing-light-grid {
+  display: grid;
+  gap: 1px;
+  background: rgb(228 228 231);
+  border: 1px solid rgb(228 228 231);
+}
+
+.landing-light-grid > * {
+  background: #ffffff;
+}
+
+.landing-light-grid .landing-grid-node::before {
+  background: rgba(0, 0, 0, 0.14);
+}
+
 /* Decorative node at grid corners (case study cards) */
 .landing-grid-node {
   position: relative;

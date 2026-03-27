@@ -17,7 +17,17 @@ type RewritePayload = {
   personaId?: string;
 };
 
-const MODES: RewriteMode[] = ["professional", "friendly", "persuasive", "safe", "speaker", "neutral"];
+const MODES: RewriteMode[] = [
+  "professional",
+  "friendly",
+  "persuasive",
+  "safe",
+  "speaker",
+  "neutral",
+  "concise",
+  "executive",
+  "empathetic",
+];
 
 export async function POST(req: Request) {
   try {

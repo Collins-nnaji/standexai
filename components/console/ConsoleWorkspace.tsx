@@ -14,12 +14,10 @@ import {
   Plus,
   Search,
   Settings,
-  Sparkles,
   Sun,
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { GenerationCore } from "@/components/workspace/GenerationCore";
 import { WritingLabCore } from "@/components/workspace/WritingLabCore";
 import {
   CONSOLE_THEMES,
@@ -81,7 +79,7 @@ function historyBucket(iso: string): "today" | "yesterday" | "earlier" {
 }
 
 /**
- * Single platform shell: Workspace (writing analysis) + Generation + theme.
+ * Single platform shell: Console (writing analysis) + Generation + theme.
  * Legacy `/writing-lab` redirects here.
  */
 export function ConsoleWorkspace() {
@@ -95,9 +93,6 @@ export function ConsoleWorkspace() {
   const [historyDetailLoading, setHistoryDetailLoading] = useState(false);
   const [historyLoadError, setHistoryLoadError] = useState<string | null>(null);
   const [historySidebarOpen, setHistorySidebarOpen] = useState(true);
-
-  const rawTab = searchParams.get("tab");
-  const tab: "lab" | "gen" = rawTab === "gen" ? "gen" : "lab";
 
   const t = CONSOLE_THEMES[themeMode];
 
@@ -122,12 +117,37 @@ export function ConsoleWorkspace() {
     localStorage.setItem(THEME_STORAGE_KEY, m);
   };
 
+  const applyRecentRows = useCallback(
+    (
+      recent: Array<{
+        id: string;
+        title: string;
+        source: string;
+        riskLevel: string | null;
+        overallScore: number | null;
+        createdAt: string;
+      }>,
+    ) => {
+      setDrafts(
+        recent.map((r) => ({
+          id: r.id,
+          title: (r.title && r.title.trim()) || "Untitled run",
+          source: r.source,
+          riskLevel: r.riskLevel,
+          overallScore: r.overallScore,
+          createdAt: r.createdAt ?? new Date().toISOString(),
+        })),
+      );
+    },
+    [],
+  );
+
   const loadDrafts = useCallback(async () => {
     setHistoryLoadError(null);
     try {
       const res = await fetch("/api/communication-analysis", {
         cache: "no-store",
-        credentials: "same-origin",
+        credentials: "include",
       });
       const data = (await res.json()) as {
         recent?: Array<{
@@ -140,30 +160,51 @@ export function ConsoleWorkspace() {
         }>;
         error?: string;
       };
-      if (!res.ok) {
-        setDrafts([]);
-        setHistoryLoadError(data.error || `Could not load history (${res.status})`);
+      if (res.ok) {
+        applyRecentRows(data.recent ?? []);
         return;
       }
-      const recent = data.recent ?? [];
-      setDrafts(
-        recent.map((r) => ({
-          id: r.id,
-          title: r.title,
-          source: r.source,
-          riskLevel: r.riskLevel,
-          overallScore: r.overallScore,
-          createdAt: r.createdAt ?? new Date().toISOString(),
-        })),
-      );
+      if (res.status === 401) {
+        setDrafts([]);
+        setHistoryLoadError(data.error || "Sign in to see history");
+        return;
+      }
+      const fallback = await fetch("/api/console", { cache: "no-store", credentials: "include" });
+      const fb = (await fallback.json()) as {
+        communication?: {
+          recent?: Array<{
+            id: string;
+            title: string;
+            source: string;
+            riskLevel: string | null;
+            overallScore: number | null;
+            createdAt: string;
+          }>;
+        };
+        error?: string;
+      };
+      if (fallback.ok) {
+        applyRecentRows(fb.communication?.recent ?? []);
+        return;
+      }
+      setDrafts([]);
+      setHistoryLoadError(data.error || fb.error || `Could not load history (${res.status})`);
     } catch {
       setDrafts([]);
       setHistoryLoadError("Network error loading history");
     }
-  }, []);
+  }, [applyRecentRows]);
 
   useEffect(() => {
     void loadDrafts();
+  }, [loadDrafts]);
+
+  useEffect(() => {
+    const onVis = () => {
+      if (document.visibilityState === "visible") void loadDrafts();
+    };
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
   }, [loadDrafts]);
 
   useEffect(() => {
@@ -180,7 +221,10 @@ export function ConsoleWorkspace() {
     let cancelled = false;
     setHistoryDetailLoading(true);
     setHistoryDetail(null);
-    void fetch(`/api/communication-analysis/${encodeURIComponent(selectedHistoryId)}`, { cache: "no-store" })
+    void fetch(`/api/communication-analysis/${encodeURIComponent(selectedHistoryId)}`, {
+      cache: "no-store",
+      credentials: "include",
+    })
       .then(async (res) => {
         const data = (await res.json()) as { analysis?: AnalysisDetail; error?: string };
         if (!res.ok) throw new Error(data.error || "Failed");
@@ -197,11 +241,20 @@ export function ConsoleWorkspace() {
     };
   }, [selectedHistoryId]);
 
-  /** Voice coach removed — normalize legacy `?tab=voice` / `?voice=1` to Workspace. */
+  /** Voice coach removed — normalize legacy `?tab=voice` / `?voice=1` to Console. */
   useEffect(() => {
     if (searchParams.get("tab") === "voice" || searchParams.get("voice") === "1") {
       const q = new URLSearchParams(searchParams.toString());
       q.delete("voice");
+      q.set("tab", "lab");
+      router.replace(`/console?${q.toString()}`, { scroll: false });
+    }
+  }, [searchParams, router]);
+
+  /** Generation tab removed — AI generate lives in Console; keep deep links working. */
+  useEffect(() => {
+    if (searchParams.get("tab") === "gen") {
+      const q = new URLSearchParams(searchParams.toString());
       q.set("tab", "lab");
       router.replace(`/console?${q.toString()}`, { scroll: false });
     }
@@ -249,7 +302,7 @@ export function ConsoleWorkspace() {
     if (items.length === 0) return null;
     return (
       <div className="mb-4">
-        <p className={cn("mb-2 px-1 text-[11px] font-semibold uppercase tracking-wide", t.muted2)}>{label}</p>
+        <p className={cn("mb-2 px-1 text-[12px] font-semibold uppercase tracking-wide", t.muted2)}>{label}</p>
         <ul className="space-y-0.5">
           {items.map((d) => {
             const active = selectedHistoryId === d.id;
@@ -262,7 +315,6 @@ export function ConsoleWorkspace() {
                       setSelectedHistoryId(null);
                     } else {
                       setSelectedHistoryId(d.id);
-                      setTab("lab");
                     }
                   }}
                   className={cn(
@@ -279,8 +331,8 @@ export function ConsoleWorkspace() {
                     strokeWidth={1.75}
                   />
                   <div className="min-w-0 flex-1">
-                    <p className={cn("line-clamp-2 text-[13px] leading-snug", active ? t.text : t.muted)}>{d.title}</p>
-                    <p className={cn("mt-0.5 text-[11px]", t.muted2)}>
+                    <p className={cn("line-clamp-2 text-[14px] leading-snug", active ? t.text : t.muted)}>{d.title}</p>
+                    <p className={cn("mt-0.5 text-[12px]", t.muted2)}>
                       <span className={t.mono}>{formatAnalysisTime(d.createdAt)}</span>
                       {d.overallScore != null && (
                         <>
@@ -318,9 +370,7 @@ export function ConsoleWorkspace() {
       <header
         className={cn(
           "relative z-10 flex h-12 shrink-0 items-center gap-3 px-4 backdrop-blur-md lg:gap-4 lg:px-6",
-          themeMode === "dark"
-            ? "bg-[#121211]/95 shadow-[inset_0_-1px_0_0_rgba(255,255,255,0.06)]"
-            : "bg-white/95 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.05)]",
+          t.workspaceSurface,
         )}
       >
         <Link href="/" className="mr-1 flex shrink-0 items-center transition-opacity hover:opacity-90">
@@ -334,50 +384,16 @@ export function ConsoleWorkspace() {
           />
         </Link>
 
-        <div
-          className={cn(
-            "flex h-9 items-center rounded-lg p-0.5 ring-1",
-            themeMode === "dark"
-              ? "bg-[#090908]/70 ring-white/[0.12]"
-              : "bg-zinc-100 ring-zinc-200/80",
-          )}
-        >
-          <nav className="flex h-full items-stretch gap-0.5">
-            <button
-              type="button"
-              onClick={() => setTab("lab")}
-              className={cn(
-                "flex items-center gap-1.5 rounded-md px-3 text-[12px] font-semibold tracking-tight transition-all",
-                tab === "lab"
-                  ? cn(
-                      themeMode === "dark"
-                        ? "bg-[#1A1A17] text-[#EDEBE4] shadow-sm shadow-black/40"
-                        : "bg-white text-[#111110] shadow-sm",
-                    )
-                  : cn(t.tabIdle, "px-3"),
-              )}
-            >
-              <FileText className="h-3.5 w-3.5 opacity-80" strokeWidth={1.8} />
-              Workspace
-            </button>
-            <button
-              type="button"
-              onClick={() => setTab("gen")}
-              className={cn(
-                "flex items-center gap-1.5 rounded-md px-3 text-[12px] font-semibold tracking-tight transition-all",
-                tab === "gen"
-                  ? cn(
-                      themeMode === "dark"
-                        ? "bg-[#1A1A17] text-[#EDEBE4] shadow-sm shadow-black/40"
-                        : "bg-white text-[#111110] shadow-sm",
-                    )
-                  : cn(t.tabIdle, "px-3"),
-              )}
-            >
-              <Sparkles className="h-3.5 w-3.5 opacity-80" strokeWidth={1.8} />
-              Generation
-            </button>
-          </nav>
+        <div className="flex min-w-0 items-center gap-2">
+          <span
+            className={cn(
+              "flex h-9 items-center gap-1.5 rounded-lg px-3 text-[12px] font-semibold tracking-tight ring-1 ring-black/[0.06] dark:ring-white/[0.1]",
+              themeMode === "dark" ? "bg-[#1A1A17] text-[#EDEBE4] shadow-sm shadow-black/40" : "bg-white text-[#111110] shadow-sm",
+            )}
+          >
+            <FileText className="h-3.5 w-3.5 opacity-80" strokeWidth={1.8} />
+            Console
+          </span>
         </div>
 
         <div className="ml-auto flex items-center gap-2">
@@ -414,15 +430,13 @@ export function ConsoleWorkspace() {
           <aside
             className={cn(
               "flex min-h-[40vh] min-w-0 flex-col lg:min-h-0 lg:w-[min(100%,280px)] lg:max-w-[280px] lg:shrink-0",
-              themeMode === "dark" ? "bg-[#0D0D0C]" : "bg-zinc-50",
+              t.railSurface,
+              themeMode === "dark"
+                ? "shadow-[6px_0_28px_-12px_rgba(0,0,0,0.65)]"
+                : "shadow-[6px_0_28px_-14px_rgba(0,0,0,0.1)]",
             )}
           >
-            <div
-              className={cn(
-                "shrink-0 px-3 py-2.5",
-                themeMode === "dark" ? "bg-[#10100F]" : "bg-zinc-100/80",
-              )}
-            >
+            <div className="shrink-0 px-3 py-2.5">
               <div className="mb-2 flex items-center justify-between gap-2">
                 <h2 className={cn("text-[13px] font-semibold tracking-tight", t.text)}>History</h2>
                 <div className="flex items-center gap-1">
@@ -477,7 +491,7 @@ export function ConsoleWorkspace() {
 
             <div className={cn("min-h-0 flex-1 overflow-y-auto px-2 py-2", t.scrollbar)}>
               {historyLoadError ? (
-                <div className={cn("rounded-lg px-3 py-4 text-center", themeMode === "dark" ? "bg-[#141412]" : "bg-zinc-100/60")}>
+                <div className={cn("rounded-lg border border-dashed px-3 py-4 text-center", t.borderSub)}>
                   <p className={cn("text-[12px] leading-relaxed", t.danger)}>{historyLoadError}</p>
                   <button
                     type="button"
@@ -488,15 +502,10 @@ export function ConsoleWorkspace() {
                   </button>
                 </div>
               ) : filteredDrafts.length === 0 ? (
-                <div
-                  className={cn(
-                    "rounded-lg px-3 py-8 text-center",
-                    themeMode === "dark" ? "bg-[#141412]/80" : "bg-zinc-100/50",
-                  )}
-                >
+                <div className={cn("rounded-lg border border-dashed px-3 py-8 text-center", t.borderSub)}>
                   <p className={cn("text-[12px] leading-relaxed", t.muted)}>
                     {drafts.length === 0
-                      ? "No runs yet. Run Communication or all analyses in Workspace."
+                      ? "No runs yet. Run Communication or all analyses in Console."
                       : "No matches. Try another search."}
                   </p>
                 </div>
@@ -559,14 +568,7 @@ export function ConsoleWorkspace() {
           )}
         </aside>
         ) : (
-          <div
-            className={cn(
-              "flex w-full shrink-0 flex-col items-center py-2 lg:w-11 lg:py-3",
-              themeMode === "dark"
-                ? "bg-[#0D0D0C] shadow-[inset_-1px_0_0_0_rgba(255,255,255,0.06)]"
-                : "bg-zinc-50 shadow-[inset_-1px_0_0_0_rgba(0,0,0,0.06)]",
-            )}
-          >
+          <div className={cn("flex w-full shrink-0 flex-col items-center py-2 lg:w-11 lg:py-3", t.railSurface)}>
             <button
               type="button"
               onClick={() => setHistoryOpen(true)}
@@ -586,22 +588,13 @@ export function ConsoleWorkspace() {
           </div>
         )}
 
-        <div
-          className={cn(
-            "relative min-h-0 min-w-0 flex-1",
-            themeMode === "dark" ? "bg-[#090908]" : "bg-white",
-          )}
-        >
+        <div className={cn("relative min-h-0 min-w-0 flex-1", t.workspaceSurface)}>
           <div className="flex h-full min-h-0 flex-col">
-            {tab === "gen" ? (
-              <GenerationCore themeMode={themeMode} />
-            ) : (
-              <WritingLabCore
-                themeMode={themeMode}
-                historySnapshot={historySnapshot}
-                historySelectionId={selectedHistoryId}
-              />
-            )}
+            <WritingLabCore
+              themeMode={themeMode}
+              historySnapshot={historySnapshot}
+              historySelectionId={selectedHistoryId}
+            />
           </div>
         </div>
       </div>

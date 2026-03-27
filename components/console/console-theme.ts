@@ -1,6 +1,10 @@
 export type ConsoleThemeMode = "dark" | "light";
 
 export type ConsoleTheme = {
+  /** Main canvas: header, composer, transform — one blended surface per theme */
+  workspaceSurface: string;
+  /** History + Intelligence rails — second surface (subtle lift from canvas) */
+  railSurface: string;
   shell: string;
   topbar: string;
   border: string;
@@ -34,8 +38,10 @@ export type ConsoleTheme = {
  */
 export const CONSOLE_THEMES: Record<ConsoleThemeMode, ConsoleTheme> = {
   dark: {
+    workspaceSurface: "bg-[#090908]",
+    railSurface: "bg-[#0c0c0b]",
     shell: "bg-[#090908] text-[#F6F4EF]",
-    topbar: "bg-[#111110] border-white/[0.14]",
+    topbar: "bg-[#090908]",
     border: "border-white/[0.14]",
     borderSub: "border-white/[0.18]",
     muted: "text-[#B9B7B0]",
@@ -62,9 +68,11 @@ export const CONSOLE_THEMES: Record<ConsoleThemeMode, ConsoleTheme> = {
     mono: "[font-family:var(--font-console-mono),ui-monospace,monospace]",
   },
   light: {
+    workspaceSurface: "bg-white",
+    railSurface: "bg-zinc-50",
     /** Aligned with Settings: white shell, zinc borders */
     shell: "bg-white text-zinc-900",
-    topbar: "bg-white border-zinc-200",
+    topbar: "bg-white",
     border: "border-zinc-200",
     borderSub: "border-zinc-200",
     muted: "text-zinc-600",

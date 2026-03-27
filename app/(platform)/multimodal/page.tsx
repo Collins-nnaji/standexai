@@ -165,12 +165,12 @@ export default function MultimodalPage() {
                     </div>
                 </aside>
 
-                {/* Studio Workspace Area */}
+                {/* Studio Console Area */}
                 <main className="flex-1 bg-white p-12 overflow-auto custom-scrollbar-h relative">
 
                     <div className="absolute top-12 left-12 flex items-center gap-3 opacity-20">
                         <Box className="h-5 w-5 text-zinc-500" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.4em] text-zinc-500">Workspace</span>
+                        <span className="text-[10px] font-black uppercase tracking-[0.4em] text-zinc-500">Console</span>
                     </div>
 
                     <div className="flex items-center gap-16 min-w-max pt-16">

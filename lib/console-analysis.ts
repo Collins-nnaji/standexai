@@ -1,5 +1,5 @@
 /**
- * Shared helpers for the Console workspace — full analysis bundle + persistence.
+ * Shared helpers for the Console — full analysis bundle + persistence.
  */
 
 export function firstLineTitle(raw: string): string {
