@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  Terminal, Settings, LogOut, PanelLeftClose, PanelLeftOpen,
-  Sparkles,
-} from "lucide-react";
+import { Settings, LogOut, PanelLeftClose, PanelLeftOpen, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
@@ -16,7 +13,7 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
   const [mobileOpen, setMobileOpen] = useState(false);
   const session = neonAuthClient.useSession();
   const user = session.data?.user;
-  const immersiveConsole = pathname === "/console";
+  const immersiveWorkspace = pathname === "/console" || pathname === "/skills";
 
   const signOut = async () => {
     await neonAuthClient.signOut();
@@ -46,9 +43,9 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
 
   return (
     <div
-      className={`min-h-screen text-zinc-900 ${immersiveConsole ? "bg-white" : "flex bg-[#FAFAFA]"}`}
+      className={`min-h-screen text-zinc-900 ${immersiveWorkspace ? "bg-white" : "flex bg-[#FAFAFA]"}`}
     >
-      {!immersiveConsole && (
+      {!immersiveWorkspace && (
       <button
         onClick={() => setMobileOpen((v) => !v)}
         className="fixed left-4 top-[max(1rem,env(safe-area-inset-top,0px))] z-40 rounded-xl border border-zinc-200 bg-white p-2 text-zinc-600 shadow-sm md:hidden"
@@ -58,7 +55,7 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
       </button>
       )}
 
-      {!immersiveConsole && mobileOpen && (
+      {!immersiveWorkspace && mobileOpen && (
         <button
           className="fixed inset-0 z-20 bg-black/5 backdrop-blur-[2px] md:hidden"
           onClick={() => setMobileOpen(false)}
@@ -66,7 +63,7 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
         />
       )}
 
-      {!immersiveConsole && (
+      {!immersiveWorkspace && (
       <aside
         className={`fixed inset-y-0 left-0 z-30 flex flex-col border-r border-zinc-200 bg-white transition-all duration-300 md:static ${
           mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
@@ -96,7 +93,7 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
           {!collapsed && (
             <div className="mt-3 flex items-center gap-2">
               <Sparkles className="h-3 w-3 text-indigo-500" />
-              <p className="text-[10px] font-semibold tracking-wide text-zinc-500">AI Communication Coach</p>
+              <p className="text-[10px] font-semibold tracking-wide text-zinc-500">Daily practice &amp; pro console</p>
             </div>
           )}
           {collapsed && (
@@ -110,20 +107,34 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
         </div>
 
         <nav className="flex-1 space-y-1 overflow-y-auto p-3">
-          <Link
-            href="/console"
-            className={`mb-2 flex items-center rounded-xl px-4 py-2.5 text-[11px] font-bold tracking-wide transition-all ${
-              pathname === "/console"
-                ? "bg-indigo-50 text-indigo-950"
-                : "text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900"
-            } ${collapsed ? "justify-center px-0" : "gap-3"}`}
-          >
-            <Terminal className={`h-4 w-4 shrink-0 ${pathname === "/console" ? "text-indigo-600" : "text-zinc-400"}`} />
-            {!collapsed && "Console"}
-          </Link>
+          {!collapsed && (
+            <div className="mb-2 space-y-2 px-4 pt-1">
+              <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-zinc-400">Workspaces</span>
+              <p className="text-[11px] leading-snug text-zinc-500">
+                Switch between <span className="font-semibold text-zinc-700">Daily practice</span> and{" "}
+                <span className="font-semibold text-zinc-700">Pro console</span> from the top bar. Jump back:
+              </p>
+              <div className="flex flex-col gap-1">
+                <Link
+                  href="/skills"
+                  onClick={() => setMobileOpen(false)}
+                  className="rounded-lg px-2 py-1.5 text-[11px] font-semibold text-indigo-700 hover:bg-indigo-50"
+                >
+                  Daily practice
+                </Link>
+                <Link
+                  href="/console"
+                  onClick={() => setMobileOpen(false)}
+                  className="rounded-lg px-2 py-1.5 text-[11px] font-semibold text-indigo-700 hover:bg-indigo-50"
+                >
+                  Pro console
+                </Link>
+              </div>
+            </div>
+          )}
 
           {!collapsed && (
-            <div className="px-4 pb-1 pt-5">
+            <div className="px-4 pb-1 pt-3">
               <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-zinc-400">Account</span>
             </div>
           )}
@@ -158,7 +169,7 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
 
       <main
         className={
-          immersiveConsole
+          immersiveWorkspace
             ? "flex min-h-screen min-w-0 flex-1 flex-col bg-transparent pb-[env(safe-area-inset-bottom,0px)]"
             : "flex min-w-0 flex-1 flex-col bg-[#FAFAFA] max-md:pl-14 max-md:pt-[max(0.5rem,env(safe-area-inset-top,0px))] pb-[env(safe-area-inset-bottom,0px)]"
         }

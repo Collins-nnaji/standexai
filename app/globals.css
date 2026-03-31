@@ -341,6 +341,17 @@ section#how:not(.landing-how-revealed) .landing-how-step {
 
 .landing-how-revealed .landing-how-step {
   animation: landing-how-step-in 0.85s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: var(--how-step-delay, 0ms);
+}
+
+/* Connectors between steps (home flow) */
+section#how:not(.landing-how-revealed) .landing-how-flow-connector {
+  opacity: 0;
+}
+
+.landing-how-revealed .landing-how-flow-connector {
+  animation: landing-fade-up 0.5s ease forwards;
+  animation-delay: var(--connector-delay, 0ms);
 }
 
 .landing-how-line {
@@ -374,6 +385,15 @@ section#how:not(.landing-how-revealed) .landing-how-step {
   .landing-how-icon {
     animation: none;
     filter: drop-shadow(0 0 10px color-mix(in srgb, var(--brand-teal) 35%, transparent));
+  }
+
+  section#how:not(.landing-how-revealed) .landing-how-flow-connector {
+    opacity: 1;
+  }
+
+  .landing-how-revealed .landing-how-flow-connector {
+    animation: none;
+    opacity: 1;
   }
 }
 

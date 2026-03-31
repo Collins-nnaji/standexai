@@ -1,13 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   ChevronLeft,
   ChevronRight,
-  FileText,
   Loader2,
   MessageSquare,
   Moon,
@@ -25,6 +23,7 @@ import {
   type ConsoleThemeMode,
 } from "@/components/console/console-theme";
 import { COMMUNICATION_SAVED_EVENT } from "@/lib/console-events";
+import { WorkspaceModeNav } from "@/components/platform/WorkspaceModeNav";
 
 const HISTORY_SIDEBAR_KEY = "standex-console-history-sidebar";
 
@@ -373,30 +372,9 @@ export function ConsoleWorkspace() {
           t.workspaceSurface,
         )}
       >
-        <Link href="/" className="mr-1 flex shrink-0 items-center transition-opacity hover:opacity-90">
-          <Image
-            src="/standexailogo.png"
-            alt="StandexAI"
-            width={120}
-            height={32}
-            className={cn("h-7 w-auto object-contain", t.logoInvert)}
-            priority
-          />
-        </Link>
+        <WorkspaceModeNav active="console" consoleTheme={t} consoleThemeMode={themeMode} />
 
-        <div className="flex min-w-0 items-center gap-2">
-          <span
-            className={cn(
-              "flex h-9 items-center gap-1.5 rounded-lg px-3 text-[12px] font-semibold tracking-tight ring-1 ring-black/[0.06] dark:ring-white/[0.1]",
-              themeMode === "dark" ? "bg-[#1A1A17] text-[#EDEBE4] shadow-sm shadow-black/40" : "bg-white text-[#111110] shadow-sm",
-            )}
-          >
-            <FileText className="h-3.5 w-3.5 opacity-80" strokeWidth={1.8} />
-            Console
-          </span>
-        </div>
-
-        <div className="ml-auto flex items-center gap-2">
+        <div className="ml-auto flex shrink-0 items-center gap-2">
           <Link
             href="/settings"
             className={cn(

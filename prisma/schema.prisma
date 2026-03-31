@@ -48,8 +48,31 @@ model User {
   content         Content[]
   communicationAnalyses CommunicationAnalysis[]
   transformPersonas   TransformPersona[]
+  skillsRuns          SkillsRun[]
 
   @@index([email])
+}
+
+// ============================================================================
+// SKILLS LAB — writing & speaking improvement (incl. exam-style modes)
+// ============================================================================
+
+model SkillsRun {
+  id            String   @id @default(cuid())
+  userId        String
+  title         String
+  mode          String
+  examFramework String?
+  taskPrompt    String?  @db.Text
+  bodyText      String   @db.Text
+  simPrompt     String?  @db.Text
+  overallBand   Float?
+  resultJson    Json?
+  createdAt     DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt(sort: Desc)])
 }
 
 // ============================================================================
