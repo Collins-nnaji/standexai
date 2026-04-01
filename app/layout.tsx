@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Sans, JetBrains_Mono, Plus_Jakarta_Sans, Source_Serif_4 } from "next/font/google";
+import { DM_Sans, JetBrains_Mono, Plus_Jakarta_Sans, Source_Serif_4, Syne, Inter } from "next/font/google";
 import "./globals.css";
 
 const fontSans = Plus_Jakarta_Sans({
@@ -7,6 +7,21 @@ const fontSans = Plus_Jakarta_Sans({
   display: "swap",
   variable: "--font-standex-sans",
   weight: ["400", "500", "600", "700", "800"],
+});
+
+/** New Main Fonts */
+const fontSyne = Syne({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-syne",
+  weight: ["400", "500", "600", "700", "800"],
+});
+
+const fontInter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+  weight: ["400", "500", "600", "700"],
 });
 
 /** Landing & console chrome — DM Sans */
@@ -39,9 +54,9 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "StandexAI — Copy that clears the bar",
+  title: "StandexAI — Professional Network for AI Researchers",
   description:
-    "Agentic copy review: agents flag weak claims and guide rewrites across voice, text, and AI-generated content — one standard before you ship.",
+    "Discover talent, publish work, and build your reputation in the AI research community.",
 };
 
 export default function RootLayout({
@@ -52,10 +67,13 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fontSans.variable} ${fontSans.className} ${fontLandingSans.variable} ${fontLandingSerif.variable} ${fontConsoleMono.variable}`}
+      className={`${fontSans.variable} ${fontSans.className} ${fontLandingSans.variable} ${fontLandingSerif.variable} ${fontConsoleMono.variable} ${fontSyne.variable} ${fontInter.variable}`}
       suppressHydrationWarning
     >
-      <body className="antialiased">{children}</body>
+      <body className="antialiased font-[family-name:var(--font-landing-sans)] min-h-screen text-zinc-900 bg-white">
+        <div className="fixed inset-0 z-[-1] bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
+        {children}
+      </body>
     </html>
   );
 }

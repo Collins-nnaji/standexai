@@ -61,7 +61,6 @@ export function WorkspaceModeNav({ active, consoleTheme, consoleThemeMode = "lig
             : "bg-zinc-200/80 ring-1 ring-zinc-300/80",
         )}
       >
-        {pill("/skills", "Daily practice", active === "skills")}
         {pill("/console", "Pro console", active === "console")}
       </div>
     </div>

@@ -1,330 +1,270 @@
-import { PrismaClient, Industry, RuleType, Severity } from '@prisma/client';
+import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
-const complianceRules = [
-  // ============================================================================
-  // FINTECH - SEC & FINRA RULES
-  // ============================================================================
-  {
-    industry: Industry.FINTECH,
-    ruleName: 'Prohibited Guarantee Language',
-    ruleType: RuleType.PROHIBITED_CLAIM,
-    severity: Severity.CRITICAL,
-    pattern: '\\b(guarantee[ds]?|guaranteed|guaranteeing)\\s+(return|profit|gain|yield|income|performance)\\b',
-    explanation: 'Under SEC Rule 206(4)-1(a)(5), investment advisors cannot guarantee specific returns on securities. Using "guaranteed" in connection with investment performance violates federal securities law.',
-    regulationReference: 'SEC Investment Advisers Act Rule 206(4)-1(a)(5), FINRA Rule 2210',
-    alternatives: [
-      { text: 'potential returns', reason: 'Emphasizes possibility, not certainty' },
-      { text: 'historical returns', reason: 'References past data without future promises' },
-      { text: 'target returns', reason: 'Indicates goal rather than guarantee' },
-    ],
-    isSystemRule: true,
-  },
-  {
-    industry: Industry.FINTECH,
-    ruleName: 'Unsubstantiated Performance Claims',
-    ruleType: RuleType.UNSUPPORTED_STAT,
-    severity: Severity.CRITICAL,
-    pattern: '\\b(average|typical|expected)\\s+(return|gain|profit)\\s+of\\s+\\d+%',
-    explanation: 'FINRA Rule 2210 requires that all performance claims be substantiated and include appropriate disclaimers. Specific percentage returns must be backed by actual data and include risk disclosures.',
-    regulationReference: 'FINRA Rule 2210(d)(1)(F), SEC Rule 206(4)-1',
-    alternatives: [
-      { text: 'historical performance of approximately X% over [timeframe]', reason: 'Cites actual past data with timeframe' },
-      { text: 'returns have ranged from X% to Y% over the past [period]', reason: 'Shows range, not single figure' },
-      { text: 'based on historical data from [source], returns averaged X%', reason: 'Attributes claim to verifiable source' },
-    ],
-    isSystemRule: true,
-  },
-  {
-    industry: Industry.FINTECH,
-    ruleName: 'Missing Risk Disclosure',
-    ruleType: RuleType.MISSING_DISCLOSURE,
-    severity: Severity.WARNING,
-    pattern: '(invest|investment|portfolio|securities|stocks|bonds)(?!.*\\b(risk|loss|volatile|fluctuat))',
-    explanation: 'Investment communications must include clear risk disclosures. Material omissions about investment risks can violate anti-fraud provisions.',
-    regulationReference: 'SEC Rule 10b-5, FINRA Rule 2210(d)(1)(A)',
-    alternatives: [
-      { text: 'All investments carry risk, including potential loss of principal.', reason: 'Standard risk disclosure' },
-      { text: 'Past performance does not guarantee future results. Market conditions may vary.', reason: 'Performance caveat' },
-      { text: 'Investors should consider their risk tolerance before investing.', reason: 'Personalized risk warning' },
-    ],
-    isSystemRule: true,
-  },
-  {
-    industry: Industry.FINTECH,
-    ruleName: 'Prohibited Superlatives Without Support',
-    ruleType: RuleType.PROHIBITED_CLAIM,
-    severity: Severity.WARNING,
-    pattern: '\\b(best|top|leading|premier|superior|#1|number one|highest)\\s+(return|performance|investment|platform|service)',
-    explanation: 'Superlative claims must be substantiated with objective data from an independent third party. Unsubstantiated superlatives are considered misleading.',
-    regulationReference: 'FINRA Rule 2210(d)(1)(B)',
-    alternatives: [
-      { text: 'competitive returns', reason: 'Comparative without superlative claim' },
-      { text: 'recognized by [source] as a top performer', reason: 'Attributed to verifiable third party' },
-      { text: 'strong performance relative to benchmark', reason: 'Contextual comparison' },
-    ],
-    isSystemRule: true,
-  },
-  {
-    industry: Industry.FINTECH,
-    ruleName: 'Cherry-Picked Performance Data',
-    ruleType: RuleType.PERFORMANCE_CLAIM,
-    severity: Severity.CRITICAL,
-    pattern: '(best|top|highest)\\s+(month|quarter|year)(?!.*overall|average|typical)',
-    explanation: 'Presenting only favorable time periods without full performance context is misleading. Must show overall performance, not just peak periods.',
-    regulationReference: 'SEC Rule 206(4)-1(a)(5), FINRA Rule 2210(d)(1)(F)',
-    alternatives: [
-      { text: 'average annual return over [full period]', reason: 'Shows complete picture' },
-      { text: 'performance ranged from X% to Y% across all periods', reason: 'Includes full range' },
-      { text: 'total return since inception', reason: 'Complete timeframe' },
-    ],
-    isSystemRule: true,
-  },
-
-  // ============================================================================
-  // INSURANCE - STATE REGULATIONS & NAIC
-  // ============================================================================
-  {
-    industry: Industry.INSURANCE,
-    ruleName: 'Insurance Guarantee Prohibition',
-    ruleType: RuleType.PROHIBITED_CLAIM,
-    severity: Severity.CRITICAL,
-    pattern: '\\b(guarantee[ds]?|guaranteed|guaranteeing)\\s+(coverage|claim|payment|benefit|payout)\\b',
-    explanation: 'State insurance regulations prohibit guaranteeing claim payments or coverage decisions, as these are subject to policy terms and underwriting.',
-    regulationReference: 'NAIC Model Regulation on Unfair Trade Practices, State Insurance Codes',
-    alternatives: [
-      { text: 'eligible for coverage subject to policy terms', reason: 'Conditional language' },
-      { text: 'may be covered depending on circumstances', reason: 'Indicates possibility' },
-      { text: 'coverage is provided as outlined in the policy', reason: 'References contract terms' },
-    ],
-    isSystemRule: true,
-  },
-  {
-    industry: Industry.INSURANCE,
-    ruleName: 'Premium Pricing Claims',
-    ruleType: RuleType.PROHIBITED_CLAIM,
-    severity: Severity.WARNING,
-    pattern: '\\b(lowest|cheapest|best price|save money|reduce costs?)\\s+(premium|rate|price)',
-    explanation: 'Claims about pricing must be substantiated. Stating "lowest premium" without qualification is generally prohibited as it cannot be verified.',
-    regulationReference: 'NAIC Model Regulation §3(A), State Unfair Trade Practices Acts',
-    alternatives: [
-      { text: 'competitive pricing based on your profile', reason: 'Personalized, not absolute' },
-      { text: 'rates tailored to your specific needs', reason: 'Customized approach' },
-      { text: 'compare quotes to find the right coverage', reason: 'Encourages comparison shopping' },
-    ],
-    isSystemRule: true,
-  },
-  {
-    industry: Industry.INSURANCE,
-    ruleName: 'Missing Policy Limitations Disclosure',
-    ruleType: RuleType.MISSING_DISCLOSURE,
-    severity: Severity.CRITICAL,
-    pattern: '(coverage|benefit|policy|plan)(?!.*(exclusion|limitation|restriction|subject to|terms and conditions))',
-    explanation: 'Insurance communications must disclose material limitations, exclusions, and conditions. Omitting these can constitute unfair or deceptive practices.',
-    regulationReference: 'NAIC Model Regulation §4(B), State Insurance Advertising Rules',
-    alternatives: [
-      { text: 'Coverage subject to policy terms, conditions, and exclusions. See policy for full details.', reason: 'Standard disclosure' },
-      { text: 'Certain limitations and exclusions apply. Review policy documents for complete information.', reason: 'Directs to full terms' },
-      { text: 'Benefits are subject to eligibility requirements and policy limits.', reason: 'Highlights conditions' },
-    ],
-    isSystemRule: true,
-  },
-  {
-    industry: Industry.INSURANCE,
-    ruleName: 'Misleading Comparison Language',
-    ruleType: RuleType.COMPARISON,
-    severity: Severity.WARNING,
-    pattern: '\\b(better|superior|more comprehensive|greater protection)\\s+than\\s+(other|competitor|alternative|most)',
-    explanation: 'Comparative advertising must be fair, accurate, and substantiated. Vague superiority claims without specific, verifiable data are prohibited.',
-    regulationReference: 'NAIC Model Regulation §5, State Comparative Advertising Rules',
-    alternatives: [
-      { text: 'includes [specific feature] not available in all policies', reason: 'Specific, verifiable difference' },
-      { text: 'offers additional benefits such as [X, Y, Z]', reason: 'Lists specific features' },
-      { text: 'comparison based on [specific criteria] as of [date]', reason: 'Documented comparison' },
-    ],
-    isSystemRule: true,
-  },
-
-  // ============================================================================
-  // HEALTHCARE - HIPAA & FDA
-  // ============================================================================
-  {
-    industry: Industry.HEALTHCARE,
-    ruleName: 'Medical Advice Disclaimer',
-    ruleType: RuleType.MEDICAL_ADVICE,
-    severity: Severity.CRITICAL,
-    pattern: '(should|must|need to|recommended to)\\s+(take|use|try|consider)\\s+(medication|treatment|drug|therapy|procedure)',
-    explanation: 'Content that appears to provide medical advice must include disclaimers that it is informational only. Directive language ("you should take") crosses into medical advice territory.',
-    regulationReference: 'FDA Guidance, State Medical Practice Acts, HIPAA',
-    alternatives: [
-      { text: 'common treatments may include [options]. Consult your healthcare provider.', reason: 'Informational with disclaimer' },
-      { text: 'discuss treatment options with your doctor', reason: 'Directs to professional' },
-      { text: 'for informational purposes only, not medical advice', reason: 'Clear disclaimer' },
-    ],
-    isSystemRule: true,
-  },
-  {
-    industry: Industry.HEALTHCARE,
-    ruleName: 'Unsubstantiated Health Claims',
-    ruleType: RuleType.PROHIBITED_CLAIM,
-    severity: Severity.CRITICAL,
-    pattern: '\\b(cure[sd]?|treat|prevent|eliminate|reverse)\\s+(disease|cancer|diabetes|condition|illness)',
-    explanation: 'FDA strictly prohibits disease claims for products not approved for that use. Only FDA-approved drugs can claim to cure, treat, or prevent disease.',
-    regulationReference: 'FDA Act §201(g)(1), FDA Guidance on Disease Claims',
-    alternatives: [
-      { text: 'may support [body function]', reason: 'Structure/function claim' },
-      { text: 'intended to help manage symptoms. Consult your doctor.', reason: 'Supportive, not curative' },
-      { text: 'used in conjunction with prescribed treatment', reason: 'Complementary role' },
-    ],
-    isSystemRule: true,
-  },
-  {
-    industry: Industry.HEALTHCARE,
-    ruleName: 'Missing FDA Required Warnings',
-    ruleType: RuleType.RISK_WARNING,
-    severity: Severity.CRITICAL,
-    pattern: '(medication|drug|prescription|supplement)(?!.*(side effect|warning|risk|consult|doctor|physician))',
-    explanation: 'Healthcare products must include appropriate risk information and warnings. Material omissions about side effects or risks can violate FDA regulations.',
-    regulationReference: 'FDA Labeling Requirements, 21 CFR Part 201',
-    alternatives: [
-      { text: 'Possible side effects include [list]. Consult your healthcare provider.', reason: 'Includes risk info' },
-      { text: 'Not suitable for everyone. See full prescribing information.', reason: 'Limitation disclosure' },
-      { text: 'Discuss risks and benefits with your doctor.', reason: 'Professional consultation required' },
-    ],
-    isSystemRule: true,
-  },
-  {
-    industry: Industry.HEALTHCARE,
-    ruleName: 'Privacy and Confidentiality Language',
-    ruleType: RuleType.MISSING_DISCLOSURE,
-    severity: Severity.WARNING,
-    pattern: '(patient data|health information|medical records|personal health)(?!.*(confidential|private|HIPAA|protected|secure))',
-    explanation: 'Healthcare communications involving patient data must address privacy protections. HIPAA requires safeguarding protected health information (PHI).',
-    regulationReference: 'HIPAA Privacy Rule 45 CFR §164.502',
-    alternatives: [
-      { text: 'Your health information is protected under HIPAA and kept confidential.', reason: 'Privacy assurance' },
-      { text: 'We safeguard your personal health data in compliance with federal privacy laws.', reason: 'Regulatory compliance' },
-      { text: 'Protected health information is handled according to strict privacy standards.', reason: 'Security commitment' },
-    ],
-    isSystemRule: true,
-  },
-
-  // ============================================================================
-  // LENDING - TILA & CFPB
-  // ============================================================================
-  {
-    industry: Industry.LENDING,
-    ruleName: 'Missing APR Disclosure',
-    ruleType: RuleType.MISSING_DISCLOSURE,
-    severity: Severity.CRITICAL,
-    pattern: '(loan|financing|credit|borrow)\\s+(rate|interest)(?!.*(APR|annual percentage rate))',
-    explanation: 'Truth in Lending Act (TILA) requires disclosure of the Annual Percentage Rate (APR) in credit advertising. Stating an interest rate without APR is a TILA violation.',
-    regulationReference: 'TILA 15 USC §1664, Regulation Z 12 CFR §1026.24',
-    alternatives: [
-      { text: 'X% APR (Annual Percentage Rate)', reason: 'Compliant APR disclosure' },
-      { text: 'Interest rate of X%, APR of Y%', reason: 'Both rates disclosed' },
-      { text: 'See full APR and terms at [URL]', reason: 'Directs to complete disclosure' },
-    ],
-    isSystemRule: true,
-  },
-  {
-    industry: Industry.LENDING,
-    ruleName: 'Misleading Low Rate Claims',
-    ruleType: RuleType.PROHIBITED_CLAIM,
-    severity: Severity.WARNING,
-    pattern: '\\b(low|lowest|best)\\s+(rate|APR|interest)\\b(?!.*(as low as|starting at|for qualified borrowers))',
-    explanation: 'Advertised rates must be actually available to a reasonable proportion of applicants. "Lowest rate" claims must specify qualifications (e.g., "for qualified borrowers").',
-    regulationReference: 'TILA Regulation Z §1026.24(f), CFPB Guidance',
-    alternatives: [
-      { text: 'rates as low as X% APR for qualified borrowers', reason: 'Conditional with qualification' },
-      { text: 'competitive rates starting at X% APR', reason: 'Starting point, not guarantee' },
-      { text: 'rates from X% to Y% APR based on creditworthiness', reason: 'Range with criteria' },
-    ],
-    isSystemRule: true,
-  },
-  {
-    industry: Industry.LENDING,
-    ruleName: 'Missing Fee Disclosures',
-    ruleType: RuleType.MISSING_DISCLOSURE,
-    severity: Severity.CRITICAL,
-    pattern: '(loan|credit|financing|mortgage)(?!.*(fee|cost|charge|closing cost|origination|APR))',
-    explanation: 'TILA requires disclosure of all costs associated with credit, including fees. Advertising must not be misleading by omitting material cost information.',
-    regulationReference: 'TILA §1664, Regulation Z §1026.24(d)',
-    alternatives: [
-      { text: 'Total costs include fees. See Loan Estimate for details.', reason: 'Acknowledges fees' },
-      { text: 'May include origination, closing, and other fees.', reason: 'Lists common fees' },
-      { text: 'APR includes certain fees and costs. Full disclosure available at [URL].', reason: 'Comprehensive' },
-    ],
-    isSystemRule: true,
-  },
-  {
-    industry: Industry.LENDING,
-    ruleName: 'Prohibited "No Cost" Claims',
-    ruleType: RuleType.PROHIBITED_CLAIM,
-    severity: Severity.CRITICAL,
-    pattern: '\\b(no cost|zero cost|free|no fee|no charge)\\s+(loan|refinance|mortgage|credit)',
-    explanation: 'Claims of "no cost" or "free" loans are generally prohibited unless absolutely true. If costs exist but are rolled into the loan, this must be clearly disclosed.',
-    regulationReference: 'TILA Regulation Z §1026.24(i), CFPB Enforcement Actions',
-    alternatives: [
-      { text: 'no out-of-pocket costs at closing (fees may be included in loan amount)', reason: 'Clarifies structure' },
-      { text: 'lender-paid closing costs (may affect rate)', reason: 'Explains trade-off' },
-      { text: 'see Loan Estimate for all costs and fees', reason: 'Directs to disclosure' },
-    ],
-    isSystemRule: true,
-  },
-];
-
 async function main() {
-  console.log('🌱 Starting database seed...');
+  console.log("Cleaning network tables...");
+  await prisma.reputationSignal.deleteMany({});
+  await prisma.collabMember.deleteMany({});
+  await prisma.collaboration.deleteMany({});
+  await prisma.briefInterest.deleteMany({});
+  await prisma.researchBrief.deleteMany({});
+  await prisma.workItem.deleteMany({});
+  await prisma.standexRank.deleteMany({});
+  await prisma.labProfile.deleteMany({});
+  await prisma.follows.deleteMany({});
 
-  // Clear existing system rules
-  console.log('🧹 Clearing existing system rules...');
-  await prisma.complianceRule.deleteMany({
-    where: { isSystemRule: true },
+  // Clean old mock users (we target a specific email domain to avoid wiping real NextAuth users)
+  await prisma.user.deleteMany({
+    where: { email: { endsWith: "@mock.standex.ai" } }
   });
 
-  // Seed compliance rules
-  console.log('📋 Seeding compliance rules...');
-  let createdCount = 0;
+  console.log("Seeding Mock AI Network...");
 
-  for (const rule of complianceRules) {
-    await prisma.complianceRule.create({
-      data: {
-        industry: rule.industry,
-        ruleName: rule.ruleName,
-        ruleType: rule.ruleType,
-        severity: rule.severity,
-        pattern: rule.pattern,
-        explanation: rule.explanation,
-        regulationReference: rule.regulationReference,
-        alternatives: JSON.stringify(rule.alternatives),
-        isSystemRule: rule.isSystemRule,
+  const mockPassword = await bcrypt.hash("password123", 10);
+
+  // 1. Create Labs
+  const lab1 = await prisma.user.upsert({
+    where: { email: "recruiting@deepmind.mock.standex.ai" },
+    update: {},
+    create: {
+      email: "recruiting@deepmind.mock.standex.ai",
+      name: "Google DeepMind",
+      passwordHash: mockPassword,
+      role: "LAB",
+      avatar: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Google_DeepMind_logo.svg/1200px-Google_DeepMind_logo.svg.png",
+      verified: true,
+      labProfile: {
+        create: {
+          companyName: "Google DeepMind",
+          verified: true,
+          subscriptionTier: "enterprise"
+        }
+      }
+    }
+  });
+
+  const lab2 = await prisma.user.upsert({
+    where: { email: "talent@openai.mock.standex.ai" },
+    update: {},
+    create: {
+      email: "talent@openai.mock.standex.ai",
+      name: "OpenAI Research",
+      passwordHash: mockPassword,
+      role: "LAB",
+      avatar: "https://upload.wikimedia.org/wikipedia/commons/4/4d/OpenAI_Logo.svg",
+      verified: true,
+      labProfile: {
+        create: {
+          companyName: "OpenAI",
+          verified: true,
+          subscriptionTier: "enterprise"
+        }
+      }
+    }
+  });
+
+  // 2. Create Researchers
+  const rs1 = await prisma.user.upsert({
+    where: { email: "yann.lecun@mock.standex.ai" },
+    update: {},
+    create: {
+      email: "yann.lecun@mock.standex.ai",
+      name: "Yann LeCun",
+      passwordHash: mockPassword,
+      role: "PRO",
+      bio: "Chief AI Scientist at Meta. Professor at NYU. Turing Award Laureate.",
+      institution: "Meta AI / NYU",
+      location: "New York, USA",
+      avatar: "https://upload.wikimedia.org/wikipedia/commons/5/52/Yann_LeCun_-_2018_%28cropped%29.jpg",
+      verified: true,
+      ranks: {
+        create: { domain: "Computer Vision", score: 9950, rankPosition: 1 }
+      }
+    }
+  });
+
+  const rs2 = await prisma.user.upsert({
+    where: { email: "karpathy@mock.standex.ai" },
+    update: {},
+    create: {
+      email: "karpathy@mock.standex.ai",
+      name: "Andrej Karpathy",
+      passwordHash: mockPassword,
+      role: "PRO",
+      bio: "Building smart systems. Previously Director of AI @ Tesla, Research @ OpenAI.",
+      institution: "Independent",
+      location: "San Francisco, CA",
+      openToWork: true,
+      avatar: "https://pbs.twimg.com/profile_images/1625146599187062784/Fxy8sI4__400x400.jpg",
+      verified: true,
+      ranks: {
+        create: { domain: "Large Language Models", score: 9800, rankPosition: 2 }
+      }
+    }
+  });
+
+  const rs3 = await prisma.user.upsert({
+    where: { email: "ilias@mock.standex.ai" },
+    update: {},
+    create: {
+      email: "ilias@mock.standex.ai",
+      name: "Ilias Sutskever",
+      passwordHash: mockPassword,
+      role: "RESEARCHER",
+      bio: "Safe Superintelligence Inc. Neural Networks & Deep Learning.",
+      institution: "SSI",
+      location: "Palo Alto, CA",
+      avatar: null,
+      verified: true,
+      ranks: {
+        create: { domain: "Alignment", score: 9200, rankPosition: 5 }
+      }
+    }
+  });
+
+  // 3. Create Work Items (Papers, Models, Datasets)
+  const work1 = await prisma.workItem.create({
+    data: {
+      userId: rs2.id,
+      type: "model",
+      title: "nanoGPT: The simplest, fastest repository for training/finetuning medium-sized GPTs",
+      abstract: "A complete rewrite of minGPT. Designed specifically to be simple, hackable, and fast for academic and educational environments. Capable of reproducing GPT-2 (124M) in a few hours on a modern GPU node.",
+      impactSummary: "Standardized educational foundation model training pipelines for the entire open-source network.",
+      problemSolved: "Removed boilerplate and complexity from huge LLM frameworks like Megatron-LM for experimental researchers.",
+      improvesOn: "HuggingFace Accelerate / minGPT",
+      tags: ["LLM", "PyTorch", "GPT", "Education"],
+      externalUrl: "https://github.com/karpathy/nanoGPT",
+      fileUrl: "https://standexai.blob.core.windows.net/assets/nanogpt-weights-mock.zip",
+      views: 14520,
+    }
+  });
+
+  const work2 = await prisma.workItem.create({
+    data: {
+      userId: rs1.id,
+      type: "paper",
+      title: "V-JEPA: Video Joint Embedding Predictive Architecture",
+      abstract: "We introduce V-JEPA, a method for self-supervised learning of visual representations from video by predicting the latent representation of missing regions in a video from the unmasked context.",
+      impactSummary: "Proves that predictive masking architectures operate incredibly well in the temporal dimension, avoiding raw pixel reconstruction.",
+      problemSolved: "Compute-intensive video generation limits representation learning. Joint embeddings solve this safely.",
+      improvesOn: "I-JEPA / Masked Autoencoders",
+      tags: ["Computer Vision", "Self-Supervised Learning", "JEPA"],
+      externalUrl: "https://ai.meta.com/research/publications/v-jepa/",
+      views: 8400,
+    }
+  });
+
+  // 4. Create Reputation Signals
+  await prisma.reputationSignal.createMany({
+    data: [
+      { userId: rs2.id, fromUserId: rs1.id, workItemId: work1.id, signalType: "reproduction", value: 100 },
+      { userId: rs2.id, fromUserId: lab2.id, workItemId: work1.id, signalType: "citation", value: 50 },
+      { userId: rs1.id, fromUserId: rs3.id, workItemId: work2.id, signalType: "review", value: 20 },
+      { userId: rs1.id, fromUserId: lab1.id, signalType: "lab_view", value: 5 }, // Private signal
+      { userId: rs2.id, fromUserId: lab1.id, signalType: "lab_view", value: 5 },
+    ]
+  });
+
+  const lab3 = await prisma.user.create({
+    data: {
+      email: "recruiting@anthropic.mock.standex.ai",
+      name: "Anthropic",
+      passwordHash: mockPassword,
+      role: "LAB",
+      avatar: "https://upload.wikimedia.org/wikipedia/en/thumb/8/87/Anthropic_logo.svg/1000px-Anthropic_logo.svg.png",
+      verified: true,
+      labProfile: {
+        create: {
+          companyName: "Anthropic",
+          verified: true,
+          subscriptionTier: "pro"
+        }
+      }
+    }
+  });
+
+  const lab4 = await prisma.user.create({
+    data: {
+      email: "hiring@huggingface.mock.standex.ai",
+      name: "Hugging Face",
+      passwordHash: mockPassword,
+      role: "LAB",
+      avatar: "https://huggingface.co/front/assets/huggingface_logo-noborder.svg",
+      verified: true,
+      labProfile: {
+        create: {
+          companyName: "Hugging Face",
+          verified: true,
+          subscriptionTier: "pro"
+        }
+      }
+    }
+  });
+
+  const lab5 = await prisma.user.create({
+    data: {
+      email: "talent@scale.mock.standex.ai",
+      name: "Scale AI",
+      passwordHash: mockPassword,
+      role: "LAB",
+      avatar: "https://upload.wikimedia.org/wikipedia/commons/e/e0/Scale_AI_logo.svg",
+      verified: true,
+      labProfile: {
+        create: {
+          companyName: "Scale AI",
+          verified: true,
+          subscriptionTier: "pro"
+        }
+      }
+    }
+  });
+
+  // 5. Create Research Briefs from Labs
+  await prisma.researchBrief.createMany({
+    data: [
+      {
+        companyId: lab2.id,
+        title: "Alignment Researchers for Sparse Autoencoders",
+        description: "We are aggressively expanding our interpretability team. We need researchers capable of training SAEs on frontier models to accurately map concept activations. The goal is to isolate and steer safe behavior primitives in raw parameters.",
+        lookingFor: "Demonstrated experience scaling unsupervised feature extraction on highly dimensional activations. PyTorch mastery is required.",
+        domain: ["Interpretability", "AI Safety", "LLMs"],
         active: true,
       },
-    });
-    createdCount++;
-  }
-
-  console.log(`✅ Created ${createdCount} compliance rules`);
-
-  // Summary by industry
-  const rulesByIndustry = complianceRules.reduce((acc, rule) => {
-    acc[rule.industry] = (acc[rule.industry] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>);
-
-  console.log('\n📊 Rules by industry:');
-  Object.entries(rulesByIndustry).forEach(([industry, count]) => {
-    console.log(`   ${industry}: ${count} rules`);
+      {
+        companyId: lab3.id,
+        title: "Mechanistic Interpretability of Claude 3",
+        description: "Seeking to reverse-engineer high-level capability structures inside Claude's latest multimodal weights. Must be able to manipulate activation geometries and build new probes that accurately read and write concept clusters directly.",
+        lookingFor: "Researchers who have published at NeurIPS/ICLR on SAEs or Mechanistic mapping. Deep linear algebra intuition required.",
+        domain: ["Interpretability", "Math"],
+        active: true,
+      },
+      {
+        companyId: lab4.id,
+        title: "Optimized Multi-Modal Pipelines for Accelerate",
+        description: "We want to unify huge unaligned vision and dataset pipelines under the standard Accelerate/Transformers ecosystem without sacrificing VRAM. We need 10x throughput increases for edge deployments.",
+        lookingFor: "Systems optimization experts. CUDA, Triton, and intimate familiarity with PyTorch internals and Distributed Data Parallel.",
+        domain: ["Systems Engineering", "Open Source", "Vision"],
+        active: true,
+      },
+      {
+        companyId: lab5.id,
+        title: "DPO & RLHF Mass-pipeline Synthesis",
+        description: "Building the next generation of scalable RLHF techniques that natively handle multi-agent deliberation trajectories. Direct Preference Optimization needs to scale gracefully to billions of synthetic pairs.",
+        lookingFor: "Reinforcement Learning PhDs with experience managing massive cluster distributions. Focus on PPO optimization.",
+        domain: ["RLHF", "Synthetic Data"],
+        active: true,
+      }
+    ]
   });
 
-  console.log('\n✨ Database seeding completed successfully!');
+  console.log("Successfully seeded database with test AI talent and Labs!");
 }
 
 main()
   .catch((e) => {
-    console.error('❌ Error seeding database:', e);
+    console.error(e);
     process.exit(1);
   })
   .finally(async () => {

@@ -6,9 +6,9 @@ import type { LucideIcon } from "lucide-react";
 import {
   FileText, Sparkles, Loader2, AlertTriangle, AlertCircle, Info,
   PenTool, Smile, CheckCircle2, TrendingUp, Eye, ChevronDown, ChevronUp,
-  Mic, ShieldAlert, Brain, Shield, Copy, ScanSearch, Bot, User, Wand2,
+  ShieldAlert, Brain, Shield, Copy, ScanSearch, Bot, User, Wand2,
   Zap, Minus, RefreshCw, Plus, Trash2, X, BookOpen, LayoutList, Users, BadgeAlert,
-  Play, Briefcase, Minimize2, HeartHandshake, Square, ClipboardPaste, Download, FileType, Upload, Globe,
+  Play, Briefcase, Minimize2, HeartHandshake, ClipboardPaste, Download, FileType, Upload, Globe,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -164,7 +164,6 @@ const STUDIO_MODES: {
   { id: "friendly", label: "Friendly", icon: Smile, desc: "Warm and approachable", chip: "border-slate-200 bg-white text-slate-700 hover:border-emerald-300/50", chipActive: "border-emerald-600 bg-emerald-600 text-white shadow-md" },
   { id: "persuasive", label: "Persuasive", icon: Zap, desc: "Compelling rhetoric", chip: "border-slate-200 bg-white text-slate-700 hover:border-amber-300/50", chipActive: "border-amber-600 bg-amber-600 text-white shadow-md" },
   { id: "safe", label: "Safe", icon: CheckCircle2, desc: "Lower-risk wording", chip: "border-slate-200 bg-white text-slate-700 hover:border-sky-300/50", chipActive: "border-sky-600 bg-sky-600 text-white shadow-md" },
-  { id: "speaker", label: "Speech", icon: Mic, desc: "Delivery-ready script", chip: "border-slate-200 bg-white text-slate-700 hover:border-violet-300/50", chipActive: "border-violet-600 bg-violet-600 text-white shadow-md" },
   { id: "neutral", label: "Neutral", icon: Minus, desc: "Balanced and objective", chip: "border-slate-200 bg-white text-slate-700 hover:border-zinc-400/50", chipActive: "border-zinc-700 bg-zinc-800 text-white shadow-md" },
   { id: "concise", label: "Concise", icon: Minimize2, desc: "Tight, minimal fluff", chip: "border-slate-200 bg-white text-slate-700 hover:border-cyan-300/50", chipActive: "border-cyan-700 bg-cyan-700 text-white shadow-md" },
   { id: "executive", label: "Executive", icon: Briefcase, desc: "Board-ready, strategic", chip: "border-slate-200 bg-white text-slate-700 hover:border-indigo-300/50", chipActive: "border-indigo-700 bg-indigo-700 text-white shadow-md" },
@@ -400,7 +399,7 @@ function scoresForPersist(analyzeType: AnalyzeType, result: unknown) {
 
 async function persistCommunicationAnalysis(payload: {
   title: string;
-  source: "TEXT" | "VOICE" | "DICTATE";
+  source: "TEXT";
   kind: string;
   contentText?: string;
   overallScore?: number;
@@ -507,13 +506,6 @@ function WritingLabInner({
   const [genError, setGenError] = useState("");
   const [genPreview, setGenPreview] = useState<AssistGenerateOutput | null>(null);
   const [aiGenerateModalOpen, setAiGenerateModalOpen] = useState(false);
-  const [recordingSpeech, setRecordingSpeech] = useState(false);
-  const [transcribingSpeech, setTranscribingSpeech] = useState(false);
-  const [transcribeError, setTranscribeError] = useState("");
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const mediaStreamRef = useRef<MediaStream | null>(null);
-  const audioChunksRef = useRef<Blob[]>([]);
-  const skipTranscribeOnStopRef = useRef(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [uploadingFile, setUploadingFile] = useState(false);
   const [uploadError, setUploadError] = useState("");
@@ -785,85 +777,11 @@ function WritingLabInner({
 
   useEffect(() => {
     return () => {
-      skipTranscribeOnStopRef.current = true;
-      mediaStreamRef.current?.getTracks().forEach((tr) => tr.stop());
-      mediaStreamRef.current = null;
-      const mr = mediaRecorderRef.current;
-      if (mr && mr.state !== "inactive") {
-        try {
-          mr.stop();
-        } catch {
-          /* ignore */
-        }
-      }
-      mediaRecorderRef.current = null;
+      // Cleanup any pending resources
     };
   }, []);
 
-  const stopSpeechRecording = useCallback(() => {
-    const mr = mediaRecorderRef.current;
-    if (!mr || mr.state === "inactive") return;
-    mr.stop();
-  }, []);
 
-  const startSpeechRecording = useCallback(async () => {
-    setTranscribeError("");
-    if (typeof window === "undefined" || !navigator.mediaDevices?.getUserMedia) {
-      setTranscribeError("Recording is not supported in this browser.");
-      return;
-    }
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      mediaStreamRef.current = stream;
-      const mime =
-        MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
-          ? "audio/webm;codecs=opus"
-          : MediaRecorder.isTypeSupported("audio/webm")
-            ? "audio/webm"
-            : "";
-      const mr = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream);
-      audioChunksRef.current = [];
-      skipTranscribeOnStopRef.current = false;
-      mr.ondataavailable = (e) => {
-        if (e.data.size > 0) audioChunksRef.current.push(e.data);
-      };
-      mr.onstop = () => {
-        stream.getTracks().forEach((tr) => tr.stop());
-        mediaStreamRef.current = null;
-        mediaRecorderRef.current = null;
-        setRecordingSpeech(false);
-        const blob = new Blob(audioChunksRef.current, { type: mr.mimeType || "audio/webm" });
-        audioChunksRef.current = [];
-        if (skipTranscribeOnStopRef.current || blob.size < 64) return;
-        void (async () => {
-          setTranscribingSpeech(true);
-          setTranscribeError("");
-          try {
-            const fd = new FormData();
-            fd.append("file", blob, "recording.webm");
-            const res = await fetch("/api/transcribe", { method: "POST", body: fd });
-            const data = (await res.json()) as { text?: string; error?: string };
-            if (!res.ok) throw new Error(data.error || "Transcription failed");
-            const next = (data.text ?? "").trim();
-            if (next) {
-              setText((prev) => (prev.trim() ? `${prev.trim()}\n\n${next}` : next));
-              setExportUnlocked(false);
-              setHistoryDraftMissing(false);
-            }
-          } catch (e) {
-            setTranscribeError(e instanceof Error ? e.message : "Transcription failed");
-          } finally {
-            setTranscribingSpeech(false);
-          }
-        })();
-      };
-      mediaRecorderRef.current = mr;
-      mr.start();
-      setRecordingSpeech(true);
-    } catch (e) {
-      setTranscribeError(e instanceof Error ? e.message : "Microphone unavailable");
-    }
-  }, []);
 
   const applyAnalyzeResult = (type: AnalyzeType, result: unknown) => {
     switch (type) {
@@ -1510,12 +1428,11 @@ function WritingLabInner({
                   )}
                 >
                   <div className="min-w-0 flex-1 space-y-1">
-                    <p className={cn("text-[10px] font-bold uppercase tracking-[0.14em]", t.muted2)}>Paste, upload, or record</p>
+                    <p className={cn("text-[10px] font-bold uppercase tracking-[0.14em]", t.muted2)}>Paste or upload</p>
                     <p className={cn("text-[12px] leading-snug", t.muted)}>
                       <span className="inline-flex flex-wrap items-center gap-x-1.5 gap-y-1">
                         <ClipboardPaste className="h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden />
-                        Paste or type, <span className={cn("font-semibold", t.text)}>upload</span> a file (.txt, .md, .html, .docx, .pdf), or{" "}
-                        <span className={cn("font-semibold", t.text)}>record speech</span>. Empty?{" "}
+                        Paste or type, <span className={cn("font-semibold", t.text)}>upload</span> a file (.txt, .md, .html, .docx, .pdf). Empty?{" "}
                         <span className={cn("font-semibold", t.text)}>Generate with AI</span> in the box below.
                       </span>
                     </p>
@@ -1530,7 +1447,7 @@ function WritingLabInner({
                     <button
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
-                      disabled={uploadingFile || transcribingSpeech || recordingSpeech}
+                      disabled={uploadingFile}
                       className={cn(
                         "inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-[12px] font-semibold transition disabled:opacity-45",
                         t.borderSub,
@@ -1541,43 +1458,9 @@ function WritingLabInner({
                       <Upload className="h-4 w-4" aria-hidden />
                       Upload file
                     </button>
-                    {transcribingSpeech ? (
-                      <span className={cn("inline-flex items-center gap-2 text-[12px] font-semibold", t.muted)}>
-                        <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
-                        Transcribing…
-                      </span>
-                    ) : recordingSpeech ? (
-                      <button
-                        type="button"
-                        onClick={stopSpeechRecording}
-                        className="inline-flex items-center gap-1.5 rounded-lg bg-rose-600 px-3 py-2 text-[12px] font-semibold text-white transition hover:bg-rose-500"
-                      >
-                        <Square className="h-3.5 w-3.5 fill-current" aria-hidden />
-                        Stop & transcribe
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => void startSpeechRecording()}
-                        disabled={transcribingSpeech || uploadingFile}
-                        className={cn(
-                          "inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-[12px] font-semibold transition disabled:opacity-45",
-                          t.borderSub,
-                          t.text,
-                          t.navHover,
-                        )}
-                      >
-                        <Mic className="h-4 w-4" aria-hidden />
-                        Record speech
-                      </button>
-                    )}
                   </div>
                 </div>
-                {transcribeError ? (
-                  <p className={cn("shrink-0 text-[12px] font-medium", t.danger)} role="alert">
-                    {transcribeError}
-                  </p>
-                ) : null}
+
                 {uploadError ? (
                   <p className={cn("shrink-0 text-[12px] font-medium", t.danger)} role="alert">
                     {uploadError}
@@ -1598,7 +1481,7 @@ function WritingLabInner({
                       if (historyDraftMissing) setHistoryDraftMissing(false);
                     }}
                     placeholder={
-                      "Paste, type, upload a file, or record above.\n\nWhen the console is empty, use Generate with AI below for a first draft from a brief. After you have text, use Transform text above."
+                      "Paste, type, or upload a file above.\n\nWhen the console is empty, use Generate with AI below for a first draft from a brief. After you have text, use Transform text above."
                     }
                     className={cn(
                       "min-h-[min(34vh,260px)] w-full flex-1 resize-y border-0 bg-transparent px-4 py-4 pr-12 text-[14px] leading-relaxed outline-none transition-[box-shadow] focus:ring-2 focus:ring-inset focus:ring-zinc-400/25 dark:focus:ring-white/15 sm:min-h-[min(40vh,360px)] sm:pr-14",

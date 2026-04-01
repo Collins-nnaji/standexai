@@ -16,6 +16,9 @@ enum UserRole {
   WRITER
   REVIEWER
   VIEWER
+  RESEARCHER // New networking role
+  PRO        // Pro researcher
+  LAB        // Enterprise scout/lab
 }
 
 enum Industry {
@@ -40,6 +43,13 @@ model User {
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 
+  // StandexAI Network Profile Fields
+  bio          String?   @db.Text
+  institution  String?
+  location     String?
+  openToWork   Boolean   @default(false)
+  verified     Boolean   @default(false)
+
   // Relations
   teamMemberships TeamMember[]
   apiKeys         ApiKey[]
@@ -49,6 +59,19 @@ model User {
   communicationAnalyses CommunicationAnalysis[]
   transformPersonas   TransformPersona[]
   skillsRuns          SkillsRun[]
+
+  // StandexAI Network Relations
+  workItems           WorkItem[]
+  signalsReceived     ReputationSignal[] @relation("SignalsReceived")
+  signalsGiven        ReputationSignal[] @relation("SignalsGiven")
+  ranks               StandexRank[]
+  collabMemberships   CollabMember[]
+  briefsPosted        ResearchBrief[]    @relation("LabBriefs")
+  briefInterests      BriefInterest[]
+  followers           Follows[]          @relation("Followers")
+  following           Follows[]          @relation("Following")
+  labProfile          LabProfile?
+  collabMessages      CollabMessage[]
 
   @@index([email])
 }
@@ -349,4 +372,159 @@ model Integration {
 
   @@index([userId])
   @@index([teamId])
+}
+
+// ============================================================================
+// STANDEXAI: PROFESSIONAL NETWORK
+// ============================================================================
+
+model WorkItem {
+  id              String   @id @default(cuid())
+  userId          String
+  type            String   // paper, model, dataset, experiment, collab_experiment
+  title           String
+  abstract        String   @db.Text
+  impactSummary   String   @db.Text
+  problemSolved   String   @db.Text
+  improvesOn      String   @db.Text
+  tags            String[]
+  externalUrl     String?
+  fileUrl         String?  // Azure Blob Storage link
+  views           Int      @default(0)
+  createdAt       DateTime @default(now())
+
+  // Co-authorship — set when published from a Collab Room
+  collaborationId  String?
+  coAuthors        String[] // array of User IDs for co-published work
+
+  user             User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reputationSignals ReputationSignal[]
+
+  @@index([userId, createdAt(sort: Desc)])
+  @@index([type])
+}
+
+model ReputationSignal {
+  id           String   @id @default(cuid())
+  userId       String   // The user receiving the signal
+  signalType   String   // reproduction, citation, collab, review, lab_view
+  workItemId   String?  // Optional relation to a work item
+  fromUserId   String?  // The user giving the signal
+  value        Int      // Points for this signal
+  createdAt    DateTime @default(now())
+
+  user         User      @relation("SignalsReceived", fields: [userId], references: [id], onDelete: Cascade)
+  fromUser     User?     @relation("SignalsGiven", fields: [fromUserId], references: [id], onDelete: SetNull)
+  workItem     WorkItem? @relation(fields: [workItemId], references: [id], onDelete: SetNull)
+
+  @@index([userId, createdAt(sort: Desc)])
+}
+
+model StandexRank {
+  id           String   @id @default(cuid()) // Usually 1:1 with User
+  userId       String   @unique
+  domain       String   // ranking happens per domain
+  score        Int      @default(0)
+  rankPosition Int?     // updated via chron
+  updatedAt    DateTime @updatedAt
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, domain])
+  @@index([domain, rankPosition(sort: Asc)])
+}
+
+model Collaboration {
+  id                   String   @id @default(cuid())
+  title                String
+  description          String   @db.Text
+  visibility           String   @default("private") // public | private
+  status               String   @default("active")  // active | completed
+  createdAt            DateTime @default(now())
+
+  // Loop traceability — links back to the source Brief and forward to output
+  briefId              String?  // optional link to source ResearchBrief
+  publishedWorkItemId  String?  // set when collab is published
+
+  members     CollabMember[]
+  messages    CollabMessage[]
+  brief       ResearchBrief?   @relation("CollabSource", fields: [briefId], references: [id], onDelete: SetNull)
+}
+
+model CollabMember {
+  id            String   @id @default(cuid())
+  collabId      String
+  userId        String
+  role          String   @default("contributor")
+
+  collaboration Collaboration @relation(fields: [collabId], references: [id], onDelete: Cascade)
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([collabId, userId])
+}
+
+model CollabMessage {
+  id              String   @id @default(cuid())
+  collabId        String
+  userId          String
+  content         String   @db.Text
+  createdAt       DateTime @default(now())
+
+  collaboration   Collaboration @relation(fields: [collabId], references: [id], onDelete: Cascade)
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([collabId, createdAt(sort: Asc)])
+}
+
+model ResearchBrief {
+  id          String   @id @default(cuid())
+  companyId   String   // lab User id
+  title       String
+  description String   @db.Text
+  lookingFor  String   @db.Text
+  domain      String[]
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  company     User            @relation("LabBriefs", fields: [companyId], references: [id], onDelete: Cascade)
+  interests   BriefInterest[]
+  collabs     Collaboration[] @relation("CollabSource")
+
+  @@index([companyId, createdAt(sort: Desc)])
+}
+
+model BriefInterest {
+  id            String   @id @default(cuid())
+  briefId       String
+  userId        String
+  message       String?  @db.Text
+  createdAt     DateTime @default(now())
+
+  brief         ResearchBrief @relation(fields: [briefId], references: [id], onDelete: Cascade)
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([briefId, userId])
+}
+
+model Follows {
+  followerId  String
+  followingId String
+
+  follower    User @relation("Following", fields: [followerId], references: [id], onDelete: Cascade)
+  following   User @relation("Followers", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@id([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
+}
+
+model LabProfile {
+  id               String   @id @default(cuid())
+  userId           String   @unique
+  companyName      String
+  logo             String?
+  verified         Boolean  @default(false)
+  subscriptionTier String   @default("base")
+
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
