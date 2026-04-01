@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { prisma } from "@/lib/prisma";
+import { prismaDb as prisma } from "@/lib/prisma";
 import { TopNav } from "@/components/network/TopNav";
 import { neonAuth } from "@/lib/neon/auth-server";
 import { Share2, TrendingUp, CheckCircle2 } from "lucide-react";
@@ -15,6 +15,8 @@ export const metadata: Metadata = {
     images: [{ url: "/api/og/index" }], // Mock route for OG generation
   },
 };
+
+export const dynamic = "force-dynamic";
 
 export default async function IndexPage() {
   const { data: session } = await neonAuth.getSession();
@@ -33,13 +35,13 @@ export default async function IndexPage() {
         where: { createdAt: { gte: sevenDaysAgo } }
       }
     }
-  });
+  }) as any;
 
   // Calculate scores and sort
-  const scoredWorks = popularWorks.map(w => {
-    const weeklyScore = w.reputationSignals.reduce((acc, sig) => acc + sig.value, 0);
+  const scoredWorks = popularWorks.map((w: any) => {
+    const weeklyScore = w.reputationSignals.reduce((acc: any, sig: any) => acc + sig.value, 0);
     return { ...w, weeklyScore };
-  }).sort((a, b) => b.weeklyScore - a.weeklyScore).slice(0, 10);
+  }).sort((a: any, b: any) => b.weeklyScore - a.weeklyScore).slice(0, 10);
 
   return (
     <div className="min-h-screen bg-[#FAFAF9] text-zinc-600">
@@ -93,7 +95,7 @@ export default async function IndexPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5">
-                {scoredWorks.length > 0 ? scoredWorks.map((work, index) => (
+                {scoredWorks.length > 0 ? scoredWorks.map((work: any, index: any) => (
                   <tr key={work.id} className="group transition-colors hover:bg-zinc-100">
                     <td className="px-6 py-6">
                       <div className={`flex h-8 w-8 items-center justify-center rounded-full font-bold ${

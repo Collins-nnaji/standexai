@@ -1,6 +1,9 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { prisma } from "@/lib/prisma";
+import { prismaDb as prisma } from "@/lib/prisma";
+
+export const dynamic = "force-dynamic";
+
 import { TopNav } from "@/components/network/TopNav";
 import { ImpactCard } from "@/components/network/ImpactCard";
 import { WorkItemCard } from "@/components/network/WorkItemCard";
@@ -9,7 +12,6 @@ import { neonAuth } from "@/lib/neon/auth-server";
 
 export default async function WorkItemPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-
   const { data: session } = await neonAuth.getSession();
 
   const work = await prisma.workItem.findUnique({
@@ -20,7 +22,7 @@ export default async function WorkItemPage({ params }: { params: Promise<{ id: s
         include: { fromUser: { select: { id: true, name: true, avatar: true } } }
       }
     }
-  });
+  }) as any;
 
   if (!work) {
     return notFound();
@@ -28,14 +30,14 @@ export default async function WorkItemPage({ params }: { params: Promise<{ id: s
 
   // Increment view (in a real app, this would be a client side fetch or done safely via a specialized route to avoid cache busting)
   // For demo logic we'll just increment it lazily if someone visits
-  await prisma.workItem.update({ where: { id }, data: { views: { increment: 1 } } });
-
   const isOwner = session?.user?.email 
     ? await prisma.user.findFirst({ where: { email: session.user.email, id: work.userId } }) !== null
     : false;
+  
+  await prisma.workItem.update({ where: { id: work.id }, data: { views: { increment: 1 } } }) as any;
 
-  const reproductions = work.reputationSignals.filter(s => s.signalType === "reproduction");
-  const citations = work.reputationSignals.filter(s => s.signalType === "citation");
+  const reproductions = work.reputationSignals.filter((s: any) => s.signalType === "reproduction");
+  const citations = work.reputationSignals.filter((s: any) => s.signalType === "citation");
 
   // Optional: fetch related work by matching some tags
   const related = await prisma.workItem.findMany({
@@ -45,7 +47,7 @@ export default async function WorkItemPage({ params }: { params: Promise<{ id: s
     },
     take: 3,
     include: { user: { select: { id: true, name: true } } }
-  });
+  }) as any;
 
   return (
     <div className="min-h-screen text-zinc-600">
@@ -130,7 +132,7 @@ export default async function WorkItemPage({ params }: { params: Promise<{ id: s
         </div>
 
         <div className="mb-12 flex flex-wrap gap-2">
-          {work.tags.map(t => (
+          {work.tags.map((t: any) => (
             <span key={t} className="rounded-full bg-zinc-100 border border-black/5 px-3 py-1 text-xs font-semibold text-zinc-500">
               {t}
             </span>
@@ -147,7 +149,7 @@ export default async function WorkItemPage({ params }: { params: Promise<{ id: s
               <p className="text-sm text-zinc-500 italic">No verified reproductions yet.</p>
             ) : (
               <ul className="space-y-3">
-                {reproductions.map(rep => (
+                {reproductions.map((rep: any) => (
                   <li key={rep.id} className="flex items-center gap-3 rounded-xl border border-black/5 bg-zinc-100 p-3">
                     <div className="h-8 w-8 rounded-full bg-zinc-100 shrink-0 overflow-hidden">
                       {rep.fromUser?.avatar && <img src={rep.fromUser.avatar} alt="User" className="h-full w-full object-cover" />}
@@ -170,7 +172,7 @@ export default async function WorkItemPage({ params }: { params: Promise<{ id: s
               <p className="text-sm text-zinc-500 italic">No indexed citations yet.</p>
             ) : (
               <ul className="space-y-3">
-                {citations.map(cit => (
+                {citations.map((cit: any) => (
                   <li key={cit.id} className="flex items-center gap-3 rounded-xl border border-black/5 bg-zinc-100 p-3">
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-bold text-zinc-900 truncate">{cit.fromUser?.name} cited this contextually</p>
@@ -208,7 +210,7 @@ export default async function WorkItemPage({ params }: { params: Promise<{ id: s
           <div>
             <h2 className="font-syne mb-6 text-2xl font-bold text-zinc-900">Related Work in "{work.tags[0]}"</h2>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {related.map((r) => (
+              {related.map((r: any) => (
                 <WorkItemCard
                   key={r.id}
                   id={r.id}
