@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { User, Sparkles, Briefcase, ChevronRight, UserPlus, Share2, ExternalLink } from "lucide-react";
+import { User, Sparkles, Briefcase, ChevronRight, UserPlus, Share2, ExternalLink, ShieldCheck } from "lucide-react";
 import { RankBadge } from "./RankBadge";
 import { neonAuthClient } from "@/lib/neon/auth-client";
 import { useState } from "react";
@@ -70,11 +70,13 @@ export function TalentCard({
             )}
           </Badge.Anchor>
           
-          <div className="min-w-0 flex-1">
-            <Link href={`/r/${handle || id}`} className="font-syne block truncate text-lg font-black text-zinc-900 transition-colors hover:text-[#7C5CFC]">
-              {name || "Anonymous"}
+          <div className="flex h-12 flex-col justify-center">
+            <Link href={`/r/${handle || id}`}>
+              <h3 className="font-syne text-xl font-bold text-zinc-900 group-hover:text-[#7C5CFC] transition-colors leading-tight">{name}</h3>
             </Link>
-            {institution && <p className="truncate text-[10px] font-bold text-zinc-400 uppercase tracking-widest">{institution}</p>}
+            <div className="flex items-center gap-1.5 text-xs font-semibold text-zinc-500">
+               <ShieldCheck className="h-3.5 w-3.5 text-[#7C5CFC]" /> {institution}
+            </div>
           </div>
         </div>
         

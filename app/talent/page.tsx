@@ -179,14 +179,22 @@ export default async function DiscoverPage() {
                   {recentWork.length > 0 ? recentWork.map((work: any) => (
                     <div key={work.id} className="group relative rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm transition-all hover:border-[#7C5CFC]/30 hover:shadow-xl">
                        <div className="mb-4 flex items-center gap-3">
-                          <UserAvatar src={work.user.avatar} name={work.user.name} size="sm" className="h-8 w-8 border border-zinc-100" />
+                          <Link href={`/r/${work.user.handle || work.user.id}`} className="transition-transform hover:scale-105 active:scale-95">
+                             <UserAvatar src={work.user.avatar} name={work.user.name} size="sm" className="h-8 w-8 border border-zinc-100" />
+                          </Link>
                           <div className="flex flex-col">
-                             <p className="text-xs font-black text-zinc-900 leading-none">{work.user.name}</p>
+                             <Link href={`/r/${work.user.handle || work.user.id}`} className="text-xs font-black text-zinc-900 leading-none hover:text-[#7C5CFC] transition-colors">
+                                {work.user.name}
+                             </Link>
                              <p className="text-[9px] font-bold text-[#7C5CFC] uppercase tracking-widest mt-1">Verified Reproduction</p>
                           </div>
-                          <ArrowUpRight className="ml-auto h-4 w-4 text-zinc-300 group-hover:text-[#7C5CFC] transition-colors" />
+                          <Link href={`/work/${work.id}`} className="ml-auto group/arrow">
+                             <ArrowUpRight className="h-4 w-4 text-zinc-300 group-hover/arrow:text-[#7C5CFC] transition-colors" />
+                          </Link>
                        </div>
-                       <h4 className="font-syne text-sm font-bold text-zinc-800 leading-tight mb-2">{work.title}</h4>
+                       <Link href={`/work/${work.id}`} className="block">
+                          <h4 className="font-syne text-sm font-bold text-zinc-800 leading-tight mb-2 group-hover:text-[#7C5CFC] transition-colors">{work.title}</h4>
+                       </Link>
                        <div className="flex items-center gap-2">
                           <span className="rounded-lg bg-zinc-50 px-2 py-1 text-[9px] font-black uppercase tracking-widest text-zinc-400">{work.type}</span>
                           <div className="h-0.5 w-0.5 rounded-full bg-zinc-200" />
