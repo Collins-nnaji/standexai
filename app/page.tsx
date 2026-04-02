@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Sparkles, Terminal, CheckCircle2, ShieldCheck, Zap, BarChart3, Users, Newspaper, Clock, TrendingUp } from "lucide-react";
 import { TopNav } from "@/components/network/TopNav";
+import { TalentCard } from "@/components/network/TalentCard";
 import { AnimatedNetwork } from "@/components/ui/AnimatedNetwork";
 import { cn } from "@/lib/utils";
 import { neonAuth } from "@/lib/neon/auth-server";
@@ -18,10 +19,19 @@ export default async function HomePage() {
     select: { id: true, role: true, handle: true, ranks: { select: { domain: true } } }
   }) as any : null;
 
-  const posts = await prisma.aIIndexPost.findMany({
+  const posts = (await prisma.aIIndexPost.findMany({
     orderBy: { publishedAt: "desc" },
     take: 7,
-  }) as any;
+  })) as any;
+
+  const eliteTalent = (await prisma.user.findMany({
+    where: { role: { in: ["RESEARCHER", "PRO"] } },
+    take: 3,
+    include: {
+      workItems: { orderBy: { createdAt: "desc" }, take: 3, select: { id: true, title: true, type: true } },
+      ranks: { orderBy: { rankPosition: "asc" }, take: 1, select: { domain: true, rankPosition: true, score: true } }
+    }
+  })) as any;
 
   const featuredPost = posts[0];
   const remainingPosts = posts.slice(1, 7);
@@ -199,7 +209,33 @@ export default async function HomePage() {
           </div>
         </div>
 
-        {/* Redesigned Discovery Pulse */}
+        {/* Elite Talent Discovery Pulse (New) */}
+        <section className="relative z-10 w-full bg-[#FAFAF9] py-24 border-t border-zinc-100">
+          <div className="mx-auto max-w-7xl px-4">
+            <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8">
+              <div className="max-w-2xl text-left">
+                <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-[#7C5CFC]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-[#7C5CFC] ring-1 ring-[#7C5CFC]/20">
+                  <Sparkles className="h-3 w-3" /> Talent Signals
+                </div>
+                <h2 className="font-syne text-4xl font-black text-zinc-900 md:text-5xl leading-tight">
+                  Elite AI <span className="text-[#7C5CFC]">Talent.</span>
+                </h2>
+                <p className="mt-4 text-lg font-medium text-zinc-500 leading-relaxed">
+                  Connect with the world's highest-signal AI researchers, verified by peer reproduction.
+                </p>
+              </div>
+              <Link href="/talent" className="flex items-center gap-2 font-black text-xs uppercase tracking-widest text-[#7C5CFC] hover:text-[#6042db] transition-colors">
+                Discover All Talent <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {eliteTalent.map((user: any) => (
+                <TalentCard key={user.id} {...user} domain={user.ranks[0]?.domain || "AI Research"} rankPosition={user.ranks[0]?.rankPosition || null} />
+              ))}
+            </div>
+          </div>
+        </section>
 
         {/* Latest Intelligence Section (Integrated AI Index) */}
         <section className="relative z-10 w-full bg-white py-24 border-t border-zinc-100">
