@@ -119,7 +119,7 @@ export default async function DiscoverPage() {
                         <span className="font-syne text-3xl font-black text-[#7C5CFC]">{matchedResearchers.length}</span>
                         <span className="text-[9px] font-bold uppercase tracking-widest text-zinc-400">Matches</span>
                      </div>
-                     <Link href="/briefs" className="flex items-center gap-2 rounded-2xl bg-zinc-900 px-6 py-4 text-sm font-black text-white hover:bg-[#7C5CFC] transition-all active:scale-95 shadow-xl shadow-zinc-900/20">
+                     <Link href="/projects" className="flex items-center gap-2 rounded-2xl bg-zinc-900 px-6 py-4 text-sm font-black text-white hover:bg-[#7C5CFC] transition-all active:scale-95 shadow-xl shadow-zinc-900/20">
                         Manage Briefs <ArrowUpRight className="h-4 w-4" />
                      </Link>
                   </div>

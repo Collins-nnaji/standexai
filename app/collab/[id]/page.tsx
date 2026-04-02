@@ -125,7 +125,7 @@ export default async function CollabRoomPage({ params }: { params: Promise<{ id:
               <p className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-amber-600">
                 <Zap className="h-4 w-4 fill-amber-500" /> Source Brief
               </p>
-              <Link href={`/briefs`} className="flex items-center gap-1 text-xs font-semibold text-amber-600 hover:text-amber-700 transition-colors">
+              <Link href={`/projects`} className="flex items-center gap-1 text-xs font-semibold text-amber-600 hover:text-amber-700 transition-colors">
                 View all briefs <ExternalLink className="h-3 w-3" />
               </Link>
             </div>

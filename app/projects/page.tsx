@@ -7,13 +7,13 @@ import Link from "next/link";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Open Projects | StandexAI",
+  title: "Projects | StandexAI",
   description: "Discover active AI research projects from frontier labs.",
 };
 
 export const dynamic = "force-dynamic";
 
-export default async function BriefsPage() {
+export default async function ProjectsPage() {
   const { data: session } = await neonAuth.getSession();
   
   const currentUser = session?.user?.email ? await prisma.user.findUnique({

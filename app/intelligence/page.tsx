@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-export default async function IndexPage() {
+export default async function IntelligencePage() {
   const { data: session } = await neonAuth.getSession();
 
   const posts = await prisma.aIIndexPost.findMany({
@@ -36,7 +36,7 @@ export default async function IndexPage() {
               <Newspaper className="h-3 w-3" /> StandexAI Editorial
             </div>
             <h1 className="font-syne text-5xl font-black text-zinc-900 md:text-7xl leading-[0.9]">
-              AI <span className="text-[#7C5CFC]">Index.</span>
+              AI <span className="text-[#7C5CFC]">Intelligence.</span>
             </h1>
             <p className="mt-6 text-lg font-medium text-zinc-500 leading-relaxed">
               Browse all publications on the frontiers of machine learning, policy, and model architecture.
@@ -51,7 +51,7 @@ export default async function IndexPage() {
         {/* Featured Story (Hero) */}
         {featuredPost && (
           <section className="mb-16">
-            <Link href={`/index/${featuredPost.id}`} className="group relative block overflow-hidden rounded-[32px] border border-zinc-200 bg-white shadow-2xl transition-all hover:border-[#7C5CFC]/30">
+            <Link href={`/intelligence/${featuredPost.id}`} className="group relative block overflow-hidden rounded-[32px] border border-zinc-200 bg-white shadow-2xl transition-all hover:border-[#7C5CFC]/30">
               <div className="grid lg:grid-cols-[1fr_450px]">
                 <div className="relative h-[300px] lg:h-[500px] overflow-hidden">
                   <Image 
@@ -95,7 +95,7 @@ export default async function IndexPage() {
         {/* Intelligence Grid */}
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {remainingPosts.length > 0 ? remainingPosts.map((post: any) => (
-            <Link key={post.id} href={`/index/${post.id}`} className="group flex flex-col rounded-3xl border border-zinc-200 bg-white p-2 transition-all hover:border-[#7C5CFC]/20 hover:shadow-xl">
+            <Link key={post.id} href={`/intelligence/${post.id}`} className="group flex flex-col rounded-3xl border border-zinc-200 bg-white p-2 transition-all hover:border-[#7C5CFC]/20 hover:shadow-xl">
               <div className="relative h-[240px] w-full overflow-hidden rounded-2xl">
                 <Image 
                   src={post.imageUrl || "https://images.unsplash.com/photo-1620712943543-bcc4628c6820?q=80&w=1530"} 

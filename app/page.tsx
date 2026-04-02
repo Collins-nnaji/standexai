@@ -73,7 +73,7 @@ export default async function HomePage() {
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
-                href="/briefs"
+                href="/projects"
                 className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-zinc-200 bg-white/80 backdrop-blur-sm shadow-sm px-8 text-sm font-bold text-zinc-900 transition-all hover:bg-white hover:border-[#7C5CFC]/30 active:scale-95"
               >
                 Launch Open Project
@@ -261,7 +261,7 @@ export default async function HomePage() {
             {/* Featured Story */}
             {featuredPost && (
               <div className="mb-12">
-                <Link href={`/index/${featuredPost.id}`} className="group relative block overflow-hidden rounded-[32px] border border-zinc-200 bg-white shadow-2xl transition-all hover:border-[#7C5CFC]/30">
+                <Link href={`/intelligence/${featuredPost.id}`} className="group relative block overflow-hidden rounded-[32px] border border-zinc-200 bg-white shadow-2xl transition-all hover:border-[#7C5CFC]/30">
                   <div className="grid lg:grid-cols-[1fr_450px]">
                     <div className="relative h-[300px] lg:h-[450px] overflow-hidden">
                       <Image 
@@ -296,7 +296,7 @@ export default async function HomePage() {
             {/* Small Grid */}
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {remainingPosts.map((post: any) => (
-                <Link key={post.id} href={`/index/${post.id}`} className="group flex flex-col rounded-3xl border border-zinc-100 bg-white p-2 transition-all hover:border-[#7C5CFC]/20 hover:shadow-xl">
+                <Link key={post.id} href={`/intelligence/${post.id}`} className="group flex flex-col rounded-3xl border border-zinc-100 bg-white p-2 transition-all hover:border-[#7C5CFC]/20 hover:shadow-xl">
                   <div className="relative h-[200px] w-full overflow-hidden rounded-2xl">
                     <Image 
                       src={post.imageUrl || "https://images.unsplash.com/photo-1620712943543-bcc4628c6820?q=80&w=1530"} 
@@ -326,7 +326,7 @@ export default async function HomePage() {
             </div>
 
             <div className="mt-16 flex justify-center">
-               <Link href="/index" className="rounded-full border border-zinc-200 bg-white px-8 py-3 text-sm font-bold text-zinc-600 transition-all hover:border-[#7C5CFC]/30 hover:text-[#7C5CFC]">
+               <Link href="/intelligence" className="rounded-full border border-zinc-200 bg-white px-8 py-3 text-sm font-bold text-zinc-600 transition-all hover:border-[#7C5CFC]/30 hover:text-[#7C5CFC]">
                  View All Publications
                </Link>
             </div>
