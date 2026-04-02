@@ -30,7 +30,7 @@ export default async function OnboardingPage() {
 
   // If already onboarded (has specific role or bio), redirect to their domain
   if (user?.role === "RESEARCHER" || user?.role === "PRO" || user?.role === "LAB" || user?.bio) {
-    redirect("/discover");
+    redirect("/talent");
   }
 
   return (

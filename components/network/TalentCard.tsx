@@ -1,8 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { User, Sparkles, Briefcase, ChevronRight } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { User, Sparkles, Briefcase, ChevronRight, UserPlus, Share2, ExternalLink } from "lucide-react";
 import { RankBadge } from "./RankBadge";
+import { neonAuthClient } from "@/lib/neon/auth-client";
+import { useState } from "react";
+import { InviteToCollabModal } from "./InviteToCollabModal";
+import { Avatar, Badge, Button, ButtonGroup, Separator } from "@heroui/react";
 
 interface CompactWorkItem {
   id: string;
@@ -12,6 +17,7 @@ interface CompactWorkItem {
 
 export interface TalentCardProps {
   id: string;
+  handle?: string | null;
   name: string | null;
   avatar: string | null;
   bio: string | null;
@@ -25,8 +31,9 @@ export interface TalentCardProps {
 
 export function TalentCard({
   id,
+  handle,
   name,
-  avatar,
+  avatar: avatarUrl,
   bio,
   institution,
   openToWork,
@@ -35,86 +42,138 @@ export function TalentCard({
   workItems,
   isScoutView = false,
 }: TalentCardProps) {
+  const router = useRouter();
+  const { data: session } = neonAuthClient.useSession();
+  const [isInviteOpen, setIsInviteOpen] = useState(false);
+  const isSelf = session?.user?.email && session.user.email === id ? true : false;
+  const canInvite = session?.user;
+
   return (
-    <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-black/10 bg-white shadow-sm p-5 transition-all hover:border-black/20 hover:shadow-md">
+    <>
+      <div className="group relative flex h-full flex-col overflow-hidden rounded-[32px] border border-zinc-200 bg-white/80 p-6 shadow-sm backdrop-blur-sm transition-all hover:border-[#7C5CFC]/40 hover:shadow-2xl hover:-translate-y-1">
       {/* Background glow on hover */}
-      <div className="absolute inset-x-0 -top-px h-px w-full bg-gradient-to-r from-transparent via-[#7C5CFC]/0 to-transparent transition-all group-hover:via-[#7C5CFC]/40" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_100%_0%,rgba(124,92,252,0.05),transparent_70%)] opacity-0 transition-opacity group-hover:opacity-100" />
       
-      <div className="mb-4 flex items-start justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <Link href={`/r/${id}`} className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full border border-black/10 bg-zinc-100">
-            {avatar ? (
-              <img src={avatar} alt={name || "Researcher"} className="h-full w-full object-cover" />
-            ) : (
-              <div className="flex h-full items-center justify-center bg-zinc-100 text-zinc-500">
-                <User className="h-6 w-6" />
-              </div>
-            )}
-          </Link>
-          <div className="min-w-0 flex-1">
-            <Link href={`/r/${id}`} className="font-syne block truncate text-base font-bold text-zinc-900 transition-colors hover:text-[#7C5CFC]">
-              {name || "Anonymous Researcher"}
+      <div className="mb-6 flex items-start justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <Badge.Anchor>
+            <Link href={`/r/${handle || id}`}>
+              <Avatar className="h-16 w-16 border border-zinc-100 shadow-sm">
+                {avatarUrl && <Avatar.Image src={avatarUrl} />}
+                <Avatar.Fallback>{name?.slice(0, 2).toUpperCase() || "AI"}</Avatar.Fallback>
+              </Avatar>
             </Link>
-            {institution && <p className="truncate text-xs font-medium text-zinc-500">{institution}</p>}
+            {rankPosition && (
+              <Badge color="accent" size="sm" variant="soft" className="font-syne font-black">
+                #{rankPosition}
+              </Badge>
+            )}
+          </Badge.Anchor>
+          
+          <div className="min-w-0 flex-1">
+            <Link href={`/r/${handle || id}`} className="font-syne block truncate text-lg font-black text-zinc-900 transition-colors hover:text-[#7C5CFC]">
+              {name || "Anonymous"}
+            </Link>
+            {institution && <p className="truncate text-[10px] font-bold text-zinc-400 uppercase tracking-widest">{institution}</p>}
           </div>
         </div>
         
-        {rankPosition && <RankBadge domain={domain} position={rankPosition} compact />}
+        {!rankPosition && (
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-50 border border-zinc-100 text-[#7C5CFC]">
+            <Sparkles className="h-5 w-5" />
+          </div>
+        )}
       </div>
 
-      <p className="mb-5 line-clamp-2 text-sm leading-relaxed text-zinc-500">
-        {bio || "No bio provided."}
+      <p className="mb-6 line-clamp-3 text-sm font-medium leading-relaxed text-zinc-500">
+        {bio || "Researcher on the frontiers of artificial intelligence."}
       </p>
 
+      {/* Stats/Reputation Row */}
+      <div className="mb-6">
+        <Separator className="bg-zinc-100/50" />
+        <div className="grid grid-cols-2 gap-4 py-4">
+           <div className="flex flex-col">
+              <span className="text-xs font-black text-zinc-900 font-syne tracking-tight">180.2k</span>
+              <span className="text-[9px] font-bold uppercase tracking-widest text-[#7C5CFC]">Impact Points</span>
+           </div>
+           <div className="flex flex-col border-l border-zinc-100 pl-4">
+              <span className="text-xs font-black text-zinc-900 font-syne tracking-tight">Verified</span>
+              <span className="text-[9px] font-bold uppercase tracking-widest text-emerald-500">Signal Scout</span>
+           </div>
+        </div>
+        <Separator className="bg-zinc-100/50" />
+      </div>
+
       {/* Mini Work Feed */}
-      <div className="mb-5 flex-1 space-y-2">
+      <div className="mb-6 flex-1 space-y-2.5">
+        <p className="text-[9px] font-black uppercase tracking-widest text-zinc-400 mb-2">Verified Artifacts</p>
         {workItems.length > 0 ? (
-          workItems.slice(0, 3).map((work) => (
+          workItems.slice(0, 2).map((work) => (
             <Link 
               key={work.id} 
               href={`/work/${work.id}`}
-              className="flex items-center justify-between rounded-lg border border-black/5 bg-zinc-100 py-1.5 px-3 transition-colors hover:bg-zinc-200"
+              className="flex items-center justify-between rounded-xl border border-zinc-100 bg-zinc-50/50 p-2.5 transition-all hover:bg-white hover:border-[#7C5CFC]/20 hover:shadow-sm"
             >
               <div className="min-w-0 flex-1 pr-2">
-                <p className="truncate text-xs font-medium text-zinc-900/90">{work.title}</p>
+                <p className="truncate text-[10px] font-bold text-zinc-700">{work.title}</p>
               </div>
-              <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider text-zinc-500">
+              <span className="shrink-0 text-[8px] font-black uppercase tracking-wider text-zinc-400">
                 {work.type}
               </span>
             </Link>
           ))
         ) : (
-          <div className="flex h-[88px] items-center justify-center rounded-lg border border-dashed border-black/10 text-xs text-zinc-500">
-            No public work items yet.
+          <div className="flex h-16 items-center justify-center rounded-2xl border border-dashed border-zinc-200 text-[9px] font-bold text-zinc-400 uppercase tracking-widest bg-zinc-50/30">
+            Pending verification.
           </div>
         )}
       </div>
 
-      <div className="mt-auto flex items-center justify-between border-t border-black/10 pt-4">
+      <div className="mt-auto flex items-center justify-between pt-4 pb-4">
         <div>
           {openToWork && (
-            <div className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-[11px] font-semibold text-emerald-400">
-              <Briefcase className="h-3 w-3" />
-              Open to Work
+            <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-3 py-1 text-[9px] font-black uppercase tracking-widest text-emerald-600">
+              <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" /> Available
             </div>
           )}
         </div>
-        {isScoutView ? (
-          <Link
-            href={`/r/${id}`}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-zinc-900 px-4 py-1.5 text-xs font-bold text-white transition-all hover:bg-[#7C5CFC] hover:shadow-[0_0_10px_rgba(124,92,252,0.3)] active:scale-95"
-          >
-            <Sparkles className="h-3.5 w-3.5" /> Scout Profile
-          </Link>
-        ) : (
-          <Link
-            href={`/r/${id}`}
-            className="inline-flex items-center text-xs font-semibold text-zinc-500 transition-colors group-hover:text-[#7C5CFC]"
-          >
-            View Profile <ChevronRight className="ml-1 h-3 w-3" />
-          </Link>
-        )}
       </div>
+
+      {/* Action Bar (Invite Button) */}
+      <div className="flex gap-2">
+        <ButtonGroup className="w-full">
+           {canInvite && !isSelf ? (
+             <Button 
+                onPress={() => setIsInviteOpen(true)}
+                className="flex-[2] h-11 bg-[#7C5CFC] text-white text-[10px] font-black uppercase tracking-widest shadow-lg shadow-[#7C5CFC]/20 rounded-2xl hover:bg-[#6042db]"
+             >
+                <UserPlus className="h-3.5 w-3.5 mr-2" /> Invite
+             </Button>
+           ) : (
+             <Button
+                onPress={() => router.push(`/r/${handle || id}`)}
+                className="flex-[2] h-11 bg-zinc-900 text-white text-[10px] font-black flex items-center justify-center uppercase tracking-widest rounded-2xl hover:bg-black transition-colors"
+             >
+                <ExternalLink className="h-3.5 w-3.5 mr-2" /> Profile
+             </Button>
+           )}
+           <Button 
+              className="w-11 min-w-0 h-11 bg-zinc-50 border border-zinc-100 rounded-2xl text-zinc-400 hover:text-zinc-600 hover:bg-white transition-all flex items-center justify-center p-0"
+           >
+              <Share2 className="h-3.5 w-3.5" />
+           </Button>
+        </ButtonGroup>
+      </div>
+
+      {/* Modal */}
+      <InviteToCollabModal
+        isOpen={isInviteOpen}
+        onClose={() => setIsInviteOpen(false)}
+        targetUserId={id}
+        targetUserName={name || "Researcher"}
+      />
     </div>
+    </>
   );
 }

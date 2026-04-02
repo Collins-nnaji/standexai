@@ -11,7 +11,7 @@ import {
   Moon,
   Plus,
   Search,
-  Settings,
+  User,
   Sun,
   X,
 } from "lucide-react";
@@ -376,16 +376,16 @@ export function ConsoleWorkspace() {
 
         <div className="ml-auto flex shrink-0 items-center gap-2">
           <Link
-            href="/settings"
+            href="/r/me"
             className={cn(
               "flex h-8 w-8 items-center justify-center rounded-lg border transition-colors",
               t.borderSub,
               t.muted,
               t.navHover,
             )}
-            title="Settings"
+            title="My Profile"
           >
-            <Settings className="h-4 w-4" strokeWidth={1.8} />
+            <User className="h-4 w-4" strokeWidth={1.8} />
           </Link>
           <button
             type="button"

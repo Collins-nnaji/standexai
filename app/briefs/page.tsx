@@ -4,6 +4,12 @@ import { TopNav } from "@/components/network/TopNav";
 import { ResearchBriefCard } from "@/components/network/ResearchBriefCard";
 import { Briefcase, Building, Plus } from "lucide-react";
 import Link from "next/link";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Open Projects | StandexAI",
+  description: "Discover active AI research projects from frontier labs.",
+};
 
 export const dynamic = "force-dynamic";
 
@@ -45,7 +51,7 @@ export default async function BriefsPage() {
         <div className="mb-10 flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
           <div>
             <h1 className="font-syne mb-2 text-4xl font-bold text-zinc-900 md:text-5xl">
-              Research Briefs
+              Open Projects
             </h1>
             <p className="max-w-2xl text-lg text-zinc-500">
               Discover active AI projects from labs and companies. 

@@ -6,6 +6,14 @@ const nextConfig: NextConfig = {
     NEXT_PUBLIC_NEON_AUTH_URL: process.env.NEON_AUTH_URL,
     NEXT_PUBLIC_NEON_DATA_API_URL: process.env.NEON_DATA_API_URL,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+    ],
+  },
 };
 
 export default nextConfig;

@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
 
     const body = await req.json();
-    const { title, description, briefId, visibility = "private" } = body;
+    const { title, description, briefId, visibility = "private", invitedUserId } = body;
 
     if (!title?.trim()) {
       return NextResponse.json({ error: "Title is required" }, { status: 400 });
@@ -43,7 +43,12 @@ export async function POST(req: NextRequest) {
         visibility,
         briefId: briefId || null,
         members: {
-          create: { userId: user.id, role: "owner" }
+          create: invitedUserId 
+            ? [
+                { userId: user.id, role: "owner" },
+                { userId: invitedUserId, role: "contributor" }
+              ]
+            : [{ userId: user.id, role: "owner" }]
         }
       }
     });

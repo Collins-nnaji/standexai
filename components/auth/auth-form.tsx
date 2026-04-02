@@ -56,7 +56,7 @@ export function AuthForm({ mode: initialMode }: AuthFormProps) {
           return;
         }
       }
-      router.push("/console");
+      router.push("/discover");
       router.refresh();
     } catch (authError) {
       setError(authError instanceof Error ? authError.message : "Authentication failed");
@@ -84,7 +84,7 @@ export function AuthForm({ mode: initialMode }: AuthFormProps) {
     setError(null);
     const result = await neonAuthClient.signIn.social({
       provider: "google",
-      callbackURL: "/console",
+      callbackURL: "/console/redirect",
     });
     if (result.error) {
       setError(result.error.message || "Google sign-in failed");
@@ -107,7 +107,7 @@ export function AuthForm({ mode: initialMode }: AuthFormProps) {
           />
           <div className="flex items-center justify-center gap-1.5 text-xs text-zinc-400">
             <Sparkles className="h-3 w-3 text-indigo-500" />
-            <span>AI Communication Coach</span>
+            <span>Professional Network for AI Researchers</span>
           </div>
         </div>
 
@@ -120,16 +120,16 @@ export function AuthForm({ mode: initialMode }: AuthFormProps) {
               ? `Signed in as ${session.data?.user?.email ?? "user"}`
               : mode === "sign-up"
                 ? "Start analyzing and improving your communication."
-                : "Continue to the console."}
+                : "Continue to the network."}
           </p>
 
           {isSignedIn ? (
             <div className="mt-6 space-y-3">
               <button
-                onClick={() => router.push("/console")}
+                onClick={() => router.push("/discover")}
                 className="w-full rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700 shadow-lg shadow-indigo-600/25"
               >
-                Open console
+                Discover Network
               </button>
               <button
                 onClick={signOut}

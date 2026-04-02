@@ -22,7 +22,7 @@ export default async function CollabRoomPage({ params }: { params: Promise<{ id:
     where: { id },
     include: {
       members: {
-        include: { user: { select: { id: true, name: true, avatar: true, role: true } } }
+        include: { user: { select: { id: true, name: true, handle: true, avatar: true, role: true } } }
       },
       brief: {
         select: {
@@ -35,7 +35,7 @@ export default async function CollabRoomPage({ params }: { params: Promise<{ id:
         }
       }
     }
-  });
+  }) as any;
 
   if (!collab) return notFound();
 
@@ -67,7 +67,7 @@ export default async function CollabRoomPage({ params }: { params: Promise<{ id:
 
   return (
     <div className="min-h-screen text-zinc-700">
-      <TopNav />
+      <TopNav user={session?.user} />
 
       {/* Room Header */}
       <header className="border-b border-zinc-200/60 bg-white/70 backdrop-blur-xl shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
@@ -92,7 +92,7 @@ export default async function CollabRoomPage({ params }: { params: Promise<{ id:
             {/* Member Avatars */}
             <div className="flex -space-x-2">
               {collab.members.slice(0, 5).map((m: any) => (
-                <Link key={m.userId} href={`/r/${m.userId}`} title={`${m.user.name} (${m.role})`}
+                <Link key={m.userId} href={`/r/${m.user.handle || m.userId}`} title={`${m.user.name} (${m.role})`}
                   className="relative z-0 hover:z-10 transition-transform hover:scale-110"
                 >
                   <div className="h-9 w-9 rounded-full border-2 border-white bg-zinc-100 overflow-hidden shadow-sm">
@@ -204,7 +204,7 @@ export default async function CollabRoomPage({ params }: { params: Promise<{ id:
               <ul className="space-y-3">
                 {collab.members.map((m: any) => (
                   <li key={m.userId}>
-                    <Link href={`/r/${m.userId}`} className="flex items-center gap-3 rounded-xl p-2 hover:bg-zinc-50 transition-colors group">
+                    <Link href={`/r/${m.user.handle || m.userId}`} className="flex items-center gap-3 rounded-xl p-2 hover:bg-zinc-50 transition-colors group">
                       <div className="h-9 w-9 rounded-full bg-zinc-100 overflow-hidden border border-zinc-200 shrink-0">
                         {m.user.avatar ? (
                           <img src={m.user.avatar} alt={m.user.name || ""} className="h-full w-full object-cover" />

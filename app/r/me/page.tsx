@@ -13,11 +13,11 @@ export default async function RedirectToSelf() {
 
   const user = await prisma.user.findUnique({
     where: { email: session.user.email },
-    select: { id: true },
+    select: { id: true, handle: true },
   });
 
   if (user?.id) {
-    redirect(`/r/${user.id}`);
+    redirect(`/r/${user.handle || user.id}`);
   } else {
     redirect("/onboarding");
   }

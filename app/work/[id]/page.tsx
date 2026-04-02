@@ -51,7 +51,7 @@ export default async function WorkItemPage({ params }: { params: Promise<{ id: s
 
   return (
     <div className="min-h-screen text-zinc-600">
-      <TopNav />
+      <TopNav user={session?.user} />
       
       <main className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
         <div className="mb-8">

@@ -27,7 +27,7 @@ export function OnboardingForm({ userId }: { userId: string }) {
         setLoading(false);
       } else {
         router.refresh();
-        router.push("/discover");
+        router.push("/talent");
       }
     } catch (err: any) {
       setError(err.message || "Something went wrong.");

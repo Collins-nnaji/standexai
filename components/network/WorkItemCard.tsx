@@ -12,6 +12,7 @@ export interface WorkItemCardProps {
   fileUrl?: string | null;
   authorName?: string | null;
   authorId?: string | null;
+  authorHandle?: string | null;
   collaborationId?: string | null;
   coAuthors?: string[];
 }
@@ -27,6 +28,7 @@ export function WorkItemCard({
   fileUrl,
   authorName,
   authorId,
+  authorHandle,
   collaborationId,
   coAuthors = [],
 }: WorkItemCardProps) {
@@ -60,7 +62,7 @@ export function WorkItemCard({
               )}
             </div>
             {authorName && authorId && (
-              <Link href={`/r/${authorId}`} className="text-sm font-bold text-zinc-900 hover:text-[#7C5CFC] transition-colors relative z-10">
+              <Link href={`/r/${authorHandle || authorId}`} className="text-sm font-bold text-zinc-900 hover:text-[#7C5CFC] transition-colors relative z-10">
                 {authorName}
               </Link>
             )}

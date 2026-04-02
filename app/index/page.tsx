@@ -4,16 +4,11 @@ import Image from "next/image";
 import { prismaDb as prisma } from "@/lib/prisma";
 import { TopNav } from "@/components/network/TopNav";
 import { neonAuth } from "@/lib/neon/auth-server";
-import { Share2, TrendingUp, CheckCircle2 } from "lucide-react";
+import { Clock, ArrowRight, TrendingUp, Sparkles, Newspaper, Bookmark } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "AI Index | Weekly Top Research",
-  description: "The top 10 most impactful AI research works this week based on verified peer reproductions and citations.",
-  openGraph: {
-    title: "AI Index | Weekly Top Research",
-    description: "The top 10 most impactful AI research works this week based on verified peer reproductions and citations.",
-    images: [{ url: "/api/og/index" }], // Mock route for OG generation
-  },
+  title: "Intelligence Hub | StandexAI",
+  description: "Curated publications and high-signal news from across the global AI research space.",
 };
 
 export const dynamic = "force-dynamic";
@@ -21,120 +16,120 @@ export const dynamic = "force-dynamic";
 export default async function IndexPage() {
   const { data: session } = await neonAuth.getSession();
 
-  // Compute signal velocity: sum of signal values in last 7 days grouped by work item
-  const sevenDaysAgo = new Date();
-  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-
-  // Note: Prisma aggregate grouping is great, but we can also just fetch signals and map it (easier for mock data)
-  // Finding Top Work Items
-  const popularWorks = await prisma.workItem.findMany({
-    take: 10,
-    include: {
-      user: { select: { id: true, name: true, institution: true } },
-      reputationSignals: {
-        where: { createdAt: { gte: sevenDaysAgo } }
-      }
-    }
+  const posts = await prisma.aIIndexPost.findMany({
+    orderBy: { publishedAt: "desc" },
+    take: 24, // Show a larger number on the dedicated page
   }) as any;
 
-  // Calculate scores and sort
-  const scoredWorks = popularWorks.map((w: any) => {
-    const weeklyScore = w.reputationSignals.reduce((acc: any, sig: any) => acc + sig.value, 0);
-    return { ...w, weeklyScore };
-  }).sort((a: any, b: any) => b.weeklyScore - a.weeklyScore).slice(0, 10);
+  const featuredPost = posts[0];
+  const remainingPosts = posts.slice(1);
 
   return (
-    <div className="min-h-screen bg-[#FAFAF9] text-zinc-600">
+    <div className="min-h-screen bg-[#FAFAF9] text-zinc-600 font-[family-name:var(--font-inter)]">
       <TopNav user={session?.user} />
       
-      <main className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
-        <div className="mx-auto mb-16 max-w-2xl text-center">
-          <div className="relative mx-auto mb-8 flex flex-col items-center justify-center">
-            {/* The Mark of Approval Container */}
-            <div className="relative flex h-32 w-32 items-center justify-center rounded-full bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] ring-1 ring-zinc-200/50">
-              <div className="absolute inset-0 animate-pulse rounded-full bg-[#7C5CFC]/5 blur-xl group-hover:bg-[#7C5CFC]/10" />
-              <Image 
-                src="/standexailogo.png" 
-                alt="StandexAI Logo" 
-                width={80} 
-                height={24} 
-                className="relative z-10 w-20 object-contain"
-              />
-              {/* Approval Badge */}
-              <div className="absolute -bottom-1 -right-1 rounded-full bg-white p-1 shadow-md ring-1 ring-zinc-200">
-                <CheckCircle2 className="h-6 w-6 text-[#7C5CFC] fill-[#7C5CFC] text-white" />
-              </div>
+      <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
+        {/* Header Section */}
+        <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-zinc-200 pb-8">
+          <div className="max-w-2xl">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-[#7C5CFC]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-[#7C5CFC] ring-1 ring-[#7C5CFC]/20">
+              <Newspaper className="h-3 w-3" /> StandexAI Editorial
             </div>
-            
-            <h1 className="font-syne mt-8 text-5xl font-bold tracking-tight text-zinc-900 md:text-6xl">
-              AI Index
+            <h1 className="font-syne text-5xl font-black text-zinc-900 md:text-7xl leading-[0.9]">
+              AI <span className="text-[#7C5CFC]">Index.</span>
             </h1>
+            <p className="mt-6 text-lg font-medium text-zinc-500 leading-relaxed">
+              Browse all publications on the frontiers of machine learning, policy, and model architecture.
+            </p>
           </div>
-          <p className="text-xl leading-relaxed text-zinc-500">
-            The defining weekly benchmark of AI research velocity. 
-            Ranked by peer reproductions, citations, and completions in the last 7 days.
-          </p>
-          <div className="mt-8">
-            <button className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-zinc-100 px-6 py-2.5 text-sm font-bold text-zinc-900 transition-colors hover:bg-zinc-200">
-              <Share2 className="h-4 w-4" /> Share Leaderboard
-            </button>
+          <div className="flex items-center gap-2 text-sm font-bold text-zinc-400">
+            <TrendingUp className="h-4 w-4 text-emerald-500" />
+            <span>Full Archive</span>
           </div>
         </div>
 
-        <div className="rounded-3xl border border-black/10 bg-white shadow-sm shadow-2xl overflow-hidden relative">
-          <div className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-[#7C5CFC] to-transparent opacity-50" />
-          
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead className="bg-black/20 text-xs font-bold uppercase tracking-wider text-zinc-500">
-                <tr>
-                  <th className="px-6 py-4 font-bold">Rank</th>
-                  <th className="px-6 py-4 font-bold">Work Title</th>
-                  <th className="px-6 py-4 font-bold">Primary Domain</th>
-                  <th className="px-6 py-4 font-bold text-right">Velocity Score</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/5">
-                {scoredWorks.length > 0 ? scoredWorks.map((work: any, index: any) => (
-                  <tr key={work.id} className="group transition-colors hover:bg-zinc-100">
-                    <td className="px-6 py-6">
-                      <div className={`flex h-8 w-8 items-center justify-center rounded-full font-bold ${
-                        index === 0 ? "bg-amber-500/20 text-amber-500 border border-amber-500/30" :
-                        index === 1 ? "bg-zinc-300/20 text-zinc-600 border border-zinc-300/30" :
-                        index === 2 ? "bg-amber-700/20 text-amber-600 border border-amber-700/30" :
-                        "bg-zinc-100 text-zinc-500"
-                      }`}>
-                        {index + 1}
+        {/* Featured Story (Hero) */}
+        {featuredPost && (
+          <section className="mb-16">
+            <Link href={`/index/${featuredPost.id}`} className="group relative block overflow-hidden rounded-[32px] border border-zinc-200 bg-white shadow-2xl transition-all hover:border-[#7C5CFC]/30">
+              <div className="grid lg:grid-cols-[1fr_450px]">
+                <div className="relative h-[300px] lg:h-[500px] overflow-hidden">
+                  <Image 
+                    src={featuredPost.imageUrl || "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=1632"} 
+                    alt={featuredPost.title}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent lg:hidden" />
+                </div>
+                <div className="flex flex-col justify-center p-8 lg:p-12">
+                  <div className="mb-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#7C5CFC]">
+                    <Sparkles className="h-3.5 w-3.5" /> Featured Publication
+                  </div>
+                  <h2 className="font-syne mb-6 text-3xl font-black text-zinc-900 md:text-4xl lg:text-5xl leading-[1.1] group-hover:text-[#7C5CFC] transition-colors">
+                    {featuredPost.title}
+                  </h2>
+                  <p className="mb-8 text-lg text-zinc-500 leading-relaxed">
+                    {featuredPost.summary}
+                  </p>
+                  <div className="mt-auto flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-100 font-bold text-[#7C5CFC]">S</div>
+                      <div>
+                        <p className="text-sm font-bold text-zinc-900">StandexAI Editorial</p>
+                        <p className="text-xs text-zinc-400 flex items-center gap-1">
+                          <Clock className="h-3 w-3" /> {featuredPost.readingTime} min read
+                        </p>
                       </div>
-                    </td>
-                    <td className="px-6 py-6 min-w-[300px]">
-                      <Link href={`/work/${work.id}`} className="block">
-                        <p className="font-syne text-lg font-bold text-zinc-900 group-hover:text-[#7C5CFC] transition-colors line-clamp-1">{work.title}</p>
-                        <p className="mt-1 text-xs text-zinc-500">by {work.user.name}</p>
-                      </Link>
-                    </td>
-                    <td className="px-6 py-6 text-zinc-500">
-                      <span className="rounded-md bg-zinc-100 px-2.5 py-1 text-xs font-semibold">
-                        {work.tags[0] || "AI Research"}
-                      </span>
-                    </td>
-                    <td className="px-6 py-6 text-right">
-                      <div className="flex items-center justify-end gap-2 font-bold text-emerald-400">
-                        <TrendingUp className="h-4 w-4" />
-                        <span className="text-lg">{work.weeklyScore > 0 ? work.weeklyScore : "—"}</span>
-                      </div>
-                    </td>
-                  </tr>
-                )) : (
-                  <tr>
-                     <td colSpan={4} className="px-6 py-12 text-center text-zinc-500 shadow-inner">
-                        Building the intelligence graph. Results will populate shortly.
-                     </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+                    </div>
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full border border-zinc-200 text-zinc-400 group-hover:bg-[#7C5CFC] group-hover:text-white group-hover:border-[#7C5CFC] transition-all">
+                      <ArrowRight className="h-5 w-5" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          </section>
+        )}
+
+        {/* Intelligence Grid */}
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {remainingPosts.length > 0 ? remainingPosts.map((post: any) => (
+            <Link key={post.id} href={`/index/${post.id}`} className="group flex flex-col rounded-3xl border border-zinc-200 bg-white p-2 transition-all hover:border-[#7C5CFC]/20 hover:shadow-xl">
+              <div className="relative h-[240px] w-full overflow-hidden rounded-2xl">
+                <Image 
+                  src={post.imageUrl || "https://images.unsplash.com/photo-1620712943543-bcc4628c6820?q=80&w=1530"} 
+                  alt={post.title}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute top-4 left-4 rounded-lg bg-white/90 backdrop-blur-md px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-[#7C5CFC] shadow-sm">
+                  {post.category}
+                </div>
+              </div>
+              <div className="flex flex-1 flex-col p-5">
+                <h3 className="font-syne mb-4 text-xl font-bold text-zinc-900 group-hover:text-[#7C5CFC] transition-colors leading-tight">
+                  {post.title}
+                </h3>
+                <p className="mb-6 line-clamp-3 text-sm font-medium text-zinc-500 leading-relaxed">
+                  {post.summary}
+                </p>
+                <div className="mt-auto flex items-center justify-between border-t border-zinc-100 pt-4">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 flex items-center gap-1">
+                    <Clock className="h-3 w-3" /> {post.readingTime}m read
+                  </span>
+                  <button className="rounded-full p-2 text-zinc-300 hover:text-[#7C5CFC] hover:bg-[#7C5CFC]/5 transition-all">
+                    <Bookmark className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+            </Link>
+          )) : (
+            <div className="col-span-full rounded-3xl border border-dashed border-zinc-200 p-24 text-center">
+              <p className="font-syne text-xl font-bold text-zinc-400">Loading full intelligence archive.</p>
+              <p className="mt-2 text-zinc-500">Wait for the next high-signal publication.</p>
+            </div>
+          )}
         </div>
       </main>
     </div>
