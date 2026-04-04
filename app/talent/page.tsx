@@ -3,13 +3,9 @@ import { Metadata } from "next";
 import { prismaDb as prisma } from "@/lib/prisma";
 import { TopNav } from "@/components/network/TopNav";
 import { ScoutSearch } from "@/components/network/ScoutSearch";
-import { TalentCard } from "@/components/network/TalentCard";
-import { WorkItemCard } from "@/components/network/WorkItemCard";
-import { TalentInterests } from "@/components/network/TalentInterests";
-import { PublicationActions } from "@/components/network/PublicationManager";
-import { UserAvatar } from "@/components/network/UserAvatar";
+import { TalentDiscovery } from "@/components/network/TalentDiscovery";
 import Link from "next/link";
-import { Eye, Users, Zap, Sparkles, TrendingUp, ShieldCheck, ArrowUpRight } from "lucide-react";
+import { TrendingUp, ShieldCheck, ArrowUpRight } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "AI Talent | StandexAI",
@@ -56,185 +52,84 @@ export default async function DiscoverPage() {
 
   const researchers = await prisma.user.findMany({
     where: { role: { in: ["RESEARCHER", "PRO"] } },
-    take: 9,
+    take: 20, // Fetch more for the list view
     include: {
-      workItems: { orderBy: { createdAt: "desc" }, take: 3, select: { id: true, title: true, type: true } },
+      workItems: { orderBy: { createdAt: "desc" }, take: 5, select: { id: true, title: true, type: true, abstract: true, tags: true, views: true } },
       ranks: { orderBy: { rankPosition: "asc" }, take: 1, select: { domain: true, rankPosition: true, score: true } }
     }
   }) as any;
 
-  const recentWork = await prisma.workItem.findMany({
-    take: 6,
-    orderBy: { createdAt: "desc" },
-    include: { user: { select: { id: true, name: true, handle: true, avatar: true } } }
-  });
+  const totalResearchers = await prisma.user.count({ where: { role: { in: ["RESEARCHER", "PRO"] } } });
+  const totalWork = await prisma.workItem.count();
 
   return (
     <div className="min-h-screen bg-[#FAFAF9] font-[family-name:var(--font-inter)] selection:bg-[#7C5CFC]/20">
       <TopNav user={session?.user} />
 
-      <main className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6">
+      <main className="relative mx-auto max-w-[1440px] px-6 lg:px-12 py-10">
         {/* Decorative Background Elements */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-64 bg-[radial-gradient(circle_at_50%_0%,rgba(124,92,252,0.05),transparent_70%)] pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-6xl h-48 bg-[radial-gradient(circle_at_50%_0%,rgba(124,92,252,0.03),transparent_70%)] pointer-events-none" />
 
-        {/* Compressed Discovery Hero */}
-        <div className="relative mb-8 text-center">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#7C5CFC]/10 bg-white/60 backdrop-blur-md px-3 py-1 text-[9px] font-black uppercase tracking-widest text-[#7C5CFC] shadow-sm">
-            <TrendingUp className="h-3 w-3" /> Reputation Directory
-          </div>
-          <h1 className="font-syne mb-3 text-3xl font-black tracking-tight text-zinc-900 md:text-5xl leading-tight">
-            Elite AI <span className="text-[#7C5CFC]">Talent.</span>
-          </h1>
-          <p className="mx-auto max-w-xl text-sm font-medium text-zinc-500 leading-relaxed">
-            The world's first reputation-verified network for frontier AI research. Find your next high-impact collaborator.
-          </p>
+        {/* Compact Interaction Hero */}
+        <div className="relative z-20 mb-12 flex flex-col lg:flex-row items-center gap-10">
+           {/* Search & Filters */}
+           <div className="flex-1 w-full">
+              <div className="rounded-[40px] border border-zinc-200 bg-white shadow-2xl shadow-zinc-200/20 p-2 backdrop-blur-xl">
+                 <ScoutSearch isLab={isLab} />
+              </div>
+           </div>
+           
+           {/* Global Network Stats */}
+           <div className="flex shrink-0 items-center gap-10">
+              <div className="flex flex-col">
+                 <span className="font-syne text-2xl font-black text-zinc-900 leading-none">{totalResearchers}</span>
+                 <span className="text-[10px] font-black uppercase tracking-widest text-[#7C5CFC] mt-2">Personnel</span>
+              </div>
+              <div className="h-10 w-px bg-zinc-200" />
+              <div className="flex flex-col">
+                 <span className="font-syne text-2xl font-black text-zinc-900 leading-none">{totalWork}</span>
+                 <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400 mt-2">Artifacts</span>
+              </div>
+              <div className="h-10 w-px bg-zinc-200" />
+              <div className="flex flex-col">
+                 <span className="font-syne text-2xl font-black text-emerald-500 leading-none">99.8%</span>
+                 <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400 mt-2">Reliability</span>
+              </div>
+           </div>
         </div>
 
-        {/* Tighter Search Bar */}
-        <div className="relative z-20 mb-12 max-w-2xl mx-auto">
-          <div className="rounded-3xl border border-zinc-200 bg-white/80 p-1.5 shadow-xl backdrop-blur-xl">
-             <ScoutSearch isLab={isLab} />
-          </div>
-        </div>
-
-        {/* Scout Dashboard (Labs Only) */}
+        {/* Scout Dashboard (Labs Only) - More Compact */}
         {isLab && (
-          <section className="mb-24">
-            <div className="relative overflow-hidden rounded-[32px] border border-[#7C5CFC]/20 bg-white p-8 shadow-2xl shadow-[#7C5CFC]/5 md:p-12">
-               <div className="absolute top-0 right-0 h-64 w-64 bg-[radial-gradient(circle_at_100%_0%,rgba(124,92,252,0.1),transparent_70%)] pointer-events-none" />
-               <div className="relative flex flex-col md:flex-row items-center justify-between gap-8">
-                  <div className="max-w-xl text-left">
-                     <div className="mb-4 inline-flex items-center gap-2 rounded-lg bg-[#7C5CFC]/10 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-[#7C5CFC]">
-                        <ShieldCheck className="h-3.5 w-3.5" /> Scout Matching Active
-                     </div>
-                     <h2 className="font-syne text-3xl font-black text-zinc-900 md:text-4xl leading-tight mb-4">
-                        Collaborator <br className="hidden md:block" />Matchmaking.
-                     </h2>
-                     <p className="text-base font-medium text-zinc-500 leading-relaxed">
-                        Verified researchers matching your AI project briefs are algorithmically highlighted. Every match is backed by peer-verified reproduction signals.
-                     </p>
+          <section className="mb-10">
+            <div className="relative overflow-hidden rounded-[40px] border border-black/5 bg-white p-6 shadow-sm">
+               <div className="relative flex flex-col md:flex-row items-center justify-between gap-6">
+                  <div className="flex items-center gap-6">
+                      <div className="h-14 w-14 flex items-center justify-center rounded-2xl bg-[#7C5CFC]/5 text-[#7C5CFC]">
+                         <ShieldCheck className="h-6 w-6" />
+                      </div>
+                      <div>
+                         <h2 className="font-syne text-sm font-black text-zinc-900 uppercase tracking-tight">Active Scout Matchmaking</h2>
+                         <p className="text-[11px] font-medium text-zinc-400">Personnel matching your project requirements are highlighted in the directory below.</p>
+                      </div>
                   </div>
-                  <div className="flex shrink-0 items-center gap-4">
-                     <div className="flex flex-col items-center justify-center rounded-3xl bg-zinc-50 border border-zinc-100 p-6 shadow-inner w-32 h-32">
-                        <span className="font-syne text-3xl font-black text-[#7C5CFC]">{matchedResearchers.length}</span>
-                        <span className="text-[9px] font-bold uppercase tracking-widest text-zinc-400">Matches</span>
-                     </div>
-                     <Link href="/projects" className="flex items-center gap-2 rounded-2xl bg-zinc-900 px-6 py-4 text-sm font-black text-white hover:bg-[#7C5CFC] transition-all active:scale-95 shadow-xl shadow-zinc-900/20">
-                        Manage Briefs <ArrowUpRight className="h-4 w-4" />
+                  <div className="flex items-center gap-6">
+                     <Link href="/projects" className="text-[10px] font-black uppercase tracking-widest text-[#7C5CFC] hover:underline">
+                        Manage Research Briefs
                      </Link>
+                     <div className="rounded-2xl bg-zinc-900 px-6 py-3 text-[10px] font-black text-white">
+                        {matchedResearchers.length} Target Matches
+                     </div>
                   </div>
                </div>
-
-               {/* Matched Grid */}
-               {matchedResearchers.length > 0 && (
-                 <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                   {matchedResearchers.map((user: any) => (
-                      <TalentCard key={user.id} {...user} domain={user.ranks[0]?.domain || "AI Research"} rankPosition={user.ranks[0]?.rankPosition || null} isScoutView={true} />
-                   ))}
-                 </div>
-               )}
             </div>
           </section>
         )}
 
-        <div className="flex flex-col gap-12 lg:flex-row">
-          {/* Main Feed: Elite Researchers */}
-          <div className="flex-1">
-            <div className="mb-10 flex items-center justify-between border-b border-zinc-100 pb-6">
-              <h2 className="font-syne text-2xl font-black text-zinc-900 md:text-3xl">Elite Researchers</h2>
-              <div className="flex gap-2">
-                 <button className="rounded-full bg-white border border-zinc-200 px-4 py-2 text-xs font-bold text-zinc-500 hover:border-[#7C5CFC] hover:text-[#7C5CFC] transition-all">Most Impact</button>
-                 <button className="rounded-full bg-white border border-zinc-200 px-4 py-2 text-xs font-bold text-zinc-500 hover:border-[#7C5CFC] hover:text-[#7C5CFC] transition-all">Trending</button>
-              </div>
-            </div>
-
-            <div className="grid gap-8 md:grid-cols-2">
-              {researchers.length > 0 ? researchers.map((user: any) => (
-                 <TalentCard key={user.id} {...user} domain={user.ranks[0]?.domain || "AI Research"} rankPosition={user.ranks[0]?.rankPosition || null} isScoutView={isLab} />
-              )) : (
-                <div className="col-span-2 rounded-[32px] border border-dashed border-zinc-200 py-32 text-center text-zinc-400">
-                  <span className="font-syne font-black text-xl uppercase tracking-widest">Awaiting Signal</span>
-                </div>
-              )}
-            </div>
-
-            <div className="mt-12 flex justify-center">
-              <button className="rounded-full border border-zinc-200 bg-white px-8 py-3 text-sm font-bold text-zinc-600 transition-all hover:border-[#7C5CFC] hover:text-[#7C5CFC]">
-                Load More Researchers
-              </button>
-            </div>
-          </div>
-
-          {/* Sidebar: The Signal Stream & Controls */}
-          <div className="lg:w-[400px] shrink-0">
-            <div className="sticky top-28 space-y-8">
-              
-              <div className="mb-10">
-                <div className="mb-6 flex items-center justify-between border-b border-zinc-100 pb-4">
-                  <h2 className="font-syne text-2xl font-black text-zinc-900 md:text-3xl">Signal Stream</h2>
-                  <div className="flex h-2 w-2 rounded-full bg-[#7C5CFC] animate-pulse" />
-                </div>
-
-                <div className="space-y-4">
-                  {recentWork.length > 0 ? recentWork.map((work: any) => (
-                    <div key={work.id} className="group relative rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm transition-all hover:border-[#7C5CFC]/30 hover:shadow-xl">
-                       <div className="mb-4 flex items-center gap-3">
-                          <Link href={`/r/${work.user.handle || work.user.id}`} className="transition-transform hover:scale-105 active:scale-95">
-                             <UserAvatar src={work.user.avatar} name={work.user.name} size="sm" className="h-8 w-8 border border-zinc-100" />
-                          </Link>
-                          <div className="flex flex-col">
-                             <Link href={`/r/${work.user.handle || work.user.id}`} className="text-xs font-black text-zinc-900 leading-none hover:text-[#7C5CFC] transition-colors">
-                                {work.user.name}
-                             </Link>
-                             <p className="text-[9px] font-bold text-[#7C5CFC] uppercase tracking-widest mt-1">Verified Reproduction</p>
-                          </div>
-                          <Link href={`/work/${work.id}`} className="ml-auto group/arrow">
-                             <ArrowUpRight className="h-4 w-4 text-zinc-300 group-hover/arrow:text-[#7C5CFC] transition-colors" />
-                          </Link>
-                       </div>
-                       <Link href={`/work/${work.id}`} className="block">
-                          <h4 className="font-syne text-sm font-bold text-zinc-800 leading-tight mb-2 group-hover:text-[#7C5CFC] transition-colors">{work.title}</h4>
-                       </Link>
-                       <div className="flex items-center gap-2">
-                          <span className="rounded-lg bg-zinc-50 px-2 py-1 text-[9px] font-black uppercase tracking-widest text-zinc-400">{work.type}</span>
-                          <div className="h-0.5 w-0.5 rounded-full bg-zinc-200" />
-                          <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest">2h ago</span>
-                       </div>
-
-                       {/* Impact Gain Visualization */}
-                       <div className="absolute top-4 right-4 text-[10px] font-black text-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity translate-y-1 group-hover:translate-y-0 duration-300">
-                          +15 Impact
-                       </div>
-                    </div>
-                  )) : (
-                    <div className="rounded-[32px] border border-dashed border-zinc-200 p-12 text-center text-[10px] font-black uppercase tracking-widest text-zinc-400">
-                      Listening for signals...
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Controls at Bottom */}
-              <div className="space-y-4 pt-8 border-t border-zinc-100">
-                <PublicationActions />
-                <TalentInterests />
-
-                <div className="mt-8 rounded-[32px] border border-emerald-500/20 bg-emerald-50/50 p-6">
-                   <div className="flex items-center gap-3 mb-4">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white shadow-sm ring-1 ring-emerald-500/20">
-                         <TrendingUp className="h-5 w-5 text-emerald-600" />
-                      </div>
-                      <h5 className="font-syne text-sm font-bold text-zinc-900">Network Momentum</h5>
-                   </div>
-                   <p className="text-[11px] font-medium leading-relaxed text-zinc-500">
-                      The network matches are accelerating. 12 verified collaborations formed in the last 24 hours.
-                   </p>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </div>
+        {/* Talent Discovery Master-Detail View */}
+        <TalentDiscovery 
+          researchers={researchers} 
+          currentUserEmail={session?.user?.email}
+        />
       </main>
     </div>
   );

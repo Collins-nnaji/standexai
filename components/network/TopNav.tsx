@@ -54,7 +54,6 @@ export function TopNav({ user }: TopNavProps) {
   const navItems = [
     { name: "AI Talent", href: "/talent" },
     { name: "Open Projects", href: "/projects" },
-    { name: "Intelligence", href: "/intelligence" },
   ];
 
   return (

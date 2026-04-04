@@ -19,6 +19,7 @@ import {
 
 export function CollabRoom({ initialContent }: { initialContent?: string }) {
   const editor = useEditor({
+    immediatelyRender: false,
     extensions: [
       StarterKit,
       Highlight,

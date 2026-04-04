@@ -10,7 +10,18 @@ export async function PATCH(req: Request) {
     }
 
     const body = await req.json();
-    const { handle, name, bio, openToWork } = body;
+    const { 
+      handle, 
+      name, 
+      bio, 
+      openToWork,
+      institution,
+      location,
+      linkedinUrl,
+      twitterUrl,
+      githubUrl,
+      websiteUrl
+    } = body;
 
     const user = await prisma.user.findUnique({
       where: { email: session.user.email },
@@ -43,6 +54,12 @@ export async function PATCH(req: Request) {
     if (name !== undefined) updateData.name = name;
     if (bio !== undefined) updateData.bio = bio;
     if (openToWork !== undefined) updateData.openToWork = openToWork;
+    if (institution !== undefined) updateData.institution = institution;
+    if (location !== undefined) updateData.location = location;
+    if (linkedinUrl !== undefined) updateData.linkedinUrl = linkedinUrl;
+    if (twitterUrl !== undefined) updateData.twitterUrl = twitterUrl;
+    if (githubUrl !== undefined) updateData.githubUrl = githubUrl;
+    if (websiteUrl !== undefined) updateData.websiteUrl = websiteUrl;
 
     const updatedUser = await prisma.user.update({
       where: { id: user.id },
@@ -53,6 +70,12 @@ export async function PATCH(req: Request) {
         name: true,
         bio: true,
         openToWork: true,
+        institution: true,
+        location: true,
+        linkedinUrl: true,
+        twitterUrl: true,
+        githubUrl: true,
+        websiteUrl: true,
       }
     });
 

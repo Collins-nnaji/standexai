@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Sparkles, Terminal, CheckCircle2, ShieldCheck, Zap, BarChart3, Users, Newspaper, Clock, TrendingUp } from "lucide-react";
+import { ArrowRight, Sparkles, Terminal, CheckCircle2, ShieldCheck, Zap, BarChart3, Users } from "lucide-react";
 import { TopNav } from "@/components/network/TopNav";
 import { TalentCard } from "@/components/network/TalentCard";
 import { AnimatedNetwork } from "@/components/ui/AnimatedNetwork";
@@ -13,16 +13,10 @@ export const dynamic = "force-dynamic";
 export default async function HomePage() {
   const { data: session } = await neonAuth.getSession();
 
-  // Fetch the latest Intelligence from AI Index
   const currentUser = session?.user?.email ? await prisma.user.findUnique({
     where: { email: session.user.email },
     select: { id: true, role: true, handle: true, ranks: { select: { domain: true } } }
   }) as any : null;
-
-  const posts = (await prisma.aIIndexPost.findMany({
-    orderBy: { publishedAt: "desc" },
-    take: 7,
-  })) as any;
 
   const eliteTalent = (await prisma.user.findMany({
     where: { role: { in: ["RESEARCHER", "PRO"] } },
@@ -33,8 +27,6 @@ export default async function HomePage() {
     }
   })) as any;
 
-  const featuredPost = posts[0];
-  const remainingPosts = posts.slice(1, 7);
 
   return (
     <div className="flex min-h-[100dvh] flex-col bg-[#FAFAF9] overflow-hidden selection:bg-[#7C5CFC]/20 font-[family-name:var(--font-inter)]">
@@ -237,101 +229,6 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* Latest Intelligence Section (Integrated AI Index) */}
-        <section className="relative z-10 w-full bg-white py-24 border-t border-zinc-100">
-          <div className="mx-auto max-w-7xl px-4">
-            <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-zinc-100 pb-8">
-              <div className="max-w-2xl text-left">
-                <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-[#7C5CFC]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-[#7C5CFC] ring-1 ring-[#7C5CFC]/20">
-                  <Newspaper className="h-3 w-3" /> Live Intelligence
-                </div>
-                <h2 className="font-syne text-4xl font-black text-zinc-900 md:text-5xl leading-tight">
-                  The <span className="text-[#7C5CFC]">Intelligence</span> Hub.
-                </h2>
-                <p className="mt-4 text-lg font-medium text-zinc-500 leading-relaxed">
-                  Curated daily insights into model architecture, global AI policy, and frontier breakthroughs.
-                </p>
-              </div>
-              <div className="flex items-center gap-2 text-sm font-bold text-zinc-400">
-                <TrendingUp className="h-4 w-4 text-emerald-500" />
-                <span>Verified Signal Feed</span>
-              </div>
-            </div>
-
-            {/* Featured Story */}
-            {featuredPost && (
-              <div className="mb-12">
-                <Link href={`/intelligence/${featuredPost.id}`} className="group relative block overflow-hidden rounded-[32px] border border-zinc-200 bg-white shadow-2xl transition-all hover:border-[#7C5CFC]/30">
-                  <div className="grid lg:grid-cols-[1fr_450px]">
-                    <div className="relative h-[300px] lg:h-[450px] overflow-hidden">
-                      <Image 
-                        src={featuredPost.imageUrl || "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=1632"} 
-                        alt={featuredPost.title}
-                        fill
-                        className="object-cover transition-transform duration-700 group-hover:scale-105"
-                      />
-                    </div>
-                    <div className="flex flex-col justify-center p-8 lg:p-10">
-                      <div className="mb-4 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#7C5CFC]">
-                        <Sparkles className="h-3.5 w-3.5" /> Featured Publication
-                      </div>
-                      <h3 className="font-syne mb-4 text-2xl font-black text-zinc-900 md:text-3xl leading-tight group-hover:text-[#7C5CFC] transition-colors">
-                        {featuredPost.title}
-                      </h3>
-                      <p className="mb-6 text-base text-zinc-500 leading-relaxed line-clamp-3">
-                        {featuredPost.summary}
-                      </p>
-                      <div className="flex items-center justify-between">
-                         <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 flex items-center gap-1">
-                            <Clock className="h-3 w-3" /> {featuredPost.readingTime}m read
-                         </span>
-                         <ArrowRight className="h-5 w-5 text-zinc-300 group-hover:text-[#7C5CFC] transition-colors" />
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              </div>
-            )}
-
-            {/* Small Grid */}
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {remainingPosts.map((post: any) => (
-                <Link key={post.id} href={`/intelligence/${post.id}`} className="group flex flex-col rounded-3xl border border-zinc-100 bg-white p-2 transition-all hover:border-[#7C5CFC]/20 hover:shadow-xl">
-                  <div className="relative h-[200px] w-full overflow-hidden rounded-2xl">
-                    <Image 
-                      src={post.imageUrl || "https://images.unsplash.com/photo-1620712943543-bcc4628c6820?q=80&w=1530"} 
-                      alt={post.title}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <div className="absolute top-3 left-3 rounded-lg bg-white/90 backdrop-blur-md px-2 py-1 text-[9px] font-black uppercase tracking-widest text-[#7C5CFC] shadow-sm">
-                      {post.category}
-                    </div>
-                  </div>
-                  <div className="flex flex-1 flex-col p-4">
-                    <h4 className="font-syne mb-2 text-lg font-bold text-zinc-900 group-hover:text-[#7C5CFC] transition-colors leading-tight">
-                      {post.title}
-                    </h4>
-                    <p className="mb-4 line-clamp-2 text-sm font-medium text-zinc-500 leading-relaxed">
-                      {post.summary}
-                    </p>
-                    <div className="mt-auto flex items-center justify-between pt-2 border-t border-zinc-50">
-                      <span className="text-[9px] font-bold uppercase tracking-widest text-zinc-400 flex items-center gap-1">
-                        <Clock className="h-3 w-3" /> {post.readingTime}m
-                      </span>
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-
-            <div className="mt-16 flex justify-center">
-               <Link href="/intelligence" className="rounded-full border border-zinc-200 bg-white px-8 py-3 text-sm font-bold text-zinc-600 transition-all hover:border-[#7C5CFC]/30 hover:text-[#7C5CFC]">
-                 View All Publications
-               </Link>
-            </div>
-          </div>
-        </section>
 
         {/* New Graphic: Real-time Discovery Pulse */}
         <section className="relative z-10 w-full bg-[#FAFAF9] py-24 px-4 overflow-hidden border-t border-zinc-100">

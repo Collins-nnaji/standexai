@@ -119,7 +119,7 @@ export function OnboardingForm({ userId }: { userId: string }) {
       <button
         type="submit"
         disabled={loading}
-        className="mt-4 flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#7C5CFC] font-semibold text-zinc-900 transition-all hover:bg-[#6042db] active:scale-[0.98] disabled:opacity-50"
+        className="mt-4 flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#7C5CFC] font-semibold text-white transition-all hover:bg-[#6042db] active:scale-[0.98] disabled:opacity-50"
       >
         {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : "Complete Profile"}
       </button>

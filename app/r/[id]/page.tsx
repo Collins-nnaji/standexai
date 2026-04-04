@@ -9,7 +9,7 @@ import { ReputationBar } from "@/components/network/ReputationBar";
 import { RankBadge } from "@/components/network/RankBadge";
 import { EditProfileModal } from "@/components/network/EditProfileModal";
 import { ProfileInviteButton } from "@/components/network/ProfileInviteButton";
-import { User, ShieldCheck, MapPin, Briefcase, Eye, Users, Sparkles } from "lucide-react";
+import { User, ShieldCheck, MapPin, Briefcase, Eye, Users, Sparkles, ArrowLeft } from "lucide-react";
 import { neonAuth } from "@/lib/neon/auth-server";
 
 export default async function ResearcherProfile({ params }: { params: Promise<{ id: string }> }) {
@@ -64,6 +64,17 @@ export default async function ResearcherProfile({ params }: { params: Promise<{ 
       <TopNav user={session?.user} />
       
       <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
+        {/* Navigation Breadcrumb */}
+        <div className="mb-8">
+          <Link 
+            href="/talent" 
+            className="group inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-zinc-400 hover:text-[#7C5CFC] transition-colors"
+          >
+            <ArrowLeft className="h-3 w-3 transition-transform group-hover:-translate-x-1" />
+            Back to Talent Directory
+          </Link>
+        </div>
+
         {/* Profile Hero */}
         <div className="mb-12 flex flex-col items-start gap-8 sm:flex-row sm:items-center">
           <div className="flex h-32 w-32 shrink-0 items-center justify-center overflow-hidden rounded-full border-4 border-[#7C5CFC]/20 bg-zinc-100 relative shadow-[0_0_30px_rgba(124,92,252,0.15)]">

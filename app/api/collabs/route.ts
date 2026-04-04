@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { prismaDb as prisma } from "@/lib/prisma";
 import { neonAuth } from "@/lib/neon/auth-server";
 
 // POST /api/collabs — Create a new Collaboration (optionally linked to a brief)
@@ -24,16 +24,37 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Title is required" }, { status: 400 });
     }
 
-    // If briefId provided, pull its description as prompt
+    // Logic to identify stakeholders
     let finalDescription = description?.trim() || "";
-    if (briefId && !finalDescription) {
+    let briefOwnerId: string | null = null;
+    
+    if (briefId) {
       const brief = await prisma.researchBrief.findUnique({
         where: { id: briefId },
-        select: { title: true, description: true }
+        select: { title: true, description: true, companyId: true }
       });
+      
       if (brief) {
-        finalDescription = `Collaboration spawned from Brief: "${brief.title}"\n\n${brief.description}`;
+        briefOwnerId = brief.companyId;
+        if (!finalDescription) {
+          finalDescription = `Collaboration spawned from Brief: "${brief.title}"\n\n${brief.description}`;
+        }
       }
+    }
+
+    // Prepare initial members
+    const initialMembers = [
+      { userId: user.id, role: "owner" }
+    ];
+
+    // If explicit invitedUserId provided (e.g. from a user hover/profile)
+    if (invitedUserId && invitedUserId !== user.id) {
+       initialMembers.push({ userId: invitedUserId, role: "contributor" });
+    }
+
+    // If briefId provided, automatically invite the lab owner who posted it
+    if (briefOwnerId && briefOwnerId !== user.id && briefOwnerId !== invitedUserId) {
+       initialMembers.push({ userId: briefOwnerId, role: "partner" });
     }
 
     const collab = await prisma.collaboration.create({
@@ -43,12 +64,7 @@ export async function POST(req: NextRequest) {
         visibility,
         briefId: briefId || null,
         members: {
-          create: invitedUserId 
-            ? [
-                { userId: user.id, role: "owner" },
-                { userId: invitedUserId, role: "contributor" }
-              ]
-            : [{ userId: user.id, role: "owner" }]
+          create: initialMembers
         }
       }
     });

@@ -197,7 +197,7 @@ export default async function WorkItemPage({ params }: { params: Promise<{ id: s
               className="mb-3 w-full resize-none border-none bg-transparent text-sm text-zinc-900 placeholder-zinc-600 focus:outline-none focus:ring-0" 
             />
             <div className="flex items-center justify-end">
-              <button disabled className="rounded-lg bg-[#7C5CFC] px-4 py-2 text-xs font-bold text-zinc-900 opacity-50">Post Review</button>
+              <button disabled className="rounded-lg bg-[#7C5CFC] px-4 py-2 text-xs font-bold text-white opacity-50">Post Review</button>
             </div>
           </div>
           <div className="py-8 text-center text-sm text-zinc-500">
