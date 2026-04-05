@@ -164,7 +164,7 @@ export default async function CollabRoomPage({ params }: { params: Promise<{ id:
               )}
             </div>
             <div className={isCompleted || !isMember ? "pointer-events-none opacity-70" : ""}>
-              <CollabRoom />
+              <CollabRoom collabId={id} initialContent={collab.canvasContent} />
             </div>
 
             {/* Publish Panel — only for active members */}

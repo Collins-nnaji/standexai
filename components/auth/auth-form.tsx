@@ -28,6 +28,13 @@ export function AuthForm({ mode: initialMode }: AuthFormProps) {
 
   const isSignedIn = useMemo(() => Boolean(session.data?.user), [session.data]);
 
+  // Automated redirect if already signed in
+  useEffect(() => {
+    if (isSignedIn) {
+      router.push("/r/me");
+    }
+  }, [isSignedIn, router]);
+
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setBusy(true);
@@ -56,7 +63,7 @@ export function AuthForm({ mode: initialMode }: AuthFormProps) {
           return;
         }
       }
-      router.push("/discover");
+      router.push("/r/me");
       router.refresh();
     } catch (authError) {
       setError(authError instanceof Error ? authError.message : "Authentication failed");
@@ -126,10 +133,10 @@ export function AuthForm({ mode: initialMode }: AuthFormProps) {
           {isSignedIn ? (
             <div className="mt-6 space-y-3">
               <button
-                onClick={() => router.push("/discover")}
+                onClick={() => router.push("/r/me")}
                 className="w-full rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700 shadow-lg shadow-indigo-600/25"
               >
-                Discover Network
+                Go to My Profile
               </button>
               <button
                 onClick={signOut}

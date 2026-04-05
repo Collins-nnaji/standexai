@@ -4,9 +4,10 @@ import { prismaDb as prisma } from "@/lib/prisma";
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { data: session } = await neonAuth.getSession();
     if (!session?.user?.email) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -16,7 +17,7 @@ export async function PATCH(
     const { title, description, lookingFor, domain, active } = body;
 
     const brief = await prisma.researchBrief.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: { company: true }
     });
 
@@ -30,7 +31,7 @@ export async function PATCH(
     }
 
     const updatedBrief = await prisma.researchBrief.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         title: title !== undefined ? title : undefined,
         description: description !== undefined ? description : undefined,
@@ -49,16 +50,17 @@ export async function PATCH(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { data: session } = await neonAuth.getSession();
     if (!session?.user?.email) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const brief = await prisma.researchBrief.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: { company: true }
     });
 
@@ -71,7 +73,7 @@ export async function DELETE(
     }
 
     await prisma.researchBrief.delete({
-      where: { id: params.id }
+      where: { id }
     });
 
     return NextResponse.json({ success: true });

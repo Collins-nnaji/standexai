@@ -450,6 +450,7 @@ model Collaboration {
   // Loop traceability — links back to the source Brief and forward to output
   briefId              String?  // optional link to source ResearchBrief
   publishedWorkItemId  String?  // set when collab is published
+  canvasContent        String?  @db.Text
 
   members     CollabMember[]
   messages    CollabMessage[]
