@@ -54,8 +54,11 @@ interface Researcher {
   bio: string | null;
   institution: string | null;
   location: string | null;
+  role: string;
   openToWork: boolean;
   verified: boolean;
+  isVetted?: boolean;
+  vettedCategory?: string | null;
   linkedinUrl?: string | null;
   twitterUrl?: string | null;
   githubUrl?: string | null;
@@ -91,6 +94,7 @@ export function TalentDiscovery({ researchers, initialSelectedId, currentUserEma
     if (t === "model") return Code2;
     if (t === "dataset") return Database;
     if (t === "experiment") return Beaker;
+    if (t === "implementation" || t === "project") return Zap;
     return FileText;
   };
 
@@ -109,7 +113,7 @@ export function TalentDiscovery({ researchers, initialSelectedId, currentUserEma
       <div className="w-full lg:w-[300px] shrink-0 lg:border-r border-black/[0.03]">
         <div className="sticky top-24 pr-4 space-y-3">
           <div className="mb-8 flex items-center justify-between px-2">
-             <h3 className="font-syne text-[10px] font-black uppercase tracking-widest text-[#7C5CFC]">Research Network</h3>
+             <h3 className="font-syne text-[10px] font-black uppercase tracking-widest text-[#7C5CFC]">Personnel Network</h3>
              <span className="text-[10px] font-bold text-zinc-400">{researchers.length} Nodes</span>
           </div>
           
@@ -151,8 +155,11 @@ export function TalentDiscovery({ researchers, initialSelectedId, currentUserEma
                       isSelected ? "text-zinc-900" : "text-zinc-600 group-hover:text-zinc-900"
                     )}>
                       {r.name}
+                      {r.isVetted && <Badge size="sm" variant="soft" color="warning" className="ml-1 scale-75 origin-left tracking-tighter">Vetted</Badge>}
                     </h4>
-                    <p className="text-[9px] font-medium text-zinc-400 truncate">{r.institution || "Research Node"}</p>
+                    <p className="text-[9px] font-medium text-zinc-400 truncate">
+                      {r.role === "ENGINEER" ? "AI Implementation" : (r.institution || "Research Node")}
+                    </p>
                   </div>
                   
                   {rank?.rankPosition && (
@@ -198,16 +205,24 @@ export function TalentDiscovery({ researchers, initialSelectedId, currentUserEma
                   <div className="flex-1 pt-2 space-y-5">
                     <div className="flex flex-wrap items-center gap-4">
                       <h2 className="font-syne text-4xl md:text-5xl font-black text-zinc-900 tracking-tight">{selectedResearcher.name}</h2>
-                      {selectedResearcher.verified && (
-                        <div className="inline-flex items-center gap-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-emerald-600 shadow-sm">
-                           <ShieldCheck className="h-3.5 w-3.5" /> Identity Verified
-                        </div>
-                      )}
+                      <div className="flex gap-2">
+                        {selectedResearcher.verified && (
+                          <div className="inline-flex items-center gap-2 rounded-full bg-blue-500/10 border border-blue-500/20 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-blue-600 shadow-sm">
+                             <ShieldCheck className="h-3.5 w-3.5" /> ID Verified
+                          </div>
+                        )}
+                        {selectedResearcher.isVetted && (
+                          <div className="inline-flex items-center gap-2 rounded-full bg-amber-500/10 border border-amber-500/20 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-amber-600 shadow-sm">
+                             <Sparkles className="h-3.5 w-3.5" /> Standex Vetted
+                          </div>
+                        )}
+                      </div>
                     </div>
                     
                     <div className="flex flex-wrap gap-5 text-xs font-bold text-zinc-400">
                       <div className="flex items-center gap-2 transition-colors hover:text-zinc-600 cursor-default">
-                        <Building2 className="h-4 w-4 text-[#7C5CFC]" /> {selectedResearcher.institution || "Research Network"}
+                        {selectedResearcher.role === "ENGINEER" ? <Code2 className="h-4 w-4 text-[#7C5CFC]" /> : <Building2 className="h-4 w-4 text-[#7C5CFC]" />} 
+                        {selectedResearcher.role === "ENGINEER" ? "Implementation Engineer" : (selectedResearcher.institution || "Research Network")}
                       </div>
                       <div className="flex items-center gap-2 transition-colors hover:text-zinc-600 cursor-default">
                         <MapPin className="h-4 w-4 text-[#7C5CFC]" /> {selectedResearcher.location || "Distributed Node"}
@@ -315,9 +330,13 @@ export function TalentDiscovery({ researchers, initialSelectedId, currentUserEma
                       className="space-y-12"
                     >
                        <div className="max-w-3xl">
-                          <h4 className="text-[10px] font-black uppercase tracking-widest text-[#7C5CFC] mb-4">Research Background</h4>
+                          <h4 className="text-[10px] font-black uppercase tracking-widest text-[#7C5CFC] mb-4">
+                            {selectedResearcher.role === "ENGINEER" ? "Engineering Philosophy" : "Research Background"}
+                          </h4>
                           <p className="text-xl font-medium text-zinc-600 leading-relaxed italic">
-                            \"{selectedResearcher.bio || "Pushing the boundaries of decentralized intelligence and frontier model architectures.\" "}
+                            "{selectedResearcher.bio || (selectedResearcher.role === "ENGINEER" 
+                              ? "Focused on bridging the gap between frontier models and production-scale implementation."
+                              : "Pushing the boundaries of decentralized intelligence and frontier model architectures.")}"
                           </p>
                        </div>
 
@@ -377,7 +396,7 @@ export function TalentDiscovery({ researchers, initialSelectedId, currentUserEma
                                   <div className="flex-1 min-w-0">
                                     <div className="flex items-center gap-3 mb-1.5">
                                       <Badge variant="soft" className="text-[8px] font-black uppercase tracking-wider bg-[#7C5CFC]/5 text-[#7C5CFC] py-0.5">{work.type}</Badge>
-                                      {work.views && <span className="flex items-center gap-1 text-[9px] font-bold text-zinc-400"><Eye className="h-3 w-3" /> {work.views} Global Interactions</span>}
+                                      {work.views && <span className="flex items-center gap-1 text-[9px] font-bold text-zinc-404"><Eye className="h-3 w-3" /> {work.views} Global Interactions</span>}
                                     </div>
                                     <h4 className="font-syne text-xl font-bold text-zinc-900 leading-tight group-hover:text-[#7C5CFC] transition-colors">{work.title}</h4>
                                   </div>

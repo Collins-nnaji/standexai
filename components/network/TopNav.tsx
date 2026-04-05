@@ -29,6 +29,7 @@ export interface TopNavProps {
     id: string;
     email: string;
     name?: string | null;
+    role?: string | null;
   } | null;
 }
 
@@ -54,6 +55,7 @@ export function TopNav({ user }: TopNavProps) {
   const navItems = [
     { name: "AI Talent", href: "/talent" },
     { name: "Open Projects", href: "/projects" },
+    { name: "Prime", href: "/prime" },
   ];
 
   return (
@@ -119,6 +121,19 @@ export function TopNav({ user }: TopNavProps) {
                          <User className="h-4 w-4" /> My Profile
                        </div>
                       </Link>
+
+                      {user?.role === "ADMIN" && (
+                        <Link
+                          href="/admin"
+                          onClick={() => setMenuOpen(false)}
+                          className="block px-4 py-2.5 text-sm font-black text-[#7C5CFC] hover:bg-[#7C5CFC]/5 transition-colors"
+                        >
+                         <div className="flex items-center gap-2">
+                           <UploadCloud className="h-4 w-4" /> Admin Console
+                         </div>
+                        </Link>
+                      )}
+                      
                       <div className="h-px w-full bg-zinc-100" />
                       <button
                         onClick={() => {

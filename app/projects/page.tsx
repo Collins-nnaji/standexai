@@ -26,7 +26,10 @@ export default async function ProjectsPage() {
   const isLab = currentUser?.role === "LAB";
 
   const briefs = await prisma.researchBrief.findMany({
-    where: { active: true },
+    where: { 
+      active: true,
+      isApproved: true 
+    },
     orderBy: { createdAt: "desc" },
     include: {
       company: {
@@ -35,7 +38,12 @@ export default async function ProjectsPage() {
     }
   }) as any;
 
-  const totalActiveBriefs = await prisma.researchBrief.count({ where: { active: true } });
+  const totalActiveBriefs = await prisma.researchBrief.count({ 
+    where: { 
+      active: true,
+      isApproved: true 
+    } 
+  });
   const totalLabs = await prisma.user.count({ where: { role: "LAB" } });
 
   // Domain-overlap match scoring logic (passed to client)

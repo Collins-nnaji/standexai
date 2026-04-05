@@ -20,7 +20,8 @@ export async function PATCH(req: Request) {
       linkedinUrl,
       twitterUrl,
       githubUrl,
-      websiteUrl
+      websiteUrl,
+      role
     } = body;
 
     const user = await prisma.user.findUnique({
@@ -60,6 +61,7 @@ export async function PATCH(req: Request) {
     if (twitterUrl !== undefined) updateData.twitterUrl = twitterUrl;
     if (githubUrl !== undefined) updateData.githubUrl = githubUrl;
     if (websiteUrl !== undefined) updateData.websiteUrl = websiteUrl;
+    if (role !== undefined) updateData.role = role;
 
     const updatedUser = await prisma.user.update({
       where: { id: user.id },

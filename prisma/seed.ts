@@ -259,7 +259,20 @@ async function main() {
     ]
   });
 
-  console.log("Successfully seeded database with test AI talent and Labs!");
+  // 0. Create Admin
+  await prisma.user.upsert({
+    where: { email: "admin@standex.ai" },
+    update: {},
+    create: {
+      email: "admin@standex.ai",
+      name: "Standex Admin",
+      passwordHash: mockPassword,
+      role: "ADMIN",
+      verified: true,
+    }
+  });
+
+  console.log("Successfully seeded database with test AI talent, Labs, and Admin!");
 }
 
 main()

@@ -16,6 +16,7 @@ export function AuthForm({ mode: initialMode }: AuthFormProps) {
   const router = useRouter();
   const session = neonAuthClient.useSession();
   const [mode, setMode] = useState<AuthMode>(initialMode);
+  const [role, setRole] = useState<"RESEARCHER" | "ENGINEER" | "LAB">("RESEARCHER");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -47,11 +48,22 @@ export function AuthForm({ mode: initialMode }: AuthFormProps) {
           email: email.trim(),
           password,
         });
+        
         if (result.error) {
           setError(result.error.message || "Sign-up failed");
           setBusy(false);
           return;
         }
+
+        // If signup success, we need to set the role. 
+        // If neonAuthClient doesn't support it in the call, we might need a separate call or it defaults to RESEARCHER.
+        // For now, we'll assume the client is updated or we handle it via a profile patch if possible right after.
+        await fetch("/api/profile", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ role })
+        });
+
       } else {
         const result = await neonAuthClient.signIn.email({
           email: email.trim(),
@@ -149,14 +161,42 @@ export function AuthForm({ mode: initialMode }: AuthFormProps) {
           ) : (
             <form onSubmit={submit} className="mt-6 space-y-4">
               {mode === "sign-up" && (
-                <div>
-                  <label className="mb-1.5 block text-xs font-semibold text-zinc-500">Name</label>
-                  <input
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none focus:bg-white focus:border-indigo-300 transition"
-                    placeholder="Your name"
-                  />
+                <div className="space-y-4">
+                  <div>
+                    <label className="mb-2 block text-[10px] font-black uppercase tracking-widest text-zinc-500">I am joining as a...</label>
+                    <div className="grid grid-cols-3 gap-2">
+                       {[
+                         { id: "RESEARCHER", label: "Researcher", desc: "Scientific focus" },
+                         { id: "ENGINEER", label: "Engineer", desc: "Implementation" },
+                         { id: "LAB", label: "Lab / Org", desc: "Enterprise" }
+                       ].map((r) => (
+                         <button
+                           key={r.id}
+                           type="button"
+                           onClick={() => setRole(r.id as any)}
+                           className={`flex flex-col items-center justify-center rounded-xl border p-3 transition-all ${
+                             role === r.id 
+                               ? "border-indigo-600 bg-indigo-50 text-indigo-700 shadow-sm" 
+                               : "border-zinc-100 bg-white text-zinc-500 hover:border-zinc-200"
+                           }`}
+                         >
+                            <span className="text-[10px] font-black uppercase tracking-tighter">{r.label}</span>
+                            <span className="text-[8px] font-medium opacity-60">{r.desc}</span>
+                         </button>
+                       ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="mb-1.5 block text-xs font-semibold text-zinc-500">Name</label>
+                    <input
+                      required
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none focus:bg-white focus:border-indigo-300 transition"
+                      placeholder="Your name"
+                    />
+                  </div>
                 </div>
               )}
               <div>

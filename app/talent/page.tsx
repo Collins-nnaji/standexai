@@ -36,7 +36,7 @@ export default async function DiscoverPage() {
 
     if (labDomains.length > 0) {
       const allResearchers = await prisma.user.findMany({
-        where: { role: { in: ["RESEARCHER", "PRO"] } },
+        where: { role: { in: ["RESEARCHER", "PRO", "ENGINEER"] } },
         include: {
           ranks: { orderBy: { rankPosition: "asc" }, take: 1, select: { domain: true, rankPosition: true, score: true } },
           workItems: { orderBy: { createdAt: "desc" }, take: 3, select: { id: true, title: true, type: true } }
@@ -51,15 +51,15 @@ export default async function DiscoverPage() {
   }
 
   const researchers = await prisma.user.findMany({
-    where: { role: { in: ["RESEARCHER", "PRO"] } },
+    where: { role: { in: ["RESEARCHER", "PRO", "ENGINEER"] } },
     take: 20, // Fetch more for the list view
     include: {
-      workItems: { orderBy: { createdAt: "desc" }, take: 5, select: { id: true, title: true, type: true, abstract: true, tags: true, views: true } },
+      workItems: { orderBy: { createdAt: "desc" }, take: 5, select: { id: true, title: true, type: true, abstract: true, tags: true, views: true, externalUrl: true } },
       ranks: { orderBy: { rankPosition: "asc" }, take: 1, select: { domain: true, rankPosition: true, score: true } }
     }
   }) as any;
 
-  const totalResearchers = await prisma.user.count({ where: { role: { in: ["RESEARCHER", "PRO"] } } });
+  const totalResearchers = await prisma.user.count({ where: { role: { in: ["RESEARCHER", "PRO", "ENGINEER"] } } });
   const totalWork = await prisma.workItem.count();
 
   return (

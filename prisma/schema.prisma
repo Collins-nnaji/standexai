@@ -17,6 +17,7 @@ enum UserRole {
   REVIEWER
   VIEWER
   RESEARCHER // New networking role
+  ENGINEER   // Implementation focus
   PRO        // Pro researcher
   LAB        // Enterprise scout/lab
 }
@@ -45,15 +46,17 @@ model User {
   updatedAt    DateTime  @updatedAt
 
   // StandexAI Network Profile Fields
-  bio          String?   @db.Text
-  institution  String?
-  location     String?
-  linkedinUrl  String?
-  twitterUrl   String?
-  githubUrl    String?
-  websiteUrl   String?
-  openToWork   Boolean   @default(false)
-  verified     Boolean   @default(false)
+  bio              String?   @db.Text
+  institution      String?
+  location         String?
+  linkedinUrl      String?
+  twitterUrl       String?
+  githubUrl        String?
+  websiteUrl       String?
+  openToWork       Boolean   @default(false)
+  verified         Boolean   @default(false)
+  isVetted         Boolean   @default(false)
+  vettedCategory   String?   // e.g. "Implementation", "Architecture"
 
   // Relations
   teamMemberships TeamMember[]
@@ -77,6 +80,22 @@ model User {
   following           Follows[]          @relation("Following")
   labProfile          LabProfile?
   collabMessages      CollabMessage[]
+
+  @@index([email])
+}
+
+// ... remaining models ...
+
+model ManagedProjectRequest {
+  id            String   @id @default(cuid())
+  companyName   String
+  contactName   String
+  email         String
+  description   String   @db.Text
+  budgetRange   String?
+  timeline      String?
+  status        String   @default("PENDING") // PENDING | IN_REVIEW | CONTACTED
+  createdAt     DateTime @default(now())
 
   @@index([email])
 }
@@ -490,6 +509,7 @@ model ResearchBrief {
   lookingFor  String   @db.Text
   domain      String[]
   active      Boolean  @default(true)
+  isApproved  Boolean  @default(false)
   createdAt   DateTime @default(now())
 
   company     User            @relation("LabBriefs", fields: [companyId], references: [id], onDelete: Cascade)

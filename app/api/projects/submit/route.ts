@@ -31,7 +31,8 @@ export async function POST(req: Request) {
         lookingFor,
         domain,
         companyId: user.id,
-        active: false, // Managed submissions must be reviewed by Standex team first
+        active: true, 
+        isApproved: false, // Must be verified by admin first
       }
     });
 
