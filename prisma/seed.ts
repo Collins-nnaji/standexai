@@ -167,8 +167,10 @@ async function main() {
     ]
   });
 
-  const lab3 = await prisma.user.create({
-    data: {
+  const lab3 = await prisma.user.upsert({
+    where: { email: "recruiting@anthropic.mock.standex.ai" },
+    update: {},
+    create: {
       email: "recruiting@anthropic.mock.standex.ai",
       name: "Anthropic",
       passwordHash: mockPassword,
@@ -185,8 +187,10 @@ async function main() {
     }
   });
 
-  const lab4 = await prisma.user.create({
-    data: {
+  const lab4 = await prisma.user.upsert({
+    where: { email: "hiring@huggingface.mock.standex.ai" },
+    update: {},
+    create: {
       email: "hiring@huggingface.mock.standex.ai",
       name: "Hugging Face",
       passwordHash: mockPassword,
@@ -203,8 +207,10 @@ async function main() {
     }
   });
 
-  const lab5 = await prisma.user.create({
-    data: {
+  const lab5 = await prisma.user.upsert({
+    where: { email: "talent@scale.mock.standex.ai" },
+    update: {},
+    create: {
       email: "talent@scale.mock.standex.ai",
       name: "Scale AI",
       passwordHash: mockPassword,
@@ -221,40 +227,44 @@ async function main() {
     }
   });
 
-  // 5. Create Research Briefs from Labs
+  // 5. Create Research Briefs from Labs (Professional Case Studies)
   await prisma.researchBrief.createMany({
     data: [
       {
         companyId: lab2.id,
-        title: "Alignment Researchers for Sparse Autoencoders",
-        description: "We are aggressively expanding our interpretability team. We need researchers capable of training SAEs on frontier models to accurately map concept activations. The goal is to isolate and steer safe behavior primitives in raw parameters.",
-        lookingFor: "Demonstrated experience scaling unsupervised feature extraction on highly dimensional activations. PyTorch mastery is required.",
+        title: "Large-Scale Sparse Autoencoder Implementation",
+        description: "A technical breakdown of interpretability scaling on frontier LLMs. We successfully isolated over 100k concept primitives, enabling surgical-level steerability of safety protocols without degradating core reasoning benchmarks.",
+        lookingFor: "Researchers with experience in high-dimensional activation mapping and PyTorch systems optimization.",
         domain: ["Interpretability", "AI Safety", "LLMs"],
         active: true,
+        isApproved: true
       },
       {
         companyId: lab3.id,
-        title: "Mechanistic Interpretability of Claude 3",
-        description: "Seeking to reverse-engineer high-level capability structures inside Claude's latest multimodal weights. Must be able to manipulate activation geometries and build new probes that accurately read and write concept clusters directly.",
-        lookingFor: "Researchers who have published at NeurIPS/ICLR on SAEs or Mechanistic mapping. Deep linear algebra intuition required.",
-        domain: ["Interpretability", "Math"],
+        title: "V-JEPA Temporal Reasoning in Autonomous Agents",
+        description: "Exploring joint embedding predictive architectures for video-level reasoning. This case study details the optimization of predictive masking for non-generative temporal understanding in edge environments.",
+        lookingFor: "Vision-Transformer specialists with a focus on self-supervised learning for temporal data.",
+        domain: ["Computer Vision", "Self-Supervised Learning"],
         active: true,
+        isApproved: true
       },
       {
         companyId: lab4.id,
-        title: "Optimized Multi-Modal Pipelines for Accelerate",
-        description: "We want to unify huge unaligned vision and dataset pipelines under the standard Accelerate/Transformers ecosystem without sacrificing VRAM. We need 10x throughput increases for edge deployments.",
-        lookingFor: "Systems optimization experts. CUDA, Triton, and intimate familiarity with PyTorch internals and Distributed Data Parallel.",
-        domain: ["Systems Engineering", "Open Source", "Vision"],
+        title: "Matryoshka Embedding Optimization for RAG",
+        description: "Implementation of nested embedding structures to reduce latency by 10x in high-scale vector search environments. Details on balancing dimensionality vs retrieval precision for enterprise search.",
+        lookingFor: "Systems engineers specializing in vector database optimization and NLP retrieval pipelines.",
+        domain: ["NLP", "Vector Databases", "RAG"],
         active: true,
+        isApproved: true
       },
       {
         companyId: lab5.id,
-        title: "DPO & RLHF Mass-pipeline Synthesis",
-        description: "Building the next generation of scalable RLHF techniques that natively handle multi-agent deliberation trajectories. Direct Preference Optimization needs to scale gracefully to billions of synthetic pairs.",
-        lookingFor: "Reinforcement Learning PhDs with experience managing massive cluster distributions. Focus on PPO optimization.",
-        domain: ["RLHF", "Synthetic Data"],
+        title: "DPO Scaling for Multi-Agent Deliberation",
+        description: "Applying Direct Preference Optimization to complex, multi-turn agentic trajectories. This architecture allows for stable alignment across asynchronous synthetic reasoning chains.",
+        lookingFor: "Reinforcement Learning experts with experience in massive synthetic data pipelines.",
+        domain: ["RLHF", "Synthetic Data", "Agents"],
         active: true,
+        isApproved: true
       }
     ]
   });

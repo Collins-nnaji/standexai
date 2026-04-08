@@ -80,6 +80,7 @@ model User {
   following           Follows[]          @relation("Following")
   labProfile          LabProfile?
   collabMessages      CollabMessage[]
+  assessmentRuns      AssessmentRun[]
 
   @@index([email])
 }
@@ -555,3 +556,74 @@ model LabProfile {
   user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+// ============================================================================
+// LEARNING PLATFORM
+// ============================================================================
+
+enum CourseTrack {
+  STARTER
+  PROFESSIONAL
+  BUILDER
+  CORPORATE
+  PRIME_BESPOKE
+}
+
+enum CourseLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  ALL_LEVELS
+}
+
+model Course {
+  id            String      @id @default(cuid())
+  title         String
+  description   String      @db.Text
+  track         CourseTrack
+  level         CourseLevel @default(BEGINNER)
+  priceUSD      Float?      
+  priceGBP      Float?
+  priceNGN      Float?
+  modulesCount  Int         @default(0)
+  duration      String?     
+  isActive      Boolean     @default(true)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  modules       Module[]
+
+  @@index([track])
+}
+
+model Module {
+  id          String   @id @default(cuid())
+  courseId    String
+  title       String
+  description String?  @db.Text
+  order       Int
+  content     Json?    
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@index([courseId])
+}
+
+// ============================================================================
+// AI ASSESSMENTS
+// ============================================================================
+
+model AssessmentRun {
+  id              String   @id @default(cuid())
+  userId          String
+  score           Int
+  totalQuestions  Int
+  tier            String
+  history         Json     // Stores array of questions + answers
+  createdAt       DateTime @default(now())
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt(sort: Desc)])
+}

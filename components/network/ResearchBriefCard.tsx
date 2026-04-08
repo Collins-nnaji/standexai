@@ -127,7 +127,7 @@ export function ResearchBriefCard({
               onClick={() => setShowModal(true)}
               className="w-full h-16 flex items-center justify-center gap-3 rounded-[24px] bg-zinc-950 px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-white shadow-2xl shadow-zinc-900/20 transition-all hover:bg-[#7C5CFC] hover:shadow-[#7C5CFC]/30 active:scale-95 group/btn"
             >
-              <span>Submit Proposal</span>
+              <span>Request Onboarding</span>
               <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
             </button>
             
@@ -165,9 +165,9 @@ export function ResearchBriefCard({
                 <div className="mx-auto mb-8 flex h-24 w-24 items-center justify-center rounded-[32px] bg-emerald-500/10 text-emerald-500 shadow-xl shadow-emerald-500/5">
                    <CheckCircle className="h-12 w-12" />
                 </div>
-                <h2 className="font-syne text-3xl font-black text-zinc-900 mb-4 items-center gap-2">Proposal Dispatched.</h2>
+                <h2 className="font-syne text-3xl font-black text-zinc-900 mb-4 items-center gap-2">Onboarding Requested.</h2>
                 <p className="text-base font-medium text-zinc-500 mb-10 leading-relaxed max-w-sm mx-auto">
-                   A private collaboration room has been created in your profile. The project team has been automatically invited to review your proposal.
+                   Your technical onboarding workspace has been initialized. The project team has been notified of your intention to join for live learning and practice.
                 </p>
                 <div className="flex flex-col gap-3">
                   <button
@@ -226,9 +226,9 @@ export function ResearchBriefCard({
                   className="w-full rounded-[24px] bg-zinc-900 py-5 text-xs font-black uppercase tracking-widest text-white shadow-2xl shadow-zinc-900/20 transition-all hover:bg-[#7C5CFC] hover:shadow-[#7C5CFC]/20 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {loading ? (
-                    <><Loader2 className="h-5 w-5 animate-spin" /> Committing Signal...</>
+                    <><Loader2 className="h-5 w-5 animate-spin" /> Initializing...</>
                   ) : (
-                    <><ArrowRight className="h-5 w-5" /> Submit Research Proposal</>
+                    <><ArrowRight className="h-5 w-5" /> Confirm Onboarding Request</>
                   )}
                 </button>
               </>

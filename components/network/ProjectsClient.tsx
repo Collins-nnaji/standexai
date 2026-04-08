@@ -45,32 +45,32 @@ export function ProjectsClient({
 
   return (
     <>
-      {/* Page Header & Summary Section */}
-      <div className="relative z-20 mb-16 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-12">
+      {/* Page Header & Summary Section - Compact & Authoritative */}
+      <div className="relative z-20 mb-12 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 py-4">
         <div className="max-w-2xl">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#7C5CFC]/10 bg-white/60 backdrop-blur-md px-3 py-1 text-[9px] font-black uppercase tracking-widest text-[#7C5CFC] shadow-sm">
-            <Zap className="h-3 w-3" /> Managed Implementation
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#7C5CFC]/10 bg-white/60 backdrop-blur-md px-3 py-1 text-[8px] font-black uppercase tracking-widest text-[#7C5CFC] shadow-sm">
+            <Zap className="h-3 w-3" /> Technical Practice Hub
           </div>
-          <h1 className="font-syne mb-4 text-5xl font-black tracking-tight text-zinc-900 md:text-6xl leading-[1.1]">
+          <h1 className="font-syne mb-2 text-4xl font-black tracking-tight text-zinc-900 md:text-5xl leading-tight">
              Open <span className="text-[#7C5CFC]">Projects.</span>
           </h1>
-          <p className="text-lg font-medium text-zinc-500 leading-relaxed max-w-xl">
-             Connect with frontier research laboratories or deploy managed AI squads for mission-critical engineering.
+          <p className="text-sm font-bold text-zinc-400 leading-relaxed max-w-lg uppercase tracking-widest">
+             Join active implementations to practice your skills and gain live technical knowledge within the StandexAI network.
           </p>
         </div>
         
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-8 lg:gap-16">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-8 lg:gap-12">
             <div className="flex flex-col">
-               <span className="font-syne text-3xl font-black text-zinc-900 leading-none">{totalActiveBriefs}</span>
-               <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#7C5CFC] mt-3 underline decoration-2 decoration-[#7C5CFC]/20 underline-offset-4">Active Briefs</span>
+               <span className="font-syne text-2xl font-black text-zinc-900 leading-none">{totalActiveBriefs}</span>
+               <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#7C5CFC] mt-2 underline decoration-2 decoration-[#7C5CFC]/20 underline-offset-4">Verified Docs</span>
             </div>
             <div className="flex flex-col">
-               <span className="font-syne text-3xl font-black text-zinc-900 leading-none">{totalLabs}</span>
-               <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mt-3">Verified Labs</span>
+               <span className="font-syne text-2xl font-black text-zinc-900 leading-none">{totalLabs}</span>
+               <span className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-400 mt-2">Active Nodes</span>
             </div>
             <div className="hidden md:flex flex-col">
-               <span className="font-syne text-3xl font-black text-emerald-500 leading-none">94.8%</span>
-               <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mt-3">Success Rate</span>
+               <span className="font-syne text-2xl font-black text-emerald-500 leading-none">SOTA</span>
+               <span className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-400 mt-2">Tier Level</span>
             </div>
         </div>
       </div>

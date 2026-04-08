@@ -19,6 +19,7 @@ function Logo() {
         height={40} 
         className="h-8 w-auto object-contain"
         priority
+        unoptimized
       />
     </div>
   );
@@ -60,29 +61,31 @@ export function TopNav({ user }: TopNavProps) {
   };
   
   const navItems = [
-    { name: "AI Talent", href: "/talent" },
+    { name: "The Academy", href: "/masterclass" },
+    { name: "Assessment", href: "/assessment" },
     { name: "Open Projects", href: "/projects" },
     { name: "Prime", href: "/prime" },
   ];
 
   return (
     <header className="sticky top-0 z-[100] w-full border-b border-zinc-200/50 bg-white/70 backdrop-blur-2xl shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
-        <div className="flex items-center">
+      <div className="mx-auto flex h-16 max-w-7xl items-center px-4 sm:px-6">
+        {/* Left: Logo */}
+        <div className="flex flex-1 items-center">
           <Link href="/" className="flex items-center gap-2">
             <Logo />
           </Link>
         </div>
 
-        {/* Desktop Nav */}
-        <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 sm:flex">
+        {/* Center: Desktop Nav */}
+        <nav className="hidden items-center gap-1 sm:flex">
           {navItems.map((item) => {
             const active = pathname.startsWith(item.href);
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`rounded-xl px-4 py-2 text-sm font-semibold transition-all duration-300 ${
+                className={`rounded-xl px-4 py-2 text-sm font-black transition-all duration-300 ${
                   active
                     ? "bg-[#7C5CFC]/10 text-[#7C5CFC]"
                     : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
@@ -94,7 +97,8 @@ export function TopNav({ user }: TopNavProps) {
           })}
         </nav>
 
-        <div className="flex items-center gap-2 sm:gap-3">
+        {/* Right: User Actions */}
+        <div className="flex flex-1 items-center justify-end gap-2 sm:gap-3">
           {/* User Desktop Actions */}
           <div className="hidden items-center gap-3 sm:flex">
             {user ? (

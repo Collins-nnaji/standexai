@@ -110,7 +110,7 @@ export function TalentCard({
       {/* Mini Work Feed */}
       <div className="mb-6 flex-1 space-y-2.5">
         <p className="text-[9px] font-black uppercase tracking-widest text-zinc-400 mb-2">Verified Artifacts</p>
-        {workItems.length > 0 ? (
+        {workItems && workItems.length > 0 ? (
           workItems.slice(0, 2).map((work) => (
             <Link 
               key={work.id} 

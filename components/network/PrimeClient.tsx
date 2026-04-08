@@ -18,8 +18,15 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { ManagedProjectForm } from "@/components/consulting/ManagedProjectForm";
+import { PrimeCourses } from "@/components/consulting/PrimeCourses";
 
 export function PrimeClient() {
+  const navItems = [
+    { name: "AI Talent", href: "/talent" },
+    { name: "Open Projects", href: "/projects" },
+    { name: "Prime", href: "/prime" },
+  ];
+
   const toolkit = [
     { name: "LangChain", desc: "Agentic Workflows", icon: Workflow },
     { name: "PyTorch", desc: "Model Architecture", icon: Cpu },
@@ -124,8 +131,12 @@ export function PrimeClient() {
                   </div>
                </div>
             </div>
-         </div>
-      </div>
+          </div>
+       </div>
+ 
+       <div className="-mt-12">
+         <PrimeCourses />
+       </div>
 
       {/* Technical Toolkit Section */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
