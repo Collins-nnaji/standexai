@@ -390,10 +390,10 @@ export function OpenProjectsGrid({ user, appliedProjects = [] }: OpenProjectsGri
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link
-                  href="/masterclass"
+                  href="/learn"
                   className="flex items-center justify-center gap-2 rounded-2xl border border-white/15 px-8 py-4 text-[11px] font-black uppercase tracking-widest text-white hover:border-white/30 hover:bg-white/5 transition-all"
                 >
-                  Complete The Academy First
+                  Complete Learn First
                 </Link>
 
                 {/* Project logo strip */}

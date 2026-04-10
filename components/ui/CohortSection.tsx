@@ -93,7 +93,7 @@ export function CohortSection() {
             >
               <div className="h-1.5 w-1.5 rounded-full bg-[#7C5CFC] animate-pulse" />
               <span className="text-[9px] font-black uppercase tracking-[0.25em] text-zinc-500">
-                Q2 Academy — Enrolling Now
+                Q2 Learn · Rolling Intake
               </span>
             </motion.div>
             <motion.h2
@@ -102,17 +102,23 @@ export function CohortSection() {
               transition={{ delay: 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
               className="font-syne text-3xl sm:text-4xl lg:text-5xl font-black text-zinc-900 tracking-tight"
             >
-              6 weeks.{" "}
-              <span className="text-[#7C5CFC]">Clear milestones.</span>
+              Build production{" "}
+              <span className="text-[#7C5CFC]">AI systems.</span>
             </motion.h2>
+            <motion.div
+              initial={{ scaleX: 0, opacity: 0 }}
+              animate={headerInView ? { scaleX: 1, opacity: 1 } : {}}
+              transition={{ delay: 0.2, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="mt-4 h-px w-32 origin-left bg-gradient-to-r from-[#7C5CFC]/80 via-[#7C5CFC]/30 to-transparent"
+            />
             <motion.p
               initial={{ opacity: 0, y: 10 }}
               animate={headerInView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.2 }}
               className="mt-2 max-w-xl text-sm font-medium text-zinc-500"
             >
-              Every week has a concrete deliverable — you leave with something
-              built, not just something learned.
+              Six weeks. One shipped system each week. A portfolio that proves
+              you can build in production, not just follow tutorials.
             </motion.p>
           </div>
           <motion.div
@@ -121,17 +127,17 @@ export function CohortSection() {
             transition={{ delay: 0.25 }}
           >
             <Link
-              href="/masterclass"
+              href="/learn"
               className="shrink-0 inline-flex items-center gap-2 rounded-2xl border-2 border-zinc-900 px-5 py-2.5 text-[10px] font-black uppercase tracking-widest text-zinc-900 hover:bg-zinc-900 hover:text-white transition-all active:scale-95"
             >
-              View The Academy <ArrowRight className="h-3.5 w-3.5" />
+              View Curriculum <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </motion.div>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
           {/* Week timeline */}
-          <div className="flex-1 divide-y divide-zinc-100">
+          <div className="flex-1 divide-y divide-zinc-100 lg:pr-4">
             {weeks.map((item, i) => (
               <WeekRow key={item.week} item={item} index={i} />
             ))}
@@ -143,9 +149,12 @@ export function CohortSection() {
             initial={{ opacity: 0, y: 24 }}
             animate={cardInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:w-[300px] shrink-0"
+            className="lg:w-[320px] shrink-0 lg:-translate-y-6"
           >
-            <div className="rounded-[32px] border-2 border-zinc-100 bg-zinc-50 p-6 sticky top-24">
+            <div className="group relative rounded-[32px] border-2 border-zinc-100 bg-zinc-50 p-6 sticky top-24 overflow-hidden">
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                <div className="landing-gloss-sweep" />
+              </div>
               <div className="grid grid-cols-2 gap-5 mb-6">
                 {details.map((d, i) => (
                   <motion.div
@@ -153,7 +162,7 @@ export function CohortSection() {
                     initial={{ opacity: 0, y: 8 }}
                     animate={cardInView ? { opacity: 1, y: 0 } : {}}
                     transition={{ delay: 0.1 + i * 0.08 }}
-                    className="space-y-0.5"
+                    className="relative z-10 space-y-0.5"
                   >
                     <p className="text-[9px] font-black uppercase tracking-widest text-zinc-400">
                       {d.label}
@@ -165,10 +174,11 @@ export function CohortSection() {
               </div>
 
               <Link
-                href="/masterclass"
-                className="flex items-center justify-center gap-2 h-12 w-full rounded-2xl bg-[#7C5CFC] text-[10px] font-black uppercase tracking-widest text-white hover:bg-[#6042db] transition-colors shadow-lg shadow-[#7C5CFC]/20"
+                href="/learn"
+                className="relative z-10 flex items-center justify-center gap-2 h-12 w-full rounded-2xl bg-[#7C5CFC] text-[10px] font-black uppercase tracking-widest text-white hover:bg-[#6042db] transition-colors shadow-lg shadow-[#7C5CFC]/20 overflow-hidden"
               >
-                Join The Academy <ArrowRight className="h-3.5 w-3.5" />
+                Learn <ArrowRight className="h-3.5 w-3.5" />
+                <span aria-hidden className="landing-gloss-sweep opacity-0 group-hover:opacity-100 transition-opacity" />
               </Link>
               <p className="mt-3 text-center text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
                 Spots limited · Rolling intake

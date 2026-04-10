@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-sans: var(--font-standex-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
-  --font-sans: var(--font-standex-sans), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
   /* StandexAI “AI” mark — only accents besides black (~90% of UI) */
@@ -412,6 +412,15 @@ section#how:not(.landing-how-revealed) .landing-how-flow-connector {
   animation: console-scan-line 1.8s ease-in-out forwards;
 }
 
+@keyframes shine {
+  0% { transform: translateX(-100%) skewX(-15deg); }
+  100% { transform: translateX(200%) skewX(-15deg); }
+}
+
+.animate-shine {
+  animation: shine 0.75s ease-out forwards;
+}
+
 @keyframes pulse-glow {
   0%, 100% { box-shadow: 0 0 15px -5px rgba(24, 24, 27, 0.15); }
   50% { box-shadow: 0 0 25px -5px rgba(24, 24, 27, 0.25); }
@@ -426,6 +435,45 @@ section#how:not(.landing-how-revealed) .landing-how-flow-connector {
   background: linear-gradient(90deg, transparent 0%, rgba(24, 24, 27, 0.06) 50%, transparent 100%);
   background-size: 200% 100%;
   animation: shimmer 2s infinite;
+}
+
+/* Gloss sweep for modern hover states */
+@keyframes gloss-sweep {
+  0% { transform: translateX(-140%) skewX(-12deg); }
+  100% { transform: translateX(140%) skewX(-12deg); }
+}
+
+.landing-gloss-sweep {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.18) 48%,
+    transparent 100%
+  );
+  transform: translateX(-140%) skewX(-12deg);
+  animation: gloss-sweep 3.4s ease-in-out infinite;
+}
+
+.landing-gloss-sweep--dark {
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(124, 92, 252, 0.18) 48%,
+    transparent 100%
+  );
+}
+
+/* Subtle parallax fade-in accent */
+@keyframes soft-pulse {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 0.6; }
+}
+
+.landing-soft-pulse {
+  animation: soft-pulse 4s ease-in-out infinite;
 }
 
 /* ==================== SCORE RING ==================== */
@@ -589,6 +637,74 @@ section#how:not(.landing-how-revealed) .landing-how-flow-connector {
   100% { transform: translateX(-50%); }
 }
 
+/* Hero roadmap carousel */
+@keyframes hero-roadmap-marquee {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
+
+.hero-roadmap-marquee {
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+}
+
+.hero-roadmap-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: hero-roadmap-marquee 18s linear infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-roadmap-marquee {
+    mask-image: none;
+  }
+  .hero-roadmap-marquee-track {
+    animation: none;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Hero — stack panel (right column): soft drifting sheen, no scroll */
+@keyframes hero-stack-sheen {
+  0%,
+  100% {
+    transform: translate3d(-30%, 0, 0) skewX(-12deg);
+    opacity: 0.25;
+  }
+  50% {
+    transform: translate3d(30%, 0, 0) skewX(-12deg);
+    opacity: 0.5;
+  }
+}
+
+.hero-stack-panel-sheen {
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.07) 45%,
+    rgba(255, 255, 255, 0.14) 50%,
+    rgba(255, 255, 255, 0.07) 55%,
+    transparent 100%
+  );
+  width: 160%;
+  animation: hero-stack-sheen 10s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-stack-panel-sheen {
+    animation: none;
+    transform: none;
+    opacity: 0.15;
+  }
+}
+
+.hero-stack-name {
+  text-shadow: 0 0 28px rgba(255, 255, 255, 0.06);
+}
+
 /* ==================== ANIMATED LINE BACKGROUNDS ==================== */
 
 /* 1. Slowly drifting orthogonal grid — used on inline div overlays */
@@ -617,5 +733,12 @@ section#how:not(.landing-how-revealed) .landing-how-flow-connector {
 }
 .animate-radial-breathe {
   animation: radial-breathe 8s ease-in-out infinite;
+}
+
+/* Use Inter everywhere: legacy `font-syne` classes map to the same UI font */
+@layer utilities {
+  .font-syne {
+    font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  }
 }
 

@@ -21,7 +21,7 @@ const fontInter = Inter({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-inter",
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 /** Landing & console chrome — DM Sans */
@@ -67,10 +67,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fontSans.variable} ${fontSans.className} ${fontLandingSans.variable} ${fontLandingSerif.variable} ${fontConsoleMono.variable} ${fontSyne.variable} ${fontInter.variable}`}
+      className={`${fontInter.variable} ${fontInter.className} ${fontSans.variable} ${fontLandingSans.variable} ${fontLandingSerif.variable} ${fontConsoleMono.variable} ${fontSyne.variable}`}
       suppressHydrationWarning
     >
-      <body className="antialiased font-[family-name:var(--font-landing-sans)] min-h-screen text-zinc-900 bg-white">
+      <body className="antialiased min-h-screen text-zinc-900 bg-white">
         <div className="fixed inset-0 z-[-1] bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
         {children}
       </body>

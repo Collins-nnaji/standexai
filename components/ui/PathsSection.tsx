@@ -52,7 +52,7 @@ export function PathsSection() {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="space-y-12">
                <div>
-                  <h3 className="font-syne text-3xl font-black text-white mb-4">Applied AI Engineering Masterclass</h3>
+                  <h3 className="font-syne text-3xl font-black text-white mb-4">Learn: Applied AI Engineering</h3>
                   <p className="text-zinc-400 font-medium text-lg leading-relaxed">
                     A comprehensive, 12-week fellowship covering the entire technical stack of autonomous agents and production LLM architectures.
                   </p>
@@ -73,7 +73,7 @@ export function PathsSection() {
                   ))}
                </div>
 
-               <Link href="/masterclass" className="block pt-8">
+               <Link href="/learn" className="block pt-8">
                   <Button className="h-16 rounded-2xl bg-[#7C5CFC] px-10 text-xs font-black uppercase tracking-widest text-white shadow-xl hover:bg-[#6042db] active:scale-95">
                     VIEW COMPLETE CURRICULUM <ArrowRight className="ml-3 h-4 w-4" />
                   </Button>

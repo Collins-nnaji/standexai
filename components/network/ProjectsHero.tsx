@@ -35,7 +35,7 @@ export function ProjectsHero() {
           </div>
 
           <Link
-            href="/masterclass"
+            href="/learn"
             className="inline-flex items-center gap-2 shrink-0 rounded-2xl bg-zinc-900 px-5 py-3 text-[10px] font-black uppercase tracking-widest text-white hover:bg-[#7C5CFC] transition-colors"
           >
             Complete the 6-Week Program First
@@ -55,7 +55,7 @@ export function ProjectsHero() {
           {
             step: "01",
             icon: Sparkles,
-            title: "Complete the Academy",
+            title: "Learn & Build",
             desc: "Finish the 6-week applied AI engineering program",
           },
           {

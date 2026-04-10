@@ -27,7 +27,7 @@ export default async function AssessmentPage() {
   }
 
   return (
-    <div className="flex min-h-[100dvh] flex-col bg-[#FAFAF9] overflow-hidden font-[family-name:var(--font-inter)] selection:bg-[#7C5CFC]/20">
+    <div className="flex min-h-[100dvh] flex-col bg-[#FAFAF9] overflow-hidden selection:bg-[#7C5CFC]/20">
       <TopNav user={session?.user ?? null} />
 
       {/* Background */}

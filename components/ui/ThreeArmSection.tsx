@@ -5,11 +5,21 @@ import Link from "next/link";
 import { motion, useInView, Variants } from "framer-motion";
 import { ArrowRight, CheckCircle2, GraduationCap, Rocket, Building2 } from "lucide-react";
 
+/** Minimal ticker — gate, onboarding, collaboration */
+const openProjectPathTags = [
+  "Exceptional capstone only",
+  "Invite after review",
+  "Squad match",
+  "Contributor onboarding",
+  "Real backlog & PRs",
+  "Same bar as the team",
+];
+
 const arms = [
   {
     badge: "01",
     icon: GraduationCap,
-    title: "The Academy",
+    title: "Learn",
     tagline: "Any level → AI-ready in 6 weeks",
     description:
       "Outcome-focused. Every week ends with something deployed. Rolling cohorts, live sessions, verified certificate.",
@@ -17,9 +27,9 @@ const arms = [
       "Week-by-week milestones",
       "From foundations to production",
       "Live cohort + async content",
-      "Open Projects pathway after",
+      "Open Projects if capstone is exceptional",
     ],
-    cta: { label: "View Curriculum", href: "/masterclass" },
+    cta: { label: "View Curriculum", href: "/learn" },
     accent: "#A892FF",
     border: "border-[#7C5CFC]/30",
     chipBg: "bg-[#7C5CFC]/15",
@@ -30,12 +40,14 @@ const arms = [
     badge: "02",
     icon: Rocket,
     title: "Open Projects",
-    tagline: "Exceptional graduates → live product teams",
+    tagline: "Not automatic — earned through the capstone",
     description:
-      "Top performers from each cohort join active projects. Real products, real teams, real ownership.",
+      "You collaborate on live builds only after you finish the Academy with an exceptional capstone. We then run a short onboarding: fit review, squad assignment, access to rituals and backlog — then you ship like a contributor, not a student.",
     highlights: [
-      "Invite-only from cohort performance",
-      "Build live, in public",
+      "Gate: outstanding capstone + cohort performance",
+      "Onboarding: review → squad match → repo & comms access",
+      "Work: tickets, PRs, reviews — mentored, production-grade",
+      "Limited seats; most graduates continue without this track",
     ],
     cta: { label: "See Projects", href: "/projects" },
     accent: "#34D399",
@@ -105,43 +117,94 @@ export function ThreeArmSection() {
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
-        {/* Section header */}
-        <div className="mb-12 max-w-xl" ref={ref}>
+        {/* Section header — minimal: gate, onboarding, collaboration */}
+        <div className="mb-10 max-w-2xl" ref={ref}>
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5 }}
-            className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5"
+            className="mb-3 inline-flex items-center gap-2 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-3 py-1.5"
           >
-            <span className="text-[9px] font-black uppercase tracking-[0.25em] text-zinc-400">
-              The Platform
+            <span className="text-[9px] font-black uppercase tracking-[0.25em] text-emerald-400/90">
+              Open Projects
             </span>
           </motion.div>
           <motion.h2
             initial={{ opacity: 0, y: 16 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="font-syne text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[0.88]"
+            transition={{ delay: 0.08, duration: 0.65, ease: [0.16, 1, 0.3, 1] as const }}
+            className="font-syne text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-[0.95]"
           >
-            Three arms.
-            <br />
-            <span className="text-[#7C5CFC]">One mission.</span>
+            Collaboration{" "}
+            <span className="text-emerald-400">by invitation.</span>
           </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.14, duration: 0.45 }}
+            className="mt-3 text-sm font-medium text-zinc-400 leading-relaxed"
+          >
+            Only for people who pass the{" "}
+            <span className="text-zinc-200">capstone at an exceptional standard</span> — not every graduate.
+            If you clear that bar, we onboard you into a squad on a live build.
+          </motion.p>
+          <motion.dl
+            initial={{ opacity: 0, y: 8 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.2, duration: 0.45 }}
+            className="mt-5 grid gap-4 sm:grid-cols-2 sm:gap-x-8"
+          >
+            <div>
+              <dt className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 mb-1.5">What it takes</dt>
+              <dd className="text-[13px] font-semibold text-zinc-400 leading-snug">
+                Strong capstone delivery, consistent cohort work, and readiness to own tasks like a mid-level contributor.
+              </dd>
+            </div>
+            <div>
+              <dt className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 mb-1.5">How you&apos;re onboarded</dt>
+              <dd className="text-[13px] font-semibold text-zinc-400 leading-snug">
+                Short review → squad match → access to backlog, repo, and ceremonies — then you ship with the same expectations as the rest of the team.
+              </dd>
+            </div>
+          </motion.dl>
         </div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : {}}
+          transition={{ delay: 0.22 }}
+          className="overflow-hidden border-y border-emerald-500/10 py-3 -mx-4 sm:-mx-6 mb-10"
+          style={{ maskImage: "linear-gradient(to right, transparent, black 8%, black 92%, transparent)" }}
+        >
+          <div className="flex gap-2.5 w-max" style={{ animation: "marquee 22s linear infinite" }}>
+            {[...openProjectPathTags, ...openProjectPathTags].map((tag, i) => (
+              <span
+                key={i}
+                className="shrink-0 rounded-full border border-emerald-500/20 bg-emerald-500/5 px-3 py-0.5 text-[9px] font-bold uppercase tracking-widest text-emerald-200/90"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        </motion.div>
 
         {/* Cards */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate={inView ? "show" : "hidden"}
-          className="grid lg:grid-cols-5 gap-4"
+          className="grid lg:grid-cols-5 gap-6"
         >
           {/* Featured — Academy */}
           <motion.div
             variants={itemVariants}
-            className={`lg:col-span-3 group relative rounded-[36px] border-2 ${arms[0].border} bg-white/[0.04] p-8 lg:p-10 overflow-hidden hover:bg-white/[0.07] transition-all duration-500`}
+            whileHover={{ y: -6 }}
+            className={`lg:col-span-3 group relative rounded-[36px] border-2 ${arms[0].border} bg-white/[0.04] p-8 lg:p-10 overflow-hidden hover:bg-white/[0.07] transition-all duration-500 lg:-translate-y-3`}
           >
             <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-[radial-gradient(circle,rgba(124,92,252,0.12),transparent_70%)] pointer-events-none" />
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+              <div className="landing-gloss-sweep landing-gloss-sweep--dark" />
+            </div>
 
             <div className="relative z-10">
               <div className="flex items-start justify-between mb-6">
@@ -193,13 +256,17 @@ export function ThreeArmSection() {
           </motion.div>
 
           {/* Stacked — Open Projects + Prime */}
-          <div className="lg:col-span-2 flex flex-col gap-4">
+          <div className="lg:col-span-2 flex flex-col gap-4 lg:pt-6">
             {arms.slice(1).map((arm) => (
               <motion.div
                 key={arm.badge}
                 variants={itemVariants}
-                className={`group relative flex-1 rounded-[28px] border ${arm.border} bg-white/[0.03] p-6 overflow-hidden hover:bg-white/[0.06] transition-all duration-400`}
+                whileHover={{ y: -4 }}
+                className={`group relative flex-1 rounded-[28px] border ${arm.border} bg-white/[0.03] p-6 overflow-hidden hover:bg-white/[0.06] transition-all duration-400 ${arm.badge === "03" ? "lg:translate-x-6" : "lg:-translate-x-2"}`}
               >
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                  <div className="landing-gloss-sweep landing-gloss-sweep--dark" />
+                </div>
                 <div className="relative z-10">
                   <div className="flex items-start justify-between mb-4">
                     <div className={`flex h-9 w-9 items-center justify-center rounded-xl ${arm.chipBg}`}>
@@ -215,9 +282,17 @@ export function ThreeArmSection() {
                   <p className="text-[10px] font-black uppercase tracking-wider mb-3" style={{ color: arm.accent }}>
                     {arm.tagline}
                   </p>
-                  <p className="text-[12px] font-medium text-zinc-400 mb-5 leading-relaxed">
+                  <p className="text-[12px] font-medium text-zinc-400 mb-4 leading-relaxed">
                     {arm.description}
                   </p>
+                  <ul className="mb-5 space-y-1.5">
+                    {arm.highlights.map((h, hi) => (
+                      <li key={hi} className="flex items-start gap-2">
+                        <CheckCircle2 className="h-3.5 w-3.5 shrink-0 mt-0.5 opacity-70" style={{ color: arm.accent }} />
+                        <span className="text-[11px] font-semibold text-zinc-500 leading-snug">{h}</span>
+                      </li>
+                    ))}
+                  </ul>
                   <Link
                     href={arm.cta.href}
                     className="inline-flex items-center gap-1.5 rounded-xl border px-4 py-2 text-[10px] font-black uppercase tracking-widest transition-all active:scale-95"

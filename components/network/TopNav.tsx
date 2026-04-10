@@ -61,10 +61,9 @@ export function TopNav({ user }: TopNavProps) {
   };
   
   const navItems = [
-    { name: "The Academy", href: "/masterclass" },
+    { name: "Learn", href: "/learn" },
     { name: "Assessment", href: "/assessment" },
     { name: "Open Projects", href: "/projects" },
-    { name: "Prime", href: "/prime" },
   ];
 
   return (

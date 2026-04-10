@@ -25,7 +25,7 @@ export default async function ProjectsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white font-[family-name:var(--font-inter)] selection:bg-[#7C5CFC]/20">
+    <div className="min-h-screen bg-white selection:bg-[#7C5CFC]/20">
       <TopNav user={session?.user} />
       <OpenProjectsGrid user={session?.user ?? null} appliedProjects={appliedProjects} />
     </div>

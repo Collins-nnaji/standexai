@@ -353,7 +353,7 @@ export function ConsoleWorkspace() {
   return (
     <div
       className={cn(
-        "relative flex h-[100dvh] flex-col overflow-hidden [font-family:var(--font-landing-sans),sans-serif] text-[14px] leading-snug antialiased",
+        "relative flex h-[100dvh] flex-col overflow-hidden [font-family:var(--font-inter),ui-sans-serif,sans-serif] text-[14px] leading-snug antialiased",
         t.shell,
         t.scrollbar,
       )}
