@@ -3,11 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-import { User, TerminalSquare, UploadCloud, LogOut, Menu, X, ChevronRight, LayoutDashboard, Settings } from "lucide-react";
+import { User, TerminalSquare, UploadCloud, LogOut, Menu, X, ChevronRight, LayoutDashboard, Settings, ChevronDown } from "lucide-react";
 import { neonAuthClient } from "@/lib/neon/auth-client";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 function Logo() {
   return (
@@ -59,12 +60,6 @@ export function TopNav({ user }: TopNavProps) {
       setIsLoggingOut(false);
     }
   };
-  
-  const navItems = [
-    { name: "Learn", href: "/learn" },
-    { name: "Assessment", href: "/assessment" },
-    { name: "Open Projects", href: "/projects" },
-  ];
 
   return (
     <header className="sticky top-0 z-[100] w-full border-b border-zinc-200/50 bg-white/70 backdrop-blur-2xl shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
@@ -77,23 +72,52 @@ export function TopNav({ user }: TopNavProps) {
         </div>
 
         {/* Center: Desktop Nav */}
-        <nav className="hidden items-center gap-1 sm:flex">
-          {navItems.map((item) => {
-            const active = pathname.startsWith(item.href);
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`rounded-xl px-4 py-2 text-sm font-black transition-all duration-300 ${
-                  active
-                    ? "bg-[#7C5CFC]/10 text-[#7C5CFC]"
-                    : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
-                }`}
-              >
-                {item.name}
-              </Link>
-            );
-          })}
+        <nav className="hidden items-center gap-2 sm:flex">
+          <Link
+            href="/learn"
+            className={cn(
+              "rounded-xl px-4 py-2 text-sm font-black transition-all duration-300",
+              pathname.startsWith("/learn") ? "bg-[#7C5CFC]/10 text-[#7C5CFC]" : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
+            )}
+          >
+            Learn
+          </Link>
+
+          {/* Opportunities Dropdown */}
+          <div className="relative group">
+            <button className="flex items-center gap-1 rounded-xl px-4 py-2 text-sm font-black text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 transition-all duration-300">
+              Opportunities
+              <ChevronDown className="h-3.5 w-3.5 opacity-50 transition-transform group-hover:rotate-180" />
+            </button>
+            <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+              <div className="w-56 rounded-2xl border border-zinc-200 bg-white p-2 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] flex flex-col gap-1">
+                <Link href="/projects" className="flex items-center justify-between rounded-xl px-3 py-2.5 text-sm font-bold text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-all">
+                  Open Projects
+                </Link>
+                <Link href="/jobs" className="flex items-center justify-between rounded-xl px-3 py-2.5 text-sm font-bold text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-all">
+                  Jobs
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* Workspace Dropdown */}
+          <div className="relative group">
+            <button className="flex items-center gap-1 rounded-xl px-4 py-2 text-sm font-black text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 transition-all duration-300">
+              Workspace
+              <ChevronDown className="h-3.5 w-3.5 opacity-50 transition-transform group-hover:rotate-180" />
+            </button>
+            <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+              <div className="w-56 rounded-2xl border border-zinc-200 bg-white p-2 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] flex flex-col gap-1">
+                <Link href="/cognitive-audit" className="flex items-center justify-between rounded-xl px-3 py-2.5 text-sm font-bold text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-all">
+                  Skills Benchmark
+                </Link>
+                <Link href="/console" className="flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-bold text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-all">
+                  <TerminalSquare className="h-4 w-4 text-zinc-400" /> Console
+                </Link>
+              </div>
+            </div>
+          </div>
         </nav>
 
         {/* Right: User Actions */}
@@ -102,13 +126,6 @@ export function TopNav({ user }: TopNavProps) {
           <div className="hidden items-center gap-3 sm:flex">
             {user ? (
               <>
-                <Link
-                  href="/console"
-                  className="flex items-center gap-1.5 rounded-full border border-zinc-200 bg-white px-4 py-2 text-sm font-semibold text-zinc-600 shadow-[0_2px_4px_rgba(0,0,0,0.02)] transition-colors hover:border-zinc-300 hover:bg-zinc-50 hover:text-zinc-900"
-                >
-                  <TerminalSquare className="h-[18px] w-[18px]" strokeWidth={1.75} /> Console
-                </Link>
-                <div className="h-6 w-px bg-zinc-200" />
                 <div className="relative">
                   <button
                     onClick={() => setMenuOpen(!menuOpen)}
@@ -212,23 +229,43 @@ export function TopNav({ user }: TopNavProps) {
                 <div className="mb-4">
                   <p className="px-3 text-[10px] font-black uppercase tracking-widest text-zinc-400">Navigation</p>
                 </div>
-                {navItems.map((item) => {
-                  const active = pathname.startsWith(item.href);
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className={`flex items-center justify-between rounded-xl px-4 py-3 text-sm font-bold transition-all ${
-                        active
-                          ? "bg-[#7C5CFC]/10 text-[#7C5CFC]"
-                          : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
-                      }`}
-                    >
-                      {item.name}
-                      <ChevronRight className={`h-4 w-4 opacity-50 ${active ? "text-[#7C5CFC]" : ""}`} />
-                    </Link>
-                  );
-                })}
+                <Link
+                  href="/learn"
+                  className={cn(
+                    "flex items-center justify-between rounded-xl px-4 py-3 text-sm font-bold transition-all",
+                    pathname.startsWith("/learn") ? "bg-[#7C5CFC]/10 text-[#7C5CFC]" : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
+                  )}
+                >
+                  Learn
+                  <ChevronRight className={cn("h-4 w-4 opacity-50", pathname.startsWith("/learn") && "text-[#7C5CFC]")} />
+                </Link>
+
+                <div className="my-6 h-px w-full bg-zinc-100" />
+
+                <div className="mb-4">
+                  <p className="px-3 text-[10px] font-black uppercase tracking-widest text-zinc-400">Opportunities</p>
+                </div>
+                <Link href="/projects" className="flex items-center justify-between rounded-xl px-4 py-3 text-sm font-bold text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 transition-all">
+                  Open Projects
+                  <ChevronRight className="h-4 w-4 opacity-50" />
+                </Link>
+                <Link href="/jobs" className="flex items-center justify-between rounded-xl px-4 py-3 text-sm font-bold text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 transition-all">
+                  Jobs
+                  <ChevronRight className="h-4 w-4 opacity-50" />
+                </Link>
+
+                <div className="my-6 h-px w-full bg-zinc-100" />
+
+                <div className="mb-4">
+                  <p className="px-3 text-[10px] font-black uppercase tracking-widest text-zinc-400">Workspace</p>
+                </div>
+                <Link href="/cognitive-audit" className="flex items-center justify-between rounded-xl px-4 py-3 text-sm font-bold text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 transition-all">
+                  Skills Benchmark
+                  <ChevronRight className="h-4 w-4 opacity-50" />
+                </Link>
+                <Link href="/console" className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 transition-all">
+                  <TerminalSquare className="h-5 w-5 text-zinc-400" /> Console
+                </Link>
 
                 <div className="my-6 h-px w-full bg-zinc-100" />
 
@@ -238,12 +275,6 @@ export function TopNav({ user }: TopNavProps) {
 
                 {user ? (
                   <div className="flex flex-col gap-2">
-                    <Link
-                      href="/console"
-                      className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 transition-all"
-                    >
-                      <TerminalSquare className="h-5 w-5" /> Console
-                    </Link>
                     <Link
                       href="/r/me"
                       className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 transition-all"

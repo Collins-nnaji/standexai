@@ -47,7 +47,8 @@ export default async function HomePage() {
               LinkedIn: standexai
             </a>
             <Link href="/learn" className="hover:text-[#7C5CFC] transition-colors">Learn</Link>
-            <Link href="/assessment" className="hover:text-[#7C5CFC] transition-colors">Assessment</Link>
+            <Link href="/cognitive-audit" className="hover:text-[#7C5CFC] transition-colors">Skills Benchmark</Link>
+            <Link href="/presentation/ai" className="hover:text-[#7C5CFC] transition-colors">Course deck</Link>
             <Link href="/projects" className="hover:text-[#7C5CFC] transition-colors">Open Projects</Link>
             <Link href="/prime" className="hover:text-[#7C5CFC] transition-colors">Prime</Link>
           </div>

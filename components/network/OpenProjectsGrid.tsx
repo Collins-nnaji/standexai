@@ -12,12 +12,12 @@ import {
   Brain,
   Users,
   FileText,
-  Rocket,
-  ChevronRight,
+  Hexagon,
+  Calendar,
+  Layers
 } from "lucide-react";
 
 import { applyToProject } from "@/app/projects/actions";
-import { useRouter } from "next/navigation";
 
 interface OpenProjectsGridProps {
   user: any;
@@ -35,100 +35,126 @@ const projects = [
       "We're building the voice and speech model infrastructure that most AI products are missing. Real-time transcription, speaker diarisation, voice-commanded agents, and audio-grounded reasoning. If you've ever wanted to work at the intersection of LLMs and audio — this is it.",
     solving:
       "Most AI apps are text-in, text-out. Voice changes everything — lower friction, richer context, broader access. We're building the primitives that make voice-first AI products possible.",
+    tools: ["Whisper API", "ElevenLabs", "Deepgram", "Next.js", "React", "PostgreSQL", "LLMs", "Stripe", "Resend", "Redis Cache", "Azure Storage"],
+    collaborators: 15,
+    process: "Live weekly codebase reviews, rapid sprint cycles, and active architectural discussions in the StandexAI voice squad channel.",
+    datePrimary: "Active",
+    dateSubtext: "sprint phase",
     lookingFor: [
-      "Engineers interested in speech models (Whisper, ElevenLabs, Deepgram)",
+      "Engineers interested in speech models",
       "Product thinkers who see the voice opportunity",
-      "Builders who want to ship, not just learn",
+      "Builders who want to ship",
     ],
     logo: "/standexailogo.png",
+    logoWidth: "w-48 sm:w-56",
     icon: Mic,
-    accentColor: "#3B82F6",
-    bgClass: "bg-blue-50",
-    chipClass: "bg-blue-100 text-blue-700 border-blue-200",
+    accentColor: "#7C5CFC",
+    bgClass: "bg-violet-50",
+    chipClass: "bg-violet-100 text-violet-700 border-violet-200",
     featured: true,
+    isLatest: true,
   },
   {
     id: "02",
     name: "GlobalCoachAI",
     tag: "Assessments & Adaptive Learning",
-    status: "Active — accepting contributors",
+    status: "Completed — Previous Cohort",
     tagline: "AI that learns how you learn.",
     description:
       "GlobalCoachAI is an intelligent assessment and learning platform that maps user study patterns, identifies knowledge gaps in real time, and adapts content delivery to how each person actually learns. Not another quiz tool — a genuine AI tutor that gets smarter the more you use it.",
     solving:
       "Generic learning platforms treat every user the same. GlobalCoachAI builds a live model of each learner — their pace, their blind spots, their optimal recall windows — and teaches to that.",
+    tools: ["OpenAI Embeddings", "Vector DB (Pinecone)", "Next.js", "React", "PostgreSQL", "LLMs", "Stripe", "Resend", "Redis Cache", "Azure Storage"],
+    collaborators: 9,
+    process: "Iterative design testing, continuous integration for new assessment metrics, and rigorous prompt engineering cycles.",
+    datePrimary: "Q1 2026",
+    dateSubtext: "completed",
     lookingFor: [
       "Engineers interested in learning science + AI",
-      "Anyone with experience in spaced repetition, knowledge graphs, or edtech",
-      "Builders who care about outcomes, not just engagement metrics",
+      "Anyone with experience in spaced repetition",
+      "Builders who care about outcomes",
     ],
-    logo: "/images/globalcoachai-logo.png",
+    logo: "/globalcoachlogo.png",
+    logoWidth: "w-40 sm:w-48",
     icon: Brain,
     accentColor: "#7C5CFC",
-    bgClass: "bg-violet-50",
-    chipClass: "bg-violet-100 text-violet-700 border-violet-200",
+    bgClass: "bg-zinc-50",
+    chipClass: "bg-zinc-100 text-zinc-700 border-zinc-200",
     featured: false,
+    isLatest: false,
+    website: "https://globalcoachai.com",
   },
   {
     id: "03",
     name: "Rekruuter",
     tag: "Recruitment & Interview AI",
-    status: "Active — accepting contributors",
+    status: "Completed — Previous Cohort",
     tagline: "The AI layer recruiters actually needed.",
     description:
       "Rekruuter puts AI inside the recruitment workflow — from JD analysis and candidate screening to live interview assistance and structured scoring. Built for recruiters who want leverage, not replacement. Fast, fair, and auditable at every step.",
     solving:
       "Recruitment is slow, inconsistent, and bias-prone. Rekruuter gives recruiters an AI co-pilot that surfaces signal, reduces noise, and makes every decision more defensible.",
+    tools: ["Semantic Search", "Next.js", "React", "PostgreSQL", "LLMs", "Stripe", "Resend", "Redis Cache", "Azure Storage"],
+    collaborators: 12,
+    process: "Cross-functional building with HR advisors, robust data modeling for bias reduction, and staging deploys.",
+    datePrimary: "Q4 2025",
+    dateSubtext: "completed",
     lookingFor: [
-      "Engineers interested in NLP, ranking, and structured data extraction",
-      "Anyone who's worked in HR tech or understands recruiter workflows",
-      "Builders who care about fairness and auditability in AI systems",
+      "Engineers interested in NLP",
+      "Anyone who's worked in HR tech",
+      "Builders who care about fairness",
     ],
-    logo: "/images/rekruuter-logo.png",
+    logo: "/Rekruuter.png",
+    logoWidth: "w-36 sm:w-44",
     icon: Users,
-    accentColor: "#4338CA",
-    bgClass: "bg-indigo-50",
-    chipClass: "bg-indigo-100 text-indigo-700 border-indigo-200",
+    accentColor: "#7C5CFC",
+    bgClass: "bg-zinc-50",
+    chipClass: "bg-zinc-100 text-zinc-700 border-zinc-200",
     featured: false,
+    isLatest: false,
+    website: "https://rekruuter.com",
   },
   {
     id: "04",
     name: "AccurateCV",
     tag: "Career & CV Intelligence",
-    status: "Active — accepting contributors",
+    status: "Completed — Previous Cohort",
     tagline: "Your CV, adapted for every opportunity.",
     description:
       "AccurateCV is an AI CV agent that reads a job description, understands what the employer is actually looking for, and rewrites and repositions your CV to match — without fabricating anything. It also tracks application patterns, learns what works, and gets sharper with every role you apply for.",
     solving:
       "Most people send the same CV everywhere and wonder why they don't hear back. AccurateCV treats your CV as a living document — one that adapts, improves, and advocates for you intelligently with every application.",
+    tools: ["PDF Generation", "Edge Functions", "Next.js", "React", "PostgreSQL", "LLMs", "Stripe", "Resend", "Redis Cache", "Azure Storage"],
+    collaborators: 8,
+    process: "System integration testing for variable PDF parsers and asynchronous webhook processing systems.",
+    datePrimary: "Q3 2025",
+    dateSubtext: "completed",
     lookingFor: [
-      "Engineers interested in document intelligence and personalisation",
-      "Anyone with experience in job market data or career platforms",
-      "Builders who want to work on something with immediate, personal impact",
+      "Engineers interested in document intelligence",
+      "Experience in job market data",
+      "Builders analyzing impact data",
     ],
-    logo: "/images/accuratecv-logo.png",
+    logo: "/ACCURATECV.png",
+    logoWidth: "w-40 sm:w-48",
     icon: FileText,
-    accentColor: "#0369A1",
-    bgClass: "bg-sky-50",
-    chipClass: "bg-sky-100 text-sky-700 border-sky-200",
+    accentColor: "#7C5CFC",
+    bgClass: "bg-zinc-50",
+    chipClass: "bg-zinc-100 text-zinc-700 border-zinc-200",
     featured: false,
+    isLatest: false,
+    website: "https://accuratecv.com",
   },
 ];
 
-function ProjectCard({ project, user, appliedProjects }: { project: any, user: any, appliedProjects: string[] }) {
+function ProjectSection({ project, user, appliedProjects }: { project: any, user: any, appliedProjects: string[] }) {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
-  const Icon = project.icon;
-  const router = useRouter();
+  const inView = useInView(ref, { once: true, margin: "-100px" });
   const [isApplying, setIsApplying] = React.useState(false);
   const [isApplied, setIsApplied] = React.useState(() => appliedProjects.includes(project.name));
 
   const handleApply = async (e: React.MouseEvent) => {
-    if (!user) {
-      // Let it normally navigate to sign-in
-      return;
-    }
-    e.preventDefault(); // Prevent navigation since we have a user
+    if (!user) return;
+    e.preventDefault();
     if (isApplied || isApplying) return;
     
     setIsApplying(true);
@@ -137,115 +163,137 @@ function ProjectCard({ project, user, appliedProjects }: { project: any, user: a
     
     if (result && result.success) {
       setIsApplied(true);
-    } else if (result?.error) {
-      console.error(result.error);
     }
   };
 
   return (
     <motion.article
       ref={ref}
-      initial={{ opacity: 0, y: 32 }}
+      initial={{ opacity: 0, y: 30 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className="group relative rounded-[32px] border border-zinc-200 bg-white overflow-hidden hover:border-zinc-300 hover:shadow-2xl hover:shadow-zinc-100 transition-all duration-500"
+      className="group w-full relative rounded-[32px] md:rounded-[40px] border border-zinc-200 bg-white shadow-sm overflow-hidden hover:border-[#7C5CFC]/30 hover:shadow-2xl hover:shadow-[#7C5CFC]/[0.08] transition-all duration-500"
     >
-      {/* Accent glow */}
-      <div
-        className="absolute top-0 right-0 w-64 h-64 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-3xl pointer-events-none"
-        style={{ backgroundColor: `${project.accentColor}10` }}
-      />
-
-      <div className="relative z-10 p-7 lg:p-8">
-        {/* Header row */}
-        <div className="flex items-start justify-between gap-4 mb-6">
-          <div className="flex items-center gap-4">
-            {/* Logo / Icon */}
-            <div
-              className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${project.bgClass}`}
+      <div className="flex flex-col lg:flex-row">
+        
+        {/* LEFT COLUMN: IDENTIFICATION & DESCRIPTION */}
+        <div className="lg:w-[60%] p-8 sm:p-12 xl:p-16 border-b lg:border-b-0 lg:border-r border-zinc-100 flex flex-col justify-between">
+          <div>
+            {/* Branding - Bold and Open Logo */}
+            <a 
+              href={project.website || "#"} 
+              target={project.website ? "_blank" : "_self"}
+              rel={project.website ? "noreferrer" : ""}
+              className={`mb-6 block relative flex items-center justify-start ${project.logoWidth} hover:opacity-80 transition-opacity`}
             >
-              <Icon className="h-5 w-5" style={{ color: project.accentColor }} />
-            </div>
-            <div>
-              <h3 className="font-syne text-xl font-black text-zinc-900 tracking-tight">
-                {project.name}
-              </h3>
-              <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: project.accentColor }}>
+               <Image 
+                 src={project.logo} 
+                 alt={project.name} 
+                 width={400}
+                 height={120}
+                 className="w-full h-auto object-contain origin-left" 
+                 unoptimized 
+               />
+            </a>
+            
+            <div className="flex flex-wrap items-center gap-3 mb-8">
+              <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">
                 {project.tag}
+              </span>
+              <div className="h-4 w-px bg-zinc-200" />
+              <div className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[9px] font-black uppercase tracking-widest ${project.chipClass}`}>
+                <div className={`h-1.5 w-1.5 rounded-full ${project.isLatest ? "animate-pulse" : ""}`} style={{ backgroundColor: project.accentColor }} />
+                {project.status}
+              </div>
+            </div>
+            
+            <p className="text-lg md:text-xl font-bold text-zinc-900 tracking-tight mb-6">
+              "{project.tagline}"
+            </p>
+
+            <div className="space-y-6">
+              <div>
+                <p className="text-sm md:text-[15px] font-medium text-zinc-600 leading-relaxed max-w-2xl">
+                  {project.description}
+                </p>
+              </div>
+              <div>
+                <p className="text-[13px] font-medium text-zinc-500 leading-relaxed max-w-2xl bg-zinc-50 p-4 rounded-2xl border border-zinc-100">
+                  <strong className="text-zinc-700">The Problem: </strong>{project.solving}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* RIGHT COLUMN: TECHNICAL METADATA & ACTIONS */}
+        <div className="lg:w-[40%] bg-zinc-50/50 p-8 sm:p-12 xl:p-16 flex flex-col justify-between">
+          <div>
+            {/* Tech Stack */}
+            <div className="mb-10">
+              <h4 className="flex items-center gap-2 text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-4">
+                 <Layers className="h-3.5 w-3.5" /> Tech Stack Used
+              </h4>
+              <div className="flex flex-wrap gap-2">
+                {project.tools.map((t: string) => (
+                  <span key={t} className="px-3.5 py-1.5 rounded-xl border border-zinc-200 bg-white shadow-sm text-[11px] font-bold text-zinc-700 hover:border-zinc-300 transition-colors">
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Meta Data: Collaborators & Dates */}
+            <div className="grid grid-cols-2 gap-8 mb-10">
+              <div>
+                <h4 className="flex items-center gap-2 text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-2">
+                   <Users className="h-3.5 w-3.5" /> Collaborators
+                </h4>
+                <p className="text-3xl md:text-4xl font-black text-zinc-900 leading-none flex items-baseline">
+                  {project.collaborators}<span className="text-lg text-zinc-400 font-bold ml-1.5 leading-none">{project.isLatest ? "expected devs" : "devs"}</span>
+                </p>
+              </div>
+              <div>
+                <h4 className="flex items-center gap-2 text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-2">
+                   <Calendar className="h-3.5 w-3.5" /> Timeline
+                </h4>
+                <p className="text-2xl md:text-3xl font-black text-zinc-900 leading-none flex items-baseline">
+                  {project.datePrimary}<span className="text-sm font-bold text-zinc-400 ml-1.5 leading-none">{project.dateSubtext}</span>
+                </p>
+              </div>
+            </div>
+
+            {/* Process */}
+            <div className="mb-12">
+              <h4 className="flex items-center gap-2 text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-3">
+                 <Hexagon className="h-3.5 w-3.5" /> Operating Process
+              </h4>
+              <p className="text-[13px] font-medium text-zinc-600 leading-relaxed">
+                {project.process}
               </p>
             </div>
           </div>
-          {/* Project number */}
-          <span className="shrink-0 font-syne text-4xl font-black text-zinc-100 leading-none select-none">
-            {project.id}
-          </span>
+
+          {/* Action Area */}
+          {project.isLatest && (
+            <div className="pt-8 border-t border-zinc-200/60 mt-auto">
+              {isApplied ? (
+                <div className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-zinc-100 p-5 text-[11px] font-black uppercase tracking-widest text-zinc-500 border border-zinc-200/80">
+                  <CheckCircle2 className="h-4 w-4" /> Applied to Squad
+                </div>
+              ) : (
+                <Link
+                  href={user ? "#" : "/auth/sign-in"}
+                  onClick={handleApply}
+                  className="group/btn inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#7C5CFC] p-5 text-[11px] font-black uppercase tracking-widest text-white transition-all shadow-[0_8px_30px_rgba(124,92,252,0.3)] hover:scale-[1.02] hover:bg-[#6841fb] active:scale-95"
+                >
+                  {isApplying ? "Authenticating..." : "Apply to Join Squad"}
+                  {!isApplying && <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />}
+                </Link>
+              )}
+            </div>
+          )}
         </div>
-
-        {/* Status chip */}
-        <div className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[9px] font-black uppercase tracking-widest mb-4 ${project.chipClass}`}>
-          <div className="h-1.5 w-1.5 rounded-full animate-pulse" style={{ backgroundColor: project.accentColor }} />
-          {project.status}
-        </div>
-
-        {/* Tagline */}
-        <p className="font-syne text-base font-black text-zinc-900 tracking-tight mb-3">
-          "{project.tagline}"
-        </p>
-
-        {/* Description */}
-        <p className="text-[13px] font-medium text-zinc-500 leading-relaxed mb-5">
-          {project.description}
-        </p>
-
-        {/* What we're solving */}
-        <div className={`rounded-2xl border p-4 mb-5 ${project.bgClass} border-transparent`}>
-          <p className="text-[9px] font-black uppercase tracking-widest mb-2" style={{ color: project.accentColor }}>
-            What we're solving
-          </p>
-          <p className="text-xs font-semibold text-zinc-700 leading-relaxed">{project.solving}</p>
-        </div>
-
-        {/* Looking for */}
-        <div className="mb-6">
-          <p className="text-[9px] font-black uppercase tracking-widest text-zinc-400 mb-3">
-            Looking for
-          </p>
-          <ul className="space-y-2">
-            {project.lookingFor.map((item: string, i: number) => (
-              <li key={i} className="flex items-start gap-2">
-                <ChevronRight className="h-3.5 w-3.5 mt-0.5 shrink-0" style={{ color: project.accentColor }} />
-                <span className="text-[12px] font-semibold text-zinc-600">{item}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* CTA */}
-        {isApplied ? (
-          <div className="inline-flex items-center gap-2 rounded-2xl border-2 px-5 py-2.5 text-[10px] font-black uppercase tracking-widest bg-zinc-100 text-zinc-500 border-zinc-200 cursor-default select-none">
-            <CheckCircle2 className="h-3.5 w-3.5" /> Applied
-          </div>
-        ) : (
-          <Link
-            href={user ? "#" : "/auth/sign-in"}
-            onClick={handleApply}
-            className={`inline-flex items-center gap-2 rounded-2xl border-2 px-5 py-2.5 text-[10px] font-black uppercase tracking-widest transition-all ${isApplying ? "opacity-50 cursor-not-allowed" : "active:scale-95 hover:text-white"} group/btn`}
-            style={{ borderColor: project.accentColor, color: project.accentColor }}
-            onMouseEnter={(e) => {
-              if (isApplying) return;
-              (e.currentTarget as HTMLElement).style.backgroundColor = project.accentColor;
-              (e.currentTarget as HTMLElement).style.color = "white";
-            }}
-            onMouseLeave={(e) => {
-              if (isApplying) return;
-              (e.currentTarget as HTMLElement).style.backgroundColor = "transparent";
-              (e.currentTarget as HTMLElement).style.color = project.accentColor;
-            }}
-          >
-            {isApplying ? "Applying..." : "Apply to Join"} 
-            {!isApplying && <ArrowRight className="h-3.5 w-3.5 group-hover/btn:translate-x-0.5 transition-transform" />}
-          </Link>
-        )}
       </div>
     </motion.article>
   );
@@ -254,160 +302,81 @@ function ProjectCard({ project, user, appliedProjects }: { project: any, user: a
 export function OpenProjectsGrid({ user, appliedProjects = [] }: OpenProjectsGridProps) {
   const heroRef = useRef(null);
   const heroInView = useInView(heroRef, { once: true });
-  const ctaRef = useRef(null);
-  const ctaInView = useInView(ctaRef, { once: true, margin: "-60px" });
+  
+  const latestProjects = projects.filter(p => p.isLatest);
+  const previousProjects = projects.filter(p => !p.isLatest);
 
   return (
-    <main>
+    <main className="bg-[#FAFAF9] min-h-screen pb-20">
       {/* ── HERO ── */}
-      <section
-        ref={heroRef}
-        className="relative overflow-hidden bg-white border-b border-zinc-100"
-      >
-        {/* Drifting grid */}
-        <div aria-hidden className="pointer-events-none animate-grid-drift" style={{ position: "absolute", inset: -80, zIndex: 0, backgroundImage: "linear-gradient(to right, rgba(124,92,252,0.055) 1px, transparent 1px), linear-gradient(to bottom, rgba(124,92,252,0.055) 1px, transparent 1px)", backgroundSize: "80px 80px" }} />
-        {/* Diagonal hatch */}
-        <div aria-hidden className="pointer-events-none animate-hatch-slide" style={{ position: "absolute", inset: -60, zIndex: 0, backgroundImage: "repeating-linear-gradient(45deg, rgba(124,92,252,0.022) 0px, rgba(124,92,252,0.022) 1px, transparent 1px, transparent 30px)" }} />
-        {/* Radial glow */}
-        <div aria-hidden className="pointer-events-none animate-radial-breathe" style={{ position: "absolute", top: "-10%", left: "50%", width: 900, height: 700, borderRadius: "50%", background: "radial-gradient(ellipse at center, rgba(124,92,252,0.07) 0%, transparent 65%)", zIndex: 0 }} />
+      <section ref={heroRef} className="relative overflow-hidden bg-white border-b border-zinc-200 pt-4 pb-2 lg:pt-6 lg:pb-4 px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto relative z-10 flex flex-col lg:flex-row lg:items-end justify-between gap-4">
+          <div className="max-w-3xl">
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={heroInView ? { opacity: 1, y: 0 } : {}}
+              className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#7C5CFC]/30 bg-[#7C5CFC]/10 px-4 py-2"
+            >
+              <div className="h-2 w-2 rounded-full bg-[#7C5CFC] animate-pulse" />
+              <span className="text-[10px] font-black uppercase tracking-[0.25em] text-[#7C5CFC]">
+                Arm 02 — Elite Project Squads
+              </span>
+            </motion.div>
 
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 pt-10 pb-12 lg:pt-14 lg:pb-16">
-          {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={heroInView ? { opacity: 1, y: 0 } : {}}
-            className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#7C5CFC]/25 bg-[#7C5CFC]/8 px-4 py-2"
-          >
-            <div className="h-1.5 w-1.5 rounded-full bg-[#7C5CFC] animate-pulse" />
-            <span className="text-[10px] font-black uppercase tracking-[0.25em] text-[#7C5CFC]">
-              Arm 02 — Open Projects
-            </span>
-          </motion.div>
-
-          {/* Headline */}
-          <div className="overflow-hidden mb-2">
             <motion.h1
-              initial={{ y: "100%" }}
-              animate={heroInView ? { y: 0 } : {}}
-              transition={{ delay: 0.1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="font-syne text-5xl sm:text-6xl lg:text-7xl xl:text-[5.5rem] font-black text-zinc-900 tracking-tight leading-[0.88]"
+              initial={{ opacity: 0, y: 12 }}
+              animate={heroInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: 0.1 }}
+              className="text-5xl md:text-7xl lg:text-7xl font-black text-zinc-900 tracking-tighter leading-[0.85] uppercase italic whitespace-nowrap"
             >
-              Open Projects.
+              Open{" "}
+              <span className="text-transparent bg-clip-text bg-[linear-gradient(to_right,#7C5CFC,#A892FF)]">Projects.</span>
             </motion.h1>
-          </div>
-          <div className="overflow-hidden mb-8">
-            <motion.span
-              initial={{ y: "100%" }}
-              animate={heroInView ? { y: 0 } : {}}
-              transition={{ delay: 0.2, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="block font-syne text-5xl sm:text-6xl lg:text-7xl xl:text-[5.5rem] font-black text-[#7C5CFC] tracking-tight leading-[0.88]"
-            >
-              Join the Build.
-            </motion.span>
           </div>
 
           <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={heroInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.35 }}
-            className="text-lg font-medium text-zinc-500 mb-10 max-w-xl leading-relaxed"
-          >
-            StandexAI runs open product squads. Pick a project, contribute, and
-            ship real AI products alongside the cohort.
-          </motion.p>
-
-          {/* Stats */}
-          <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={heroInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.45 }}
-            className="flex flex-wrap gap-4"
+            transition={{ delay: 0.2 }}
+            className="text-base md:text-lg font-medium text-zinc-500 max-w-sm leading-relaxed mb-2"
           >
-            {[
-              { v: "4", l: "Active Projects" },
-              { v: "100%", l: "Built in Open" },
-              { v: "Real", l: "Users & Problems" },
-              { v: "Invite", l: "Performance-based" },
-            ].map((s, i) => (
-              <div key={i} className="rounded-2xl border border-zinc-200 bg-zinc-50 px-5 py-3">
-                <p className="font-syne text-xl font-black text-zinc-900">{s.v}</p>
-                <p className="text-[9px] font-bold uppercase tracking-widest text-zinc-400">{s.l}</p>
-              </div>
-            ))}
-          </motion.div>
+            StandexAI runs open product squads. Pick a project, contribute, and
+            ship real AI products built on state-of-the-art enterprise stacks.
+          </motion.p>
         </div>
       </section>
 
-      {/* ── PROJECT GRID ── */}
-      <section className="bg-zinc-50 border-b border-zinc-100 py-16 lg:py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-            {projects.map((project, i) => (
-              <ProjectCard key={project.id} project={project} user={user} appliedProjects={appliedProjects} />
+      {/* ── LATEST PROJECTS ── */}
+      <section className="pt-6 pb-12 lg:pt-8 lg:pb-20 px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center gap-4 mb-6 lg:mb-8">
+            <h2 className="text-[11px] md:text-xs font-black uppercase tracking-[0.3em] text-[#7C5CFC]">
+              Latest Active Squads
+            </h2>
+            <div className="h-px flex-1 bg-zinc-200" />
+          </div>
+          <div className="flex flex-col gap-16">
+            {latestProjects.map(p => (
+              <ProjectSection key={p.id} project={p} user={user} appliedProjects={appliedProjects} />
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── CTA BLOCK ── */}
-      <section ref={ctaRef} className="bg-white py-16 lg:py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={ctaInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="rounded-[40px] border-2 border-zinc-900 bg-zinc-950 p-8 lg:p-14 relative overflow-hidden"
-          >
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(124,92,252,0.15),transparent_65%)] pointer-events-none" />
-            <div className="relative z-10 grid lg:grid-cols-2 gap-10 items-center">
-              <div>
-                <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-[#7C5CFC]/15 border border-[#7C5CFC]/25 px-3 py-1.5">
-                  <Rocket className="h-3 w-3 text-[#7C5CFC]" />
-                  <span className="text-[9px] font-black uppercase tracking-[0.25em] text-[#7C5CFC]">
-                    Apply Now
-                  </span>
-                </div>
-                <h2 className="font-syne text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-[0.92] mb-4">
-                  Ready to build
-                  <br />
-                  <span className="text-[#7C5CFC]">something real?</span>
-                </h2>
-                <p className="text-base font-medium text-zinc-400 leading-relaxed mb-2">
-                  These aren't side projects. They're products in active development
-                  with real users, real problems, and real stakes. Join a squad,
-                  contribute to the build, and ship AI that matters.
-                </p>
-                <p className="text-[11px] font-bold text-zinc-600 uppercase tracking-widest">
-                  Open to Academy cohort members · Built in the open with StandexAI infrastructure.
-                </p>
-              </div>
-              <div className="flex flex-col gap-3">
-                <Link
-                  href="/auth/sign-in"
-                  className="flex items-center justify-center gap-2.5 rounded-2xl bg-white px-8 py-4 text-[11px] font-black uppercase tracking-widest text-zinc-900 shadow-xl hover:bg-zinc-100 transition-all active:scale-95"
-                >
-                  Apply to Join a Project Squad
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-                <Link
-                  href="/learn"
-                  className="flex items-center justify-center gap-2 rounded-2xl border border-white/15 px-8 py-4 text-[11px] font-black uppercase tracking-widest text-white hover:border-white/30 hover:bg-white/5 transition-all"
-                >
-                  Complete Learn First
-                </Link>
-
-                {/* Project logo strip */}
-                <div className="mt-3 flex items-center gap-4 flex-wrap">
-                  <p className="text-[9px] font-black uppercase tracking-widest text-zinc-600">Active projects:</p>
-                  {["StandexAI Voice", "GlobalCoachAI", "Rekruuter", "AccurateCV"].map((name, i) => (
-                    <span key={i} className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-[10px] font-bold text-zinc-300">
-                      {name}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </motion.div>
+      {/* ── PREVIOUS PROJECTS ── */}
+      <section className="py-12 lg:py-20 px-4 sm:px-6 bg-zinc-100 border-t border-zinc-200">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center gap-4 mb-12 lg:mb-16">
+            <h2 className="text-[11px] md:text-xs font-black uppercase tracking-[0.3em] text-zinc-400">
+              Previous Cohort Deployments
+            </h2>
+            <div className="h-px flex-1 bg-zinc-300" />
+          </div>
+          <div className="flex flex-col gap-16">
+            {previousProjects.map(p => (
+              <ProjectSection key={p.id} project={p} user={user} appliedProjects={appliedProjects} />
+            ))}
+          </div>
         </div>
       </section>
     </main>

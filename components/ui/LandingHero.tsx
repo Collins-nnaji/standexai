@@ -305,7 +305,7 @@ export function LandingHero() {
       <AIBackground />
 
       {/* ── Background decoration matching the image ── */}
-      <div className="absolute inset-0 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03]" />
+      <div className="absolute inset-0 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/brick-wall.png')] opacity-[0.05]" />
       <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-[#7C5CFC]/5 via-transparent to-transparent" />
       <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_top,rgba(124,92,252,0.1)_0%,transparent_50%)]" />
       {/* Radial glow */}
@@ -338,7 +338,7 @@ export function LandingHero() {
                     initial={{ y: "100%", opacity: 0 }}
                     animate={inView ? { y: 0, opacity: 1 } : {}}
                     transition={{ delay: 0.1 + li * 0.12, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                    className="block tracking-[-0.045em] leading-[0.92] font-black text-[clamp(3rem,6.5vw,5.5rem)] lg:text-[clamp(3.5rem,7vw,6.5rem)] text-[#7C5CFC]"
+                    className="block tracking-[-0.045em] leading-[0.92] font-black text-[clamp(3rem,6.5vw,5.5rem)] lg:text-[clamp(3.5rem,7vw,6.5rem)] text-transparent bg-clip-text bg-[linear-gradient(to_right,#7C5CFC,#000000)]"
                   >
                     {line}
                   </motion.h1>

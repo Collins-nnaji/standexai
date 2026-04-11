@@ -1,18 +1,18 @@
 "use client";
 
 import React, { useState } from "react";
-import { AssessmentHistoryList } from "@/components/ui/AssessmentHistoryList";
-import { AssessmentHUD } from "@/components/ui/AssessmentHUD";
-import { AssessmentReview } from "@/components/ui/AssessmentReview";
+import { CognitiveAuditHistoryList } from "@/components/ui/CognitiveAuditHistoryList";
+import { CognitiveAuditHUD } from "@/components/ui/CognitiveAuditHUD";
+import { CognitiveAuditReview } from "@/components/ui/CognitiveAuditReview";
 import { motion, AnimatePresence } from "framer-motion";
-import { saveAssessment } from "@/app/assessment/actions";
+import { saveAssessment } from "@/app/cognitive-audit/actions";
 import { useRouter } from "next/navigation";
 
-interface AssessmentLayoutClientProps {
+interface CognitiveAuditLayoutClientProps {
   initialHistory: any[];
 }
 
-export function AssessmentLayoutClient({ initialHistory }: AssessmentLayoutClientProps) {
+export function CognitiveAuditLayoutClient({ initialHistory }: CognitiveAuditLayoutClientProps) {
   const [history, setHistory] = useState(initialHistory);
   const [activeRunId, setActiveRunId] = useState<string | null>(null);
   const router = useRouter();
@@ -41,7 +41,7 @@ export function AssessmentLayoutClient({ initialHistory }: AssessmentLayoutClien
   return (
     <div className="flex flex-col md:flex-row w-full max-w-7xl mx-auto px-4 sm:px-6 py-6 border-t border-zinc-100 min-h-[600px] mt-4 relative">
       <div className="w-full md:w-64 md:shrink-0 md:pr-6 mb-6 md:mb-0">
-        <AssessmentHistoryList
+        <CognitiveAuditHistoryList
           runs={history}
           activeRunId={activeRunId}
           onSelectRun={(id) => setActiveRunId(id)}
@@ -59,7 +59,7 @@ export function AssessmentLayoutClient({ initialHistory }: AssessmentLayoutClien
             >
               <div className="rounded-[44px] border border-white/60 bg-white/40 p-2.5 backdrop-blur-3xl shadow-[0_32px_80px_-16px_rgba(0,0,0,0.08)] ring-1 ring-black/[0.03]">
                 <div className="rounded-[38px] bg-white p-6 lg:p-10 shadow-inner">
-                  <AssessmentHUD onComplete={handleComplete} />
+                  <CognitiveAuditHUD onComplete={handleComplete} />
                 </div>
               </div>
             </motion.div>
@@ -71,7 +71,7 @@ export function AssessmentLayoutClient({ initialHistory }: AssessmentLayoutClien
               exit={{ opacity: 0, x: -20 }}
               className="w-full"
             >
-              <AssessmentReview run={activeRun} />
+              <CognitiveAuditReview run={activeRun} />
             </motion.div>
           )}
         </AnimatePresence>
