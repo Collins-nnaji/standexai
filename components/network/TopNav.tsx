@@ -62,7 +62,7 @@ export function TopNav({ user }: TopNavProps) {
   };
 
   return (
-    <header className="sticky top-0 z-[100] w-full border-b border-zinc-200/50 bg-white/70 backdrop-blur-2xl shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
+    <header className="sticky top-0 z-[100] w-full border-b border-zinc-200 bg-white shadow-[0_1px_3px_rgba(0,0,0,0.06)] sm:border-zinc-200/60 sm:bg-white/95 sm:shadow-[0_2px_10px_rgba(0,0,0,0.03)] sm:backdrop-blur-xl supports-[backdrop-filter]:sm:bg-white/90">
       <div className="mx-auto flex h-16 min-h-16 max-w-7xl items-center gap-2 px-3 sm:gap-3 sm:px-6">
         {/* Left: Logo */}
         <div className="flex min-w-0 flex-1 items-center">
