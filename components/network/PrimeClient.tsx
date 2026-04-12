@@ -43,17 +43,31 @@ export function PrimeClient() {
       {/* Decorative elements */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-6xl h-64 bg-[radial-gradient(circle_at_50%_0%,rgba(124,92,252,0.03),transparent_70%)] pointer-events-none" />
 
-      {/* Formal Breadcrumbs */}
-      <nav className="relative z-10 flex items-center gap-2 mb-12 overflow-x-auto whitespace-nowrap pb-2 no-scrollbar">
-        <Link href="/" className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-zinc-400 hover:text-zinc-900 transition-all">
-          <Home className="h-3 w-3" /> Network
-        </Link>
-        <ChevronRight className="h-3 w-3 text-zinc-200" />
-        <Link href="/projects" className="text-[10px] font-black uppercase tracking-widest text-zinc-400 hover:text-zinc-900 transition-all">
-          Projects
-        </Link>
-        <ChevronRight className="h-3 w-3 text-zinc-200" />
-        <span className="text-[10px] font-black uppercase tracking-widest text-[#7C5CFC]">Standex Prime</span>
+      {/* Breadcrumbs: compact on mobile, full trail on sm+ */}
+      <nav className="relative z-10 mb-8 min-w-0 sm:mb-12" aria-label="Breadcrumb">
+        <div className="flex min-w-0 flex-col gap-1 sm:hidden">
+          <Link
+            href="/"
+            className="flex w-fit items-center gap-1 text-[10px] font-black uppercase tracking-widest text-zinc-400 transition-all hover:text-zinc-900"
+          >
+            <Home className="h-3 w-3 shrink-0" /> Network
+          </Link>
+          <p className="truncate text-[10px] font-black uppercase tracking-widest text-[#7C5CFC]">Standex Prime</p>
+        </div>
+        <div className="hidden min-w-0 items-center gap-2 pb-2 sm:flex sm:flex-wrap sm:gap-x-2 sm:gap-y-1">
+          <Link href="/" className="flex shrink-0 items-center gap-1 text-[10px] font-black uppercase tracking-widest text-zinc-400 transition-all hover:text-zinc-900">
+            <Home className="h-3 w-3" /> Network
+          </Link>
+          <ChevronRight className="h-3 w-3 shrink-0 text-zinc-200" aria-hidden />
+          <Link
+            href="/projects"
+            className="shrink-0 text-[10px] font-black uppercase tracking-widest text-zinc-400 transition-all hover:text-zinc-900"
+          >
+            Projects
+          </Link>
+          <ChevronRight className="h-3 w-3 shrink-0 text-zinc-200" aria-hidden />
+          <span className="min-w-0 truncate text-[10px] font-black uppercase tracking-widest text-[#7C5CFC]">Standex Prime</span>
+        </div>
       </nav>
 
       <div className="mb-12 lg:mb-16">

@@ -65,13 +65,13 @@ export default async function ResearcherProfile({ params }: { params: Promise<{ 
       
       <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
         {/* Navigation Breadcrumb */}
-        <div className="mb-8">
-          <Link 
-            href="/talent" 
-            className="group inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-zinc-400 hover:text-[#7C5CFC] transition-colors"
+        <div className="mb-8 min-w-0">
+          <Link
+            href="/talent"
+            className="group inline-flex max-w-full min-w-0 items-center gap-2 text-[10px] font-black uppercase tracking-widest text-zinc-400 transition-colors hover:text-[#7C5CFC]"
           >
-            <ArrowLeft className="h-3 w-3 transition-transform group-hover:-translate-x-1" />
-            Back to Talent Directory
+            <ArrowLeft className="h-3 w-3 shrink-0 transition-transform group-hover:-translate-x-1" />
+            <span className="min-w-0 truncate sm:whitespace-normal">Back to Talent Directory</span>
           </Link>
         </div>
 

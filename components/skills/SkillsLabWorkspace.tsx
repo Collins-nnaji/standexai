@@ -589,8 +589,8 @@ export function SkillsLabWorkspace() {
 
   return (
     <div className="flex h-[100dvh] flex-col overflow-hidden bg-zinc-50 text-zinc-900 antialiased">
-      <header className="flex h-12 shrink-0 items-center gap-3 border-b border-zinc-200 bg-white px-4 backdrop-blur-md lg:gap-4 lg:px-6">
-        <WorkspaceModeNav active="skills" />
+      <header className="flex h-12 min-h-12 shrink-0 items-center gap-2 border-b border-zinc-200 bg-white px-3 backdrop-blur-md sm:gap-3 sm:px-4 lg:gap-4 lg:px-6">
+        <WorkspaceModeNav active="skills" className="min-w-0" />
         <div className="ml-auto flex shrink-0 items-center gap-2">
           <Link
             href="/settings"

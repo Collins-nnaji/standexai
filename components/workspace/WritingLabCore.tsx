@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState, useEffect, useRef, useCallback, type ReactNode } from "react";
+import { Suspense, useState, useEffect, useRef, useCallback } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import type { LucideIcon } from "lucide-react";
 import {
@@ -8,7 +8,7 @@ import {
   PenTool, Smile, CheckCircle2, TrendingUp, Eye, ChevronDown, ChevronUp,
   ShieldAlert, Brain, Shield, Copy, ScanSearch, Bot, User, Wand2,
   Zap, Minus, RefreshCw, Plus, Trash2, X, BookOpen, LayoutList, Users, BadgeAlert,
-  Play, Briefcase, Minimize2, HeartHandshake, ClipboardPaste, Download, FileType, Upload, Globe,
+  Briefcase, Minimize2, HeartHandshake, ClipboardPaste, Download, FileType, Upload,
   Volume2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -21,6 +21,12 @@ import { stripHtmlToText } from "@/lib/strip-html";
 import { parseUploadedFile } from "@/lib/parse-uploaded-file";
 import type { AnalyzeType, RewriteMode } from "@/lib/communication-llm";
 import { TTSTool } from "@/components/workspace/TTSTool";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 type AssistGenerateOutput = { title: string; html: string; notes: string };
 
@@ -264,8 +270,8 @@ const TACTIC_LABELS: Record<string, string> = {
 const ANALYZER_TOOLS: ToolDef[] = [
   {
     id: "communication",
-    title: "Communication",
-    subtitle: "Tone, clarity, overall quality & phrase-level flags",
+    title: "Writing fundamentals",
+    subtitle: "Tone, clarity, overall quality & phrase-level coaching",
     icon: FileText,
     iconWrap: "border-[#0f2744]/15 bg-[#0f2744]/[0.04]",
     iconColor: "text-[#0f2744]",
@@ -275,7 +281,7 @@ const ANALYZER_TOOLS: ToolDef[] = [
   },
   {
     id: "compliance",
-    title: "Compliance & risk",
+    title: "Safety & compliance",
     subtitle: "HR, legal, policy & safer wording alternatives",
     icon: ShieldAlert,
     iconWrap: "border-rose-200 bg-rose-50",
@@ -286,8 +292,8 @@ const ANALYZER_TOOLS: ToolDef[] = [
   },
   {
     id: "intent",
-    title: "Intent & psychology",
-    subtitle: "Persuasion tactics, pressure & cognitive bias signals",
+    title: "Persuasion signals",
+    subtitle: "Pressure cues & cognitive bias signals",
     icon: Brain,
     iconWrap: "border-fuchsia-200 bg-fuchsia-50",
     iconColor: "text-fuchsia-600",
@@ -297,8 +303,8 @@ const ANALYZER_TOOLS: ToolDef[] = [
   },
   {
     id: "detect",
-    title: "AI authorship",
-    subtitle: "How AI-like the text reads & tips to sound more human",
+    title: "Originality signal",
+    subtitle: "AI-likeness and tips to sound more human",
     icon: ScanSearch,
     iconWrap: "border-amber-200 bg-amber-50",
     iconColor: "text-amber-600",
@@ -308,8 +314,8 @@ const ANALYZER_TOOLS: ToolDef[] = [
   },
   {
     id: "readability",
-    title: "Readability",
-    subtitle: "Sentence length, grade level & clarity fixes",
+    title: "Readability level",
+    subtitle: "Sentence flow, grade level & clarity fixes",
     icon: BookOpen,
     iconWrap: "border-sky-200 bg-sky-50",
     iconColor: "text-sky-600",
@@ -319,8 +325,8 @@ const ANALYZER_TOOLS: ToolDef[] = [
   },
   {
     id: "structure",
-    title: "Structure",
-    subtitle: "Outline, asks, and missing sections",
+    title: "Structure map",
+    subtitle: "Outline guidance, asks, and missing sections",
     icon: LayoutList,
     iconWrap: "border-indigo-200 bg-indigo-50",
     iconColor: "text-indigo-600",
@@ -341,7 +347,7 @@ const ANALYZER_TOOLS: ToolDef[] = [
   },
   {
     id: "claims",
-    title: "Claims & certainty",
+    title: "Claims balance",
     subtitle: "Overstatements & supportable wording",
     icon: BadgeAlert,
     iconWrap: "border-orange-200 bg-orange-50",
@@ -514,6 +520,10 @@ function WritingLabInner({
   /** Export/copy allowed only after a successful Transform or inserting AI-generated text. */
   const [exportUnlocked, setExportUnlocked] = useState(false);
   const [ttsOpen, setTtsOpen] = useState(false);
+  const [consoleTask, setConsoleTask] = useState("");
+  const [refineLoading, setRefineLoading] = useState(false);
+  const [refineError, setRefineError] = useState<string | null>(null);
+  const [refinedOutput, setRefinedOutput] = useState<{ refined: string; notes: string } | null>(null);
 
   const hasAnyResult = Boolean(
     commResult ||
@@ -600,6 +610,39 @@ function WritingLabInner({
       if (!p) return seed;
       return `${seed}\n\nContext / notes:\n${p}`;
     });
+  };
+
+  const taskForConsole = () => consoleTask.trim() || text.trim();
+
+  /** Right rail: depth from shadow + hairline ring only — same surface as workspace (no darker card fills). */
+  const assistantSectionClass = cn(
+    "rounded-2xl px-4 py-4",
+    themeMode === "light"
+      ? "shadow-[0_2px_16px_-2px_rgba(15,23,42,0.08),0_0_0_1px_rgba(15,23,42,0.04)]"
+      : "shadow-[0_4px_28px_-8px_rgba(0,0,0,0.55)] ring-1 ring-white/[0.06]",
+  );
+
+  const runRefinePrompt = async () => {
+    const prompt = taskForConsole();
+    if (!prompt) return;
+    setRefineLoading(true);
+    setRefineError(null);
+    setRefinedOutput(null);
+    try {
+      const res = await fetch("/api/console/refine-prompt", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt }),
+      });
+      const data = (await res.json()) as { refined?: string; notes?: string; error?: string };
+      if (!res.ok) throw new Error(data.error || "Refine failed");
+      if (!data.refined?.trim()) throw new Error("Empty refine result");
+      setRefinedOutput({ refined: data.refined.trim(), notes: data.notes?.trim() ?? "" });
+    } catch (e) {
+      setRefineError(e instanceof Error ? e.message : "Refine failed");
+    } finally {
+      setRefineLoading(false);
+    }
   };
 
   const runWorkspaceGenerate = async () => {
@@ -1168,76 +1211,84 @@ function WritingLabInner({
   const exportToolbar = (
     <div
       className={cn(
-        "pointer-events-none absolute right-2 top-2 z-10 flex items-center gap-0.5 rounded-lg border p-0.5 shadow-sm sm:right-2.5 sm:top-2.5",
+        "pointer-events-none absolute right-2 top-2 z-10 flex items-center gap-px rounded-lg border p-0.5 shadow-sm sm:right-2.5 sm:top-2.5",
         t.borderSub,
         themeMode === "dark" ? "border-white/[0.08] bg-zinc-950/90" : "border-zinc-200/90 bg-white/95",
       )}
       role="toolbar"
       aria-label="Export"
     >
-      <button
+      <Button
         type="button"
+        variant="ghost"
+        size="icon"
         onClick={copyWorkspaceText}
         disabled={!canUseExportActions}
         title={canUseExportActions ? "Copy text" : "Run Transform or Generate with AI first"}
         className={cn(
-          "pointer-events-auto rounded-md p-1.5 transition",
+          "pointer-events-auto h-8 w-8 text-inherit hover:bg-black/[0.06] dark:hover:bg-white/[0.08]",
           t.text,
-          t.navHover,
-          !canUseExportActions && "cursor-not-allowed opacity-35",
+          !canUseExportActions && "pointer-events-none opacity-35",
         )}
         aria-label="Copy text"
       >
         <Copy className="h-3.5 w-3.5" />
-      </button>
-      <button
+      </Button>
+      <Button
         type="button"
+        variant="ghost"
+        size="icon"
         onClick={() => setTtsOpen(true)}
-        disabled={!canUseExportActions}
-        title={canUseExportActions ? "Speech Synthesis" : "Run Transform or Generate with AI first"}
+        disabled={!text.trim()}
+        title={text.trim() ? "Speech synthesis" : "Add text to enable speech"}
         className={cn(
-          "pointer-events-auto rounded-md p-1.5 transition",
+          "pointer-events-auto h-8 w-8 text-inherit hover:bg-black/[0.06] dark:hover:bg-white/[0.08]",
           t.text,
-          t.navHover,
-          !canUseExportActions && "cursor-not-allowed opacity-35",
+          !canUseExportActions && "pointer-events-none opacity-35",
         )}
-        aria-label="Speech Synthesis"
+        aria-label="Speech synthesis"
       >
         <Volume2 className="h-3.5 w-3.5" />
-      </button>
-      <button
+      </Button>
+      <Button
         type="button"
+        variant="ghost"
+        size="icon"
         onClick={downloadWorkspaceTxt}
         disabled={!canUseExportActions}
         title={canUseExportActions ? "Download .txt" : "Run Transform or Generate with AI first"}
         className={cn(
-          "pointer-events-auto rounded-md p-1.5 transition",
+          "pointer-events-auto h-8 w-8 text-inherit hover:bg-black/[0.06] dark:hover:bg-white/[0.08]",
           t.text,
-          t.navHover,
-          !canUseExportActions && "cursor-not-allowed opacity-35",
+          !canUseExportActions && "pointer-events-none opacity-35",
         )}
         aria-label="Download text file"
       >
         <Download className="h-3.5 w-3.5" />
-      </button>
-      <button
+      </Button>
+      <Separator orientation="vertical" className="mx-0.5 h-5 bg-zinc-200/80 dark:bg-white/15" />
+      <Button
         type="button"
+        variant="ghost"
+        size="icon"
         disabled
-        title="PDF coming soon"
-        className={cn("pointer-events-auto cursor-not-allowed rounded-md p-1.5 opacity-35", t.muted)}
+        title="PDF export coming soon"
+        className={cn("pointer-events-auto h-8 w-8 cursor-not-allowed opacity-35", t.muted)}
         aria-label="PDF export coming soon"
       >
         <FileType className="h-3.5 w-3.5" />
-      </button>
-      <button
+      </Button>
+      <Button
         type="button"
+        variant="ghost"
+        size="icon"
         disabled
-        title="Word coming soon"
-        className={cn("pointer-events-auto cursor-not-allowed rounded-md p-1.5 opacity-35", t.muted)}
+        title="Word export coming soon"
+        className={cn("pointer-events-auto h-8 w-8 cursor-not-allowed opacity-35", t.muted)}
         aria-label="Word export coming soon"
       >
         <FileText className="h-3.5 w-3.5" />
-      </button>
+      </Button>
     </div>
   );
 
@@ -1253,39 +1304,62 @@ function WritingLabInner({
                 themeMode === "dark" ? "bg-[var(--brand-teal)]/[0.04]" : "bg-[var(--brand-teal)]/[0.06]",
               )}
             />
-            <div className="relative flex flex-col gap-2" aria-label="Transform">
-              <div className="flex min-w-0 flex-nowrap items-center gap-1 overflow-x-auto pb-0.5 [scrollbar-width:thin]">
-                {STUDIO_MODES.map((m) => {
-                  const Icon = m.icon;
-                  const active = !activePersonaId && studioMode === m.id;
-                  return (
-                    <button
-                      key={m.id}
-                      type="button"
-                      title={m.desc}
-                      onClick={() => selectStudioMode(m.id)}
-                      className={cn(
-                        "flex shrink-0 items-center gap-1 rounded-lg px-2 py-1.5 text-left transition-all",
-                        active
-                          ? "bg-[var(--brand-teal)]/[0.14] text-[var(--brand-teal)]"
-                          : cn(t.muted, "hover:bg-black/[0.04] dark:hover:bg-white/[0.06]"),
-                      )}
-                    >
-                      <span
+            <div className="relative flex flex-col gap-3" aria-label="Transform">
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div className="space-y-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p className={cn("text-xs font-medium tracking-wide", t.muted2)}>Learning console</p>
+                    <Badge variant="outline" className={cn("h-5 border px-2 text-[10px] font-semibold uppercase tracking-wider", t.borderSub, t.muted2)}>
+                      Draft
+                    </Badge>
+                  </div>
+                  <p className={cn("max-w-xl text-sm leading-relaxed", t.muted)}>
+                    Write in the canvas, tune tone with coaching modes, then export or listen with speech.
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <Label className={cn("text-[11px] font-medium", t.muted2)}>Coaching tone</Label>
+                <ToggleGroup
+                  type="single"
+                  value={studioMode}
+                  onValueChange={(v) => {
+                    if (v) selectStudioMode(v as RewriteMode);
+                  }}
+                  disabled={Boolean(activePersonaId)}
+                  variant="outline"
+                  size="sm"
+                  className={cn(
+                    "w-full justify-start rounded-lg border p-1",
+                    t.borderSub,
+                    themeMode === "dark" ? "bg-white/[0.03]" : "bg-zinc-50/80",
+                  )}
+                >
+                  {STUDIO_MODES.map((m) => {
+                    const Icon = m.icon;
+                    return (
+                      <ToggleGroupItem
+                        key={m.id}
+                        value={m.id}
+                        title={m.desc}
                         className={cn(
-                          "flex h-6 w-6 shrink-0 items-center justify-center rounded-md",
-                          active ? "bg-[var(--brand-teal)]/20 text-[var(--brand-teal)]" : cn(t.muted2, "opacity-80"),
+                          "h-8 gap-1.5 border-0 px-2 shadow-none data-[state=on]:bg-[var(--brand-teal)]/15 data-[state=on]:text-[var(--brand-teal)]",
+                          t.text,
+                          themeMode === "dark"
+                            ? "text-[#B9B7B0] hover:bg-white/[0.06] hover:text-[#F6F4EF]"
+                            : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900",
                         )}
                       >
-                        <Icon className="h-3 w-3" />
-                      </span>
-                      <span className={cn("whitespace-nowrap text-[11px] font-semibold leading-none", active ? "text-[var(--brand-teal)]" : t.text)}>
-                        {m.label}
-                      </span>
-                    </button>
-                  );
-                })}
+                        <Icon className="h-3.5 w-3.5 shrink-0 opacity-80" />
+                        <span className="whitespace-nowrap text-[11px] font-medium">{m.label}</span>
+                      </ToggleGroupItem>
+                    );
+                  })}
+                </ToggleGroup>
               </div>
+
+              <Separator className={themeMode === "dark" ? "bg-white/10" : "bg-zinc-200"} />
 
               <div className="flex flex-wrap items-center gap-2">
                 {personasLoading ? <Loader2 className={cn("h-3.5 w-3.5 shrink-0 animate-spin", t.muted)} /> : null}
@@ -1296,18 +1370,21 @@ function WritingLabInner({
                   )}
                   title="Saved personas — use with Prebuilt or Neutral"
                 >
-                  <button
+                  <Button
                     type="button"
+                    variant="ghost"
+                    size="sm"
                     onClick={() => openPersonaModal()}
                     className={cn(
-                      "inline-flex shrink-0 items-center gap-1 border-r border-zinc-200/70 px-2 py-2 text-[10px] font-semibold leading-tight transition sm:px-2.5 sm:text-[11px] dark:border-white/[0.1]",
+                      "h-[38px] shrink-0 rounded-none rounded-l-lg border-0 border-r px-2.5 text-[11px] font-semibold sm:px-3",
+                      themeMode === "dark" ? "border-white/[0.1] hover:bg-white/[0.06]" : "border-zinc-200/70 hover:bg-zinc-200/50",
                       t.muted,
-                      t.navHover,
+                      t.text,
                     )}
                   >
-                    <Plus className="h-3.5 w-3.5 shrink-0" />
+                    <Plus className="mr-1 h-3.5 w-3.5 shrink-0" />
                     <span className="max-w-[5.5rem] truncate sm:max-w-none">New persona</span>
-                  </button>
+                  </Button>
                   <label htmlFor="saved-persona-select" className="sr-only">
                     Prebuilt or saved persona
                   </label>
@@ -1364,16 +1441,38 @@ function WritingLabInner({
                   ) : null}
                 </div>
 
-                <button
-                  type="button"
-                  onClick={() => void handleStudioRewrite()}
-                  disabled={!text.trim() || studioLoading}
-                  title={!text.trim() ? "Add text in the console below to transform" : undefined}
-                  className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-[var(--brand-teal)] px-3 py-2 text-[12px] font-semibold text-[#0C0C0B] transition hover:brightness-105 disabled:opacity-45 sm:px-4"
-                >
-                  {studioLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <PenTool className="h-4 w-4" />}
-                  {studioLoading ? "Transforming…" : "Transform text"}
-                </button>
+                <div className="inline-flex shrink-0 items-center gap-0 rounded-lg shadow-sm ring-1 ring-inset ring-black/[0.06] dark:ring-white/[0.1]">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setTtsOpen(true)}
+                    disabled={!text.trim()}
+                    className={cn(
+                      "rounded-r-none border-r-0 text-[12px] font-semibold shadow-none",
+                      t.borderSub,
+                      t.text,
+                      themeMode === "dark" ? "hover:bg-white/[0.06]" : "hover:bg-zinc-50",
+                    )}
+                  >
+                    <Volume2 className="mr-1.5 h-4 w-4" />
+                    Speech
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={() => void handleStudioRewrite()}
+                    disabled={!text.trim() || studioLoading}
+                    title={!text.trim() ? "Add text in the console below to coach" : undefined}
+                    className={cn(
+                      "rounded-l-none border-0 bg-[var(--brand-teal)] text-[#0C0C0B] shadow-none hover:brightness-105 disabled:opacity-45",
+                      "text-[12px] font-semibold",
+                    )}
+                  >
+                    {studioLoading ? <Loader2 className="mr-1.5 h-4 w-4 animate-spin" /> : <PenTool className="mr-1.5 h-4 w-4" />}
+                    {studioLoading ? "Coaching…" : "Coach draft"}
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
@@ -1395,17 +1494,18 @@ function WritingLabInner({
                     themeMode === "dark" ? "bg-[var(--brand-teal)]/[0.06]" : "bg-[var(--brand-teal)]/[0.08]",
                   )}
                 >
-                  <p className={cn("text-[10px] font-bold uppercase tracking-[0.14em]", t.muted2)}>Highlighted draft</p>
+                  <p className={cn("text-[10px] font-bold uppercase tracking-[0.14em]", t.muted2)}>Coach highlights</p>
                   <p className={cn("mt-1 text-[12px] leading-relaxed", t.muted)}>
-                    Phrase-level flags from Communication. Open Intelligence tools for compliance, intent, and AI authorship.
+                    Phrase-level notes from Writing fundamentals. Use skill checks for safety, intent, and originality.
                   </p>
                 </div>
                 <div className="relative">
                   {exportToolbar}
                   <div
                     className={cn(
-                      "rounded-2xl border px-4 py-4 pr-12 sm:px-5 sm:py-5 sm:pr-14",
+                      "rounded-2xl border px-4 py-4 pr-12 shadow-sm sm:px-5 sm:py-5 sm:pr-14",
                       t.borderSub,
+                      t.composerInset,
                       "whitespace-pre-wrap text-[14px] leading-[1.85]",
                       t.text,
                     )}
@@ -1446,12 +1546,12 @@ function WritingLabInner({
                   )}
                 >
                   <div className="min-w-0 flex-1 space-y-1">
-                    <p className={cn("text-[10px] font-bold uppercase tracking-[0.14em]", t.muted2)}>Paste or upload</p>
+                    <p className={cn("text-[10px] font-bold uppercase tracking-[0.14em]", t.muted2)}>Write or upload</p>
                     <p className={cn("text-[12px] leading-snug", t.muted)}>
                       <span className="inline-flex flex-wrap items-center gap-x-1.5 gap-y-1">
                         <ClipboardPaste className="h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden />
                         Paste or type, <span className={cn("font-semibold", t.text)}>upload</span> a file (.txt, .md, .html, .docx, .pdf). Empty?{" "}
-                        <span className={cn("font-semibold", t.text)}>Generate with AI</span> in the box below.
+                        <span className={cn("font-semibold", t.text)}>Generate with AI</span> from a short brief below.
                       </span>
                     </p>
                   </div>
@@ -1486,9 +1586,9 @@ function WritingLabInner({
                 ) : null}
                 <div
                   className={cn(
-                    "relative flex w-full flex-1 flex-col overflow-hidden rounded-2xl border",
+                    "relative flex w-full flex-1 flex-col overflow-hidden rounded-2xl border shadow-sm",
                     t.borderSub,
-                    t.workspaceSurface,
+                    t.composerInset,
                   )}
                 >
                   {exportToolbar}
@@ -1510,7 +1610,7 @@ function WritingLabInner({
                       if (historyDraftMissing) setHistoryDraftMissing(false);
                     }}
                     placeholder={
-                      "Paste, type, or upload a file above.\n\nWhen the console is empty, use Generate with AI below for a first draft from a brief. After you have text, use Transform text above."
+                      "Paste, type, or upload a draft above.\n\nWhen the console is empty, use Generate with AI below for a first draft from a brief. After you have text, use Coach draft above."
                     }
                     className={cn(
                       "min-h-[min(34vh,260px)] w-full flex-1 resize-y border-0 bg-transparent px-4 py-4 pr-12 text-[14px] leading-relaxed outline-none transition-[box-shadow] focus:ring-2 focus:ring-inset focus:ring-zinc-400/25 dark:focus:ring-white/15 sm:min-h-[min(40vh,360px)] sm:pr-14",
@@ -1527,9 +1627,9 @@ function WritingLabInner({
                       )}
                     >
                       <div className="min-w-0 space-y-0.5">
-                        <p className={cn("text-[10px] font-bold uppercase tracking-[0.14em]", t.muted2)}>From scratch</p>
+                        <p className={cn("text-[10px] font-bold uppercase tracking-[0.14em]", t.muted2)}>Start with a brief</p>
                         <p className={cn("text-[12px] leading-snug", t.muted)}>
-                          Generate a first draft from a short brief — then refine with Transform and Intelligence.
+                          Generate a first draft from a short brief — then refine with coaching and skill checks.
                         </p>
                       </div>
                       <button
@@ -1553,7 +1653,7 @@ function WritingLabInner({
           {(studioLoading || studioError || studioResult) && (
             <div className={cn("flex min-h-0 max-h-[min(34vh,280px)] shrink-0 flex-col border-t pt-1", t.workspaceSurface, t.borderSub)}>
               <div className={cn("flex shrink-0 items-center justify-between gap-2 px-4 py-2 sm:px-5")}>
-                <span className={cn("text-[10px] font-bold uppercase tracking-[0.14em]", t.muted2)}>Transform result</span>
+                <span className={cn("text-[10px] font-bold uppercase tracking-[0.14em]", t.muted2)}>Coaching result</span>
                 {studioResult?.rewritten ? (
                   <div className="flex items-center gap-2 sm:gap-3">
                     <button
@@ -1733,926 +1833,147 @@ function WritingLabInner({
 
         <div
           className={cn(
-            "flex w-full shrink-0 flex-col overflow-hidden lg:w-[min(100%,480px)] lg:max-w-[480px] lg:pl-3",
+            "flex w-full shrink-0 flex-col overflow-hidden lg:w-[min(100%,400px)] lg:max-w-[400px]",
             t.workspaceSurface,
           )}
         >
-          <div className="shrink-0 px-3 pb-2 pt-1.5 sm:px-4 sm:pb-2.5 sm:pt-2">
-            <div className="flex flex-wrap items-end justify-between gap-2">
-              <p className={cn("text-[13px] font-bold uppercase tracking-[0.14em]", t.muted2)}>Tools</p>
-              <p className={cn("hidden text-[11px] sm:inline", t.muted2)}>Row = detail · Run = rerun</p>
-            </div>
-            <div className="mt-2 flex flex-wrap gap-2">
-              <button
-                type="button"
-                onClick={() => void handleRunSelectedBatch()}
-                disabled={!text.trim() || runAllAnalyzeLoading || batchSelected.size === 0}
-                className={cn(
-                  "inline-flex flex-1 min-w-[140px] items-center justify-center gap-2 rounded-xl border px-3 py-2 text-[13px] font-semibold transition disabled:opacity-45 sm:flex-initial",
-                  t.borderSub,
-                  t.s2,
-                  t.text,
-                  t.navHover,
-                )}
-                title="Run only the tools you checked in the list"
-              >
-                {runAllAnalyzeLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Play className="h-4 w-4 opacity-90" />}
-                Run selected
-                {batchSelected.size > 0 ? ` (${batchSelected.size})` : ""}
-              </button>
-              <button
-                type="button"
-                onClick={() => void handleRunAllAnalyze()}
-                disabled={!text.trim() || runAllAnalyzeLoading}
-                className={cn(
-                  "inline-flex flex-1 min-w-[140px] items-center justify-center gap-2 rounded-xl px-3 py-2 text-[13px] font-semibold transition disabled:opacity-45 sm:flex-initial",
-                  t.btnPrimary,
-                )}
-              >
-                {runAllAnalyzeLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4 opacity-90" />}
-                {runAllAnalyzeLoading ? "Running…" : "Run all analyses"}
-              </button>
+          <div className="shrink-0 px-4 py-3 sm:py-3.5">
+            <div>
+              <p className={cn("text-xs font-medium", t.muted2)}>Assistant</p>
+              <h2 className={cn("mt-0.5 text-sm font-semibold tracking-tight sm:text-base", t.text)}>
+                Prompts &amp; generation
+              </h2>
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto px-2.5 pb-2 pt-0 sm:px-3">
-            {error && (
-              <div className={cn("mb-2.5 rounded-lg border border-dashed p-3", t.borderSub)}>
-                <p className={cn("text-xs font-semibold", t.danger)}>{error}</p>
+          <div className={cn("flex-1 space-y-5 overflow-y-auto px-4 pb-5 pt-2 lg:pt-1", t.scrollbar)}>
+            <section className={assistantSectionClass} aria-labelledby="assistant-task-title">
+              <h3 id="assistant-task-title" className={cn("text-sm font-semibold", t.text)}>
+                Task
+              </h3>
+              <p className={cn("mt-1 text-xs leading-relaxed", t.muted2)}>
+                Optional focus for refine. If empty, your canvas draft is used. Coach and generate still use your usual text model.
+              </p>
+              <div className="mt-3">
+                <Label htmlFor="console-task" className="sr-only">
+                  Task or prompt
+                </Label>
+                <Textarea
+                  id="console-task"
+                  value={consoleTask}
+                  onChange={(e) => setConsoleTask(e.target.value)}
+                  rows={3}
+                  placeholder="Example: Summarize the draft in three bullets for executives…"
+                  className={cn("min-h-[88px] resize-y text-[13px] leading-relaxed", t.input)}
+                />
               </div>
-            )}
+            </section>
 
-            {!text.trim() && (
-              <div
-                className={cn(
-                  "mb-2.5 flex gap-2 rounded-xl border border-dashed px-3 py-2.5 text-[13px] leading-snug",
-                  t.borderSub,
-                  t.muted,
-                )}
-              >
-                <span
-                  className={cn(
-                    "mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-md border text-[12px] font-bold",
-                    t.borderSub,
-                    t.muted2,
-                  )}
-                >
-                  1
-                </span>
-                <div>
-                  <p className={cn("font-semibold", t.text)}>Add copy on the left</p>
-                  <p className="mt-0.5 text-[12px] leading-snug opacity-90">
-                    Check tools · Run selected / Run all above · transform strip on the left.
-                  </p>
+            <section className={assistantSectionClass} aria-labelledby="assistant-refine-title">
+              <h3 id="assistant-refine-title" className={cn("text-sm font-semibold", t.text)}>
+                Refine prompt
+              </h3>
+              <p className={cn("mt-1 text-xs leading-relaxed", t.muted2)}>
+                Turn a rough instruction into a clear, structured prompt.
+              </p>
+              <div className="mt-3 space-y-3">
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={openGenerateWorkspace}
+                    className={cn("gap-1.5 shadow-none", t.btnPrimary)}
+                  >
+                    <Sparkles className="h-3.5 w-3.5" />
+                    Prompt builder
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => void runRefinePrompt()}
+                    disabled={refineLoading || !taskForConsole()}
+                    className={cn("gap-1.5 shadow-none", t.borderSub, t.text, "hover:bg-black/[0.04] dark:hover:bg-white/[0.06]")}
+                  >
+                    {refineLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Wand2 className="h-3.5 w-3.5" />}
+                    Refine with AI
+                  </Button>
                 </div>
-              </div>
-            )}
-
-            <nav aria-label="Analysis tools" className="mb-2 space-y-1">
-              {ANALYZER_TOOLS.map((tool) => {
-                const Icon = tool.icon;
-                const active = selectedTool === tool.id;
-                const busy = Boolean(loadingTools[tool.id]);
-                const rc = riskResult ? RISK_COLORS[riskResult.riskLevel] || RISK_COLORS.low : RISK_COLORS.low;
-                const intentLabel = intentResult
-                  ? ASSESSMENT_CONFIG[intentResult.overallAssessment] || ASSESSMENT_CONFIG.neutral
-                  : ASSESSMENT_CONFIG.neutral;
-                let teaser: ReactNode = null;
-                if (busy) {
-                  teaser = <Loader2 className={cn("h-3.5 w-3.5 shrink-0 animate-spin", t.muted)} />;
-                } else if (tool.id === "communication" && commResult) {
-                  teaser = (
-                    <div className="text-right leading-none">
-                      <span className={cn("block text-sm font-black tabular-nums leading-tight", t.text)}>{commResult.overallScore}</span>
-                      <span className={cn("text-[10px] font-semibold uppercase leading-tight", t.muted2)}>Overall</span>
-                    </div>
-                  );
-                } else if (tool.id === "compliance" && riskResult) {
-                  teaser = (
-                    <div className="text-right leading-none">
-                      <span className={`block text-[12px] font-bold leading-tight ${rc.text}`}>{rc.label}</span>
-                      <span className={cn("text-[10px] font-semibold uppercase leading-tight", t.muted2)}>{riskResult.overallScore}</span>
-                    </div>
-                  );
-                } else if (tool.id === "intent" && intentResult) {
-                  teaser = (
-                    <div className="max-w-[88px] text-right leading-none">
-                      <span className={`block truncate text-[12px] font-bold leading-tight ${intentLabel.text}`}>{intentLabel.label}</span>
-                      <span className={cn("text-[10px] font-semibold uppercase leading-tight", t.muted2)}>{intentResult.confidenceScore}%</span>
-                    </div>
-                  );
-                } else if (tool.id === "detect" && detectResult) {
-                  teaser = (
-                    <div className="text-right leading-none">
-                      <span className={cn("block text-sm font-black tabular-nums leading-tight", t.warn)}>{detectResult.aiProbability}%</span>
-                      <span className={cn("text-[10px] font-semibold uppercase leading-tight", t.muted2)}>AI-like</span>
-                    </div>
-                  );
-                } else if (tool.id === "readability" && readabilityResult) {
-                  teaser = (
-                    <div className="text-right leading-none">
-                      <span className={cn("block text-sm font-black tabular-nums leading-tight", t.info)}>{readabilityResult.readingEaseScore}</span>
-                      <span className={cn("text-[10px] font-semibold uppercase leading-tight", t.muted2)}>Ease</span>
-                    </div>
-                  );
-                } else if (tool.id === "structure" && structureResult) {
-                  teaser = (
-                    <div className="max-w-[88px] text-right leading-none">
-                      <span className={cn("block truncate text-[11px] font-bold capitalize leading-tight", t.text)}>
-                        {structureResult.documentTypeGuess?.replace(/_/g, " ") || "—"}
-                      </span>
-                      <span className={cn("text-[10px] font-semibold uppercase leading-tight", t.muted2)}>
-                        {structureResult.hasClearAsk ? "Ask ✓" : "Ask ?"}
-                      </span>
-                    </div>
-                  );
-                } else if (tool.id === "inclusion" && inclusionResult) {
-                  teaser = (
-                    <div className="text-right leading-none">
-                      <span className={cn("block text-sm font-black tabular-nums leading-tight", t.ok)}>{inclusionResult.inclusionScore}</span>
-                      <span className={cn("text-[10px] font-semibold uppercase leading-tight", t.muted2)}>Score</span>
-                    </div>
-                  );
-                } else if (tool.id === "claims" && claimsResult) {
-                  teaser = (
-                    <div className="text-right leading-none">
-                      <span className={cn("block text-[12px] font-bold capitalize leading-tight", t.warn)}>{claimsResult.overclaimRisk}</span>
-                      <span className={cn("text-[10px] font-semibold uppercase leading-tight", t.muted2)}>Risk</span>
-                    </div>
-                  );
-                } else {
-                  teaser = <span className={cn("text-[11px] font-semibold tabular-nums", t.muted2)}>—</span>;
-                }
-                return (
+                {refineError ? (
+                  <p className={cn("text-xs font-medium", t.danger)} role="alert">
+                    {refineError}
+                  </p>
+                ) : null}
+                {refinedOutput ? (
                   <div
-                    key={tool.id}
                     className={cn(
-                      "flex w-full items-center gap-1 rounded-lg border px-1 py-0.5 text-left transition-all",
-                      t.border,
-                      active
-                        ? "bg-black/[0.06] shadow-sm dark:bg-white/[0.08]"
-                        : "bg-black/[0.02] hover:bg-black/[0.05] dark:bg-white/[0.03] dark:hover:bg-white/[0.06]",
+                      "space-y-2 rounded-xl p-3",
+                      themeMode === "light"
+                        ? "shadow-[inset_0_1px_2px_rgba(15,23,42,0.06)] ring-1 ring-zinc-900/[0.05]"
+                        : "shadow-[inset_0_1px_3px_rgba(0,0,0,0.35)] ring-1 ring-white/[0.06]",
                     )}
                   >
-                    <label
-                      className="flex shrink-0 cursor-pointer items-center px-0.5 py-1"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={batchSelected.has(tool.id)}
-                        onChange={() => toggleBatchTool(tool.id)}
-                        className={cn(
-                          "h-3.5 w-3.5 rounded border",
-                          themeMode === "dark" ? "border-white/30 bg-[#171716]" : "border-zinc-300 bg-white",
-                        )}
-                        aria-label={`Include ${tool.title} in batch run`}
-                      />
-                    </label>
-                    <button
+                    <p className={cn("text-[10px] font-semibold uppercase tracking-wider", t.muted2)}>Result</p>
+                    <p className={cn("whitespace-pre-wrap text-xs leading-relaxed sm:text-sm", t.text)}>{refinedOutput.refined}</p>
+                    {refinedOutput.notes ? (
+                      <p className={cn("text-[11px] leading-snug", t.muted2)}>{refinedOutput.notes}</p>
+                    ) : null}
+                    <Button
                       type="button"
-                      aria-pressed={active}
-                      onClick={() => focusToolPanel(tool.id)}
-                      disabled={busy}
-                      className={cn(
-                        "group flex min-w-0 flex-1 items-center gap-2 rounded-md px-1 py-1 text-left transition-colors disabled:cursor-wait disabled:opacity-60",
-                        t.navHover,
-                      )}
+                      variant="link"
+                      size="sm"
+                      className={cn("h-auto p-0 text-xs", t.muted)}
+                      onClick={() => {
+                        setConsoleTask(refinedOutput.refined);
+                        setRefinedOutput(null);
+                      }}
                     >
-                      <span
-                        className={cn(
-                          "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border transition-colors",
-                          t.border,
-                          active ? t.s4 : t.s3,
-                          "group-hover:border-white/10",
-                        )}
-                      >
-                        <Icon className={cn("h-4 w-4", tool.iconColor)} />
-                      </span>
-                      <div className="min-w-0 flex-1">
-                        <p className={cn("text-[13px] font-semibold leading-tight", t.text)}>{tool.title}</p>
-                        <p className={cn("mt-0.5 line-clamp-2 text-[11px] leading-snug", t.muted2)}>{tool.subtitle}</p>
-                      </div>
-                    </button>
-                    <div className="flex shrink-0 items-center gap-1.5 pr-0.5">
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          void runTool(tool.id);
-                        }}
-                        disabled={!text.trim() || busy || runAllAnalyzeLoading}
-                        className={cn(
-                          "inline-flex h-8 shrink-0 items-center gap-1 rounded-md border px-2.5 text-[12px] font-semibold transition-colors disabled:opacity-45",
-                          t.borderSub,
-                          t.btnGhost,
-                        )}
-                        title="Run this tool only"
-                      >
-                        {busy ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Play className="h-3.5 w-3.5" />}
-                        <span className="hidden min-[380px]:inline">Run</span>
-                      </button>
-                      <div className="flex min-h-[28px] min-w-[56px] items-center justify-end">{teaser}</div>
-                    </div>
+                      Use as task
+                    </Button>
                   </div>
-                );
-              })}
-            </nav>
-
-            {selectedTool && toolErrors[selectedTool] && (
-              <div className={cn("mb-2.5 rounded-lg border p-2.5", t.border)}>
-                <p className={cn("text-[11px] font-semibold", t.danger)}>{toolErrors[selectedTool]}</p>
-                <button
-                  type="button"
-                  onClick={() => void runTool(selectedTool)}
-                  disabled={!text.trim() || Boolean(loadingTools[selectedTool])}
-                  className={cn("mt-2 text-[12px] font-semibold disabled:opacity-45", t.danger)}
-                >
-                  Retry
-                </button>
+                ) : null}
               </div>
-            )}
+            </section>
 
-            {selectedTool && loadingTools[selectedTool] && !hasResultForTool(selectedTool) && !toolErrors[selectedTool] && (
-              <div
-                className={cn(
-                  "mb-4 flex flex-col items-center gap-2 rounded-xl border border-dashed py-6",
-                  t.borderSub,
-                )}
-              >
-                <Loader2 className={cn("h-6 w-6 animate-spin", t.info)} />
-                <p className={cn("text-[13px] font-medium", t.muted)}>Running analysis…</p>
-                <p className={cn("text-[11px]", t.muted2)}>Usually a few seconds</p>
-              </div>
-            )}
-
-            {!selectedTool && (
-              <div className="space-y-2">
-                <div
-                  className={cn(
-                    "rounded-xl border border-dashed px-4 py-5 text-center",
-                    t.borderSub,
-                    t.muted2,
-                  )}
-                >
-                  <p className={cn("text-[13px] font-medium", t.muted)}>Select a tool</p>
-                  <p className={cn("mx-auto mt-1.5 max-w-[240px] text-[12px] leading-snug", t.muted2)}>
-                    Detail & scores below. Rewrites: <span className={cn("font-semibold", t.muted)}>Modes &amp; personas</span> on the top bar.
-                  </p>
-                </div>
-                <div
-                  className={cn(
-                    "rounded-lg border px-2.5 py-2",
-                    themeMode === "dark"
-                      ? "border-[var(--brand-teal)]/20 bg-[var(--brand-teal)]/[0.05]"
-                      : "border-[var(--brand-teal)]/25 bg-[var(--brand-teal)]/[0.06]",
-                  )}
-                >
-                  <div className="flex items-start gap-2">
-                    <Globe className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--brand-teal)]" aria-hidden />
-                    <div className="min-w-0 flex-1">
-                      <p className={cn("text-[11px] font-semibold leading-tight", t.text)}>Web page analysis</p>
-                      <p className={cn("mt-0.5 text-[10px] leading-snug", t.muted2)}>
-                        URL & metadata (title, OG, headings) — coming soon.
-                      </p>
-                      <div className="mt-1.5 flex gap-1.5">
-                        <input
-                          type="url"
-                          readOnly
-                          disabled
-                          placeholder="https://…"
-                          className={cn(
-                            "min-w-0 flex-1 cursor-not-allowed rounded-md border px-2 py-1 text-[11px] outline-none opacity-65",
-                            t.input,
-                          )}
-                          aria-label="URL for web page analysis (coming soon)"
-                        />
-                        <button
-                          type="button"
-                          disabled
-                          title="Coming soon"
-                          className={cn(
-                            "shrink-0 rounded-md px-2 py-1 text-[10px] font-semibold opacity-45",
-                            t.btnPrimary,
-                          )}
-                        >
-                          Analyze
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {selectedTool === "communication" && commResult && (
-                  <div className="space-y-4">
-                    <div className={cn("grid grid-cols-4 gap-2 rounded-xl border p-3", t.border, t.s2)}>
-                      {[
-                        { label: "Tone", score: commResult.toneScore, color: getScoreColor(commResult.toneScore) },
-                        { label: "Risk", score: commResult.riskScore, color: getRiskColor(commResult.riskScore) },
-                        { label: "Clarity", score: commResult.clarityScore, color: getScoreColor(commResult.clarityScore) },
-                        { label: "Overall", score: commResult.overallScore, color: getScoreColor(commResult.overallScore) },
-                      ].map((s) => (
-                        <div key={s.label} className="text-center">
-                          <div className="text-lg font-bold tabular-nums" style={{ color: s.color }}>{s.score}</div>
-                          <div className={cn("text-[10px] font-semibold uppercase tracking-wide", t.muted2)}>{s.label}</div>
-                        </div>
-                      ))}
-                    </div>
-                    <div className={cn("rounded-xl border p-3", t.border, t.s2)}>
-                      <p className={cn("text-[13px] leading-relaxed", t.muted)}>{commResult.summary}</p>
-                    </div>
-                    {commResult.flags?.length > 0 && (
-                      <div>
-                        <h3 className={cn("mb-2 flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider", t.muted2)}>
-                          <AlertTriangle className="h-3 w-3" />
-                          Flagged issues ({commResult.flags.length})
-                        </h3>
-                        <div className="space-y-1.5">
-                          {commResult.flags.map((flag, i) => {
-                            const config = severityConfig[flag.severity];
-                            const Icon = config.icon;
-                            const isExpanded = expandedFlag === i;
-                            return (
-                              <div key={i} className={cn("overflow-hidden rounded-xl border", t.border, t.s2)}>
-                                <button
-                                  type="button"
-                                  onClick={() => setExpandedFlag(isExpanded ? null : i)}
-                                  className="flex w-full items-start gap-3 p-2.5 text-left"
-                                >
-                                  <Icon className={cn("mt-0.5 h-3.5 w-3.5 shrink-0", config.color)} />
-                                  <div className="min-w-0 flex-1">
-                                    <p className={cn("truncate text-[13px] font-semibold", t.text)}>&ldquo;{flag.text}&rdquo;</p>
-                                    <p className={cn("mt-0.5 text-[11px]", t.muted2)}>{config.label} · {flag.category}</p>
-                                  </div>
-                                  {isExpanded ? <ChevronUp className={cn("h-3.5 w-3.5 shrink-0", t.muted2)} /> : <ChevronDown className={cn("h-3.5 w-3.5 shrink-0", t.muted2)} />}
-                                </button>
-                                {isExpanded && (
-                                  <div className={cn("border-t px-3 pb-3 pt-2", t.border)}>
-                                    <p className={cn("mb-2 text-[12px] leading-relaxed", t.muted)}>{flag.explanation}</p>
-                                    <div className={cn("rounded-lg border p-2.5", t.border, t.s3)}>
-                                      <p className={cn("mb-1 text-[10px] font-semibold uppercase", t.muted2)}>Suggestion</p>
-                                      <p className={cn("text-[12px]", t.text)}>{flag.suggestion}</p>
-                                    </div>
-                                  </div>
-                                )}
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    )}
-                    {commResult.strengths?.length > 0 && (
-                      <div>
-                        <h3 className={cn("mb-2 flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider", t.muted2)}>
-                          <CheckCircle2 className="h-3 w-3" />
-                          Strengths
-                        </h3>
-                        <div className="space-y-1.5">
-                          {commResult.strengths.map((s, i) => (
-                            <div key={i} className={cn("flex items-start gap-2 text-[12px] leading-relaxed", t.muted)}>
-                              <CheckCircle2 className={cn("mt-0.5 h-3.5 w-3.5 shrink-0", t.ok)} />
-                              {s}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                    {commResult.improvements?.length > 0 && (
-                      <div>
-                        <h3 className={cn("mb-2 flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider", t.muted2)}>
-                          <TrendingUp className="h-3 w-3" />
-                          Improvements
-                        </h3>
-                        <div className="space-y-1.5">
-                          {commResult.improvements.map((s, i) => (
-                            <div key={i} className={cn("flex items-start gap-2 text-[12px] leading-relaxed", t.muted)}>
-                              <ArrowRight className={cn("mt-0.5 h-3.5 w-3.5 shrink-0", t.info)} />
-                              {s}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {selectedTool === "compliance" && riskResult && (
-                  <div className="space-y-4">
-                    <div className={cn("rounded-xl border p-3", t.border, t.s2)}>
-                      <div className="flex flex-wrap items-start justify-between gap-2">
-                        <div className="flex items-center gap-2">
-                          <div className={cn("flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border", t.border)}>
-                            {riskResult.riskLevel === "low" ? (
-                              <CheckCircle2 className={cn("h-5 w-5", t.ok)} />
-                            ) : riskResult.riskLevel === "critical" ? (
-                              <AlertTriangle className={cn("h-5 w-5", t.danger)} />
-                            ) : (
-                              <AlertCircle className={cn("h-5 w-5", t.warn)} />
-                            )}
-                          </div>
-                          <div>
-                            <h2 className={cn("text-sm font-bold", riskConfig.text)}>{riskConfig.label}</h2>
-                            <p className={cn("mt-0.5 text-[12px]", t.muted)}>{riskResult.summary}</p>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <div className={cn("text-2xl font-bold tabular-nums", riskConfig.text)}>{riskResult.overallScore}</div>
-                          <div className={cn("text-[10px] font-semibold uppercase", t.muted2)}>Safety</div>
-                        </div>
-                      </div>
-                    </div>
-                    {riskResult.issues?.length > 0 ? (
-                      <div className="space-y-2">
-                        <h3 className={cn("flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider", t.muted2)}>
-                          <AlertTriangle className="h-3 w-3" />
-                          Issues ({riskResult.issues.length})
-                        </h3>
-                        {riskResult.issues.map((issue, i) => (
-                          <div key={i} className={cn("overflow-hidden rounded-xl border", t.border, t.s2)}>
-                            <div className={cn("border-b px-3 py-2.5", t.border)}>
-                              <div className="mb-1.5 flex flex-wrap items-center gap-2">
-                                <span className={cn("rounded-full px-2 py-0.5 text-[10px] font-bold uppercase",
-                                  issue.severity === "critical" ? "bg-rose-500/15 text-rose-400" :
-                                  issue.severity === "warning" ? "bg-amber-500/15 text-amber-400" :
-                                  cn(t.s4, t.muted)
-                                )}>
-                                  {issue.severity}
-                                </span>
-                                <span className={cn("text-[11px] font-semibold", t.muted2)}>
-                                  {CATEGORY_LABELS[issue.category] || issue.category}
-                                </span>
-                              </div>
-                              <p className={cn("text-[13px] font-semibold", t.text)}>&ldquo;{issue.text}&rdquo;</p>
-                              <p className={cn("mt-1.5 text-[12px] leading-relaxed", t.muted)}>{issue.explanation}</p>
-                            </div>
-                            <div className={cn("px-3 py-2.5", t.s3)}>
-                              <div className="mb-1.5 flex items-center justify-between">
-                                <span className={cn("flex items-center gap-1 text-[10px] font-bold uppercase", t.ok)}>
-                                  <Shield className="h-3 w-3" />
-                                  Safer alternative
-                                </span>
-                                <button
-                                  type="button"
-                                  onClick={() => copySafer(issue.saferVersion, i)}
-                                  className={cn("flex items-center gap-1 text-[11px] font-semibold", t.muted, t.navHover)}
-                                >
-                                  {copiedRiskIdx === i ? <CheckCircle2 className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
-                                  {copiedRiskIdx === i ? "Copied" : "Copy"}
-                                </button>
-                              </div>
-                              <p className={cn("text-[13px] leading-relaxed", t.text)}>{issue.saferVersion}</p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className={cn("rounded-xl border p-5 text-center", t.border, t.s2)}>
-                        <CheckCircle2 className={cn("mx-auto mb-2 h-7 w-7", t.ok)} />
-                        <p className={cn("font-bold text-sm", t.text)}>All clear</p>
-                        <p className={cn("mt-1 text-[12px]", t.muted)}>No compliance issues flagged.</p>
-                      </div>
-                    )}
-                    {riskResult.recommendations?.length > 0 && (
-                      <div className={cn("rounded-xl border p-3", t.border, t.s2)}>
-                        <h3 className={cn("mb-2 flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider", t.muted2)}>
-                          <Sparkles className="h-3 w-3" />
-                          Recommendations
-                        </h3>
-                        <ul className="space-y-1.5">
-                          {riskResult.recommendations.map((r, i) => (
-                            <li key={i} className={cn("flex items-start gap-2 text-[12px] leading-relaxed", t.muted)}>
-                              <ArrowRight className={cn("mt-0.5 h-3 w-3 shrink-0", t.danger)} />
-                              {r}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {selectedTool === "intent" && intentResult && assessment && (
-                  <div className="space-y-4">
-                    <div className={cn("rounded-xl border p-3", t.border, t.s2)}>
-                      <div className="flex flex-wrap items-start justify-between gap-2">
-                        <div className="flex items-center gap-2">
-                          <div className={cn("flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border", t.border)}>
-                            <Brain className={cn("h-5 w-5", t.info)} />
-                          </div>
-                          <div>
-                            <h2 className={cn("text-sm font-bold", t.text)}>{assessment.label}</h2>
-                            <p className={cn("mt-0.5 text-[12px]", t.muted)}>{assessment.desc}</p>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <div className={cn("text-2xl font-bold tabular-nums", t.text)}>{intentResult.confidenceScore}%</div>
-                          <div className={cn("text-[10px] font-semibold uppercase", t.muted2)}>Confidence</div>
-                        </div>
-                      </div>
-                    </div>
-                    {intentResult.tactics?.length > 0 ? (
-                      <div className="space-y-2">
-                        <h3 className={cn("flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider", t.muted2)}>
-                          <Eye className="h-3 w-3" />
-                          Tactics ({intentResult.tactics.length})
-                        </h3>
-                        {intentResult.tactics.map((tactic, i) => (
-                          <div key={i} className={cn("rounded-xl border p-3", t.border, t.s2)}>
-                            <div className="mb-1.5 flex flex-wrap items-center gap-2">
-                              <span className={cn("rounded-full px-2 py-0.5 text-[10px] font-bold uppercase",
-                                tactic.impact === "high" ? "bg-rose-500/15 text-rose-400" :
-                                tactic.impact === "medium" ? "bg-amber-500/15 text-amber-400" :
-                                cn(t.s4, t.muted)
-                              )}>
-                                {tactic.impact} impact
-                              </span>
-                              <span className={cn("text-[12px] font-semibold", t.text)}>{TACTIC_LABELS[tactic.type] || tactic.type}</span>
-                            </div>
-                            <div className={cn("mb-1.5 rounded-lg border px-3 py-2", t.border, t.s3)}>
-                              <p className={cn("text-[13px] font-medium", t.text)}>&ldquo;{tactic.text}&rdquo;</p>
-                            </div>
-                            <p className={cn("text-[12px] leading-relaxed", t.muted)}>{tactic.explanation}</p>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className={cn("rounded-xl border p-5 text-center", t.border, t.s2)}>
-                        <Shield className={cn("mx-auto mb-2 h-7 w-7", t.ok)} />
-                        <p className={cn("font-bold text-sm", t.text)}>No tactics detected</p>
-                        <p className={cn("mt-1 text-[12px]", t.muted)}>Text appears straightforward.</p>
-                      </div>
-                    )}
-                    {intentResult.biasDetected?.length > 0 && (
-                      <div>
-                        <h3 className={cn("mb-2 flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider", t.muted2)}>
-                          <AlertTriangle className="h-3 w-3" />
-                          Cognitive biases
-                        </h3>
-                        <div className="flex flex-wrap gap-1.5">
-                          {intentResult.biasDetected.map((b, i) => (
-                            <span key={i} className={cn("rounded-lg border px-2.5 py-1 text-[12px] font-semibold", t.border, t.s3, t.text)}>
-                              {b}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                    {intentResult.neutralVersion && (
-                      <div className={cn("rounded-xl border p-3", t.border, t.s2)}>
-                        <div className="mb-2 flex items-center justify-between">
-                          <h3 className={cn("flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider", t.muted2)}>
-                            <Shield className="h-3 w-3" />
-                            Neutral version
-                          </h3>
-                          <button
-                            type="button"
-                            onClick={() => setShowNeutral(!showNeutral)}
-                            className={cn("text-[12px] font-semibold", t.muted, t.navHover)}
-                          >
-                            {showNeutral ? "Hide" : "Show"}
-                          </button>
-                        </div>
-                        {showNeutral && (
-                          <div className={cn("rounded-lg border p-3", t.border, t.s3)}>
-                            <p className={cn("text-[13px] leading-relaxed", t.text)}>{intentResult.neutralVersion}</p>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                    <div className={cn("rounded-xl border p-3", t.border, t.s2)}>
-                      <p className={cn("text-[11px] font-bold uppercase tracking-wider mb-1", t.muted2)}>Summary</p>
-                      <p className={cn("text-[13px] leading-relaxed", t.muted)}>{intentResult.summary}</p>
-                    </div>
-                  </div>
-                )}
-
-                {selectedTool === "detect" && detectResult && (
-                  <div className="space-y-4">
-                    <div className={cn("rounded-xl border p-4 text-center", t.border, t.s2)}>
-                      <div className="relative mx-auto mb-3 inline-block">
-                        <svg width="96" height="96" className="score-ring">
-                          <circle className="score-ring-track" cx="48" cy="48" r="36" strokeWidth="6" />
-                          <circle
-                            className="score-ring-fill"
-                            cx="48"
-                            cy="48"
-                            r="36"
-                            strokeWidth="6"
-                            stroke={getAiProbStyle(detectResult.aiProbability).ring}
-                            strokeDasharray={aiRingCircumference}
-                            strokeDashoffset={
-                              aiRingCircumference - (detectResult.aiProbability / 100) * aiRingCircumference
-                            }
-                          />
-                        </svg>
-                        <div className="absolute inset-0 flex flex-col items-center justify-center">
-                          <span className={cn("text-xl font-black", t.warn)}>
-                            {detectResult.aiProbability}%
-                          </span>
-                        </div>
-                      </div>
-                      <p className={cn("text-sm font-bold", t.text)}>
-                        {verdictLabels[detectResult.verdict] || detectResult.verdict}
-                      </p>
-                      <p className={cn("mt-1 text-[12px]", t.muted2)}>Estimated AI probability (heuristic)</p>
-                    </div>
-
-                    <div className={cn("space-y-3 rounded-xl border p-3", t.border, t.s2)}>
-                      <div>
-                        <h3 className={cn("mb-2 flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider", t.muted2)}>
-                          <Bot className="h-3 w-3" />
-                          AI signals
-                        </h3>
-                        <div className="space-y-1.5">
-                          {detectResult.indicators?.aiSignals?.map((s, i) => (
-                            <p key={i} className={cn("flex items-start gap-2 text-[12px]", t.muted)}>
-                              <AlertTriangle className={cn("mt-0.5 h-3 w-3 shrink-0", t.warn)} />
-                              {s}
-                            </p>
-                          ))}
-                        </div>
-                      </div>
-                      <div className={cn("border-t pt-3", t.border)}>
-                        <h3 className={cn("mb-2 flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider", t.muted2)}>
-                          <User className="h-3 w-3" />
-                          Human signals
-                        </h3>
-                        <div className="space-y-1.5">
-                          {detectResult.indicators?.humanSignals?.map((s, i) => (
-                            <p key={i} className={cn("flex items-start gap-2 text-[12px]", t.muted)}>
-                              <CheckCircle2 className={cn("mt-0.5 h-3 w-3 shrink-0", t.ok)} />
-                              {s}
-                            </p>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-
-                    {detectResult.sections?.length > 0 && (
-                      <div>
-                        <h3 className={cn("mb-2 text-[11px] font-bold uppercase tracking-wider", t.muted2)}>By section</h3>
-                        <div className="space-y-1.5">
-                          {detectResult.sections.map((s, i) => {
-                            const c = getAiProbStyle(s.probability);
-                            return (
-                              <div key={i} className={cn("overflow-hidden rounded-lg border", t.border)}>
-                                <div className={cn("flex items-center justify-between px-3 py-1.5", t.s3)}>
-                                  <div className="flex items-center gap-2">
-                                    <div className={cn("h-2 w-2 rounded-full", c.bg)} />
-                                    <span className={cn("text-[12px] font-bold", c.text)}>{s.probability}% AI</span>
-                                  </div>
-                                  <span className={cn("text-[11px]", t.muted2)}>{s.reason}</span>
-                                </div>
-                                <p className={cn("px-3 py-2 text-[12px] leading-relaxed", t.muted)}>{s.text}</p>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    )}
-
-                    {detectResult.suggestions?.length > 0 && (
-                      <div>
-                        <h3 className={cn("mb-2 flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider", t.muted2)}>
-                          <Sparkles className="h-3 w-3" />
-                          Sound more human
-                        </h3>
-                        <div className="space-y-1.5">
-                          {detectResult.suggestions.map((s, i) => (
-                            <div key={i} className={cn("flex items-start gap-2 rounded-lg border p-2.5", t.border, t.s2)}>
-                              <Wand2 className={cn("mt-0.5 h-3.5 w-3.5 shrink-0", t.warn)} />
-                              <p className={cn("text-[12px] leading-relaxed", t.muted)}>{s}</p>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    <div className={cn("rounded-xl border p-3", t.border, t.s2)}>
-                      <p className={cn("text-[13px] leading-relaxed", t.muted)}>{detectResult.summary}</p>
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={() => void handleHumanize()}
-                      disabled={humanizing || !text.trim()}
-                      className={cn(
-                        "flex w-full items-center justify-center gap-2 rounded-xl border py-2.5 text-[12px] font-bold transition disabled:opacity-45",
-                        t.borderSub, t.muted, t.navHover,
-                      )}
-                    >
-                      {humanizing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Wand2 className="h-4 w-4" />}
-                      Humanize text (friendly rewrite)
-                    </button>
-                  </div>
-                )}
-
-                {selectedTool === "readability" && readabilityResult && (
-                  <div className="space-y-4">
-                    <div className={cn("grid grid-cols-2 gap-2 rounded-xl border p-3 sm:grid-cols-4", t.border, t.s2)}>
-                      <div className="text-center">
-                        <div className={cn("text-lg font-bold tabular-nums", t.info)}>{readabilityResult.readingEaseScore}</div>
-                        <div className={cn("text-[10px] font-semibold uppercase", t.muted2)}>Reading ease</div>
-                      </div>
-                      <div className="text-center">
-                        <div className={cn("text-sm font-bold", t.text)}>{readabilityResult.gradeLevelApprox}</div>
-                        <div className={cn("text-[10px] font-semibold uppercase", t.muted2)}>Level</div>
-                      </div>
-                      <div className="text-center">
-                        <div className={cn("text-lg font-bold tabular-nums", t.text)}>{readabilityResult.avgSentenceLength}</div>
-                        <div className={cn("text-[10px] font-semibold uppercase", t.muted2)}>Avg words/sent.</div>
-                      </div>
-                      <div className="text-center">
-                        <div className={cn("text-lg font-bold tabular-nums", t.warn)}>{readabilityResult.longSentenceCount}</div>
-                        <div className={cn("text-[10px] font-semibold uppercase", t.muted2)}>Long sentences</div>
-                      </div>
-                    </div>
-                    <div className={cn("rounded-xl border p-3", t.border, t.s2)}>
-                      <p className={cn("text-[13px] leading-relaxed", t.muted)}>{readabilityResult.summary}</p>
-                    </div>
-                    {readabilityResult.issues?.length > 0 && (
-                      <div>
-                        <h3 className={cn("mb-2 text-[11px] font-bold uppercase tracking-wider", t.muted2)}>Issues</h3>
-                        <div className="space-y-2">
-                          {readabilityResult.issues.map((issue, i) => (
-                            <div key={i} className={cn("rounded-xl border p-3", t.border, t.s2)}>
-                              <p className={cn("text-[13px] font-medium", t.text)}>&ldquo;{issue.text}&rdquo;</p>
-                              <p className={cn("mt-1 text-[12px]", t.muted)}>{issue.issue}</p>
-                              <p className={cn("mt-2 text-[12px]", t.ok)}>{issue.fix}</p>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                    {readabilityResult.recommendations?.length > 0 && (
-                      <ul className={cn("space-y-1 rounded-xl border p-3", t.border, t.s2)}>
-                        {readabilityResult.recommendations.map((r, i) => (
-                          <li key={i} className={cn("flex items-start gap-2 text-[12px]", t.muted)}>
-                            <CheckCircle2 className={cn("mt-0.5 h-3.5 w-3.5 shrink-0", t.info)} />
-                            {r}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                )}
-
-                {selectedTool === "structure" && structureResult && (
-                  <div className="space-y-4">
-                    <div className={cn("rounded-xl border p-3", t.border, t.s2)}>
-                      <p className={cn("text-[11px] font-bold uppercase tracking-wider", t.muted2)}>Detected type</p>
-                      <p className={cn("mt-1 text-sm font-semibold capitalize", t.text)}>
-                        {structureResult.documentTypeGuess?.replace(/_/g, " ")}
-                      </p>
-                      <p className={cn("mt-2 text-[13px]", t.muted)}>
-                        Clear ask: <span className="font-semibold">{structureResult.hasClearAsk ? "Yes" : "No"}</span>
-                      </p>
-                    </div>
-                    <p className={cn("text-[13px] leading-relaxed", t.muted)}>{structureResult.summary}</p>
-                    {structureResult.strengths?.length > 0 && (
-                      <div>
-                        <h3 className={cn("mb-2 text-[11px] font-bold uppercase tracking-wider", t.muted2)}>Strengths</h3>
-                        <ul className="space-y-1">
-                          {structureResult.strengths.map((s, i) => (
-                            <li key={i} className={cn("flex items-start gap-2 text-[12px]", t.muted)}>
-                              <CheckCircle2 className={cn("mt-0.5 h-3.5 w-3.5 shrink-0", t.ok)} />
-                              {s}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                    {structureResult.missingSections?.length > 0 && (
-                      <div>
-                        <h3 className={cn("mb-2 text-[11px] font-bold uppercase tracking-wider", t.muted2)}>Missing</h3>
-                        <ul className="space-y-1">
-                          {structureResult.missingSections.map((s, i) => (
-                            <li key={i} className={cn("flex items-start gap-2 text-[12px]", t.muted)}>
-                              <AlertCircle className={cn("mt-0.5 h-3.5 w-3.5 shrink-0", t.warn)} />
-                              {s}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                    {structureResult.suggestedOutline?.length > 0 && (
-                      <div className={cn("rounded-xl border p-3", t.border, t.s2)}>
-                        <h3 className={cn("mb-2 text-[11px] font-bold uppercase tracking-wider", t.muted2)}>Suggested outline</h3>
-                        <ol className="list-decimal space-y-1 pl-4 text-[12px]">
-                          {structureResult.suggestedOutline.map((s, i) => (
-                            <li key={i} className={cn("leading-relaxed", t.muted)}>
-                              {s}
-                            </li>
-                          ))}
-                        </ol>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {selectedTool === "inclusion" && inclusionResult && (
-                  <div className="space-y-4">
-                    <div className={cn("rounded-xl border p-4 text-center", t.border, t.s2)}>
-                      <div className={cn("text-3xl font-black tabular-nums", t.ok)}>{inclusionResult.inclusionScore}</div>
-                      <div className={cn("text-[10px] font-semibold uppercase", t.muted2)}>Inclusion score</div>
-                    </div>
-                    <p className={cn("text-[13px] leading-relaxed", t.muted)}>{inclusionResult.summary}</p>
-                    {inclusionResult.flags?.length > 0 && (
-                      <div className="space-y-2">
-                        {inclusionResult.flags.map((f, i) => (
-                          <div key={i} className={cn("rounded-xl border p-3", t.border, t.s2)}>
-                            <p className={cn("text-[13px] font-medium", t.text)}>&ldquo;{f.text}&rdquo;</p>
-                            <p className={cn("mt-1 text-[12px]", t.muted)}>{f.issue}</p>
-                            <p className={cn("mt-2 text-[12px]", t.ok)}>{f.suggestion}</p>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                    {inclusionResult.goodPractices?.length > 0 && (
-                      <div>
-                        <h3 className={cn("mb-2 text-[11px] font-bold uppercase tracking-wider", t.muted2)}>Already strong</h3>
-                        <ul className="space-y-1">
-                          {inclusionResult.goodPractices.map((g, i) => (
-                            <li key={i} className={cn("flex items-start gap-2 text-[12px]", t.muted)}>
-                              <CheckCircle2 className={cn("mt-0.5 h-3.5 w-3.5 shrink-0", t.ok)} />
-                              {g}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {selectedTool === "claims" && claimsResult && (
-                  <div className="space-y-4">
-                    <div className={cn("rounded-xl border p-3", t.border, t.s2)}>
-                      <p className={cn("text-[11px] font-bold uppercase tracking-wider", t.muted2)}>Overclaim risk</p>
-                      <p className={cn("mt-1 text-lg font-bold capitalize", t.warn)}>{claimsResult.overclaimRisk}</p>
-                    </div>
-                    <p className={cn("text-[13px] leading-relaxed", t.muted)}>{claimsResult.summary}</p>
-                    {claimsResult.flags?.length > 0 && (
-                      <div className="space-y-2">
-                        {claimsResult.flags.map((f, i) => (
-                          <div key={i} className={cn("rounded-xl border p-3", t.border, t.s2)}>
-                            <p className={cn("text-[13px] font-medium", t.text)}>&ldquo;{f.text}&rdquo;</p>
-                            <p className={cn("mt-1 text-[12px]", t.muted)}>{f.concern}</p>
-                            <p className={cn("mt-2 text-[12px]", t.ok)}>{f.suggestion}</p>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                    {claimsResult.recommendations?.length > 0 && (
-                      <ul className={cn("space-y-1 rounded-xl border p-3", t.border, t.s2)}>
-                        {claimsResult.recommendations.map((r, i) => (
-                          <li key={i} className={cn("flex items-start gap-2 text-[12px]", t.muted)}>
-                            <ArrowRight className={cn("mt-0.5 h-3 w-3 shrink-0", t.warn)} />
-                            {r}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                )}
-
-            {text.trim() &&
-              (commResult ||
-                riskResult ||
-                intentResult ||
-                detectResult ||
-                readabilityResult ||
-                structureResult ||
-                inclusionResult ||
-                claimsResult) && (
-              <div className={cn("mt-4 flex flex-wrap gap-2 border-t pt-4", t.border)}>
-                <button
+            <section className={assistantSectionClass} aria-labelledby="assistant-generate-title">
+              <h3 id="assistant-generate-title" className={cn("text-sm font-semibold", t.text)}>
+                Generate
+              </h3>
+              <p className={cn("mt-1 text-xs leading-relaxed", t.muted2)}>Start from a brief or coach the current draft.</p>
+              <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                <Button
                   type="button"
-                  onClick={() => selectStudioMode("safe")}
-                  className={cn("flex items-center gap-1.5 rounded-lg border px-3 py-2 text-[12px] font-semibold transition", t.borderSub, t.muted, t.navHover)}
+                  variant="outline"
+                  size="sm"
+                  onClick={openGenerateWorkspace}
+                  className={cn("w-full justify-center gap-2 shadow-none", t.borderSub, t.text)}
                 >
-                  <PenTool className="h-3.5 w-3.5" />
-                  Refine: Safe
-                </button>
-                <button
+                  <Sparkles className="h-3.5 w-3.5" />
+                  From brief
+                </Button>
+                <Button
                   type="button"
-                  onClick={() => selectStudioMode("professional")}
-                  className={cn("flex items-center gap-1.5 rounded-lg border px-3 py-2 text-[12px] font-semibold transition", t.borderSub, t.muted, t.navHover)}
+                  size="sm"
+                  onClick={() => void handleStudioRewrite()}
+                  disabled={!text.trim() || studioLoading}
+                  className={cn("w-full justify-center gap-2 border-0 bg-[var(--brand-teal)] text-[#0C0C0B] shadow-none hover:brightness-105")}
                 >
-                  <Eye className="h-3.5 w-3.5" />
-                  Refine: Professional
-                </button>
-                <button
-                  type="button"
-                  onClick={() => selectStudioMode("friendly")}
-                  className={cn("flex items-center gap-1.5 rounded-lg border px-3 py-2 text-[12px] font-semibold transition", t.borderSub, t.muted, t.navHover)}
-                >
-                  <Smile className="h-3.5 w-3.5" />
-                  Refine: Friendly
-                </button>
+                  {studioLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <PenTool className="h-3.5 w-3.5" />}
+                  Coach draft
+                </Button>
               </div>
-            )}
+            </section>
+
+            <p
+              className={cn(
+                "rounded-2xl px-3 py-2.5 text-[11px] leading-relaxed",
+                themeMode === "light"
+                  ? "text-zinc-500 shadow-[0_1px_8px_-2px_rgba(15,23,42,0.06)] ring-1 ring-zinc-900/[0.04]"
+                  : "text-[#8A8880] shadow-[0_2px_12px_-4px_rgba(0,0,0,0.45)] ring-1 ring-white/[0.05]",
+              )}
+            >
+              Text generation and coaching use your existing API defaults. Multi-model compare is off until deployments are ready. Speech uses the voice picker only.
+            </p>
           </div>
         </div>
       </div>
@@ -2702,7 +2023,7 @@ function WritingLabInner({
                       Generate with AI
                     </h2>
                     <p className={cn("mt-1 max-w-md text-[12px] leading-relaxed", t.muted)}>
-                      Describe what you need — we&apos;ll draft text you can insert into the console, then transform or analyze.
+                      Describe what you need — we&apos;ll draft text you can insert into the console, then coach or refine.
                     </p>
                   </div>
                 </div>

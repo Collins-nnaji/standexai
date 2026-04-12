@@ -190,6 +190,34 @@ export function azureSpeechTranscriptionHeaders(): Record<string, string> {
   return { "api-key": key };
 }
 
+/** Azure chat completions for a specific deployment (Foundry / multi-model compare). */
+export function createAzureChatCompletionsRequest(
+  deployment: string,
+  body: Record<string, unknown>,
+): { url: string; init: RequestInit } {
+  const endpoint = azureEndpoint();
+  const key = azureApiKey();
+  if (!endpoint || !key) {
+    throw new Error(llmMissingConfigMessage());
+  }
+  const dep = deployment.trim();
+  if (!dep) {
+    throw new Error("Azure deployment name is required");
+  }
+  const { model: _drop, ...rest } = body;
+  return {
+    url: azureChatUrl(dep),
+    init: {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "api-key": key,
+      },
+      body: JSON.stringify(rest),
+    },
+  };
+}
+
 /**
  * Build a chat/completions request. Standard OpenAI is preferred if configured, bridging automatically.
  */
@@ -207,31 +235,16 @@ export function createChatCompletionsRequest(body: Record<string, unknown>): { u
           "Authorization": `Bearer ${process.env.OPENAI_API_KEY.trim()}`,
         },
         body: JSON.stringify({
-          model: fallbackModel,
+          model: (typeof model === "string" && model.trim() ? model : fallbackModel) as string,
           ...rest,
         }),
       },
     };
   }
 
-  const endpoint = azureEndpoint();
-  const key = azureApiKey();
   const deployment = getTextDeploymentName();
-
-  if (!endpoint || !key || !deployment) {
+  if (!deployment) {
     throw new Error(llmMissingConfigMessage());
   }
-
-  const { model: _drop, ...rest } = body;
-  return {
-    url: azureChatUrl(deployment),
-    init: {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "api-key": key,
-      },
-      body: JSON.stringify(rest),
-    },
-  };
+  return createAzureChatCompletionsRequest(deployment, body);
 }

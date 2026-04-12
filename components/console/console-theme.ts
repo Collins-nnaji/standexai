@@ -5,6 +5,13 @@ export type ConsoleTheme = {
   workspaceSurface: string;
   /** History + Intelligence rails — second surface (subtle lift from canvas) */
   railSurface: string;
+  /** Right “tools” column — ChatGPT-style contrast from main canvas */
+  toolsPanel: string;
+  toolsPanelBorder: string;
+  /** Cards sitting on the tools panel */
+  toolsCard: string;
+  /** Main draft / composer inset (ChatGPT-style input band) */
+  composerInset: string;
   shell: string;
   topbar: string;
   border: string;
@@ -38,29 +45,35 @@ export type ConsoleTheme = {
  */
 export const CONSOLE_THEMES: Record<ConsoleThemeMode, ConsoleTheme> = {
   dark: {
-    workspaceSurface: "bg-[#090908]",
-    railSurface: "bg-[#0c0c0b]",
-    shell: "bg-[#090908] text-[#F6F4EF]",
-    topbar: "bg-[#090908]",
+    /** ChatGPT-like main reading surface */
+    workspaceSurface: "bg-[#212121]",
+    /** Narrower sidebar strip */
+    railSurface: "bg-[#171717]",
+    toolsPanel: "bg-[#2b2b2b]",
+    toolsPanelBorder: "border-l border-white/[0.08]",
+    toolsCard: "bg-[#323232]",
+    composerInset: "bg-[#2f2f2f]",
+    shell: "bg-[#212121] text-[#ececec]",
+    topbar: "bg-[#212121]",
     border: "border-white/[0.14]",
     borderSub: "border-white/[0.18]",
     muted: "text-[#B9B7B0]",
     muted2: "text-[#8A8880]",
-    text: "text-[#F6F4EF]",
-    s1: "bg-[#111110]",
-    s2: "bg-[#171716]",
-    s3: "bg-[#1E1E1C]",
-    s4: "bg-[#2A2A27]",
+    text: "text-[#ececec]",
+    s1: "bg-[#2a2a2a]",
+    s2: "bg-[#303030]",
+    s3: "bg-[#383838]",
+    s4: "bg-[#404040]",
     tabIdle: "text-[#8A8880] hover:text-[#D8D6D0]",
-    tabActive: "text-[#F6F4EF] border-[#F6F4EF]",
+    tabActive: "text-[#ececec] border-[#ececec]",
     tabBorder: "border-transparent",
-    btnGhost: "border-white/[0.18] text-[#B9B7B0] hover:text-[#F6F4EF] hover:border-white/[0.26]",
+    btnGhost: "border-white/[0.18] text-[#B9B7B0] hover:text-[#ececec] hover:border-white/[0.26]",
     btnPrimary: "bg-[#F0EDE6] text-[#090908] hover:opacity-92",
-    navHover: "hover:bg-[#1E1E1C] hover:text-[#F6F4EF]",
-    navActive: "bg-[#1E1E1C] text-[#F6F4EF] border-l-[#F0EDE6]",
-    input: "bg-[#171716] border-white/[0.18] text-[#F6F4EF] placeholder:text-[#6E6C66] focus:border-white/[0.28]",
+    navHover: "hover:bg-[#2f2f2f] hover:text-[#ececec]",
+    navActive: "bg-[#2f2f2f] text-[#ececec] border-l-[#F0EDE6]",
+    input: "bg-[#2b2b2b] border-white/[0.14] text-[#ececec] placeholder:text-[#9b9b9b] focus:border-white/[0.22]",
     logoInvert: "brightness-0 invert opacity-95",
-    scrollbar: "[&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[#3A3A36]",
+    scrollbar: "[&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[#5c5c5c]",
     danger: "text-[#E8704F]",
     warn: "text-[#E3A82E]",
     ok: "text-[#5CCD8F]",
@@ -69,7 +82,11 @@ export const CONSOLE_THEMES: Record<ConsoleThemeMode, ConsoleTheme> = {
   },
   light: {
     workspaceSurface: "bg-white",
-    railSurface: "bg-zinc-50",
+    railSurface: "bg-[#f9f9f9]",
+    toolsPanel: "bg-[#f4f4f5]",
+    toolsPanelBorder: "border-l border-zinc-200/90",
+    toolsCard: "bg-white",
+    composerInset: "bg-white",
     /** Aligned with Settings: white shell, zinc borders */
     shell: "bg-white text-zinc-900",
     topbar: "bg-white",

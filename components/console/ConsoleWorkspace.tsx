@@ -24,6 +24,8 @@ import {
 } from "@/components/console/console-theme";
 import { COMMUNICATION_SAVED_EVENT } from "@/lib/console-events";
 import { WorkspaceModeNav } from "@/components/platform/WorkspaceModeNav";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 const HISTORY_SIDEBAR_KEY = "standex-console-history-sidebar";
 
@@ -368,38 +370,28 @@ export function ConsoleWorkspace() {
 
       <header
         className={cn(
-          "relative z-10 flex h-12 shrink-0 items-center gap-3 px-4 backdrop-blur-md lg:gap-4 lg:px-6",
+          "relative z-10 flex h-12 min-h-12 shrink-0 items-center gap-2 px-3 backdrop-blur-md sm:gap-3 sm:px-4 lg:gap-4 lg:px-6",
           t.workspaceSurface,
         )}
       >
-        <WorkspaceModeNav active="console" consoleTheme={t} consoleThemeMode={themeMode} />
+        <WorkspaceModeNav active="console" consoleTheme={t} consoleThemeMode={themeMode} className="min-w-0" />
 
-        <div className="ml-auto flex shrink-0 items-center gap-2">
-          <Link
-            href="/r/me"
-            className={cn(
-              "flex h-8 w-8 items-center justify-center rounded-lg border transition-colors",
-              t.borderSub,
-              t.muted,
-              t.navHover,
-            )}
-            title="My Profile"
-          >
-            <User className="h-4 w-4" strokeWidth={1.8} />
-          </Link>
-          <button
+        <div className="ml-auto flex shrink-0 items-center gap-1 sm:gap-1.5">
+          <Button variant="outline" size="icon" className={cn("h-8 w-8 shadow-none", t.borderSub, t.text)} asChild>
+            <Link href="/r/me" title="My Profile">
+              <User className="h-4 w-4" strokeWidth={1.8} />
+            </Link>
+          </Button>
+          <Button
             type="button"
+            variant="outline"
+            size="icon"
             onClick={() => persistTheme(themeMode === "dark" ? "light" : "dark")}
-            className={cn(
-              "flex h-8 w-8 items-center justify-center rounded-lg border transition-colors",
-              t.borderSub,
-              t.muted,
-              t.navHover,
-            )}
+            className={cn("h-8 w-8 shadow-none", t.borderSub, t.text)}
             title={themeMode === "dark" ? "Light background" : "Dark background"}
           >
             {themeMode === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-          </button>
+          </Button>
         </div>
       </header>
 
@@ -416,36 +408,31 @@ export function ConsoleWorkspace() {
           >
             <div className="shrink-0 px-3 py-2.5">
               <div className="mb-2 flex items-center justify-between gap-2">
-                <h2 className={cn("text-[13px] font-semibold tracking-tight", t.text)}>History</h2>
+                <h2 className={cn("text-[13px] font-semibold tracking-tight", t.text)}>Learning history</h2>
                 <div className="flex items-center gap-1">
-                  <button
+                  <Button
                     type="button"
+                    variant="ghost"
+                    size="icon"
                     onClick={() => setHistoryOpen(false)}
-                    className={cn(
-                      "flex h-8 w-8 items-center justify-center rounded-lg transition-colors",
-                      t.muted,
-                      t.navHover,
-                    )}
+                    className={cn("h-8 w-8", t.muted, t.navHover)}
                     title="Collapse history"
                     aria-label="Collapse history"
                   >
                     <ChevronLeft className="h-4 w-4" strokeWidth={2} />
-                  </button>
-                  <Link
-                    href="/console?tab=lab"
-                    className={cn(
-                      "inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-[12px] font-semibold transition-colors",
-                      t.muted,
-                      t.navHover,
-                    )}
-                    onClick={() => {
-                      setSelectedHistoryId(null);
-                      setHistoryQuery("");
-                    }}
-                  >
-                    <Plus className="h-3.5 w-3.5" strokeWidth={2.5} />
-                    New
-                  </Link>
+                  </Button>
+                  <Button variant="outline" size="sm" className={cn("h-8 gap-1 px-2.5 text-xs shadow-none", t.borderSub, t.text)} asChild>
+                    <Link
+                      href="/console?tab=lab"
+                      onClick={() => {
+                        setSelectedHistoryId(null);
+                        setHistoryQuery("");
+                      }}
+                    >
+                      <Plus className="h-3.5 w-3.5" strokeWidth={2.5} />
+                      New
+                    </Link>
+                  </Button>
                 </div>
               </div>
               <div className="relative">
@@ -453,16 +440,13 @@ export function ConsoleWorkspace() {
                   className={cn("pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2", t.muted2)}
                   strokeWidth={2}
                 />
-                <input
+                <Input
                   type="search"
                   value={historyQuery}
                   onChange={(e) => setHistoryQuery(e.target.value)}
-                  placeholder="Search…"
-                  className={cn(
-                    "w-full rounded-lg border py-2 pl-8 pr-2 text-[13px] outline-none placeholder:opacity-60",
-                    t.input,
-                  )}
-                  aria-label="Search analysis history"
+                  placeholder="Search sessions…"
+                  className={cn("h-9 w-full rounded-lg py-2 pl-8 pr-2 text-[13px] placeholder:opacity-60", t.input)}
+                  aria-label="Search learning history"
                 />
               </div>
             </div>
@@ -483,7 +467,7 @@ export function ConsoleWorkspace() {
                 <div className={cn("rounded-lg border border-dashed px-3 py-8 text-center", t.borderSub)}>
                   <p className={cn("text-[12px] leading-relaxed", t.muted)}>
                     {drafts.length === 0
-                      ? "No runs yet. Run Communication or all analyses in Console."
+                      ? "No sessions yet. Run a learning check to see feedback here."
                       : "No matches. Try another search."}
                   </p>
                 </div>
@@ -499,12 +483,12 @@ export function ConsoleWorkspace() {
             {selectedHistoryId && (
             <div
               className={cn(
-                "shrink-0 px-3 py-3",
-                themeMode === "dark" ? "bg-[#121211]" : "bg-zinc-100/90",
+                "shrink-0 border-t px-3 py-3",
+                themeMode === "dark" ? "border-white/[0.06] bg-[#141414]" : "border-zinc-200/80 bg-zinc-100/90",
               )}
             >
               <div className="mb-2 flex items-start justify-between gap-2">
-                <p className={cn("text-[11px] font-semibold uppercase tracking-wide", t.muted2)}>Run summary</p>
+                <p className={cn("text-[11px] font-semibold uppercase tracking-wide", t.muted2)}>Session summary</p>
                 <button
                   type="button"
                   className={cn("rounded p-0.5", t.muted, t.navHover)}
@@ -540,26 +524,24 @@ export function ConsoleWorkspace() {
                   </p>
                 </div>
               ) : (
-                <p className={cn("text-[12px]", t.danger)}>Could not load this run.</p>
+                <p className={cn("text-[12px]", t.danger)}>Could not load this session.</p>
               )}
             </div>
           )}
         </aside>
         ) : (
           <div className={cn("flex w-full shrink-0 flex-col items-center py-2 lg:w-11 lg:py-3", t.railSurface)}>
-            <button
+            <Button
               type="button"
+              variant="ghost"
+              size="icon"
               onClick={() => setHistoryOpen(true)}
-              className={cn(
-                "flex h-9 w-9 items-center justify-center rounded-lg transition-colors",
-                t.muted,
-                t.navHover,
-              )}
+              className={cn("h-9 w-9", t.muted, t.navHover)}
               title="Show history"
               aria-label="Show history"
             >
               <ChevronRight className="h-4 w-4" strokeWidth={2} />
-            </button>
+            </Button>
             <span className="mt-2 hidden lg:block" aria-hidden>
               <MessageSquare className={cn("h-4 w-4 opacity-40", t.muted2)} strokeWidth={1.5} />
             </span>

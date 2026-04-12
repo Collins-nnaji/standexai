@@ -12,13 +12,13 @@ import { cn } from "@/lib/utils";
 
 function Logo() {
   return (
-    <div className="flex items-center">
-      <Image 
-        src="/standexailogo.png" 
-        alt="StandexAI Logo" 
-        width={140} 
-        height={40} 
-        className="h-8 w-auto object-contain"
+    <div className="flex min-w-0 max-w-[108px] items-center sm:max-w-none">
+      <Image
+        src="/standexailogo.png"
+        alt="StandexAI Logo"
+        width={140}
+        height={40}
+        className="h-7 w-auto max-h-8 object-contain sm:h-8"
         priority
         unoptimized
       />
@@ -63,10 +63,10 @@ export function TopNav({ user }: TopNavProps) {
 
   return (
     <header className="sticky top-0 z-[100] w-full border-b border-zinc-200/50 bg-white/70 backdrop-blur-2xl shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
-      <div className="mx-auto flex h-16 max-w-7xl items-center px-4 sm:px-6">
+      <div className="mx-auto flex h-16 min-h-16 max-w-7xl items-center gap-2 px-3 sm:gap-3 sm:px-6">
         {/* Left: Logo */}
-        <div className="flex flex-1 items-center">
-          <Link href="/" className="flex items-center gap-2">
+        <div className="flex min-w-0 flex-1 items-center">
+          <Link href="/" className="flex min-w-0 items-center gap-2">
             <Logo />
           </Link>
         </div>
@@ -83,23 +83,15 @@ export function TopNav({ user }: TopNavProps) {
             Learn
           </Link>
 
-          {/* Opportunities Dropdown */}
-          <div className="relative group">
-            <button className="flex items-center gap-1 rounded-xl px-4 py-2 text-sm font-black text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 transition-all duration-300">
-              Opportunities
-              <ChevronDown className="h-3.5 w-3.5 opacity-50 transition-transform group-hover:rotate-180" />
-            </button>
-            <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-              <div className="w-56 rounded-2xl border border-zinc-200 bg-white p-2 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] flex flex-col gap-1">
-                <Link href="/projects" className="flex items-center justify-between rounded-xl px-3 py-2.5 text-sm font-bold text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-all">
-                  Open Projects
-                </Link>
-                <Link href="/jobs" className="flex items-center justify-between rounded-xl px-3 py-2.5 text-sm font-bold text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-all">
-                  Jobs
-                </Link>
-              </div>
-            </div>
-          </div>
+          <Link
+            href="/projects"
+            className={cn(
+              "rounded-xl px-4 py-2 text-sm font-black transition-all duration-300",
+              pathname.startsWith("/projects") ? "bg-[#7C5CFC]/10 text-[#7C5CFC]" : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
+            )}
+          >
+            Projects
+          </Link>
 
           {/* Workspace Dropdown */}
           <div className="relative group">
@@ -243,15 +235,17 @@ export function TopNav({ user }: TopNavProps) {
                 <div className="my-4 h-px w-full bg-zinc-100" />
 
                 <div className="mb-3">
-                  <p className="px-3 text-[10px] font-black uppercase tracking-widest text-zinc-400">Opportunities</p>
+                  <p className="px-3 text-[10px] font-black uppercase tracking-widest text-zinc-400">Navigation</p>
                 </div>
-                <Link href="/projects" className="flex items-center justify-between rounded-xl px-4 py-2.5 text-sm font-bold text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 transition-all">
+                <Link
+                  href="/projects"
+                  className={cn(
+                    "flex items-center justify-between rounded-xl px-4 py-3 text-sm font-bold transition-all",
+                    pathname.startsWith("/projects") ? "bg-[#7C5CFC]/10 text-[#7C5CFC]" : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
+                  )}
+                >
                   Open Projects
-                  <ChevronRight className="h-4 w-4 opacity-50" />
-                </Link>
-                <Link href="/jobs" className="flex items-center justify-between rounded-xl px-4 py-2.5 text-sm font-bold text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 transition-all">
-                  Jobs
-                  <ChevronRight className="h-4 w-4 opacity-50" />
+                  <ChevronRight className={cn("h-4 w-4 opacity-50", pathname.startsWith("/projects") && "text-[#7C5CFC]")} />
                 </Link>
 
                 <div className="my-4 h-px w-full bg-zinc-100" />
