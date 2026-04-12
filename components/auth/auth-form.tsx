@@ -116,14 +116,17 @@ export function AuthForm({ mode: initialMode }: AuthFormProps) {
     <main className="flex min-h-[100dvh] items-center justify-center bg-zinc-50 px-4 py-10 pb-[max(2.5rem,env(safe-area-inset-bottom,0px))] sm:px-6 sm:py-16">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
-          <Image
-            src="/standexailogo.png"
-            alt="StandexAI"
-            width={140}
-            height={40}
-            className="h-8 w-auto object-contain mx-auto mb-4"
-            priority
-          />
+          <div className="mx-auto mb-4 flex h-10 w-full max-w-[180px] items-center justify-center sm:h-11 sm:max-w-[200px]">
+            <Image
+              src="/standexailogo.png"
+              alt="StandexAI"
+              width={180}
+              height={48}
+              className="h-full w-auto max-h-11 object-contain object-center"
+              priority
+              unoptimized
+            />
+          </div>
           <div className="flex items-center justify-center gap-1.5 text-xs text-zinc-400">
             <Sparkles className="h-3 w-3 text-indigo-500" />
             <span>Professional Network for AI Researchers</span>
