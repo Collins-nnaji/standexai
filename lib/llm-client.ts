@@ -11,6 +11,10 @@
  * - Same resource as text: omit SPEECH_ENDPOINT; uses text endpoint + key.
  * - Separate voice resource: set AZURE_OPENAI_SPEECH_ENDPOINT + AZURE_OPENAI_SPEECH_API_KEY (both required;
  *   the text API key is never sent to the voice host).
+ *
+ * TTS (text → audio):
+ * - AZURE_OPENAI_DEPLOYMENT_TTS (e.g. tts-1)
+ *
  * - Optional: AZURE_OPENAI_SPEECH_API_VERSION (defaults to AZURE_OPENAI_API_VERSION)
  */
 
@@ -47,6 +51,11 @@ export function getAudioDeploymentName(): string | undefined {
     trimEnv(process.env.AZURE_OPENAI_DEPLOYMENT_SPEECH) ??
     trimEnv(process.env.AZURE_OPENAI_DEPLOYMENT_AUDIO)
   );
+}
+
+/** TTS (tts-1) deployment for text-to-speech. */
+export function getTtsDeploymentName(): string | undefined {
+  return trimEnv(process.env.AZURE_OPENAI_DEPLOYMENT_TTS) ?? "tts-1";
 }
 
 function hasDedicatedSpeechResource(): boolean {
@@ -137,6 +146,31 @@ export function transcriptionMissingConfigMessage(): string {
   return (
     "Speech-to-text is not configured. Set AZURE_OPENAI_DEPLOYMENT_SPEECH (or AZURE_OPENAI_DEPLOYMENT_AUDIO). " +
     "For a separate voice Azure resource, set AZURE_OPENAI_SPEECH_ENDPOINT and AZURE_OPENAI_SPEECH_API_KEY together."
+  );
+}
+
+/**
+ * POST URL for Azure OpenAI text-to-speech (TTS).
+ */
+export function getAzureAudioSpeechUrl(): string | null {
+  const base = transcriptionEndpoint();
+  const key = transcriptionApiKey();
+  const deployment = getTtsDeploymentName();
+  if (!base || !key || !deployment) return null;
+  const v = encodeURIComponent(transcriptionApiVersion());
+  const dep = encodeURIComponent(deployment);
+  return `${base}/openai/deployments/${dep}/audio/speech?api-version=${v}`;
+}
+
+/** True when Azure TTS is available. */
+export function isTtsConfigured(): boolean {
+  return getAzureAudioSpeechUrl() !== null;
+}
+
+export function ttsMissingConfigMessage(): string {
+  return (
+    "Text-to-speech is not configured. Set AZURE_OPENAI_DEPLOYMENT_TTS (e.g. tts-1). " +
+    "Uses the same resource/key as transcriptions if configured, otherwise falls back to chat config."
   );
 }
 

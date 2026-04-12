@@ -306,12 +306,18 @@ export default function LearnPage() {
 
   const w = weeks.find(wk => wk.week === activeWeek) || weeks[0];
 
+  const stats = [
+    { label: "Duration", value: "6 Weeks", id: "duration" },
+    { label: "Next Cohort", value: "May 5", id: "cohort" },
+    { label: "Sessions", value: "2h 30m / session", id: "sessions" },
+  ];
+
   return (
-    <div className="min-h-screen bg-white selection:bg-[#7C5CFC]/15 font-sans">
+    <div className="min-h-screen bg-white selection:bg-[#7C5CFC]/15 font-sans pb-20">
       <TopNav user={session?.user} />
 
-      {/* ── TOP HERO (Landing Sync Theme) ── */}
-      <header className="relative bg-white border-b border-zinc-100 px-6 py-4 lg:py-6 overflow-hidden antialiased">
+      {/* ── UNIFIED CURRICULUM & SIDEBAR LAYOUT ── */}
+      <div className="relative overflow-hidden pt-6 lg:pt-12">
         <AIBackground />
         
         {/* Subtle decorative mesh overlay */}
@@ -320,220 +326,178 @@ export default function LearnPage() {
         {/* Radial glow */}
         <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[800px] h-[600px] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(124,92,252,0.08)_0%,transparent_65%)] pointer-events-none" />
 
-        <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-4 lg:gap-8 relative z-10">
-          
-          {/* Left Column: Text & Stats */}
-          <div className="flex-1 flex flex-col justify-center gap-3">
-            <div className="flex items-center gap-2">
-              <div className="h-1.5 w-1.5 rounded-full bg-[#7C5CFC] animate-pulse" />
-              <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#7C5CFC]">
-                Applied Cohort · Q2 Intake
-              </span>
-            </div>
-
-            <div>
-              <h1 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter leading-[0.85] text-transparent bg-clip-text bg-[linear-gradient(to_right,#7C5CFC,#000000)] uppercase italic">
-                BECOME AN <br/> APPLIED AI ENGINEER.
-              </h1>
-            </div>
-            {/* Stats Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-6">
-              {[
-                { label: "Duration", value: "6 Weeks" },
-                { label: "Next Cohort", value: "May 5" },
-                { label: "Sessions", value: "2h 30m / session" },
-              ].map(s => (
-                <div key={s.label} className="border-r border-zinc-100 last:border-0 pr-4">
-                  <p className="text-xs font-black text-zinc-950 uppercase tracking-tight">{s.value}</p>
-                  <p className="text-[8px] font-bold uppercase tracking-widest text-[#7C5CFC] mt-0.5">{s.label}</p>
-                </div>
-              ))}
-            </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+          <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-start">
             
-            {/* After graduation Inline */}
-            <div className="flex items-center gap-2 mt-4 text-[9px] font-black text-zinc-400 uppercase tracking-widest">
-               <Rocket className="h-3.5 w-3.5 text-[#7C5CFC]" />
-               Top graduates invited to Open Projects
-            </div>
-          </div>
+            {/* LEFT COLUMN: CURRICULUM (START THE PAGE) */}
+            <div className="flex-1 w-full flex flex-col pt-4">
+              <div className="mb-10 flex flex-col items-start">
+                <div className="flex items-center gap-2 mb-4 bg-violet-50 px-3 py-1 rounded-full border border-violet-100">
+                  <div className="h-1.5 w-1.5 rounded-full bg-[#7C5CFC] animate-pulse" />
+                  <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#7C5CFC]">
+                    Applied AI Engineering Curriculum
+                  </span>
+                </div>
+                
+                {/* BIGGER TABS */}
+                <div className="flex flex-wrap gap-2 lg:gap-3 mb-10 w-full">
+                  {weeks.map((weekData) => (
+                    <button
+                      key={weekData.week}
+                      onClick={() => setActiveWeek(weekData.week)}
+                      className={`px-8 py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.15em] whitespace-nowrap transition-all border-2 flex-1 md:flex-initial text-center ${
+                        activeWeek === weekData.week
+                          ? "bg-[#7C5CFC] text-white border-[#7C5CFC] shadow-[0_12px_24px_-8px_rgba(124,92,252,0.5)] scale-[1.02]"
+                          : "bg-white text-zinc-400 border-zinc-100 hover:border-zinc-200 hover:text-zinc-600"
+                      }`}
+                    >
+                      Week 0{weekData.week}
+                    </button>
+                  ))}
+                </div>
 
-          {/* Right Column: CTAs & Banner */}
-          <div className="lg:w-[360px] shrink-0 flex flex-col gap-4">
-            <MagneticLink href="https://buy.stripe.com/your-payment-link" className="group relative w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#7C5CFC] to-[#A892FF] px-8 py-4 text-[13px] font-black uppercase tracking-widest text-white shadow-[0_0_40px_-10px_rgba(124,92,252,0.8)] hover:shadow-[0_0_60px_-15px_rgba(124,92,252,1)] transition-all active:scale-95">
-               <GraduationCap className="h-5 w-5" /> Enroll Now <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-            </MagneticLink>
-
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ 
-                type: "spring",
-                stiffness: 260,
-                damping: 20,
-                delay: 0.6 
-              }}
-              className="relative group"
-            >
-              <motion.div
-                animate={{ 
-                  scale: [1, 1.03, 1],
-                }}
-                transition={{ 
-                  duration: 2, 
-                  repeat: Infinity, 
-                  ease: "easeInOut" 
-                }}
-                className="flex flex-col bg-zinc-950 px-6 py-5 rounded-[24px] border-2 border-[#7C5CFC]/30 shadow-[0_20px_50px_rgba(124,92,252,0.2)]"
-              >
-                 <div className="flex items-center gap-3 mb-2">
-                   <div className="h-2 w-2 rounded-full bg-[#7C5CFC] animate-ping" />
-                   <span className="text-[9px] font-black uppercase tracking-[0.3em] text-[#7C5CFC]">
-                     Next Pilot Cohort
-                   </span>
-                 </div>
-                 
-                 <h3 className="text-2xl md:text-3xl font-black tracking-tighter text-white uppercase italic leading-none">
-                   MAY 5TH — $1800
-                 </h3>
-                 
-                 <div className="flex items-center gap-2 mt-4 pt-4 border-t border-white/10">
-                   <Sparkles className="h-3.5 w-3.5 text-[#7C5CFC]" />
-                   <span className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-500">
-                     Enrollment Closes Soon
-                   </span>
-                 </div>
-
-                 {/* Decorative elements */}
-                 <div className="absolute -top-2 -right-1 bg-[#7C5CFC] text-white text-[8px] font-black px-2 py-0.5 rounded-full rotate-12 shadow-lg uppercase">
-                   Pilot Price
-                 </div>
-              </motion.div>
-            </motion.div>
-          </div>
-
-        </div>
-      </header>
-
-      {/* ── CURRICULUM MAIN (Sync Theme) ── */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-8 py-8 lg:py-12 relative bg-white">
-        {/* Section label + week tabs */}
-        <div className="mb-8 flex flex-col items-center">
-          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#7C5CFC] mb-5">
-            The Curriculum
-          </p>
-          <div className="flex gap-2 lg:gap-3 overflow-x-auto pb-4 max-w-full px-4 no-scrollbar">
-            {weeks.map((weekData) => (
-              <button
-                key={weekData.week}
-                onClick={() => setActiveWeek(weekData.week)}
-                className={`px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all border-2 ${
-                  activeWeek === weekData.week
-                    ? "bg-[#7C5CFC] text-white border-[#7C5CFC] shadow-[0_10px_20px_-5px_rgba(124,92,252,0.4)]"
-                    : "bg-white text-zinc-400 border-zinc-100 hover:border-zinc-200 hover:text-zinc-600"
-                }`}
-              >
-                Week 0{weekData.week}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeWeek}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <div className="flex flex-col lg:flex-row gap-12 lg:gap-16">
-              
-              {/* LEFT COLUMN: Core Content */}
-              <div className="flex-1">
-                <div className="mb-10">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="h-10 w-10 rounded-2xl bg-[#7C5CFC]/10 flex items-center justify-center border border-[#7C5CFC]/20">
-                      <Rocket className="h-5 w-5 text-[#7C5CFC]" />
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeWeek}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 10 }}
+                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                    className="w-full"
+                  >
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="h-12 w-12 rounded-2xl bg-[#7C5CFC]/10 flex items-center justify-center border border-[#7C5CFC]/20">
+                        <Rocket className="h-6 w-6 text-[#7C5CFC]" />
+                      </div>
+                      <p className="text-sm font-black uppercase tracking-[0.25em] text-[#7C5CFC]">{w.subtitle}</p>
                     </div>
-                    <p className="text-xs font-black uppercase tracking-[0.25em] text-[#7C5CFC]">{w.subtitle}</p>
-                  </div>
-                  <h2 className="text-3xl md:text-5xl lg:text-6xl font-black text-zinc-950 tracking-tighter leading-[0.95] mb-6 uppercase italic">
-                    {w.title}
-                  </h2>
-                  <p className="text-base md:text-lg text-zinc-500 font-medium leading-relaxed max-w-3xl">
-                    {w.description}
-                  </p>
-                  {/* FLATTENED SYLLABUS */}
-                  <div className="w-full mt-10">
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 border-b border-zinc-100 pb-4">
-                      <p className="text-[10px] font-black uppercase tracking-[0.25em] text-zinc-400">
-                        Syllabus Breakdown — {w.fullCurriculum.length} Sessions
-                      </p>
-                      <div className="flex items-center gap-2 bg-[#7C5CFC]/8 text-[#7C5CFC] px-3 py-1 rounded-full border border-[#7C5CFC]/20">
-                        <span className="text-[9px] font-black uppercase tracking-widest">2.5 Hour Intensive Sessions</span>
+                    
+                    <h2 className="text-4xl md:text-6xl lg:text-7xl font-black text-zinc-950 tracking-tighter leading-[0.9] mb-8 uppercase italic">
+                      {w.title}
+                    </h2>
+                    
+                    <p className="text-lg md:text-xl text-zinc-500 font-medium leading-relaxed max-w-4xl mb-12">
+                      {w.description}
+                    </p>
+
+                    {/* HORIZONTAL TOOL STACK */}
+                    <div className="mb-12">
+                      <p className="text-[10px] font-black uppercase tracking-[0.25em] text-[#7C5CFC] mb-6">Master these Tools in Week 0{w.week}</p>
+                      <div className="flex flex-wrap gap-8 lg:gap-12">
+                        {w.tools.map((tool, ti) => (
+                           <div key={ti} className="flex flex-col items-center gap-2 group">
+                              <div className="h-14 w-14 rounded-2xl bg-white border border-zinc-100 shadow-sm flex items-center justify-center p-3 group-hover:scale-110 group-hover:border-violet-200 transition-all">
+                                <Image src={tool.src} alt={tool.name} width={32} height={32} className="object-contain" unoptimized />
+                              </div>
+                              <span className="text-[9px] font-black text-zinc-400 group-hover:text-zinc-950 transition-colors uppercase tracking-widest">{tool.name}</span>
+                           </div>
+                        ))}
                       </div>
                     </div>
-                    <div className="flex flex-col gap-12">
-                      {w.fullCurriculum.map((group, gi) => (
-                        <div key={gi} className="group">
-                          <div className="flex items-start md:items-center gap-4 mb-6">
-                             <div className="h-9 w-9 rounded-xl flex items-center justify-center text-sm font-black text-white shrink-0 bg-[#7C5CFC] shadow-[0_4px_10px_rgba(124,92,252,0.3)]">{gi + 1}</div>
-                             <h3 className="text-xl md:text-2xl font-black text-zinc-950 tracking-tight">{group.session}</h3>
-                          </div>
-                          <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4 pl-12 border-l-2 border-zinc-50 ml-4.5 py-2">
-                             {group.topics.map((topic, ti) => (
-                                <li key={ti} className="flex items-start gap-3 text-sm md:text-base font-medium text-zinc-600 leading-relaxed hover:text-[#7C5CFC] transition-colors">
-                                  <span className="mt-2.5 h-1.5 w-1.5 rounded-full shrink-0 bg-[#7C5CFC]/40" />
-                                  {topic}
-                                </li>
-                             ))}
-                          </ul>
+
+                    {/* SYLLABUS BREAKDOWN */}
+                    <div className="w-full border-t border-zinc-100 pt-10">
+                      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
+                        <p className="text-[11px] font-black uppercase tracking-[0.25em] text-zinc-400">
+                          Detailed Syllabus Breakdown — Week {w.week}
+                        </p>
+                        <div className="flex items-center gap-2 bg-[#7C5CFC]/8 text-[#7C5CFC] px-4 py-1.5 rounded-full border border-[#7C5CFC]/20">
+                          <span className="text-[10px] font-black uppercase tracking-widest">Two 2.5 Hour Sessions</span>
                         </div>
-                      ))}
+                      </div>
+
+                      <div className="grid grid-cols-1 gap-12 lg:gap-16">
+                        {w.fullCurriculum.map((group, gi) => (
+                          <div key={gi} className="group">
+                            <div className="flex items-start md:items-center gap-5 mb-8">
+                               <div className="h-10 w-10 rounded-xl flex items-center justify-center text-md font-black text-white shrink-0 bg-[#7C5CFC] shadow-[0_6px_15px_rgba(124,92,252,0.3)]">{gi + 1}</div>
+                               <h3 className="text-2xl md:text-3xl font-black text-zinc-950 tracking-tight">{group.session}</h3>
+                            </div>
+                            <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-5 pl-15 border-l-2 border-zinc-100 ml-5 py-2">
+                               {group.topics.map((topic, ti) => (
+                                  <li key={ti} className="flex items-start gap-4 text-base font-semibold text-zinc-600 leading-relaxed hover:text-[#7C5CFC] transition-colors">
+                                    <div className="mt-2.5 h-1.5 w-1.5 rounded-full shrink-0 bg-[#7C5CFC]/40" />
+                                    {topic}
+                                  </li>
+                               ))}
+                            </ul>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-
-                </div>
+                  </motion.div>
+                </AnimatePresence>
               </div>
+            </div>
 
-              {/* RIGHT COLUMN: Tool Stack (Landing Card Style) */}
-              <div className="lg:w-[320px] xl:w-[360px] shrink-0">
-                <div className="sticky top-24 rounded-[28px] p-8 xl:p-10 flex flex-col gap-8 bg-[#13062C] border border-[#7C5CFC]/20 shadow-[0_24px_64px_rgba(124,92,252,0.25)] relative overflow-hidden group">
-                  {/* Gloss Effect */}
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
-                    <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(124,92,252,0.1)_50%,transparent_75%)] bg-[length:200%_200%] animate-shine" />
-                  </div>
-                  
-                  <p className="text-[10px] font-black uppercase tracking-[0.25em] text-[#A892FF] relative z-10">Tool Stack</p>
-                  <div className="grid grid-cols-2 gap-6 relative z-10">
-                    {w.tools.map((tool, ti) => (
-                      <TiltCard key={`${tool.name}-${ti}`} tool={tool} />
-                    ))}
-                  </div>
-
-                  <div className="mt-8 pt-8 border-t border-white/10 relative z-10">
-                    <p className="text-[9px] font-black uppercase tracking-widest text-zinc-400 mb-2">Build Duration</p>
-                    <p className="text-sm font-black text-white">6 Days / Module</p>
+            {/* RIGHT COLUMN: SIDEBAR (PRICE CARD ONLY) */}
+            <div className="lg:w-[400px] shrink-0 sticky top-12 flex flex-col gap-6 w-full lg:mt-4">
+              
+              {/* PRICE & STATS CARD (COMPACT GREY THEME) */}
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.2 }}
+                className="flex flex-col bg-zinc-50 rounded-[28px] border border-zinc-200 shadow-[0_12px_32px_-8px_rgba(0,0,0,0.05)] overflow-hidden p-6 group"
+              >
+                <div className="flex items-center justify-between mb-5">
+                  <div className="flex items-center gap-2.5">
+                    <div className="h-2 w-2 rounded-full bg-[#7C5CFC] animate-pulse" />
+                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#7C5CFC]">
+                      4th Cohort — Active
+                    </span>
                   </div>
                 </div>
-              </div>
+
+                <div className="flex flex-col gap-0.5 mb-6">
+                  <span className="text-[9px] font-black text-zinc-400 uppercase tracking-widest">Enrollment Fee</span>
+                  <div className="flex items-baseline gap-2">
+                    <h3 className="text-4xl font-black tracking-tighter text-zinc-900 uppercase italic leading-none">
+                      $1800
+                    </h3>
+                    <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest line-through">$3500</span>
+                  </div>
+                </div>
+
+                {/* COMPACT PRICE CARD STATS */}
+                <div className="grid grid-cols-1 gap-1 mb-6">
+                  {stats.map(s => (
+                    <div key={s.id} className="flex items-center justify-between py-2.5 border-b border-zinc-100 last:border-0 hover:bg-white/60 transition-colors px-2 rounded-lg">
+                      <span className="text-[9px] font-black uppercase tracking-[0.15em] text-[#7C5CFC]/70">{s.label}</span>
+                      <span className="text-[11px] font-black text-zinc-900 uppercase tracking-tight">{s.value}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <MagneticLink href="https://buy.stripe.com/your-payment-link" className="group relative w-full inline-flex items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-[#7C5CFC] to-[#A892FF] px-6 py-4 text-[12px] font-black uppercase tracking-[0.15em] text-white shadow-[0_8px_20px_-4px_rgba(124,92,252,0.4)] hover:shadow-[0_12px_28px_-6px_rgba(124,92,252,0.6)] transition-all active:scale-95 mb-3">
+                   <GraduationCap className="h-5 w-5" /> Enroll Now <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </MagneticLink>
+
+                <div className="flex items-center justify-center gap-2 pt-3 border-t border-zinc-100">
+                  <Sparkles className="h-3.5 w-3.5 text-[#7C5CFC]" />
+                  <span className="text-[8px] font-black uppercase tracking-[0.15em] text-zinc-400">
+                    Spots strictly limited
+                  </span>
+                </div>
+              </motion.div>
 
             </div>
-          </motion.div>
-        </AnimatePresence>
-      </main>
 
-      {/* ── FOOTER (Dev Links) ── */}
-      <footer className="max-w-7xl mx-auto px-6 py-12 border-t border-zinc-100 flex items-center justify-between">
+          </div>
+        </div>
+      </div>
+
+      {/* ── FOOTER ── */}
+      <footer className="max-w-7xl mx-auto px-6 py-16 mt-12 border-t border-zinc-100 flex items-center justify-between relative z-10">
         <div className="flex items-center gap-2">
           <div className="h-2 w-2 rounded-full bg-zinc-200" />
-          <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">© 2026 StandexAI</p>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">© 2026 StandexAI Applied Engineering</p>
         </div>
         <Link 
           href="/presentation/ai" 
-          className="text-[10px] font-black uppercase tracking-widest text-zinc-400 hover:text-[#7C5CFC] transition-colors border border-transparent hover:border-zinc-100 rounded-lg px-3 py-1.5 bg-zinc-50/50"
+          className="text-[10px] font-black uppercase tracking-widest text-zinc-400 hover:text-[#7C5CFC] transition-colors border border-transparent hover:border-zinc-100 rounded-lg px-4 py-2 bg-zinc-50/50"
         >
-          Dev: Course Deck
+          Dev: Strategy Deck
         </Link>
       </footer>
     </div>

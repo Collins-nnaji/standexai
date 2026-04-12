@@ -9,6 +9,7 @@ import {
   ShieldAlert, Brain, Shield, Copy, ScanSearch, Bot, User, Wand2,
   Zap, Minus, RefreshCw, Plus, Trash2, X, BookOpen, LayoutList, Users, BadgeAlert,
   Play, Briefcase, Minimize2, HeartHandshake, ClipboardPaste, Download, FileType, Upload, Globe,
+  Volume2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -19,6 +20,7 @@ import { dispatchCommunicationSaved } from "@/lib/console-events";
 import { stripHtmlToText } from "@/lib/strip-html";
 import { parseUploadedFile } from "@/lib/parse-uploaded-file";
 import type { AnalyzeType, RewriteMode } from "@/lib/communication-llm";
+import { TTSTool } from "@/components/workspace/TTSTool";
 
 type AssistGenerateOutput = { title: string; html: string; notes: string };
 
@@ -511,6 +513,7 @@ function WritingLabInner({
   const [uploadError, setUploadError] = useState("");
   /** Export/copy allowed only after a successful Transform or inserting AI-generated text. */
   const [exportUnlocked, setExportUnlocked] = useState(false);
+  const [ttsOpen, setTtsOpen] = useState(false);
 
   const hasAnyResult = Boolean(
     commResult ||
@@ -1189,6 +1192,21 @@ function WritingLabInner({
       </button>
       <button
         type="button"
+        onClick={() => setTtsOpen(true)}
+        disabled={!canUseExportActions}
+        title={canUseExportActions ? "Speech Synthesis" : "Run Transform or Generate with AI first"}
+        className={cn(
+          "pointer-events-auto rounded-md p-1.5 transition",
+          t.text,
+          t.navHover,
+          !canUseExportActions && "cursor-not-allowed opacity-35",
+        )}
+        aria-label="Speech Synthesis"
+      >
+        <Volume2 className="h-3.5 w-3.5" />
+      </button>
+      <button
+        type="button"
         onClick={downloadWorkspaceTxt}
         disabled={!canUseExportActions}
         title={canUseExportActions ? "Download .txt" : "Run Transform or Generate with AI first"}
@@ -1474,6 +1492,17 @@ function WritingLabInner({
                   )}
                 >
                   {exportToolbar}
+                  {ttsOpen && (
+                    <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/5 p-4 backdrop-blur-[2px] dark:bg-black/20 sm:p-8">
+                      <div className="w-full max-w-md">
+                        <TTSTool 
+                          text={getExportPlainText()} 
+                          themeMode={themeMode} 
+                          onClose={() => setTtsOpen(false)} 
+                        />
+                      </div>
+                    </div>
+                  )}
                   <textarea
                     value={text}
                     onChange={(e) => {

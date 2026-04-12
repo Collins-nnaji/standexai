@@ -4,169 +4,116 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { TrendingUp, Building2, ChevronRight, BrainCircuit } from "lucide-react";
-
-const toolLogos = [
-  { name: "Next.js", src: "/images/nextjslogo.png" },
-  { name: "OpenAI", src: "/images/openai logo.svg" },
-  { name: "Claude", src: "/images/claude logo.svg" },
-  { name: "Google", src: "/images/google logo.png" },
-  { name: "Vercel", src: "/images/vercel logo.svg" },
-  { name: "React", src: "/images/react logo.png" },
-  { name: "GitHub", src: "/images/github logo.png" },
-  { name: "Azure", src: "/images/azure logo.png" },
-  { name: "Stripe", src: "/images/stripe logo.png" },
-  { name: "Neon", src: "/images/neon logo.webp" },
-  { name: "Cursor", src: "/images/cursor logo.png" },
-];
+import { TrendingUp, Building2, ChevronRight, BrainCircuit, Terminal } from "lucide-react";
 
 export function LandingFeatures() {
+  const features = [
+    {
+      id: "assessment",
+      label: "AI Assessment",
+      icon: BrainCircuit,
+      title: "Test your knowledge.",
+      description: "Proven technical validation via continuous, production-grade assessment toolsets.",
+      color: "from-sky-400 to-blue-500",
+      link: "/assessment",
+      cta: "Take Assessment",
+    },
+    {
+      id: "projects",
+      label: "Open Projects",
+      icon: Building2,
+      title: "Work on real deals.",
+      description: "Unlock exclusive access to live industry briefs shipping for Google and Anthropic.",
+      color: "from-emerald-400 to-teal-500",
+      link: "/projects",
+      cta: "Browse Projects",
+    },
+    {
+      id: "console",
+      label: "Engineering Console",
+      icon: Terminal,
+      title: "Your private lab.",
+      description: "Access a dedicated cloud environment to build, test, and host your agents.",
+      color: "from-amber-400 to-orange-500",
+      link: "/learn",
+      cta: "Launch Console",
+    },
+  ];
+
   return (
-    <section className="relative w-full bg-white antialiased">
+    <section className="relative w-full antialiased py-16 lg:py-24 bg-zinc-50/50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        
+        {/* Section Header */}
+        <div className="flex flex-col items-center text-center mb-12 sm:mb-16">
+          <div className="inline-flex items-center gap-2 rounded-full border border-violet-100 bg-violet-50 px-3 py-1 mb-4">
+            <div className="h-1.5 w-1.5 rounded-full bg-violet-500 animate-pulse" />
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-violet-600">The Core Pillars</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-[-0.03em] text-zinc-900 leading-[1.1]">
+            Everything you need <br className="hidden sm:block" /> to build the future.
+          </h2>
+        </div>
 
-      {/* ── Thick partial purple divider ── */}
-      <div className="flex justify-center -mt-0.5" aria-hidden>
-        <div className="h-1.5 w-40 rounded-full bg-[#7C5CFC] shadow-[0_0_24px_6px_rgba(124,92,252,0.45)]" />
-      </div>
-
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-16 pb-20 flex flex-col gap-20">
-
-        {/* ── Tool logos marquee ── */}
-        <div className="flex flex-col items-center gap-6">
-          <p className="text-[11px] font-black uppercase tracking-[0.25em] text-zinc-400">
-            Tools you&apos;ll master
-          </p>
-
-          <div className="relative w-full overflow-hidden">
-            <style dangerouslySetInnerHTML={{ __html: `
-              @keyframes lf-marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-              .lf-marquee-track { animation: lf-marquee 28s linear infinite; }
-              .lf-marquee-track:hover { animation-play-state: paused; }
-            ` }} />
-            <div className="pointer-events-none absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-white to-transparent z-10" />
-            <div className="pointer-events-none absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-white to-transparent z-10" />
-
-            <div className="lf-marquee-track flex items-center gap-12 w-max">
-              {[...toolLogos, ...toolLogos].map((logo, i) => (
-                <div key={`${logo.name}-${i}`} className="flex flex-col items-center gap-2.5 shrink-0 group">
-                  <div className="h-12 w-12 relative transition-transform duration-300 group-hover:scale-110 drop-shadow-sm">
-                    <Image src={logo.src} alt={logo.name} fill className="object-contain" unoptimized />
+        {/* Unified Dashboard Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="group relative rounded-[32px] border border-zinc-200 bg-white shadow-[0_32px_80px_-20px_rgba(0,0,0,0.08)] overflow-hidden transition-all duration-700 hover:shadow-[0_48px_100px_-20px_rgba(0,0,0,0.12)] hover:border-zinc-300"
+        >
+          {/* Internal Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-zinc-100">
+            {features.map((f, i) => (
+              <motion.div
+                key={f.id}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 + i * 0.1 }}
+                className="relative flex flex-col p-8 lg:p-10 group/item hover:bg-zinc-50/50 transition-colors"
+              >
+                {/* Visual Accent */}
+                <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${f.color} opacity-0 group-hover/item:opacity-100 transition-opacity`} />
+                
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="h-10 w-10 rounded-xl bg-zinc-50 border border-zinc-100 flex items-center justify-center group-hover/item:scale-110 transition-transform">
+                    <f.icon className="h-5 w-5 text-zinc-900" />
                   </div>
-                  <span className="text-[10px] font-semibold text-zinc-500 group-hover:text-zinc-800 transition-colors tracking-wide">
-                    {logo.name}
+                  <span className="text-[10px] font-black uppercase tracking-[0.18em] text-zinc-400">
+                    {f.label}
                   </span>
                 </div>
-              ))}
-            </div>
+
+                <div className="flex-1 space-y-3">
+                  <h3 className="text-xl font-black tracking-tight text-zinc-950 leading-tight">
+                    {f.title}
+                  </h3>
+                  <p className="text-sm font-semibold text-zinc-500 leading-relaxed">
+                    {f.description}
+                  </p>
+                </div>
+
+                <Link
+                  href={f.link}
+                  className="mt-8 inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-zinc-900 group-hover/item:text-[#7C5CFC] transition-colors"
+                >
+                  {f.cta}
+                  <ChevronRight className="h-3.5 w-3.5 group-hover/item:translate-x-1 transition-transform" />
+                </Link>
+              </motion.div>
+            ))}
           </div>
-        </div>
 
-        {/* ── Three feature cards ── */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {/* Interactive Sheen */}
+          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none">
+            <div className="landing-gloss-sweep" />
+          </div>
+        </motion.div>
 
-          {/* Card 1 — Earning Potential */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4 }}
-            className="group relative flex flex-col rounded-2xl border border-zinc-200 bg-white overflow-hidden shadow-sm hover:shadow-lg hover:border-violet-300 transition-all"
-          >
-            <div className="h-1.5 w-full bg-gradient-to-r from-violet-500 to-purple-400" />
-            <div className="flex flex-col gap-4 p-6 flex-1">
-              <div className="flex items-center gap-3">
-                <div className="h-9 w-9 rounded-xl bg-violet-50 border border-violet-100 flex items-center justify-center">
-                  <TrendingUp className="h-4 w-4 text-violet-600" />
-                </div>
-                <span className="text-[10px] font-black uppercase tracking-[0.18em] text-violet-500">
-                  Earning Potential
-                </span>
-              </div>
-              <h3 className="text-xl font-black tracking-tight text-zinc-900 leading-snug">
-                Command top-tier pay.<br />Or go it alone.
-              </h3>
-              <p className="text-sm text-zinc-500 leading-relaxed flex-1">
-                AI engineering is the fastest-growing and highest-paid discipline in tech. Graduate with the skills to land a senior role <em>or</em> launch your own AI product company — the leverage is yours.
-              </p>
-              <Link
-                href="/learn"
-                className="mt-auto inline-flex items-center gap-1.5 text-xs font-bold text-violet-600 hover:text-violet-800 transition-colors pt-4 border-t border-zinc-100"
-              >
-                See what you&apos;ll earn <ChevronRight className="h-3.5 w-3.5" />
-              </Link>
-            </div>
-          </motion.div>
-
-          {/* Card 2 — Continuous Assessment */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: 0.08 }}
-            className="group relative flex flex-col rounded-2xl border border-zinc-200 bg-white overflow-hidden shadow-sm hover:shadow-lg hover:border-sky-300 transition-all"
-          >
-            <div className="h-1.5 w-full bg-gradient-to-r from-sky-400 to-blue-500" />
-            <div className="flex flex-col gap-4 p-6 flex-1">
-              <div className="flex items-center gap-3">
-                <div className="h-9 w-9 rounded-xl bg-sky-50 border border-sky-100 flex items-center justify-center">
-                  <BrainCircuit className="h-4 w-4 text-sky-600" />
-                </div>
-                <span className="text-[10px] font-black uppercase tracking-[0.18em] text-sky-500">
-                  AI Assessment
-                </span>
-              </div>
-              <h3 className="text-xl font-black tracking-tight text-zinc-900 leading-snug">
-                Test your knowledge.<br />Track your growth.
-              </h3>
-              <p className="text-sm text-zinc-500 leading-relaxed flex-1">
-                Don&apos;t just learn — prove it. Our continuous AI Assessment tool gives you structured tests that track your progression, expose gaps in real time, and show you exactly where to level up next.
-              </p>
-              <Link
-                href="/assessment"
-                className="mt-auto inline-flex items-center gap-1.5 text-xs font-bold text-sky-600 hover:text-sky-800 transition-colors pt-4 border-t border-zinc-100"
-              >
-                Take a free assessment <ChevronRight className="h-3.5 w-3.5" />
-              </Link>
-            </div>
-          </motion.div>
-
-          {/* Card 3 — Open Projects */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: 0.16 }}
-            className="group relative flex flex-col rounded-2xl border border-zinc-200 bg-white overflow-hidden shadow-sm hover:shadow-lg hover:border-emerald-300 transition-all"
-          >
-            <div className="h-1.5 w-full bg-gradient-to-r from-emerald-400 to-teal-500" />
-            <div className="flex flex-col gap-4 p-6 flex-1">
-              <div className="flex items-center gap-3">
-                <div className="h-9 w-9 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center">
-                  <Building2 className="h-4 w-4 text-emerald-600" />
-                </div>
-                <span className="text-[10px] font-black uppercase tracking-[0.18em] text-emerald-600">
-                  Open Projects
-                </span>
-              </div>
-              <h3 className="text-xl font-black tracking-tight text-zinc-900 leading-snug">
-                Work on real deals.<br />With real partners.
-              </h3>
-              <p className="text-sm text-zinc-500 leading-relaxed flex-1">
-                Graduates unlock exclusive access to live industry briefs. Build alongside engineers shipping for{" "}
-                <span className="font-semibold text-zinc-700">Microsoft</span>,{" "}
-                <span className="font-semibold text-zinc-700">Google</span>, and{" "}
-                <span className="font-semibold text-zinc-700">Anthropic</span> — not in a sandbox, in production.
-              </p>
-              <Link
-                href="/projects"
-                className="mt-auto inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 hover:text-emerald-800 transition-colors pt-4 border-t border-zinc-100"
-              >
-                Browse open projects <ChevronRight className="h-3.5 w-3.5" />
-              </Link>
-            </div>
-          </motion.div>
-
-        </div>
+        {/* Unified Bottom Glow */}
+        <div className="absolute left-1/2 -translate-x-1/2 bottom-0 w-3/4 h-32 bg-violet-100/30 blur-[100px] -z-10" />
       </div>
     </section>
   );

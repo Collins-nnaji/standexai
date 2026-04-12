@@ -240,34 +240,34 @@ export function TopNav({ user }: TopNavProps) {
                   <ChevronRight className={cn("h-4 w-4 opacity-50", pathname.startsWith("/learn") && "text-[#7C5CFC]")} />
                 </Link>
 
-                <div className="my-6 h-px w-full bg-zinc-100" />
+                <div className="my-4 h-px w-full bg-zinc-100" />
 
-                <div className="mb-4">
+                <div className="mb-3">
                   <p className="px-3 text-[10px] font-black uppercase tracking-widest text-zinc-400">Opportunities</p>
                 </div>
-                <Link href="/projects" className="flex items-center justify-between rounded-xl px-4 py-3 text-sm font-bold text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 transition-all">
+                <Link href="/projects" className="flex items-center justify-between rounded-xl px-4 py-2.5 text-sm font-bold text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 transition-all">
                   Open Projects
                   <ChevronRight className="h-4 w-4 opacity-50" />
                 </Link>
-                <Link href="/jobs" className="flex items-center justify-between rounded-xl px-4 py-3 text-sm font-bold text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 transition-all">
+                <Link href="/jobs" className="flex items-center justify-between rounded-xl px-4 py-2.5 text-sm font-bold text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 transition-all">
                   Jobs
                   <ChevronRight className="h-4 w-4 opacity-50" />
                 </Link>
 
-                <div className="my-6 h-px w-full bg-zinc-100" />
+                <div className="my-4 h-px w-full bg-zinc-100" />
 
-                <div className="mb-4">
+                <div className="mb-3">
                   <p className="px-3 text-[10px] font-black uppercase tracking-widest text-zinc-400">Workspace</p>
                 </div>
-                <Link href="/cognitive-audit" className="flex items-center justify-between rounded-xl px-4 py-3 text-sm font-bold text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 transition-all">
+                <Link href="/cognitive-audit" className="flex items-center justify-between rounded-xl px-4 py-2.5 text-sm font-bold text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 transition-all">
                   Skills Benchmark
                   <ChevronRight className="h-4 w-4 opacity-50" />
                 </Link>
-                <Link href="/console" className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 transition-all">
+                <Link href="/console" className="flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-bold text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 transition-all">
                   <TerminalSquare className="h-5 w-5 text-zinc-400" /> Console
                 </Link>
 
-                <div className="my-6 h-px w-full bg-zinc-100" />
+                <div className="my-4 h-px w-full bg-zinc-100" />
 
                 <div className="mb-4">
                   <p className="px-3 text-[10px] font-black uppercase tracking-widest text-zinc-400">Account</p>
