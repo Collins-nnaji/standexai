@@ -156,9 +156,9 @@ export function TTSTool({ text, themeMode, onClose }: TTSToolProps) {
         </div>
 
         {error ? (
-          <div className={cn("flex items-center gap-2 rounded-lg border border-rose-500/20 bg-rose-500/[0.06] p-2.5 text-xs", t.danger)}>
-            <VolumeX className="h-3.5 w-3.5 shrink-0" />
-            {error}
+          <div className={cn("flex items-start gap-2 rounded-lg border border-rose-500/20 bg-rose-500/[0.06] p-2.5 text-xs", t.danger)}>
+            <VolumeX className="h-3.5 w-3.5 shrink-0 mt-0.5" />
+            <span className="flex-1">{error}</span>
           </div>
         ) : null}
 

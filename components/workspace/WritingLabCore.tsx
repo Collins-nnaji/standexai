@@ -1593,13 +1593,15 @@ function WritingLabInner({
                 >
                   {exportToolbar}
                   {ttsOpen && (
-                    <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/5 p-4 backdrop-blur-[2px] dark:bg-black/20 sm:p-8">
-                      <div className="w-full max-w-md">
-                        <TTSTool 
-                          text={getExportPlainText()} 
-                          themeMode={themeMode} 
-                          onClose={() => setTtsOpen(false)} 
-                        />
+                    <div className="absolute inset-0 z-20 overflow-y-auto bg-black/5 backdrop-blur-[2px] dark:bg-black/20">
+                      <div className="flex min-h-full items-center justify-center p-4 sm:p-8">
+                        <div className="w-full max-w-md">
+                          <TTSTool 
+                            text={getExportPlainText()} 
+                            themeMode={themeMode} 
+                            onClose={() => setTtsOpen(false)} 
+                          />
+                        </div>
                       </div>
                     </div>
                   )}
@@ -1833,7 +1835,7 @@ function WritingLabInner({
 
         <div
           className={cn(
-            "flex w-full shrink-0 flex-col overflow-hidden lg:w-[min(100%,400px)] lg:max-w-[400px]",
+            "flex w-full shrink-0 flex-col overflow-hidden lg:w-[min(100%,480px)] lg:max-w-[480px]",
             t.workspaceSurface,
           )}
         >
