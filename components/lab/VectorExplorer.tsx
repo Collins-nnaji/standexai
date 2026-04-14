@@ -68,63 +68,65 @@ export function VectorExplorer() {
   }, [hoveredPoint]);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-4 h-[600px] border border-[var(--line)] rounded-[32px] overflow-hidden bg-white shadow-sm">
-      {/* Sidebar Controls */}
-      <div className="lg:col-span-1 border-r border-[var(--line)] bg-zinc-50/50 p-6 flex flex-col gap-6">
+    <div className="grid grid-cols-1 lg:grid-cols-4 h-[600px] border border-white/5 overflow-hidden bg-black shadow-2xl [font-family:var(--font-console-mono),ui-monospace,monospace]">
+      {/* Sidebar Controls (Cartography Nav) */}
+      <div className="lg:col-span-1 border-r border-white/5 bg-white/[0.02] p-6 flex flex-col gap-6">
         <div className="space-y-1">
-          <h3 className="text-lg font-bold tracking-tight text-[var(--ink-900)] flex items-center gap-2">
-            <LayoutGrid className="h-5 w-5 text-[var(--accent-primary)]" />
-            Vector Space
+          <div className="flex items-center gap-2">
+             <div className="h-1.5 w-1.5 rounded-full bg-[var(--accent-primary)] animate-pulse" />
+             <p className="text-[9px] font-black uppercase tracking-[0.3em] text-zinc-500 italic">Cartography_HUD</p>
+          </div>
+          <h3 className="text-lg font-black tracking-tight text-white flex items-center gap-2 uppercase italic">
+            Semantic Space
           </h3>
-          <p className="text-xs text-[var(--ink-500)] font-medium">Visualizing semantic clusters.</p>
         </div>
 
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
+        <div className="relative group">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-600 transition-colors group-hover:text-[var(--accent-primary)]" />
           <input 
             type="text" 
-            placeholder="Search vectors..." 
+            placeholder="Search_Vectors..." 
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-white border border-[var(--line)] rounded-xl text-xs font-bold focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)]/20 transition-all shadow-sm"
+            className="w-full pl-10 pr-4 py-2 bg-black border border-white/5 text-[10px] text-zinc-500 font-black uppercase tracking-widest focus:outline-none focus:border-[var(--accent-primary)]/40 hover:border-white/10 transition-all shadow-inner"
           />
         </div>
 
-        <div className="space-y-3">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">Semantic Clusters</p>
-          <div className="grid grid-cols-2 gap-2">
+        <div className="space-y-4">
+          <p className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-600 italic">Semantic_Clusters</p>
+          <div className="grid grid-cols-2 gap-3">
             {Object.entries(categoryColors).map(([cat, color]) => (
-              <div key={cat} className="flex items-center gap-2 text-[10px] font-bold text-zinc-600 capitalize">
-                <div className={`w-2 h-2 rounded-full ${color}`} />
+              <div key={cat} className="flex items-center gap-2 text-[9px] font-black text-zinc-500 uppercase tracking-widest">
+                <div className={`w-1.5 h-1.5 ${color}`} />
                 {cat}
               </div>
             ))}
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto space-y-4 pt-4 border-t border-[var(--line)]">
+        <div className="flex-1 overflow-y-auto space-y-4 pt-4 border-t border-white/5">
           <AnimatePresence mode="wait">
             {hoveredPoint ? (
               <motion.div
                 key={hoveredPoint.id}
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -10 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
                 className="space-y-4"
               >
-                <div className="p-4 rounded-2xl bg-white border border-[var(--line)] shadow-sm space-y-2">
-                  <h4 className="text-sm font-bold text-[var(--ink-900)] uppercase tracking-wider">{hoveredPoint.name}</h4>
-                  <p className="text-xs text-[var(--ink-500)] leading-relaxed">{hoveredPoint.description}</p>
+                <div className="p-4 border border-white/5 bg-white/[0.02] space-y-3">
+                  <h4 className="text-[10px] font-black text-white uppercase tracking-[0.2em] italic border-b border-white/5 pb-2">{hoveredPoint.name}</h4>
+                  <p className="text-[10px] text-zinc-500 leading-relaxed font-medium capitalize">{hoveredPoint.description}</p>
                 </div>
 
                 {neighbors.length > 0 && (
-                  <div className="space-y-2">
-                     <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">Nearest Neighbors</p>
+                  <div className="space-y-3">
+                     <p className="text-[9px] font-black uppercase tracking-[0.3em] text-zinc-600 italic">Nearest_Neighbors</p>
                      <div className="space-y-1">
                        {neighbors.map(n => (
-                         <div key={n.id} className="flex items-center justify-between text-[11px] font-bold text-zinc-600 bg-white/50 p-2 rounded-lg border border-[var(--line)]">
-                            <span>{n.name}</span>
-                            <span className="text-[var(--accent-primary)]">{(n.similarity * 100).toFixed(0)}% sim</span>
+                         <div key={n.id} className="flex items-center justify-between text-[10px] font-black text-zinc-500 bg-white/5 p-2 border border-white/5 uppercase tracking-tighter">
+                            <span className="italic">{n.name}</span>
+                            <span className="text-[var(--brand-teal)]">{(n.similarity * 100).toFixed(0)}%_SIM</span>
                          </div>
                        ))}
                      </div>
@@ -132,18 +134,19 @@ export function VectorExplorer() {
                 )}
               </motion.div>
             ) : (
-               <div className="h-full flex flex-col items-center justify-center text-center p-4 opacity-50 grayscale">
-                 <Crosshair className="h-8 w-8 text-zinc-300 mb-2" />
-                 <p className="text-[10px] font-bold uppercase text-zinc-400">Hover a point to explore</p>
+               <div className="h-full flex flex-col items-center justify-center text-center p-4 opacity-20">
+                 <Crosshair className="h-6 w-6 text-zinc-500 mb-3" />
+                 <p className="text-[9px] font-black uppercase tracking-[0.3em] text-zinc-600">Initialising scan...</p>
                </div>
             )}
           </AnimatePresence>
         </div>
       </div>
 
-      {/* Main Starfield */}
-      <div className="lg:col-span-3 bg-zinc-950 relative overflow-hidden flex items-center justify-center p-8">
-        <div className="absolute inset-0 bg-[radial-gradient(#ffffff08_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none opacity-50" />
+      {/* Main Starfield (Cartography Projection) */}
+      <div className="lg:col-span-3 bg-black relative overflow-hidden flex items-center justify-center p-8">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none z-0" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(124,92,252,0.05),transparent_100%)] pointer-events-none z-0" />
         
         {/* Connection Lines for Neighbors */}
         <svg className="absolute inset-0 w-full h-full pointer-events-none">
@@ -208,11 +211,11 @@ export function VectorExplorer() {
 
         {/* HUD Elements */}
         <div className="absolute bottom-6 right-6 flex items-center gap-4">
-           <div className="flex items-center gap-2 px-3 py-1.5 bg-zinc-900/80 backdrop-blur-md rounded-full border border-zinc-800 text-[10px] font-bold uppercase text-zinc-400">
+           <div className="flex items-center gap-3 px-4 py-2 bg-black border border-white/10 text-[9px] font-black uppercase tracking-[0.3em] text-zinc-500 shadow-2xl">
              <Activity className="h-3 w-3 text-[var(--brand-teal)]" />
-             Dimensions: 1536 (Normalized)
+             DIM: 1536_NRML
            </div>
-           <div className="p-2 bg-zinc-900/80 backdrop-blur-md rounded-xl border border-zinc-800 text-zinc-400 hover:text-white cursor-help transition-colors">
+           <div className="p-2 border border-white/10 bg-black text-zinc-700 hover:text-[var(--accent-primary)] hover:border-[var(--accent-primary)] cursor-help transition-all shadow-2xl">
               <HelpCircle className="h-4 w-4" />
            </div>
         </div>

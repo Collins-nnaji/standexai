@@ -38,14 +38,14 @@ export default function EvalLabPage() {
   const [activeSection, setActiveSection] = useState("hero");
 
   const sections = [
-    { id: "hero", name: "Welcome", icon: Sparkles },
-    { id: "architecture", name: "Transformer", icon: Brain },
-    { id: "benchmarks", name: "Benchmarks", icon: BarChart3 },
-    { id: "vectors", name: "Vector Space", icon: Map },
-    { id: "context", name: "Context Window", icon: BookOpen },
-    { id: "simulators", name: "Inference", icon: Settings2 },
-    { id: "live", name: "Live Lab", icon: Zap },
-    { id: "ops", name: "Ops Workbench", icon: Cpu },
+    { id: "hero", name: "System Log", icon: Sparkles },
+    { id: "architecture", name: "Schematics", icon: Brain },
+    { id: "benchmarks", name: "Analytics", icon: BarChart3 },
+    { id: "vectors", name: "Vector Engine", icon: Map },
+    { id: "context", name: "Buffer Lab", icon: BookOpen },
+    { id: "simulators", name: "Inference Ops", icon: Settings2 },
+    { id: "live", name: "Real-time Node", icon: Zap },
+    { id: "ops", name: "Cost/Env Ops", icon: Cpu },
   ];
 
   useEffect(() => {
@@ -73,24 +73,29 @@ export default function EvalLabPage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-[var(--bg-app)] overflow-x-hidden selection:bg-[var(--accent-primary)]/20">
-      <div className="grain-overlay" />
-      <motion.div className="fixed top-0 left-0 right-0 h-1 bg-[var(--accent-primary)] z-[110] origin-left" style={{ scaleX }} />
+    <div className="flex min-h-screen flex-col bg-[#09090b] text-[#fafafa] overflow-x-hidden selection:bg-[var(--accent-primary)]/30 [font-family:var(--font-console-mono),ui-monospace,monospace]">
+      <div className="fixed inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none z-0" />
+      <div className="fixed inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(124,92,252,0.03),transparent_100%)] pointer-events-none z-0" />
+      
+      <motion.div className="fixed top-0 left-0 right-0 h-0.5 bg-[var(--accent-primary)] z-[110] origin-left shadow-[0_0_10px_var(--accent-primary)]" style={{ scaleX }} />
       <TopNav user={session?.user} />
       
-      {/* --- Side Navigation --- */}
-      <nav className="fixed left-8 top-1/2 -translate-y-1/2 z-[90] hidden xl:flex flex-col gap-4">
+      {/* --- Side Navigation (Diagnostic Rail) --- */}
+      <nav className="fixed left-8 top-1/2 -translate-y-1/2 z-[90] hidden xl:flex flex-col gap-3">
         {sections.map((s) => (
           <button
             key={s.id}
             onClick={() => scrollToSection(s.id)}
-            className="group relative flex items-center justify-center w-12 h-12 rounded-2xl bg-white border border-[var(--line)] shadow-sm hover:border-[var(--accent-primary)]/50 transition-all overflow-hidden"
+            className={`group relative flex items-center justify-center w-10 h-10 rounded border transition-all duration-300 ${
+              activeSection === s.id 
+              ? "bg-[var(--accent-primary)] border-[var(--accent-primary)] shadow-[0_0_15px_rgba(124,92,252,0.3)] text-white" 
+              : "bg-black/40 border-white/10 text-zinc-500 hover:border-white/30 hover:text-zinc-300"
+            }`}
           >
-            <div className={`absolute inset-0 transition-colors ${activeSection === s.id ? "bg-[var(--accent-primary)]/5" : "group-hover:bg-zinc-50"}`} />
-            <s.icon className={`h-5 w-5 transition-colors relative z-10 ${activeSection === s.id ? "text-[var(--accent-primary)]" : "text-zinc-400 group-hover:text-zinc-600"}`} />
+            <s.icon className="h-4 w-4 relative z-10" />
             
             {/* Tooltip */}
-            <div className="absolute left-full ml-4 px-3 py-1.5 bg-zinc-900 text-white text-[10px] font-bold uppercase tracking-widest rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap translate-x-[-10px] group-hover:translate-x-0">
+            <div className="absolute left-full ml-4 px-3 py-1 bg-zinc-900 border border-white/10 text-white text-[9px] font-bold uppercase tracking-[0.2em] rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap translate-x-[-5px] group-hover:translate-x-0">
               {s.name}
             </div>
           </button>
@@ -99,38 +104,61 @@ export default function EvalLabPage() {
 
       <main className="flex-1">
         {/* --- Hero Section --- */}
-        <section id="hero" className="relative pt-32 pb-24 px-6 overflow-hidden min-h-[80vh] flex items-center">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full pointer-events-none">
-            <div className="absolute top-[-10%] right-[-10%] w-[600px] h-[600px] bg-[var(--brand-purple)]/5 rounded-full blur-[120px]" />
-            <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-[var(--brand-teal)]/5 rounded-full blur-[120px]" />
-          </div>
-
-          <div className="max-w-7xl mx-auto relative z-10">
+        <section id="hero" className="relative pt-32 pb-32 px-6 overflow-hidden min-h-[90vh] flex items-center border-b border-white/[0.05]">
+          <div className="max-w-7xl mx-auto relative z-10 w-full">
             <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="flex flex-col items-center text-center space-y-8"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="flex flex-col items-start text-left space-y-12"
             >
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--accent-primary)]/5 border border-[var(--accent-primary)]/10 text-[var(--accent-primary)] text-xs font-bold uppercase tracking-[0.2em] shadow-sm">
-                <Sparkles className="h-3.5 w-3.5 fill-current animate-pulse" />
-                Live Research Environment
-              </div>
-              <h1 className="text-6xl md:text-9xl font-bold tracking-[-0.03em] text-[var(--ink-900)] leading-[0.85]">
-                Intelligence <span className="landing-text-brand-gradient">Lab</span>
-              </h1>
-              <p className="max-w-2xl text-[var(--ink-500)] text-xl font-medium leading-relaxed">
-                A technical workbench to deconstruct Transformer architectures, 
-                visualize attention mechanisms, and analyze model benchmarks.
-              </p>
-              
-              <div className="flex flex-wrap justify-center gap-4 pt-6">
-                <div className="flex items-center gap-3 px-6 py-3 bg-white border border-[var(--line)] rounded-3xl shadow-sm text-sm font-bold text-[var(--ink-500)]">
-                  <Database className="h-5 w-5 text-[var(--brand-teal)]" />
-                  SOTA MODELS
+              <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
+                <div className="h-20 w-20 flex items-center justify-center border-2 border-[var(--accent-primary)] rounded shadow-[0_0_30px_rgba(124,92,252,0.2)]">
+                   <Brain className="h-10 w-10 text-[var(--accent-primary)]" />
                 </div>
-                <div className="flex items-center gap-3 px-6 py-3 bg-white border border-[var(--line)] rounded-3xl shadow-sm text-sm font-bold text-[var(--ink-500)]">
-                  <Binary className="h-5 w-5 text-blue-500" />
-                  INFERENCE DATA
+                <div className="space-y-1">
+                   <h1 className="text-7xl md:text-9xl font-black tracking-tighter uppercase leading-[0.8] mb-2">
+                     <span className="text-white">INTEL</span>
+                     <span className="text-[var(--accent-primary)] opacity-80">.LAB</span>
+                   </h1>
+                   <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2 px-3 py-1 bg-[var(--accent-primary)]/10 border border-[var(--accent-primary)]/20 text-[var(--accent-primary)] text-[9px] font-black uppercase tracking-[0.3em]">
+                         Status: Operational
+                      </div>
+                      <div className="flex items-center gap-2 px-3 py-1 bg-white/5 border border-white/10 text-zinc-500 text-[9px] font-black uppercase tracking-[0.3em]">
+                         Node: SXAI-V26
+                      </div>
+                   </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 w-full">
+                <div className="space-y-6">
+                  <p className="text-zinc-400 text-xl font-medium leading-relaxed max-w-xl">
+                    High-fidelity diagnostics suite for Transformers, Semantic Cartography, 
+                    and Large Language Model performance telemetry.
+                  </p>
+                  <div className="flex flex-wrap gap-4 pt-4">
+                    <button 
+                      onClick={() => scrollToSection("architecture")}
+                      className="px-8 py-4 bg-white text-black text-[11px] font-black uppercase tracking-[0.4em] hover:bg-[var(--accent-primary)] hover:text-white transition-all shadow-[8px_8px_0_rgba(124,92,252,0.3)] hover:shadow-none translate-y-0 active:translate-y-1"
+                    >
+                      Initialize Diagnostic
+                    </button>
+                  </div>
+                </div>
+                
+                <div className="hidden lg:grid grid-cols-2 gap-4 border border-white/5 p-6 bg-white/[0.02]">
+                   {[
+                     { label: "Architecture", val: "Transformer-V3" },
+                     { label: "Weights", val: "FP16 / INT8" },
+                     { label: "Telemetry", val: "Active" },
+                     { label: "Registry", val: "Global-SOTA" }
+                   ].map((item, i) => (
+                     <div key={i} className="space-y-1 border-b border-white/[0.05] pb-3 last:border-0 md:border-b-0">
+                        <p className="text-[9px] font-black text-zinc-600 uppercase tracking-widest">{item.label}</p>
+                        <p className="text-sm font-black text-zinc-300 uppercase tracking-tighter italic">{item.val}</p>
+                     </div>
+                   ))}
                 </div>
               </div>
             </motion.div>
@@ -140,62 +168,79 @@ export default function EvalLabPage() {
         {/* --- Tools Grid --- */}
         <div className="max-w-7xl mx-auto px-6 pb-24 space-y-32">
           
-          {/* 1. Architecture Visualizer Section */}
-          <section id="architecture" className="space-y-12 scroll-mt-24">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[var(--line)] pb-8">
+          <section id="architecture" className="space-y-12 scroll-mt-24 pt-24">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/10 pb-8">
               <div className="space-y-2">
-                <h2 className="text-4xl font-bold tracking-[-0.03em] text-[var(--ink-900)] flex items-center gap-3">
-                  <Brain className="h-10 w-10 text-[var(--accent-primary)]" />
-                  Transformer Architecture
+                <div className="flex items-center gap-2 text-[var(--accent-primary)]">
+                   <div className="h-1 w-1 bg-current" />
+                   <span className="text-[10px] font-black uppercase tracking-[0.4em]">System Schematics</span>
+                </div>
+                <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-white flex items-center gap-4 uppercase italic">
+                  Module_01: Architecture
                 </h2>
-                <p className="text-[var(--ink-500)] font-medium max-w-xl text-lg">
-                  Scroll and interact with the inner workings of a Transformer block. 
+                <p className="text-zinc-500 font-medium max-w-xl text-sm uppercase tracking-widest">
+                  Transformer block visualization and layer-wise attention mapping.
                 </p>
               </div>
-              <div className="px-4 py-2 bg-[var(--ink-900)] text-white rounded-2xl text-[10px] font-bold uppercase tracking-widest">
-                Module 01
+              <div className="flex items-center gap-4">
+                 <div className="text-right flex flex-col items-end">
+                    <span className="text-[9px] font-black text-zinc-600 uppercase tracking-widest">Load State</span>
+                    <span className="text-xs font-black text-[var(--brand-teal)] uppercase tracking-tighter">Verified</span>
+                 </div>
+                 <div className="h-12 w-[1px] bg-white/10" />
+                 <div className="px-6 py-3 bg-white/5 border border-white/10 text-white text-[11px] font-black uppercase tracking-widest">
+                   M01
+                 </div>
               </div>
             </div>
             
-            <div className="rounded-[40px] border border-[var(--line)] bg-white overflow-hidden shadow-sm">
+            <div className="border border-white/5 bg-black/40 shadow-2xl relative">
+              <div className="absolute top-4 left-4 flex gap-1 z-10">
+                 <div className="w-1.5 h-1.5 rounded-full bg-red-500/50" />
+                 <div className="w-1.5 h-1.5 rounded-full bg-amber-500/50" />
+                 <div className="w-1.5 h-1.5 rounded-full bg-green-500/50" />
+              </div>
               <ArchVisualizer />
             </div>
           </section>
 
           {/* 2. Benchmark Leaderboard Section */}
           <section id="benchmarks" className="space-y-12 scroll-mt-24">
-             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[var(--line)] pb-8">
+             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/10 pb-8">
               <div className="space-y-2">
-                <h2 className="text-4xl font-bold tracking-[-0.03em] text-[var(--ink-900)] flex items-center gap-3">
-                  <BarChart3 className="h-10 w-10 text-[var(--brand-teal)]" />
-                  Model Intelligence Arena
+                <div className="flex items-center gap-2 text-[var(--brand-teal)]">
+                   <div className="h-1 w-1 bg-current" />
+                   <span className="text-[10px] font-black uppercase tracking-[0.4em]">Comparative Analytics</span>
+                </div>
+                <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-white flex items-center gap-4 uppercase italic">
+                  Module_02: Benchmarks
                 </h2>
-                <p className="text-[var(--ink-500)] font-medium max-w-xl text-lg">
-                  Comparison across MMLU, GSM8K, and HumanEval.
+                <p className="text-zinc-500 font-medium max-w-xl text-sm uppercase tracking-widest">
+                  Quantitative performance metrics across standard LLM evaluation frameworks.
                 </p>
               </div>
-              <div className="px-4 py-2 bg-[var(--ink-900)] text-white rounded-2xl text-[10px] font-bold uppercase tracking-widest">
-                Module 02
+              <div className="px-6 py-3 bg-white/5 border border-white/10 text-white text-[11px] font-black uppercase tracking-widest">
+                M02
               </div>
             </div>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-              <div className="lg:col-span-2 rounded-[40px] border border-[var(--line)] bg-white p-8 md:p-12 shadow-sm">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-2 border border-white/5 bg-black/40 p-8 md:p-12 shadow-sm">
                 <BenchmarkLeaderboard />
               </div>
-              <div className="rounded-[40px] border border-[var(--line)] bg-[var(--ink-900)] p-8 md:p-12 shadow-2xl text-white space-y-8 flex flex-col justify-center translate-y-6">
-                <h3 className="text-2xl font-bold italic tracking-tight">Benchmark Context</h3>
+              <div className="border border-white/5 bg-zinc-900/50 p-8 md:p-12 shadow-2xl text-white space-y-8 flex flex-col justify-center">
+                <h3 className="text-xl font-black italic tracking-tighter uppercase border-l-2 border-[var(--brand-teal)] pl-4">Diagnostic Context</h3>
                 <div className="space-y-6">
-                  <div className="group space-y-2">
-                    <h4 className="font-bold text-[var(--brand-teal)] text-sm uppercase tracking-widest flex items-center gap-2">
-                      <Zap className="h-4 w-4" /> MMLU
+                  <div className="group space-y-1">
+                    <h4 className="font-black text-[var(--brand-teal)] text-[10px] uppercase tracking-[0.2em] flex items-center gap-2">
+                      <Zap className="h-3 w-3" /> MMLU_PROC
                     </h4>
-                    <p className="text-sm text-zinc-400 leading-relaxed group-hover:text-zinc-300 transition-colors">Massive Multitask Language Understanding. Covers 57 subjects across STEM, humanities, and social sciences.</p>
+                    <p className="text-xs text-zinc-500 leading-relaxed group-hover:text-zinc-400 transition-colors">Massive Multitask Language Understanding. 57 subjects across STEM and Humanities.</p>
                   </div>
-                  <div className="group space-y-2">
-                    <h4 className="font-bold text-blue-400 text-sm uppercase tracking-widest flex items-center gap-2">
-                      <Binary className="h-4 w-4" /> GSM8K
+                  <div className="group space-y-1">
+                    <h4 className="font-black text-blue-400 text-[10px] uppercase tracking-[0.2em] flex items-center gap-2">
+                      <Binary className="h-3 w-3" /> GSM8k_LOGIC
                     </h4>
-                    <p className="text-sm text-zinc-400 leading-relaxed group-hover:text-zinc-300 transition-colors">Grade School Math Word Problems. Tests multi-step mathematical reasoning capabilities.</p>
+                    <p className="text-xs text-zinc-500 leading-relaxed group-hover:text-zinc-400 transition-colors">Multi-step mathematical reasoning and logic consistency tests.</p>
                   </div>
                 </div>
               </div>
@@ -204,111 +249,142 @@ export default function EvalLabPage() {
 
           {/* 3. Vector Space Explorer Section */}
           <section id="vectors" className="space-y-12 scroll-mt-24">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[var(--line)] pb-8">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/10 pb-8">
               <div className="space-y-2">
-                <h2 className="text-4xl font-bold tracking-[-0.03em] text-[var(--ink-900)] flex items-center gap-3">
-                  <Map className="h-10 w-10 text-[var(--accent-primary)]" />
-                  Semantic Vector Space
+                <div className="flex items-center gap-2 text-[var(--accent-primary)]">
+                   <div className="h-1 w-1 bg-current" />
+                   <span className="text-[10px] font-black uppercase tracking-[0.4em]">High-Dimensional Mapping</span>
+                </div>
+                <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-white flex items-center gap-4 uppercase italic">
+                  Module_03: Vectors
                 </h2>
-                <p className="text-[var(--ink-500)] font-medium max-w-xl text-lg">
-                  Explore how models map words and concepts into high-dimensional space.
+                <p className="text-zinc-500 font-medium max-w-xl text-sm uppercase tracking-widest">
+                  Latent space projection and semantic proximity analysis.
                 </p>
               </div>
-              <div className="px-4 py-2 bg-[var(--ink-900)] text-white rounded-2xl text-[10px] font-bold uppercase tracking-widest">
-                Module 03
+              <div className="px-6 py-3 bg-white/5 border border-white/10 text-white text-[11px] font-black uppercase tracking-widest">
+                M03
               </div>
             </div>
-            <VectorExplorer />
+            <div className="border border-white/5 bg-black/40 overflow-hidden shadow-2xl">
+              <VectorExplorer />
+            </div>
           </section>
 
           {/* 4. Context Window Visualizer Section */}
           <section id="context" className="space-y-12 scroll-mt-24">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[var(--line)] pb-8">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/10 pb-8">
               <div className="space-y-2">
-                <h2 className="text-4xl font-bold tracking-[-0.03em] text-[var(--ink-900)] flex items-center gap-3">
-                  <BookOpen className="h-10 w-10 text-[var(--brand-teal)]" />
-                  Context Memory Lab
+                <div className="flex items-center gap-2 text-[var(--brand-teal)]">
+                   <div className="h-1 w-1 bg-current" />
+                   <span className="text-[10px] font-black uppercase tracking-[0.4em]">Memory Buffer Specs</span>
+                </div>
+                <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-white flex items-center gap-4 uppercase italic">
+                  Module_04: Buffer
                 </h2>
-                <p className="text-[var(--ink-500)] font-medium max-w-xl text-lg">
-                  Visualize token concentration and memory overhead in long sequences.
+                <p className="text-zinc-500 font-medium max-w-xl text-sm uppercase tracking-widest">
+                  Context window visualization and sliding-window attention decay.
                 </p>
               </div>
-              <div className="px-4 py-2 bg-[var(--ink-900)] text-white rounded-2xl text-[10px] font-bold uppercase tracking-widest">
-                Module 04
+              <div className="px-6 py-3 bg-white/5 border border-white/10 text-white text-[11px] font-black uppercase tracking-widest">
+                M04
               </div>
             </div>
-            <ContextVisualizer />
+            <div className="border border-white/5 bg-black/40 shadow-2xl">
+              <ContextVisualizer />
+            </div>
           </section>
 
           {/* 5. Simulators Section */}
           <section id="simulators" className="space-y-12 scroll-mt-24">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[var(--line)] pb-8">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/10 pb-8">
               <div className="space-y-2">
-                <h2 className="text-4xl font-bold tracking-[-0.03em] text-[var(--ink-900)] flex items-center gap-3">
-                  <Settings2 className="h-10 w-10 text-[var(--accent-primary)]" />
-                  Inference Simulator
+                <div className="flex items-center gap-2 text-[var(--accent-primary)]">
+                   <div className="h-1 w-1 bg-current" />
+                   <span className="text-[10px] font-black uppercase tracking-[0.4em]">Inference Simulation</span>
+                </div>
+                <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-white flex items-center gap-4 uppercase italic">
+                  Module_05: Simulator
                 </h2>
-                <p className="text-[var(--ink-500)] font-medium max-w-xl text-lg">
-                  Test how tokenization and sampling parameters affect model outputs.
+                <p className="text-zinc-500 font-medium max-w-xl text-sm uppercase tracking-widest">
+                  Probabilistic token sampling and temperature gradient analysis.
                 </p>
               </div>
-              <div className="px-4 py-2 bg-[var(--ink-900)] text-white rounded-2xl text-[10px] font-bold uppercase tracking-widest">
-                Module 05
+              <div className="px-6 py-3 bg-white/5 border border-white/10 text-white text-[11px] font-black uppercase tracking-widest">
+                M05
               </div>
             </div>
-            <ModelSimulator />
+            <div className="border border-white/5 bg-black/40 shadow-2xl">
+              <ModelSimulator />
+            </div>
           </section>
 
           {/* 6. Live Inference Lab Section */}
           <section id="live" className="space-y-12 scroll-mt-24">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[var(--line)] pb-8">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/10 pb-8">
               <div className="space-y-2">
-                <h2 className="text-4xl font-bold tracking-[-0.03em] text-[var(--ink-900)] flex items-center gap-3">
-                  <Zap className="h-10 w-10 text-amber-500 fill-amber-500" />
-                  Live Intelligence Hub
+                <div className="flex items-center gap-2 text-amber-500">
+                   <div className="h-1 w-1 bg-current" />
+                   <span className="text-[10px] font-black uppercase tracking-[0.4em]">Live Node Execution</span>
+                </div>
+                <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-white flex items-center gap-4 uppercase italic">
+                  Module_06: Live Node
                 </h2>
-                <p className="text-[var(--ink-500)] font-medium max-w-xl text-lg">
-                  Execute live research prompts against the platform's production GPT model.
+                <p className="text-zinc-500 font-medium max-w-xl text-sm uppercase tracking-widest">
+                  Direct production-environment inference with token-level telemetry.
                 </p>
               </div>
-              <div className="px-4 py-2 bg-[var(--ink-900)] text-white rounded-2xl text-[10px] font-bold uppercase tracking-widest">
-                Module 06
+              <div className="px-6 py-3 bg-white/5 border border-white/10 text-white text-[11px] font-black uppercase tracking-widest">
+                M06
               </div>
             </div>
-            <LivePlayground />
+            <div className="border border-white/5 bg-black/40 shadow-2xl">
+              <LivePlayground />
+            </div>
           </section>
 
           {/* 7. Ops Workbench Section */}
           <section id="ops" className="space-y-12 scroll-mt-24 pb-24">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[var(--line)] pb-8">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/10 pb-8">
               <div className="space-y-2">
-                <h2 className="text-4xl font-bold tracking-[-0.03em] text-[var(--ink-900)] flex items-center gap-3">
-                  <Cpu className="h-10 w-10 text-[var(--brand-teal)]" />
-                  Infrastructure & Ops
+                <div className="flex items-center gap-2 text-[var(--brand-teal)]">
+                   <div className="h-1 w-1 bg-current" />
+                   <span className="text-[10px] font-black uppercase tracking-[0.4em]">FinOps & Sustainability</span>
+                </div>
+                <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-white flex items-center gap-4 uppercase italic">
+                  Module_07: Infrastructure
                 </h2>
-                <p className="text-[var(--ink-500)] font-medium max-w-xl text-lg">
-                  Estimate financial, performant, and environmental impacts of deployments.
+                <p className="text-zinc-500 font-medium max-w-xl text-sm uppercase tracking-widest">
+                  Operational cost analysis, token budgeting, and carbon footprint telemetry.
                 </p>
               </div>
-              <div className="px-4 py-2 bg-[var(--ink-900)] text-white rounded-2xl text-[10px] font-bold uppercase tracking-widest">
-                Module 07
+              <div className="px-6 py-3 bg-white/5 border border-white/10 text-white text-[11px] font-black uppercase tracking-widest">
+                M07
               </div>
             </div>
-            <OpsWorkbench />
+            <div className="border border-white/5 bg-black/40 shadow-2xl">
+              <OpsWorkbench />
+            </div>
           </section>
 
         </div>
       </main>
 
-      <footer className="w-full py-16 border-t border-[var(--line)] bg-white">
-        <div className="mx-auto max-w-7xl px-6 flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="text-zinc-400 font-bold text-[11px] uppercase tracking-[0.2em]">
-            StandexAI Intelligence Lab / Established 2026
+      <footer className="w-full py-24 border-t border-white/5 bg-black">
+        <div className="mx-auto max-w-7xl px-6 flex flex-col md:flex-row justify-between items-center gap-12">
+          <div className="flex flex-col items-center md:items-start gap-3">
+             <div className="flex items-center gap-4">
+                <div className="h-8 w-8 border border-[var(--accent-primary)] rounded flex items-center justify-center">
+                   <div className="h-2 w-2 bg-[var(--accent-primary)] animate-pulse" />
+                </div>
+                <div className="text-white font-black text-xs uppercase tracking-[0.4em]">StandexAI / INTEL-LAB</div>
+             </div>
+             <p className="text-zinc-600 text-[9px] font-black uppercase tracking-widest">Kernel Version 4.8.2-SXAI • 2026 Production Environment</p>
           </div>
-          <div className="flex gap-12 text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--ink-500)]">
-             <a href="#" className="hover:text-[var(--accent-primary)] transition-colors flex items-center gap-2">Docs <ChevronRight className="h-3 w-3" /></a>
-             <a href="#" className="hover:text-[var(--accent-primary)] transition-colors flex items-center gap-2">Papers <ChevronRight className="h-3 w-3" /></a>
-             <a href="#" className="hover:text-[var(--accent-primary)] transition-colors flex items-center gap-2">Github <ChevronRight className="h-3 w-3" /></a>
+          <div className="flex gap-12 text-[9px] font-black uppercase tracking-[0.4em] text-zinc-500">
+             <a href="#" className="hover:text-[var(--accent-primary)] transition-all">SOP_DOCS</a>
+             <a href="#" className="hover:text-[var(--accent-primary)] transition-all">RESEARCH_PAPERS</a>
+             <a href="#" className="hover:text-[var(--accent-primary)] transition-all">SOURCE_CODE</a>
           </div>
         </div>
       </footer>

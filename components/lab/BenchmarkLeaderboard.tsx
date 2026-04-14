@@ -41,11 +41,14 @@ const benchmarkData = {
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white border border-[var(--line)] p-4 rounded-2xl shadow-xl">
-        <p className="text-xs font-bold uppercase text-[var(--ink-500)] mb-1">{label}</p>
-        <p className="text-sm font-bold text-[var(--ink-900)]">
-          Result: <span style={{ color: payload[0].payload.color }}>{payload[0].value}%</span>
-        </p>
+      <div className="bg-black border border-white/10 p-4 shadow-2xl [font-family:var(--font-console-mono),ui-monospace,monospace]">
+        <p className="text-[9px] font-black uppercase text-zinc-500 mb-1 tracking-widest leading-none">{label}</p>
+        <div className="flex items-center gap-2">
+           <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: payload[0].payload.color }} />
+           <p className="text-sm font-black text-white italic">
+             RESULT: {payload[0].value}%
+           </p>
+        </div>
       </div>
     );
   }
@@ -56,23 +59,23 @@ export function BenchmarkLeaderboard() {
   const [metric, setMetric] = useState<keyof typeof benchmarkData>("mmlu");
 
   return (
-    <div className="h-full flex flex-col space-y-8">
+    <div className="h-full flex flex-col space-y-8 [font-family:var(--font-console-mono),ui-monospace,monospace]">
       {/* Header & Controls */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div className="flex items-center gap-2 px-4 py-2 bg-zinc-50 border border-[var(--line)] rounded-2xl">
-          <TrendingUp className="h-4 w-4 text-zinc-400" />
-          <span className="text-xs font-bold text-[var(--ink-900)] uppercase tracking-widest">SOTA Leaderboard</span>
+        <div className="flex items-center gap-3">
+           <div className="h-2 w-2 bg-[var(--accent-primary)] animate-pulse" />
+           <span className="text-[10px] font-black text-white uppercase tracking-[0.4em] italic">SOTA_LEADERBOARD_STREAM</span>
         </div>
         
-        <div className="flex bg-zinc-100 p-1 rounded-2xl">
+        <div className="flex bg-white/5 border border-white/5 p-1">
           {(Object.keys(benchmarkData) as Array<keyof typeof benchmarkData>).map((m) => (
             <button
               key={m}
               onClick={() => setMetric(m)}
-              className={`px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all ${
+              className={`px-4 py-2 text-[9px] font-black uppercase tracking-[0.2em] transition-all ${
                 metric === m 
-                  ? "bg-white text-[var(--accent-primary)] shadow-sm" 
-                  : "text-zinc-400 hover:text-zinc-600"
+                  ? "bg-white text-black shadow-lg" 
+                  : "text-zinc-500 hover:text-zinc-300"
               }`}
             >
               {m}
@@ -90,7 +93,7 @@ export function BenchmarkLeaderboard() {
             margin={{ top: 10, right: 60, left: 10, bottom: 10 }}
             barSize={44}
           >
-            <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f4f4f5" />
+            <CartesianGrid strokeDasharray="4 4" horizontal={false} stroke="rgba(255,255,255,0.03)" />
             <XAxis 
               type="number" 
               hide 
@@ -101,23 +104,23 @@ export function BenchmarkLeaderboard() {
               type="category" 
               axisLine={false} 
               tickLine={false}
-              tick={{ fill: '#3f3f46', fontSize: 11, fontWeight: 900 }}
-              width={120}
+              tick={{ fill: '#71717a', fontSize: 10, fontWeight: 900, textAnchor: 'start' }}
+              width={140}
+              dx={-10}
             />
-            <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(124, 92, 252, 0.05)', radius: 12 }} />
+            <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255, 255, 255, 0.02)' }} />
             <Bar 
               dataKey="score" 
-              radius={[0, 12, 12, 0]}
               animationDuration={1500}
             >
               {benchmarkData[metric].map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.color} fillOpacity={0.9} />
+                <Cell key={`cell-${index}`} fill={entry.color} fillOpacity={0.8} />
               ))}
               <LabelList 
                 dataKey="score" 
                 position="right" 
                 formatter={(val: any) => `${val}%`}
-                style={{ fill: '#09090b', fontSize: 12, fontWeight: 800 }}
+                style={{ fill: '#a1a1aa', fontSize: 10, fontWeight: 900 }}
               />
             </Bar>
           </BarChart>
@@ -125,9 +128,9 @@ export function BenchmarkLeaderboard() {
       </div>
 
       {/* Footnote */}
-      <div className="flex items-center gap-2 text-[10px] text-zinc-400 italic">
+      <div className="flex items-center gap-3 text-[9px] text-zinc-600 font-black uppercase tracking-widest italic pt-4 border-t border-white/5">
         <Info className="h-3 w-3" />
-        Data based on official model reports as of Q1 2024. Results may vary by quantization and prompt template.
+        Source: SXAI_REGISTRY / Q1_2026_TELEMETRY.
       </div>
     </div>
   );

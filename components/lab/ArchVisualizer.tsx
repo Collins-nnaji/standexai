@@ -67,10 +67,10 @@ export function ArchVisualizer() {
               transition={{ delay: index * 0.1 }}
               onMouseEnter={() => setActiveLayer(layer.id)}
               onClick={() => setActiveLayer(layer.id)}
-              className={`group relative cursor-pointer px-6 py-4 rounded-2xl border transition-all duration-300 ${
+              className={`group relative cursor-pointer px-6 py-4 rounded border transition-all duration-300 ${
                 activeLayer === layer.id 
-                  ? "bg-zinc-900 border-[var(--accent-primary)] shadow-[0_0_20px_rgba(147,51,234,0.3)] scale-105" 
-                  : "bg-zinc-900/50 border-zinc-800 hover:border-zinc-700"
+                  ? "bg-zinc-800 border-[var(--accent-primary)] shadow-[0_0_15px_rgba(124,92,252,0.2)] scale-[1.02]" 
+                  : "bg-black/40 border-white/5 hover:border-white/10"
               }`}
             >
               <div className="flex items-center justify-between">
@@ -101,7 +101,7 @@ export function ArchVisualizer() {
       </div>
 
       {/* Info Panel */}
-      <div className="w-full lg:w-80 border-l border-zinc-200 bg-white p-8 flex flex-col justify-between">
+      <div className="w-full lg:w-80 border-l border-white/5 bg-zinc-950 p-8 flex flex-col justify-between">
         <AnimatePresence mode="wait">
           {activeLayer ? (
             <motion.div
@@ -112,52 +112,51 @@ export function ArchVisualizer() {
               className="space-y-6"
             >
               <div className="space-y-2">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--accent-primary)]">Module Deep Dive</p>
-                <h3 className="text-2xl font-bold tracking-tight text-[var(--ink-900)]">{layers.find(l => l.id === activeLayer)?.name}</h3>
+                <p className="text-[9px] font-black uppercase tracking-[0.3em] text-[var(--accent-primary)]">Layer Specification</p>
+                <h3 className="text-xl font-black tracking-tighter text-white uppercase italic">{layers.find(l => l.id === activeLayer)?.name}</h3>
               </div>
               
-              <div className="p-4 rounded-2xl bg-zinc-50 border border-[var(--line)] text-sm text-[var(--ink-500)] leading-relaxed italic">
-                "{layers.find(l => l.id === activeLayer)?.description}"
+              <div className="p-4 rounded border border-white/5 bg-white/[0.02] text-xs text-zinc-400 leading-relaxed font-medium">
+                {layers.find(l => l.id === activeLayer)?.description}
               </div>
 
-              <div className="space-y-4 pt-4 border-t border-[var(--line)]">
+              <div className="space-y-4 pt-4 border-t border-white/5">
                 <div className="flex items-start gap-3">
-                  <div className="mt-1 p-1 rounded-md bg-[var(--brand-teal)]/10 text-[var(--brand-teal)]">
-                    <Zap className="h-4 w-4" />
+                  <div className="mt-1 p-1 rounded bg-[var(--brand-teal)]/10 text-[var(--brand-teal)]">
+                    <Zap className="h-3 w-3" />
                   </div>
                   <div>
-                    <h4 className="text-[10px] font-bold uppercase tracking-tight text-[var(--ink-900)]">Complexity</h4>
-                    <p className="text-xs text-[var(--ink-500)]">O(n² · d) for Attention layers, where n is sequence length.</p>
+                    <h4 className="text-[9px] font-black uppercase tracking-widest text-zinc-500">Complexity_Node</h4>
+                    <p className="text-[10px] text-zinc-400 font-mono">O(n² · d)</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <div className="mt-1 p-1 rounded-md bg-blue-500/10 text-blue-600">
-                    <InfoIcon className="h-4 w-4" />
+                  <div className="mt-1 p-1 rounded bg-blue-500/10 text-blue-600">
+                    <InfoIcon className="h-3 w-3" />
                   </div>
                   <div>
-                    <h4 className="text-[10px] font-bold uppercase tracking-tight text-[var(--ink-900)]">Key Parameters</h4>
-                    <p className="text-xs text-[var(--ink-500)]">Dimension (d_model), Heads (h), and Hidden Dimension (d_ff).</p>
+                    <h4 className="text-[9px] font-black uppercase tracking-widest text-zinc-500">Parameters</h4>
+                    <p className="text-[10px] text-zinc-400 font-mono">d_model, h, d_ff</p>
                   </div>
                 </div>
               </div>
             </motion.div>
           ) : (
-            <div className="flex-1 flex flex-col items-center justify-center text-center space-y-4 opacity-50">
-              <div className="w-16 h-16 rounded-full bg-zinc-100 flex items-center justify-center">
-                <Search className="h-8 w-8 text-zinc-300" />
+            <div className="flex-1 flex flex-col items-center justify-center text-center space-y-4 opacity-30">
+              <div className="w-12 h-12 rounded border border-white/10 flex items-center justify-center">
+                <Search className="h-6 w-6 text-zinc-500" />
               </div>
               <div>
-                <p className="text-sm font-bold text-zinc-900 uppercase tracking-widest">Select a Layer</p>
-                <p className="text-xs text-zinc-400 mt-1">Insights will appear here</p>
+                <p className="text-[9px] font-black text-zinc-500 uppercase tracking-[0.3em]">Initialising diagnostic...</p>
               </div>
             </div>
           )}
         </AnimatePresence>
 
-        <div className="pt-8 border-t border-[var(--line)]">
-          <button className="w-full flex items-center justify-between px-4 py-3 bg-[var(--ink-900)] text-white rounded-xl text-xs font-bold uppercase tracking-widest group hover:bg-[var(--accent-primary)] transition-colors">
-            View Paper
-            <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+        <div className="pt-8 border-t border-white/5">
+          <button className="w-full flex items-center justify-between px-6 py-4 bg-white text-black text-[10px] font-black uppercase tracking-[0.3em] hover:bg-[var(--accent-primary)] hover:text-white transition-all">
+            Open Paper
+            <ChevronRight className="h-4 w-4" />
           </button>
         </div>
       </div>
