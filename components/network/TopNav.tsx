@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-import { User, TerminalSquare, UploadCloud, LogOut, Menu, X, ChevronRight, LayoutDashboard, Settings, ChevronDown } from "lucide-react";
+import { User, TerminalSquare, UploadCloud, LogOut, Menu, X, ChevronRight, LayoutDashboard, Settings, ChevronDown, Zap } from "lucide-react";
 import { neonAuthClient } from "@/lib/neon/auth-client";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
@@ -103,6 +103,9 @@ export function TopNav({ user }: TopNavProps) {
               <div className="w-56 rounded-2xl border border-zinc-200 bg-white p-2 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] flex flex-col gap-1">
                 <Link href="/cognitive-audit" className="flex items-center justify-between rounded-xl px-3 py-2.5 text-sm font-bold text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-all">
                   Skills Benchmark
+                </Link>
+                <Link href="/eval-lab" className="flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-bold text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-all">
+                  <Zap className="h-4 w-4 text-amber-500" /> Intelligence Lab
                 </Link>
                 <Link href="/console" className="flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-bold text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-all">
                   <TerminalSquare className="h-4 w-4 text-zinc-400" /> Console
@@ -256,6 +259,9 @@ export function TopNav({ user }: TopNavProps) {
                 <Link href="/cognitive-audit" className="flex items-center justify-between rounded-xl px-4 py-2.5 text-sm font-bold text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 transition-all">
                   Skills Benchmark
                   <ChevronRight className="h-4 w-4 opacity-50" />
+                </Link>
+                <Link href="/eval-lab" className="flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-bold text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 transition-all">
+                  <Zap className="h-5 w-5 text-amber-500" /> Intelligence Lab
                 </Link>
                 <Link href="/console" className="flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-bold text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 transition-all">
                   <TerminalSquare className="h-5 w-5 text-zinc-400" /> Console
