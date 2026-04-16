@@ -21,7 +21,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Messages array is required" }, { status: 400 });
     }
 
-    // Intelligence Lab request: we want logprobs if possible for visualization
+    // Image & Video Console request: we want logprobs if possible for visualization
     const { url, init } = createChatCompletionsRequest({
       messages,
       temperature,

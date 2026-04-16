@@ -32,9 +32,9 @@ export function AuthForm({ mode: initialMode }: AuthFormProps) {
   // Automated redirect if already signed in
   useEffect(() => {
     if (isSignedIn) {
-      router.push("/r/me");
+      window.location.href = "/r/me";
     }
-  }, [isSignedIn, router]);
+  }, [isSignedIn]);
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -75,8 +75,7 @@ export function AuthForm({ mode: initialMode }: AuthFormProps) {
           return;
         }
       }
-      router.push("/r/me");
-      router.refresh();
+      window.location.href = "/r/me";
     } catch (authError) {
       setError(authError instanceof Error ? authError.message : "Authentication failed");
       setBusy(false);
@@ -148,7 +147,7 @@ export function AuthForm({ mode: initialMode }: AuthFormProps) {
           {isSignedIn ? (
             <div className="mt-6 space-y-3">
               <button
-                onClick={() => router.push("/r/me")}
+                onClick={() => { window.location.href = "/r/me"; }}
                 className="w-full rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700 shadow-lg shadow-indigo-600/25"
               >
                 Go to My Profile

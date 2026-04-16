@@ -1314,13 +1314,13 @@ function WritingLabInner({
                     </Badge>
                   </div>
                   <p className={cn("max-w-xl text-sm leading-relaxed", t.muted)}>
-                    Write in the canvas, tune tone with coaching modes, then export or listen with speech.
+                    Write in the canvas, tune tone with AI rewrite modes, then export or listen with speech.
                   </p>
                 </div>
               </div>
 
               <div className="space-y-1.5">
-                <Label className={cn("text-[11px] font-medium", t.muted2)}>Coaching tone</Label>
+                <Label className={cn("text-[11px] font-medium", t.muted2)}>AI Rewrite Tone</Label>
                 <ToggleGroup
                   type="single"
                   value={studioMode}
@@ -1463,14 +1463,14 @@ function WritingLabInner({
                     size="sm"
                     onClick={() => void handleStudioRewrite()}
                     disabled={!text.trim() || studioLoading}
-                    title={!text.trim() ? "Add text in the console below to coach" : undefined}
+                    title={!text.trim() ? "Add text in the console below to improve" : undefined}
                     className={cn(
                       "rounded-l-none border-0 bg-[var(--brand-teal)] text-[#0C0C0B] shadow-none hover:brightness-105 disabled:opacity-45",
                       "text-[12px] font-semibold",
                     )}
                   >
                     {studioLoading ? <Loader2 className="mr-1.5 h-4 w-4 animate-spin" /> : <PenTool className="mr-1.5 h-4 w-4" />}
-                    {studioLoading ? "Coaching…" : "Coach draft"}
+                    {studioLoading ? "Improving…" : "Improve draft"}
                   </Button>
                 </div>
               </div>
@@ -1612,7 +1612,7 @@ function WritingLabInner({
                       if (historyDraftMissing) setHistoryDraftMissing(false);
                     }}
                     placeholder={
-                      "Paste, type, or upload a draft above.\n\nWhen the console is empty, use Generate with AI below for a first draft from a brief. After you have text, use Coach draft above."
+                      "Paste, type, or upload a draft above.\n\nWhen the console is empty, use Generate with AI below for a first draft from instructions. After you have text, use Improve draft above."
                     }
                     className={cn(
                       "min-h-[min(34vh,260px)] w-full flex-1 resize-y border-0 bg-transparent px-4 py-4 pr-12 text-[14px] leading-relaxed outline-none transition-[box-shadow] focus:ring-2 focus:ring-inset focus:ring-zinc-400/25 dark:focus:ring-white/15 sm:min-h-[min(40vh,360px)] sm:pr-14",
@@ -1629,9 +1629,9 @@ function WritingLabInner({
                       )}
                     >
                       <div className="min-w-0 space-y-0.5">
-                        <p className={cn("text-[10px] font-bold uppercase tracking-[0.14em]", t.muted2)}>Start with a brief</p>
+                        <p className={cn("text-[10px] font-bold uppercase tracking-[0.14em]", t.muted2)}>Create a new draft</p>
                         <p className={cn("text-[12px] leading-snug", t.muted)}>
-                          Generate a first draft from a short brief — then refine with coaching and skill checks.
+                          Generate a first draft from a short prompt — then refine with AI and skill checks.
                         </p>
                       </div>
                       <button
@@ -1655,7 +1655,7 @@ function WritingLabInner({
           {(studioLoading || studioError || studioResult) && (
             <div className={cn("flex min-h-0 max-h-[min(34vh,280px)] shrink-0 flex-col border-t pt-1", t.workspaceSurface, t.borderSub)}>
               <div className={cn("flex shrink-0 items-center justify-between gap-2 px-4 py-2 sm:px-5")}>
-                <span className={cn("text-[10px] font-bold uppercase tracking-[0.14em]", t.muted2)}>Coaching result</span>
+                <span className={cn("text-[10px] font-bold uppercase tracking-[0.14em]", t.muted2)}>Generated text</span>
                 {studioResult?.rewritten ? (
                   <div className="flex items-center gap-2 sm:gap-3">
                     <button
@@ -1841,129 +1841,93 @@ function WritingLabInner({
         >
           <div className="shrink-0 px-4 py-3 sm:py-3.5">
             <div>
-              <p className={cn("text-xs font-medium", t.muted2)}>Assistant</p>
+              <p className={cn("text-xs font-medium", t.muted2)}>Workspace Copilot</p>
               <h2 className={cn("mt-0.5 text-sm font-semibold tracking-tight sm:text-base", t.text)}>
-                Prompts &amp; generation
+                AI Custom Instructions
               </h2>
             </div>
           </div>
 
           <div className={cn("flex-1 space-y-5 overflow-y-auto px-4 pb-5 pt-2 lg:pt-1", t.scrollbar)}>
-            <section className={assistantSectionClass} aria-labelledby="assistant-task-title">
-              <h3 id="assistant-task-title" className={cn("text-sm font-semibold", t.text)}>
-                Task
+            <section className={assistantSectionClass} aria-labelledby="assistant-unified-title">
+              <h3 id="assistant-unified-title" className={cn("text-sm font-semibold", t.text)}>
+                AI Assistant
               </h3>
               <p className={cn("mt-1 text-xs leading-relaxed", t.muted2)}>
-                Optional focus for refine. If empty, your canvas draft is used. Coach and generate still use your usual text model.
+                Add specific directions for how the AI should rewrite or structure your text.
               </p>
               <div className="mt-3">
-                <Label htmlFor="console-task" className="sr-only">
-                  Task or prompt
+                <Label htmlFor="console-task" className={cn("mb-1 block text-[10px] font-bold uppercase tracking-wider", t.text)}>
+                  Custom rewrite instructions
                 </Label>
                 <Textarea
                   id="console-task"
                   value={consoleTask}
                   onChange={(e) => setConsoleTask(e.target.value)}
                   rows={3}
-                  placeholder="Example: Summarize the draft in three bullets for executives…"
-                  className={cn("min-h-[88px] resize-y text-[13px] leading-relaxed", t.input)}
+                  placeholder="Example: Make the tone more executive and summarize the text into three bullet points…"
+                  className={cn("min-h-[88px] resize-y text-[13px] leading-relaxed transition-[box-shadow] focus:ring-2 focus:ring-inset focus:ring-zinc-400/25 dark:focus:ring-white/15", t.input)}
                 />
               </div>
-            </section>
-
-            <section className={assistantSectionClass} aria-labelledby="assistant-refine-title">
-              <h3 id="assistant-refine-title" className={cn("text-sm font-semibold", t.text)}>
-                Refine prompt
-              </h3>
-              <p className={cn("mt-1 text-xs leading-relaxed", t.muted2)}>
-                Turn a rough instruction into a clear, structured prompt.
-              </p>
-              <div className="mt-3 space-y-3">
-                <div className="flex flex-wrap gap-2">
-                  <Button
-                    type="button"
-                    size="sm"
-                    onClick={openGenerateWorkspace}
-                    className={cn("gap-1.5 shadow-none", t.btnPrimary)}
-                  >
-                    <Sparkles className="h-3.5 w-3.5" />
-                    Prompt builder
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => void runRefinePrompt()}
-                    disabled={refineLoading || !taskForConsole()}
-                    className={cn("gap-1.5 shadow-none", t.borderSub, t.text, "hover:bg-black/[0.04] dark:hover:bg-white/[0.06]")}
-                  >
-                    {refineLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Wand2 className="h-3.5 w-3.5" />}
-                    Refine with AI
-                  </Button>
-                </div>
-                {refineError ? (
-                  <p className={cn("text-xs font-medium", t.danger)} role="alert">
-                    {refineError}
-                  </p>
-                ) : null}
-                {refinedOutput ? (
-                  <div
-                    className={cn(
-                      "space-y-2 rounded-xl p-3",
-                      themeMode === "light"
-                        ? "shadow-[inset_0_1px_2px_rgba(15,23,42,0.06)] ring-1 ring-zinc-900/[0.05]"
-                        : "shadow-[inset_0_1px_3px_rgba(0,0,0,0.35)] ring-1 ring-white/[0.06]",
-                    )}
-                  >
-                    <p className={cn("text-[10px] font-semibold uppercase tracking-wider", t.muted2)}>Result</p>
-                    <p className={cn("whitespace-pre-wrap text-xs leading-relaxed sm:text-sm", t.text)}>{refinedOutput.refined}</p>
-                    {refinedOutput.notes ? (
-                      <p className={cn("text-[11px] leading-snug", t.muted2)}>{refinedOutput.notes}</p>
-                    ) : null}
-                    <Button
-                      type="button"
-                      variant="link"
-                      size="sm"
-                      className={cn("h-auto p-0 text-xs", t.muted)}
-                      onClick={() => {
-                        setConsoleTask(refinedOutput.refined);
-                        setRefinedOutput(null);
-                      }}
-                    >
-                      Use as task
-                    </Button>
-                  </div>
-                ) : null}
-              </div>
-            </section>
-
-            <section className={assistantSectionClass} aria-labelledby="assistant-generate-title">
-              <h3 id="assistant-generate-title" className={cn("text-sm font-semibold", t.text)}>
-                Generate
-              </h3>
-              <p className={cn("mt-1 text-xs leading-relaxed", t.muted2)}>Start from a brief or coach the current draft.</p>
               <div className="mt-3 grid gap-2 sm:grid-cols-2">
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
-                  onClick={openGenerateWorkspace}
-                  className={cn("w-full justify-center gap-2 shadow-none", t.borderSub, t.text)}
+                  onClick={() => void runRefinePrompt()}
+                  disabled={refineLoading || !taskForConsole()}
+                  title="Expand into a structured prompt"
+                  className={cn("w-full justify-center gap-1.5 shadow-none px-2", t.borderSub, t.text, "hover:bg-black/[0.04] dark:hover:bg-white/[0.06]")}
                 >
-                  <Sparkles className="h-3.5 w-3.5" />
-                  From brief
+                  {refineLoading ? <Loader2 className="h-3.5 w-3.5 shrink-0 animate-spin" /> : <Wand2 className="h-3.5 w-3.5 shrink-0" />}
+                  <span className="truncate">Refine instructions</span>
                 </Button>
                 <Button
                   type="button"
                   size="sm"
                   onClick={() => void handleStudioRewrite()}
                   disabled={!text.trim() || studioLoading}
-                  className={cn("w-full justify-center gap-2 border-0 bg-[var(--brand-teal)] text-[#0C0C0B] shadow-none hover:brightness-105")}
+                  title="Apply instructions to the canvas draft"
+                  className={cn("w-full justify-center gap-1.5 border-0 bg-[var(--brand-teal)] text-[#0C0C0B] shadow-none hover:brightness-105 px-2")}
                 >
-                  {studioLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <PenTool className="h-3.5 w-3.5" />}
-                  Coach draft
+                  {studioLoading ? <Loader2 className="h-3.5 w-3.5 shrink-0 animate-spin" /> : <PenTool className="h-3.5 w-3.5 shrink-0" />}
+                  <span className="truncate">Apply to draft</span>
                 </Button>
               </div>
+              
+              {refineError ? (
+                <p className={cn("mt-3 text-xs font-medium", t.danger)} role="alert">
+                  {refineError}
+                </p>
+              ) : null}
+              {refinedOutput ? (
+                <div
+                  className={cn(
+                    "mt-3 space-y-2 rounded-xl p-3",
+                    themeMode === "light"
+                      ? "shadow-[inset_0_1px_2px_rgba(15,23,42,0.06)] ring-1 ring-zinc-900/[0.05]"
+                      : "shadow-[inset_0_1px_3px_rgba(0,0,0,0.35)] ring-1 ring-white/[0.06]",
+                  )}
+                >
+                  <p className={cn("text-[10px] font-semibold uppercase tracking-wider", t.muted2)}>Refined Prompt</p>
+                  <p className={cn("whitespace-pre-wrap text-xs leading-relaxed sm:text-sm", t.text)}>{refinedOutput.refined}</p>
+                  {refinedOutput.notes ? (
+                    <p className={cn("text-[11px] leading-snug", t.muted2)}>{refinedOutput.notes}</p>
+                  ) : null}
+                  <Button
+                    type="button"
+                    variant="link"
+                    size="sm"
+                    className={cn("h-auto p-0 text-xs", t.muted)}
+                    onClick={() => {
+                      setConsoleTask(refinedOutput.refined);
+                      setRefinedOutput(null);
+                    }}
+                  >
+                    Use as input
+                  </Button>
+                </div>
+              ) : null}
             </section>
 
             <p

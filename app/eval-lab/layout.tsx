@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Intelligence Lab — StandexAI",
-  description: "Experience the architecture and benchmarks of modern Large Language Models through immersive technical simulations.",
+  title: "Image & Video Console — StandexAI",
+  description: "Advanced visual synthesis and vision analysis engine for modern engineering workflows.",
 };
 
 export default function EvalLabLayout({

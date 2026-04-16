@@ -105,10 +105,10 @@ export function TopNav({ user }: TopNavProps) {
                   Skills Benchmark
                 </Link>
                 <Link href="/eval-lab" className="flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-bold text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-all">
-                  <Zap className="h-4 w-4 text-amber-500" /> Intelligence Lab
+                  <Zap className="h-4 w-4 text-amber-500" /> Image & Video Console
                 </Link>
                 <Link href="/console" className="flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-bold text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-all">
-                  <TerminalSquare className="h-4 w-4 text-zinc-400" /> Console
+                  <TerminalSquare className="h-4 w-4 text-zinc-400" /> Speech & Text Console
                 </Link>
               </div>
             </div>
@@ -261,10 +261,10 @@ export function TopNav({ user }: TopNavProps) {
                   <ChevronRight className="h-4 w-4 opacity-50" />
                 </Link>
                 <Link href="/eval-lab" className="flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-bold text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 transition-all">
-                  <Zap className="h-5 w-5 text-amber-500" /> Intelligence Lab
+                  <Zap className="h-5 w-5 text-amber-500" /> Image & Video Console
                 </Link>
                 <Link href="/console" className="flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-bold text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 transition-all">
-                  <TerminalSquare className="h-5 w-5 text-zinc-400" /> Console
+                  <TerminalSquare className="h-5 w-5 text-zinc-400" /> Speech & Text Console
                 </Link>
 
                 <div className="my-4 h-px w-full bg-zinc-100" />

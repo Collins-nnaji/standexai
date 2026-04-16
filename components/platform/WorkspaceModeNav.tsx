@@ -6,7 +6,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import type { ConsoleTheme, ConsoleThemeMode } from "@/components/console/console-theme";
 
-type Active = "skills" | "console";
+type Active = "skills" | "console" | "eval-lab";
 
 type Props = {
   active: Active;
@@ -77,10 +77,18 @@ export function WorkspaceModeNav({ active, consoleTheme, consoleThemeMode = "lig
         {pill(
           "/console",
           <>
-            <span className="sm:hidden">Console</span>
-            <span className="hidden sm:inline">Learning console</span>
+            <span className="sm:hidden">Speech</span>
+            <span className="hidden sm:inline">Speech & Text Console</span>
           </>,
           active === "console",
+        )}
+        {pill(
+          "/eval-lab",
+          <>
+            <span className="sm:hidden">Vision</span>
+            <span className="hidden sm:inline">Image & Video Console</span>
+          </>,
+          active === "eval-lab",
         )}
       </div>
     </div>
