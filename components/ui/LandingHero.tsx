@@ -45,19 +45,19 @@ export function LandingHero() {
       </div>
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 h-full flex flex-col justify-center min-h-[90vh] pt-24">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-24 items-center py-8">
           
           {/* ── Left Column: Engineering-Grade Messaging ── */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="flex flex-col gap-10 z-10"
+            className="flex flex-col gap-10 z-10 lg:-ml-8"
           >
             <div className="space-y-6">
 
               
-              <h1 className="text-6xl md:text-8xl font-black tracking-tighter leading-[0.9] text-white">
+              <h1 className="text-6xl md:text-8xl font-extrabold tracking-tight leading-[0.9] text-white">
                 Architecting <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-emerald-300 to-teal-400">
                   Intelligent
@@ -77,7 +77,7 @@ export function LandingHero() {
             <div className="flex flex-wrap gap-5">
               <Link 
                 href="/Contact"
-                className="group relative flex h-16 items-center gap-4 overflow-hidden rounded-2xl bg-emerald-500 px-10 text-sm font-black tracking-widest text-white transition-all hover:bg-emerald-600 shadow-lg shadow-emerald-200"
+                className="group relative flex h-16 items-center gap-4 overflow-hidden rounded-2xl bg-emerald-500 px-10 text-sm font-bold tracking-widest text-white transition-all hover:bg-emerald-600 shadow-lg shadow-emerald-200"
               >
                 <span>ENGINEER A SOLUTION</span>
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />

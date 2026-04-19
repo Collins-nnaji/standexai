@@ -15,14 +15,14 @@ const ContactHeader = () => {
           className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 mb-8"
         >
           <Sparkles className="h-3.5 w-3.5 text-[#7C5CFC]" />
-          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#7C5CFC]">Strategic Engagement</span>
+          <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#7C5CFC]">Strategic Engagement</span>
         </motion.div>
 
         <motion.h1 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1 }}
-          className="text-5xl md:text-8xl font-black tracking-tighter uppercase italic leading-[0.85] mb-10"
+          className="text-5xl md:text-8xl font-extrabold tracking-tight leading-[0.9] mb-10"
         >
           Engineering <br /> Intake.
         </motion.h1>

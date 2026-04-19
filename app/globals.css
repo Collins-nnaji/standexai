@@ -86,10 +86,10 @@ a {
   h5,
   h6 {
     color: var(--ink-900);
-    font-family: var(--font-syne), sans-serif;
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    line-height: 1.15;
+    font-family: var(--font-standex-sans), sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
   }
 }
 
@@ -739,7 +739,7 @@ section#how:not(.landing-how-revealed) .landing-how-flow-connector {
 /* Use Inter everywhere: legacy `font-syne` classes map to the same UI font */
 @layer utilities {
   .font-syne {
-    font-family: var(--font-syne), ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-standex-sans), ui-sans-serif, system-ui, sans-serif;
   }
 }
 

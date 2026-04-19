@@ -32,7 +32,7 @@ export interface TopNavProps {
   } | null;
 }
 
-export function TopNav() {
+export function TopNav({ user }: TopNavProps) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -94,7 +94,7 @@ export function TopNav() {
         <nav className="hidden items-center gap-1 sm:flex">
           {/* AI Services Dropdown */}
           <div className="relative group">
-            <button className="flex items-center gap-1 rounded-xl px-4 py-2 text-sm font-black text-white hover:bg-zinc-800 transition-all duration-300 border border-zinc-800/50 hover:border-emerald-500/30">
+            <button className="flex items-center gap-1 rounded-xl px-4 py-2 text-sm font-bold text-white hover:bg-zinc-800 transition-all duration-300 border border-zinc-800/50 hover:border-emerald-500/30">
               AI Services
               <ChevronDown className="h-3.5 w-3.5 opacity-50 transition-transform group-hover:rotate-180" />
             </button>
@@ -102,7 +102,7 @@ export function TopNav() {
               <div className="w-[280px] rounded-2xl border border-zinc-800 bg-zinc-900 p-4 shadow-[0_20px_80px_-15px_rgba(0,0,0,0.5)] flex flex-col gap-2">
                 <div className="flex items-center gap-2 px-2 mb-2">
                    <Zap className="h-3.5 w-3.5 text-emerald-500" />
-                   <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-500">Artificial Intelligence</span>
+                   <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-500">Artificial Intelligence</span>
                 </div>
                 <Link href="/solutions/ai-agents" className="group/item flex flex-col rounded-xl p-3 transition-all hover:bg-zinc-800">
                   <span className="text-sm font-bold text-white leading-tight">AI Agents & Swarms</span>
@@ -118,7 +118,7 @@ export function TopNav() {
 
           {/* Power Platform Dropdown */}
           <div className="relative group">
-            <button className="flex items-center gap-1 rounded-xl px-4 py-2 text-sm font-black text-white hover:bg-zinc-800 transition-all duration-300 border border-zinc-800/50 hover:border-emerald-500/30">
+            <button className="flex items-center gap-1 rounded-xl px-4 py-2 text-sm font-bold text-white hover:bg-zinc-800 transition-all duration-300 border border-zinc-800/50 hover:border-emerald-500/30">
               Power Platform
               <ChevronDown className="h-3.5 w-3.5 opacity-50 transition-transform group-hover:rotate-180" />
             </button>
@@ -126,7 +126,7 @@ export function TopNav() {
               <div className="w-[280px] rounded-2xl border border-zinc-800 bg-zinc-900 p-4 shadow-[0_20px_80px_-15px_rgba(0,0,0,0.5)] flex flex-col gap-2">
                 <div className="flex items-center gap-2 px-2 mb-2">
                    <Cpu className="h-3.5 w-3.5 text-[#049DCB]" />
-                   <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#049DCB]">Microsoft Solutions</span>
+                   <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#049DCB]">Microsoft Solutions</span>
                 </div>
                 <Link href="/solutions/power-platform" className="group/item flex flex-col rounded-xl p-3 transition-all hover:bg-zinc-800">
                   <span className="text-sm font-bold text-white leading-tight">Strategy & Governance</span>
@@ -145,10 +145,19 @@ export function TopNav() {
           </div>
 
           {/* Standalone Links */}
-          <Link href="/console" className="rounded-xl px-4 py-2 text-sm font-black text-white hover:bg-zinc-800 transition-all">
+          {/* Standalone Links */}
+          <Link 
+            href="/console" 
+            className="rounded-xl px-4 py-2 text-sm font-bold text-white hover:bg-white/10 transition-all border border-transparent hover:border-white/20"
+            style={{ color: '#FFFFFF' }}
+          >
             AI Tools
           </Link>
-          <Link href="/learn" className="rounded-xl px-4 py-2 text-sm font-black text-white hover:bg-zinc-800 transition-all">
+          <Link 
+            href="/learn" 
+            className="rounded-xl px-4 py-2 text-sm font-bold text-white hover:bg-white/10 transition-all border border-transparent hover:border-white/20"
+            style={{ color: '#FFFFFF' }}
+          >
             Learn
           </Link>
 
@@ -198,7 +207,7 @@ export function TopNav() {
             >
               <nav className="flex flex-col gap-2">
                 <div className="mb-4">
-                  <p className="px-3 text-[10px] font-black uppercase tracking-widest text-white/50">Services</p>
+                  <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-white/50">Services</p>
                 </div>
                 
                 <Link href="/solutions/ai-agents" className="flex items-center justify-between rounded-xl px-4 py-3 text-sm font-bold text-white hover:bg-zinc-800 transition-all">
@@ -227,7 +236,7 @@ export function TopNav() {
                 <div className="my-4 h-px w-full bg-zinc-100" />
                 
                 <div className="mb-3 px-3">
-                  <p className="text-[10px] font-black uppercase tracking-widest text-white/50">Engineering Tools</p>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-white/50">Engineering Tools</p>
                 </div>
                 <Link href="/console" className="flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-bold text-white hover:bg-zinc-800 transition-all">
                   <Zap className="h-5 w-5 text-emerald-500" /> AI Tools Console

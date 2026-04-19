@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 
-const Standex DigitalPage = () => {
+const StandexAIPage = () => {
   useEffect(() => {
     window.location.replace('https://standexai.com')
   }, [])
@@ -17,6 +17,6 @@ const Standex DigitalPage = () => {
   )
 }
 
-export default Standex DigitalPage
+export default StandexAIPage
 
 
