@@ -399,7 +399,7 @@ const trackConfig = {
     enrollLink: "https://buy.stripe.com/28E4gB0JK6Z8dDi697fnO0j",
     certTitle: "Applied AI Engineer",
     certTag: "SXAI-V26-04",
-    deckLink: "/presentation/ai",
+    deckLink: "/ai-deck",
     cohortLabel: "Applied Cohort 04",
     color: "#049DCB",
     mastery: [
@@ -424,7 +424,7 @@ const trackConfig = {
     enrollLink: "https://buy.stripe.com/bIY1693YAcFMbx66os",
     certTitle: "Certified Power Platform Developer",
     certTag: "SXPP-V26-04",
-    deckLink: "/presentation/power-platform",
+    deckLink: "/pp-deck",
     cohortLabel: "Power Platform Cohort 04",
     color: "#049DCB",
     mastery: [
@@ -965,16 +965,18 @@ export default function TrainingPage() {
         )}
       </AnimatePresence>
 
-      <footer className="max-w-7xl mx-auto px-12 py-24 border-t border-zinc-100 flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
+      <footer className="max-w-7xl mx-auto px-12 py-10 border-t border-zinc-100 flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3">
              <div className="h-2 w-2 rounded-full" style={{ backgroundColor: cfg.color }} />
              <p className="text-sm font-black uppercase tracking-[0.3em] text-zinc-950">Standex Digital</p>
           </div>
-          <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">© 2026 Applied Engineering Hub • All Rights Reserved</p>
+          <div className="flex flex-col gap-1">
+            <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">© 2026 Applied Engineering Hub • All Rights Reserved</p>
+            <a href="mailto:hr@standexdigital.com" className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest hover:text-zinc-900 transition-colors">hr@standexdigital.com</a>
+          </div>
         </div>
         <div className="flex items-center gap-12">
-          <Link href={cfg.deckLink} className="text-[11px] font-black uppercase tracking-[0.3em] text-zinc-400 hover:text-zinc-900 transition-colors">Course Deck</Link>
           <Link href="#" className="text-[11px] font-black uppercase tracking-[0.3em] text-zinc-400 hover:text-zinc-900 transition-colors">Privacy</Link>
           <Link href="#" className="text-[11px] font-black uppercase tracking-[0.3em] text-zinc-950 border-b-2" style={{ borderColor: cfg.color }}>{cfg.cohortLabel}</Link>
         </div>

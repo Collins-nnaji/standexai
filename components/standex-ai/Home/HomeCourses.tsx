@@ -131,7 +131,7 @@ export default function HomeCourses() {
                     Enroll Now <ArrowRight className="h-4 w-4" />
                   </Link>
                   <Link
-                    href="/learn"
+                    href="/Training"
                     className="flex-1 inline-flex items-center justify-center gap-3 rounded-2xl p-5 text-[11px] font-black uppercase tracking-[0.2em] text-zinc-900 bg-zinc-50 border border-zinc-200 hover:bg-zinc-100 transition-all"
                   >
                     View Syllabus
