@@ -119,15 +119,15 @@ const Footer = () => {
             <div className="space-y-4">
               <p className="text-[10px] font-black uppercase tracking-[0.4em] text-zinc-600">Company</p>
               <nav className="flex flex-col gap-2.5">
-                <Link href="/About" className="text-[11px] font-bold text-zinc-400 hover:text-emerald-500 transition-colors">Mission</Link>
-                <Link href="/Contact" className="text-[11px] font-bold text-zinc-400 hover:text-emerald-500 transition-colors">Contact</Link>
+                <Link href="/#about" className="text-[11px] font-bold text-zinc-400 hover:text-emerald-500 transition-all duration-300">Mission</Link>
+                <Link href="/Contact" className="text-[11px] font-bold text-zinc-400 hover:text-emerald-500 transition-all duration-300">Contact</Link>
               </nav>
             </div>
             <div className="space-y-4">
               <p className="text-[10px] font-black uppercase tracking-[0.4em] text-zinc-600">Resources</p>
               <nav className="flex flex-col gap-2.5">
-                <Link href="/Training" className="text-[11px] font-bold text-zinc-400 hover:text-emerald-500 transition-colors">Academy</Link>
-                <Link href="/console" className="text-[11px] font-bold text-zinc-400 hover:text-emerald-500 transition-colors">Console</Link>
+                <Link href="/#academy" className="text-[11px] font-bold text-zinc-400 hover:text-emerald-500 transition-all duration-300">Academy</Link>
+                <Link href="/console" className="text-[11px] font-bold text-zinc-400 hover:text-emerald-500 transition-all duration-300">Console</Link>
               </nav>
             </div>
           </div>

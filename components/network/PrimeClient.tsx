@@ -45,13 +45,14 @@ export function PrimeClient() {
 
       {/* Breadcrumbs: compact on mobile, full trail on sm+ */}
       <nav className="relative z-10 mb-8 min-w-0 sm:mb-12" aria-label="Breadcrumb">
-        <div className="flex min-w-0 flex-col gap-1 sm:hidden bg-white/80 backdrop-blur-md px-5 py-4 rounded-3xl border border-zinc-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] w-fit">
+        <div className="flex min-w-0 items-center gap-2 sm:hidden bg-zinc-950/90 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-zinc-800 shadow-2xl w-fit">
           <Link
             href="/"
-            className="flex w-fit items-center gap-1 text-[10px] font-black uppercase tracking-widest text-zinc-400 transition-all hover:text-zinc-900"
+            className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-zinc-400 transition-all hover:text-white"
           >
-            <Home className="h-3 w-3 shrink-0" /> Network
+            <Home className="h-3.5 w-3.5 shrink-0" />
           </Link>
+          <ChevronRight className="h-3 w-3 shrink-0 text-zinc-700" />
           <p className="truncate text-[10px] font-black uppercase tracking-widest text-[#7C5CFC]">Standex Prime</p>
         </div>
         <div className="hidden min-w-0 items-center gap-2 pb-2 sm:flex sm:flex-wrap sm:gap-x-2 sm:gap-y-1">

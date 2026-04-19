@@ -25,7 +25,7 @@ export default function Page() {
         </div>
 
         {/* 2. CORPORATE SERVICES (Restyled HomeServices) */}
-        <div className="w-full">
+        <div id="services" className="w-full">
           <HomeServices />
         </div>
 
@@ -35,12 +35,12 @@ export default function Page() {
         </div>
 
         {/* 4. ACADEMY CURRICULUM (HomeCourses) */}
-        <div className="w-full">
+        <div id="academy" className="w-full">
           <HomeCourses />
         </div>
 
         {/* 5. ABOUT & EXPERTISE (Restyled HomeAbout) */}
-        <div className="w-full">
+        <div id="about" className="w-full">
           <HomeAbout />
         </div>
 

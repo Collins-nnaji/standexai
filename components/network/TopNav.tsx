@@ -227,20 +227,18 @@ export function TopNav({ user }: TopNavProps) {
                 <Link href="/Training" className="flex items-center justify-between rounded-xl px-4 py-3 text-sm font-bold text-white hover:bg-zinc-800 transition-all">
                    Training <ChevronRight className="h-4 w-4 opacity-50" />
                 </Link>
-                <Link href="/console" className="flex items-center justify-between rounded-xl px-4 py-3 text-sm font-bold text-white hover:bg-zinc-800 transition-all">
-                   AI Console <Zap className="h-4 w-4 text-emerald-500" />
-                </Link>
+
 
                 <Link href="/Contact" className="flex items-center justify-between rounded-xl px-4 py-3 text-sm font-bold text-white hover:bg-zinc-800 transition-all">
                    Contact <ChevronRight className="h-4 w-4 opacity-50" />
                 </Link>
 
-                <div className="my-4 h-px w-full bg-zinc-100" />
+                <div className="my-4 h-px w-full bg-zinc-800" />
                 
                 <div className="mb-3 px-3">
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-white/50">Engineering Tools</p>
+                   <p className="text-[10px] font-black uppercase tracking-widest text-[#7C5CFC]">Engineering Access</p>
                 </div>
-                <Link href="/console" className="flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-bold text-white hover:bg-zinc-800 transition-all">
+                <Link href="/console" className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold text-white bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 transition-all shadow-lg active:scale-95">
                   <Zap className="h-5 w-5 text-emerald-500" /> AI Console
                 </Link>
               </nav>
