@@ -13,7 +13,7 @@ export default function middleware(req: NextRequest) {
     url.pathname = path.replace(/^\/exam-prep/, "/skills");
     return NextResponse.redirect(url);
   }
-  return authMiddleware(req);
+  return NextResponse.next();
 }
 
 export const config = {

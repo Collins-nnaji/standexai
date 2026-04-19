@@ -523,7 +523,7 @@ export function MockCohort() {
       <div className="relative aspect-[4/3] min-h-[200px] w-full overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-100 shadow-md md:aspect-auto md:min-h-[260px]">
         <Image
           src={deckImages.standexHero}
-          alt="StandexAI — applied AI engineering"
+          alt="Standex Digital — applied AI engineering"
           fill
           className="object-cover"
           sizes="(max-width: 768px) 100vw, 360px"

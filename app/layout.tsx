@@ -54,9 +54,12 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "StandexAI — Professional Network for AI Researchers",
+  title: "Standex Digital — Applied AI & Power Platform Engineering",
   description:
-    "Discover talent, publish work, and build your reputation in the AI research community.",
+    "Premier Applied AI, Microsoft Power Platform engineering, and professional training solutions for modern digital infrastructure.",
+  icons: {
+    icon: "/StandexLogo.webp",
+  },
 };
 
 export default function RootLayout({
@@ -67,7 +70,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fontInter.variable} ${fontInter.className} ${fontSans.variable} ${fontLandingSans.variable} ${fontLandingSerif.variable} ${fontConsoleMono.variable} ${fontSyne.variable}`}
+      className={`${fontSans.variable} ${fontSans.className} ${fontInter.variable} ${fontLandingSans.variable} ${fontLandingSerif.variable} ${fontConsoleMono.variable} ${fontSyne.variable}`}
       suppressHydrationWarning
     >
       <body className="antialiased min-h-screen text-zinc-900 bg-white">

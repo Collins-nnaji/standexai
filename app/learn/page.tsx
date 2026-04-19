@@ -10,7 +10,8 @@ import {
   BarChart3, ShieldCheck, CreditCard
 } from "lucide-react";
 import Link from "next/link";
-import { neonAuthClient } from "@/lib/neon/auth-client";
+
+/* ── AI ENGINEERING TRACK DATA ── */
 
 const T = {
   nextjs: { name: "Next.js", src: "/images/nextjslogo.png" },
@@ -26,8 +27,7 @@ const T = {
   cursor: { name: "Cursor", src: "/images/cursor logo.png" },
 };
 
-
-const weeks = [
+const aiWeeks = [
   {
     week: 1, title: "Foundations & Modern LLMs",
     subtitle: "Evolution, Architecture & Prompting",
@@ -198,6 +198,248 @@ const weeks = [
   },
 ];
 
+/* ── POWER PLATFORM TRACK DATA ── */
+
+const PP = {
+  powerapps: { name: "Power Apps", src: "/PowerApps.svg" },
+  powerautomate: { name: "Power Automate", src: "/PowerAutomate.svg" },
+  powerbi: { name: "Power BI", src: "/PowerBi.svg" },
+  powerpages: { name: "Power Pages", src: "/PowerPages.svg" },
+  powerplatform: { name: "Power Platform", src: "/PowerPlatform.svg" },
+  azure: { name: "Azure", src: "/images/azure logo.png" },
+};
+
+const ppWeeks = [
+  {
+    week: 1, title: "Power Platform & Data Foundations",
+    subtitle: "Ecosystem, Architecture & SQL",
+    description: "Master the Microsoft Power Platform ecosystem and build a rock-solid data foundation. Understand environments, licensing, Dataverse architecture, and write production-grade SQL from day one.",
+    tools: [PP.powerplatform, PP.powerapps, PP.powerbi, PP.azure],
+    fullCurriculum: [
+      {
+        session: "Session 1 — Power Platform Ecosystem & Architecture",
+        topics: [
+          "Power Platform ecosystem: M365, Azure, and Power Platform integration landscape",
+          "Roles of Power Apps, Power Automate, Power BI, and Copilot Studio in enterprise solutions",
+          "Architecture patterns: environments, solutions, licensing, and governance",
+          "General data concepts: transactional vs analytical, OLTP vs OLAP",
+          "Data quality, integrity, governance, and normalisation vs denormalisation",
+        ],
+      },
+      {
+        session: "Session 2 — SQL Fundamentals & Dataverse",
+        topics: [
+          "SQL fundamentals: relational schemas, primary/foreign keys, constraints",
+          "Core SQL: SELECT, WHERE, JOIN, GROUP BY, subqueries, and CTEs",
+          "Window functions, indexing, and performance optimisation basics",
+          "Dataverse fundamentals: table design, relationships, and business rules",
+          "When to use Dataverse vs SQL vs SharePoint — choosing the right data layer",
+          "Connecting SQL to Power Apps and Power BI: security and compliance basics",
+        ],
+      },
+    ],
+  },
+  {
+    week: 2, title: "Power Apps — Canvas & Model-Driven",
+    subtitle: "Design, Architecture & Power Fx",
+    description: "Build data-driven business applications from scratch. Master canvas app design, model-driven app architecture, and the Power Fx formula language for production-grade enterprise apps.",
+    tools: [PP.powerapps, PP.powerplatform, PP.powerbi, PP.powerpages],
+    fullCurriculum: [
+      {
+        session: "Session 1 — Canvas App Mastery",
+        topics: [
+          "Canvas app architecture: screens, forms, galleries, components, and containers",
+          "Power Fx deep dive: Patch, Collect, LookUp, Filter, ForAll, and delegation patterns",
+          "Handling delegation limits and large dataset performance optimisation",
+          "Responsive design: building apps that work across mobile, tablet, and desktop",
+          "Security roles and data-level access control in canvas apps",
+        ],
+      },
+      {
+        session: "Session 2 — Model-Driven Apps & Custom Components",
+        topics: [
+          "Model-driven app configuration: forms, views, dashboards, and business process flows",
+          "Custom business logic: JavaScript web resources and plug-in architecture",
+          "Component framework (PCF): building custom controls for advanced scenarios",
+          "Offline capabilities and publishing strategies",
+          "ALM and solution management for enterprise-grade deployments",
+        ],
+      },
+    ],
+  },
+  {
+    week: 3, title: "Power Automate — Workflows & RPA",
+    subtitle: "Cloud Flows, Desktop Flows & Integration",
+    description: "Automate every business process. Build automated, instant, and scheduled cloud flows, integrate with hundreds of connectors, and deploy robotic process automation for legacy systems.",
+    tools: [PP.powerautomate, PP.powerapps, PP.powerplatform, PP.azure],
+    fullCurriculum: [
+      {
+        session: "Session 1 — Cloud Automation Mastery",
+        topics: [
+          "Flow types: automated, instant, scheduled, and business process flows",
+          "Using SQL and Dataverse as triggers and actions within flows",
+          "Approval patterns: multi-stage, parallel, and conditional approval workflows",
+          "Error handling: scopes, retries, exception patterns, and dead-letter strategies",
+          "App-to-flow integration: triggering automations from Power Apps",
+        ],
+      },
+      {
+        session: "Session 2 — RPA & Advanced Integration",
+        topics: [
+          "Power Automate Desktop: automating legacy desktop applications and web scraping",
+          "Data validation, transaction handling, and concurrency control",
+          "Performance tuning with large datasets and premium connectors",
+          "Governance: DLP policies, environment strategies, and ALM for automations",
+          "Building end-to-end automated business processes across the platform",
+        ],
+      },
+    ],
+  },
+  {
+    week: 4, title: "Power BI — Data Modelling & DAX",
+    subtitle: "Star Schema, Visualisation & Analytics",
+    description: "Transform raw data into executive-level intelligence. Master star schema modelling, DAX calculations, and Power BI report design to deliver insights that drive business decisions.",
+    tools: [PP.powerbi, PP.powerplatform, PP.azure, PP.powerapps],
+    fullCurriculum: [
+      {
+        session: "Session 1 — Data Modelling & Architecture",
+        topics: [
+          "BI fundamentals: KPIs, metrics, dimensions, measures, and reporting strategy",
+          "Star schema and dimensional modelling: fact tables, dimension tables, and relationships",
+          "Import vs DirectQuery vs Composite models — choosing the right strategy",
+          "Using SQL views for analytics and model performance optimisation",
+          "Power Query ETL: advanced data transformation and M language patterns",
+        ],
+      },
+      {
+        session: "Session 2 — DAX & Visualisation Mastery",
+        topics: [
+          "DAX fundamentals: calculated columns, measures, and evaluation context",
+          "Time intelligence patterns: YTD, MTD, same-period comparisons, and moving averages",
+          "Advanced DAX: CALCULATE, iterators, and context transition",
+          "Report design: best practices for executive dashboards and drill-through reports",
+          "Performance optimisation: DAX Studio, Performance Analyzer, and best practices",
+        ],
+      },
+    ],
+  },
+  {
+    week: 5, title: "Copilot Studio & Integration",
+    subtitle: "AI Assistants, Pages & Enterprise Security",
+    description: "Build intelligent AI-powered copilots and publish secure external portals. Master Copilot Studio for custom AI assistants and Power Pages for client-facing business solutions.",
+    tools: [PP.powerplatform, PP.powerpages, PP.powerapps, PP.powerbi],
+    fullCurriculum: [
+      {
+        session: "Session 1 — Copilot Studio & AI Assistants",
+        topics: [
+          "Copilot Studio fundamentals: topics, entities, and conversational AI design",
+          "Integrating Copilot with Dataverse, SharePoint, and custom APIs",
+          "Generative AI in Copilot: grounding responses with enterprise knowledge bases",
+          "Publishing copilots across Teams, websites, and mobile applications",
+          "Testing, analytics, and continuous improvement for AI assistants",
+        ],
+      },
+      {
+        session: "Session 2 — Power Pages & Enterprise Integration",
+        topics: [
+          "Power Pages architecture: site design, templates, and content management",
+          "Dataverse integration: forms, lists, and data display for external users",
+          "Row-Level Security (RLS) in Power BI: implementing data access governance",
+          "Embedding Power BI in Power Apps and Microsoft Teams",
+          "Cross-platform integration: connecting Power Platform with Azure services",
+        ],
+      },
+    ],
+  },
+  {
+    week: 6, title: "Capstone & Certification",
+    subtitle: "Enterprise Solution & Portfolio Delivery",
+    description: "Deliver a production-grade enterprise solution that demonstrates mastery across the full Power Platform stack. Graduate with a verified Standex certification and a portfolio-ready case study.",
+    tools: [PP.powerapps, PP.powerautomate, PP.powerbi, PP.powerpages],
+    fullCurriculum: [
+      {
+        session: "Session 1 — Capstone Architecture & Build",
+        topics: [
+          "Capstone project design: SQL + Dataverse backend architecture",
+          "Building the Power App front-end with enterprise UX patterns",
+          "Implementing Power Automate workflows for business process automation",
+          "Power BI analytics dashboard: real-time KPIs and executive reporting",
+          "End-to-end governance: security, ALM, and deployment strategy",
+        ],
+      },
+      {
+        session: "Session 2 — Presentation & Graduation",
+        topics: [
+          "Capstone documentation: technical architecture and business case study",
+          "Live demonstration and peer review of completed solutions",
+          "Growth and iteration: collecting stakeholder feedback for v2 planning",
+          "Portfolio Day: documenting your build for LinkedIn and professional profiles",
+          "Graduation: verified certificate issuance — Standex Certified Power Platform Developer",
+        ],
+      },
+    ],
+  },
+];
+
+/* ── TRACK CONFIGURATION ── */
+
+type Track = "ai" | "pp";
+
+const trackConfig = {
+  ai: {
+    label: "AI Engineering",
+    tag: "Engineering Curriculum 2026",
+    weeks: aiWeeks,
+    price: "$1800",
+    oldPrice: "$3500",
+    cohort: "Cohort 04 — Active Enrollment",
+    cohortDate: "May 5",
+    duration: "6 Weeks",
+    sessions: "2h 30m / session",
+    enrollLink: "https://buy.stripe.com/28E4gB0JK6Z8dDi697fnO0j",
+    certTitle: "Applied AI Engineer",
+    certTag: "SXAI-V26-04",
+    deckLink: "/presentation/ai",
+    cohortLabel: "Applied Cohort 04",
+    color: "#7C5CFC",
+    mastery: [
+      "Multi-Agent Orchestration",
+      "Vector-driven Memory (RAG)",
+      "Stripe Token-Billing",
+      "Azure/Vercel Auto-Scaling",
+      "Observability & Analytics",
+      "Production README & Case Study"
+    ],
+  },
+  pp: {
+    label: "Power Platform Developer",
+    tag: "Developer Curriculum 2026",
+    weeks: ppWeeks,
+    price: "$1500",
+    oldPrice: "$3000",
+    cohort: "Cohort 01 — Now Enrolling",
+    cohortDate: "Jun 2",
+    duration: "6 Weeks",
+    sessions: "2h 30m / session",
+    enrollLink: "https://buy.stripe.com/bIY1693YAcFMbx66os",
+    certTitle: "Certified Power Platform Developer",
+    certTag: "SXPP-V26-01",
+    deckLink: "/presentation/power-platform",
+    cohortLabel: "Power Platform Cohort 01",
+    color: "#049DCB",
+    mastery: [
+      "Canvas & Model-Driven Apps",
+      "Cloud & Desktop Automation",
+      "Star Schema BI Modelling",
+      "DAX & Power Query Mastery",
+      "Copilot Studio Integration",
+      "Enterprise ALM & Governance"
+    ],
+  },
+};
+
+/* ── SHARED UI COMPONENTS ── */
+
 const floatingNodes = [
   { top: "15%", left: "20%", size: 4, delay: 0, moveX: 30, moveY: -40 },
   { top: "25%", left: "75%", size: 6, delay: 2, moveX: -20, moveY: 50 },
@@ -206,7 +448,7 @@ const floatingNodes = [
   { top: "40%", left: "40%", size: 8, delay: 3, moveX: 20, moveY: -20 },
 ];
 
-function AIBackground() {
+function AIBackground({ color }: { color: string }) {
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-40">
       <style dangerouslySetInnerHTML={{ __html: `
@@ -222,18 +464,31 @@ function AIBackground() {
         }
       `}} />
       <div 
-        className="absolute w-[150%] h-[150%] top-0 left-0 bg-[linear-gradient(to_right,rgba(124,92,252,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(124,92,252,0.06)_1px,transparent_1px)] bg-[size:60px_60px]"
-        style={{ animation: "hero-panning 40s linear infinite" }}
+        className="absolute w-[150%] h-[150%] top-0 left-0"
+        style={{ 
+          backgroundImage: `linear-gradient(to right, ${color}10 1px, transparent 1px), linear-gradient(to bottom, ${color}10 1px, transparent 1px)`,
+          backgroundSize: '60px 60px',
+          animationName: "hero-panning",
+          animationDuration: "40s",
+          animationTimingFunction: "linear",
+          animationIterationCount: "infinite"
+        }}
       />
       <div 
-        className="absolute w-full h-[2px] bg-gradient-to-r from-transparent via-[#7C5CFC]/20 to-transparent"
-        style={{ animation: "hero-scanner 10s ease-in-out infinite" }}
+        className="absolute w-full h-[2px]"
+        style={{ 
+          backgroundImage: `linear-gradient(to right, transparent, ${color}33, transparent)`,
+          animationName: "hero-scanner",
+          animationDuration: "10s",
+          animationTimingFunction: "ease-in-out",
+          animationIterationCount: "infinite"
+        }}
       />
       {floatingNodes.map((node, i) => (
         <motion.div
            key={i}
-           className="absolute rounded-full bg-[#7C5CFC] shadow-[0_0_8px_rgba(124,92,252,0.4)]"
-           style={{ top: node.top, left: node.left, width: node.size, height: node.size }}
+           className="absolute rounded-full shadow-[0_0_8px_rgba(124,92,252,0.4)]"
+           style={{ top: node.top, left: node.left, width: node.size, height: node.size, backgroundColor: color }}
            animate={{ y: [0, node.moveY, 0], x: [0, node.moveX, 0], opacity: [0.1, 0.4, 0.1] }}
            transition={{ duration: 15 + i*3, repeat: Infinity, ease: "easeInOut" }}
         />
@@ -261,51 +516,73 @@ function MagneticLink({
   );
 }
 
-function TiltCard({ tool }: { tool: any }) {
-  return (
-    <div className="flex flex-col items-center gap-2 group">
-      <div className="h-14 w-14 lg:h-16 lg:w-16 rounded-xl flex items-center justify-center p-2.5 border border-white/10 bg-white shadow-md transition-all duration-300 relative overflow-hidden group-hover:scale-110">
-        <div className="relative h-full w-full z-10">
-          <Image src={tool.src} alt={tool.name} fill className="object-contain" unoptimized />
-        </div>
-      </div>
-      <span className="text-[9px] font-black text-zinc-400 group-hover:text-white transition-colors uppercase tracking-widest text-center px-1">
-        {tool.name}
-      </span>
-    </div>
-  );
-}
+/* ── MAIN PAGE COMPONENT ── */
 
 export default function LearnPage() {
-  const { data: session } = neonAuthClient.useSession();
+  const [activeTrack, setActiveTrack] = useState<Track>("ai");
   const [activeWeek, setActiveWeek] = useState(1);
   const [showCertificate, setShowCertificate] = useState(false);
 
+  const cfg = trackConfig[activeTrack];
+  const weeks = cfg.weeks;
   const w = weeks.find(wk => wk.week === activeWeek) || weeks[0];
 
   const stats = [
-    { label: "Duration", value: "6 Weeks", id: "duration" },
-    { label: "Next Cohort", value: "May 5", id: "cohort" },
-    { label: "Sessions", value: "2h 30m / session", id: "sessions" },
+    { label: "Duration", value: cfg.duration, id: "duration" },
+    { label: "Next Cohort", value: cfg.cohortDate, id: "cohort" },
+    { label: "Sessions", value: cfg.sessions, id: "sessions" },
   ];
+
+  const handleTrackSwitch = (track: Track) => {
+    setActiveTrack(track);
+    setActiveWeek(1);
+  };
 
   return (
     <div className="min-h-screen bg-[#FDFDFF] selection:bg-[#7C5CFC]/15 font-sans pb-24 overflow-x-hidden">
-      <TopNav user={session?.user} />
+      <TopNav />
 
       {/* ── PREMIUM BACKGROUND ARCHITECTURE ── */}
       <div className="fixed inset-0 pointer-events-none z-0">
-        <AIBackground />
-        {/* Energetic Mesh Gradients */}
-        <div className="absolute top-0 right-0 w-[50vw] h-[50vw] bg-[radial-gradient(circle_at_center,rgba(124,92,252,0.05)_0%,transparent_70%)] blur-[120px]" />
-        <div className="absolute bottom-0 left-0 w-[60vw] h-[60vw] bg-[radial-gradient(circle_at_center,rgba(168,146,255,0.03)_0%,transparent_70%)] blur-[100px]" />
-        {/* Engineering Grid Overlay */}
+        <AIBackground color={cfg.color} />
+        <div className="absolute top-0 right-0 w-[50vw] h-[50vw] blur-[120px]" style={{ background: `radial-gradient(circle at center, ${cfg.color}0D 0%, transparent 70%)` }} />
+        <div className="absolute bottom-0 left-0 w-[60vw] h-[60vw] blur-[100px]" style={{ background: `radial-gradient(circle at center, ${cfg.color}08 0%, transparent 70%)` }} />
         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.02)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_80%)]" />
       </div>
 
-      <div className="relative z-10 pt-10">
+      <div className="relative z-10 pt-32">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
-          
+
+          {/* ── TRACK TOGGLE ── */}
+          <div className="flex justify-center mb-16">
+            <div className="bg-white/80 backdrop-blur-md border border-zinc-200/60 rounded-[20px] p-1.5 flex gap-1 shadow-[0_8px_32px_-8px_rgba(0,0,0,0.03)]">
+              {(["ai", "pp"] as Track[]).map((track) => (
+                <button
+                  key={track}
+                  onClick={() => handleTrackSwitch(track)}
+                  className={`relative px-6 py-3.5 rounded-[16px] text-[11px] font-black uppercase tracking-[0.2em] transition-all duration-500 overflow-hidden ${
+                    activeTrack === track
+                      ? "text-white"
+                      : "text-zinc-400 hover:text-zinc-600 hover:bg-zinc-50"
+                  }`}
+                >
+                  {activeTrack === track && (
+                    <motion.div
+                      layoutId="active-track-tab"
+                      className="absolute inset-0 shadow-[0_8px_20px_-4px_rgba(124,92,252,0.4)]"
+                      style={{ backgroundColor: trackConfig[track].color }}
+                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                    />
+                  )}
+                  <span className="relative z-10 flex items-center gap-2">
+                    {track === "ai" ? <Bot className="h-4 w-4" /> : <img src="/PowerPlatform.svg" alt="PP" className="h-4 w-4" />}
+                    {trackConfig[track].label}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-start">
             
             {/* LEFT COLUMN: CURRICULUM CONSOLE */}
@@ -315,8 +592,8 @@ export default function LearnPage() {
               <div className="mb-14">
                 <div className="flex items-center gap-3 mb-8">
                   <span className="h-[1px] w-12 bg-zinc-200" />
-                  <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#7C5CFC]">
-                    Engineering Curriculum 2026
+                  <span className="text-[10px] font-black uppercase tracking-[0.4em]" style={{ color: cfg.color }}>
+                    {cfg.tag}
                   </span>
                 </div>
 
@@ -334,8 +611,9 @@ export default function LearnPage() {
                     >
                       {activeWeek === weekData.week && (
                         <motion.div
-                          layoutId="active-tab"
-                          className="absolute inset-0 bg-[#7C5CFC] shadow-[0_8px_20px_-4px_rgba(124,92,252,0.4)]"
+                          layoutId="active-week-tab"
+                          className="absolute inset-0 shadow-[0_8px_20px_-4px_rgba(124,92,252,0.4)]"
+                          style={{ backgroundColor: cfg.color }}
                           transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                         />
                       )}
@@ -347,7 +625,7 @@ export default function LearnPage() {
 
               <AnimatePresence mode="wait">
                 <motion.div
-                  key={activeWeek}
+                  key={`${activeTrack}-${activeWeek}`}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
@@ -373,12 +651,14 @@ export default function LearnPage() {
                     <div className="grid grid-cols-1 gap-12 lg:gap-16">
                       {w.fullCurriculum.map((group, gi) => (
                         <div key={gi} className="group relative">
-                          {/* Card Background Overlay */}
                           <div className="absolute -inset-x-8 -inset-y-6 bg-transparent group-hover:bg-violet-50/50 rounded-[40px] transition-colors duration-500 -z-10" />
                           
                           <div className="flex flex-col md:flex-row gap-8 items-start">
                             <div className="flex flex-col items-center shrink-0">
-                               <div className="h-12 w-12 rounded-2xl flex items-center justify-center text-lg font-black text-white bg-zinc-950 shadow-[0_8px_20px_rgba(0,0,0,0.1)] group-hover:bg-[#7C5CFC] transition-colors duration-500">
+                               <div 
+                                 className="h-12 w-12 rounded-2xl flex items-center justify-center text-lg font-black text-white shadow-[0_8px_20px_rgba(0,0,0,0.1)] transition-colors duration-500"
+                                 style={{ backgroundColor: activeTrack === "ai" ? "#18181b" : "#049DCB" }}
+                               >
                                  {gi + 1}
                                </div>
                                <div className="w-[2px] h-full flex-1 bg-zinc-100 group-last:hidden mt-4" />
@@ -386,7 +666,7 @@ export default function LearnPage() {
                             
                             <div className="flex-1 pt-1">
                                <div className="flex items-center gap-3 mb-4">
-                                 <span className="text-[10px] font-black uppercase tracking-widest text-[#7C5CFC]">Session 0{gi + 1} Intensive</span>
+                                 <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: cfg.color }}>Session 0{gi + 1} Intensive</span>
                                  <span className="h-1 w-1 rounded-full bg-zinc-300" />
                                  <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400 underline decoration-violet-200 underline-offset-4">Live Lab</span>
                                </div>
@@ -396,8 +676,8 @@ export default function LearnPage() {
                                
                                <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
                                   {group.topics.map((topic, ti) => (
-                                     <li key={ti} className="flex items-start gap-4 text-base font-semibold text-zinc-600 leading-relaxed hover:text-[#7C5CFC] transition-all transform hover:translate-x-1">
-                                       <div className="mt-2.5 h-1.5 w-1.5 rounded-full shrink-0 bg-[#7C5CFC]/30 group-hover:bg-[#7C5CFC]/60 transition-colors" />
+                                     <li key={ti} className="flex items-start gap-4 text-base font-semibold text-zinc-600 leading-relaxed hover:text-zinc-900 transition-all transform hover:translate-x-1" style={{ ['--hover-color' as string]: cfg.color }}>
+                                       <div className="mt-2.5 h-1.5 w-1.5 rounded-full shrink-0 transition-colors" style={{ backgroundColor: `${cfg.color}4D` }} />
                                        {topic}
                                      </li>
                                   ))}
@@ -415,12 +695,12 @@ export default function LearnPage() {
             {/* RIGHT COLUMN: FLOATING GLASS SIDEBAR */}
             <div className="lg:w-[460px] shrink-0 sticky top-12 flex flex-col gap-6 w-full">
               
-              {/* TECH STACK CARD (VERTICAL LIST) */}
+              {/* TECH STACK CARD */}
               <div className="bg-zinc-50/50 backdrop-blur-xl rounded-[32px] border border-zinc-200/50 p-6 flex flex-col gap-6">
-                <p className="text-[9px] font-black uppercase tracking-[0.3em] text-[#7C5CFC]">Module Toolchain</p>
+                <p className="text-[9px] font-black uppercase tracking-[0.3em]" style={{ color: cfg.color }}>Module Toolchain</p>
                 <div className="grid grid-cols-2 gap-4">
                    {w.tools.map((tool, ti) => (
-                      <div key={ti} className="flex items-center gap-3 bg-white/80 p-3 rounded-2xl border border-zinc-100 shadow-sm transition-all hover:border-[#7C5CFC]/30 group">
+                      <div key={ti} className="flex items-center gap-3 bg-white/80 p-3 rounded-2xl border border-zinc-100 shadow-sm transition-all hover:border-zinc-300 group">
                          <div className="h-10 w-10 shrink-0 relative p-1">
                             <Image src={tool.src} alt={tool.name} fill className="object-contain" unoptimized />
                          </div>
@@ -430,7 +710,7 @@ export default function LearnPage() {
                 </div>
               </div>
 
-              {/* PRICE & STATS CARD (COMPACT REFINED) */}
+              {/* PRICE & STATS CARD */}
               <motion.div 
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -440,9 +720,9 @@ export default function LearnPage() {
                   
                   <div className="flex items-center justify-between mb-8">
                     <div className="flex items-center gap-2.5">
-                      <div className="h-2 w-2 rounded-full bg-[#7C5CFC] animate-pulse" />
-                      <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#7C5CFC]">
-                        Cohort 04 — Active Enrollment
+                      <div className="h-2 w-2 rounded-full animate-pulse" style={{ backgroundColor: cfg.color }} />
+                      <span className="text-[10px] font-black uppercase tracking-[0.3em]" style={{ color: cfg.color }}>
+                        {cfg.cohort}
                       </span>
                     </div>
                   </div>
@@ -451,28 +731,37 @@ export default function LearnPage() {
                     <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Early Access Pricing</span>
                     <div className="flex items-baseline gap-3">
                       <h3 className="text-5xl font-black tracking-tighter text-zinc-950 uppercase italic leading-none">
-                        $1800
+                        {cfg.price}
                       </h3>
-                      <span className="text-base font-black text-zinc-400 uppercase tracking-widest line-through decoration-zinc-950/20">$3500</span>
+                      <span className="text-base font-black text-zinc-400 uppercase tracking-widest line-through decoration-zinc-950/20">{cfg.oldPrice}</span>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 gap-1 mb-8 bg-zinc-50/50 rounded-2xl p-2">
                     {stats.map(s => (
                       <div key={s.id} className="flex items-center justify-between py-3 border-b border-zinc-100 last:border-0 hover:translate-x-1 transition-transform px-3">
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#7C5CFC] opacity-70">{s.label}</span>
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-70" style={{ color: cfg.color }}>{s.label}</span>
                         <span className="text-xs font-black text-zinc-950 uppercase tracking-tight">{s.value}</span>
                       </div>
                     ))}
                   </div>
 
-                  <MagneticLink href="https://buy.stripe.com/28E4gB0JK6Z8dDi697fnO0j" className="group relative w-full inline-flex items-center justify-center gap-4 rounded-[20px] bg-zinc-950 px-8 py-5 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.2)] hover:bg-[#7C5CFC] transition-all duration-500 active:scale-95 mb-4 z-20">
-                     <span className="relative z-30 text-[13px] font-black uppercase tracking-[0.2em] text-white">Enroll Now</span> <ArrowRight className="h-5 w-5 text-white group-hover:translate-x-2 transition-transform relative z-30" />
+                  <MagneticLink 
+                    href={cfg.enrollLink} 
+                    className="group relative w-full inline-flex items-center justify-center gap-4 rounded-[20px] px-8 py-5 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.2)] transition-all duration-500 active:scale-95 mb-4 z-20"
+                    // @ts-ignore — dynamic style
+                  >
+                    <span 
+                      className="absolute inset-0 rounded-[20px] transition-all duration-500"
+                      style={{ backgroundColor: activeTrack === "ai" ? "#18181b" : cfg.color }}
+                    />
+                    <span className="relative z-30 text-[13px] font-black uppercase tracking-[0.2em] text-white">Enroll Now</span> 
+                    <ArrowRight className="h-5 w-5 text-white group-hover:translate-x-2 transition-transform relative z-30" />
                   </MagneticLink>
 
                   <div className="flex items-center justify-center gap-2 pt-2">
                     <span className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-400 italic">
-                      Verified Cohort 04 Graduation Path
+                      Verified {cfg.cohortLabel} Graduation Path
                     </span>
                   </div>
                 </div>
@@ -480,12 +769,24 @@ export default function LearnPage() {
 
               {/* Graduate Trust Segment */}
               <div className="px-10 py-6 bg-zinc-50/50 rounded-[32px] border border-zinc-100 flex flex-col gap-4">
-                 <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Trusted by Engineering Teams</p>
+                 <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400">
+                   {activeTrack === "ai" ? "Trusted by Engineering Teams" : "Microsoft Learning Partner"}
+                 </p>
                  <div className="flex gap-4 opacity-30 grayscale saturate-0">
-                    {/* Minimal logo placeholders */}
-                    <div className="h-5 w-5 border-2 border-zinc-950 rounded-sm" />
-                    <div className="h-5 w-5 border-2 border-zinc-950 rounded-full" />
-                    <div className="h-5 w-12 border-2 border-zinc-950 rounded-full" />
+                    {activeTrack === "ai" ? (
+                      <>
+                        <div className="h-5 w-5 border-2 border-zinc-950 rounded-sm" />
+                        <div className="h-5 w-5 border-2 border-zinc-950 rounded-full" />
+                        <div className="h-5 w-12 border-2 border-zinc-950 rounded-full" />
+                      </>
+                    ) : (
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23 23" width="40" height="40">
+                        <rect x="1" y="1" width="10" height="10" fill="#F25022" />
+                        <rect x="12" y="1" width="10" height="10" fill="#7FBA00" />
+                        <rect x="1" y="12" width="10" height="10" fill="#00A4EF" />
+                        <rect x="12" y="12" width="10" height="10" fill="#FFB900" />
+                      </svg>
+                    )}
                  </div>
               </div>
 
@@ -493,7 +794,7 @@ export default function LearnPage() {
 
           </div>
 
-          {/* NEW: UNIFIED CAPSTONE MASTERY SECTION */}
+          {/* CAPSTONE MASTERY SECTION */}
           <section className="mt-32 pt-20 border-t border-zinc-100 mb-20">
              <div className="flex flex-col items-center text-center mb-16">
                 <div className="inline-flex items-center gap-2 rounded-full border border-violet-100 bg-violet-50 px-3 py-1 mb-4">
@@ -507,7 +808,6 @@ export default function LearnPage() {
              <div className="max-w-4xl mx-auto">
                 <div className="group relative p-[1px] rounded-[40px] bg-gradient-to-br from-violet-200/50 via-zinc-200/50 to-violet-200/50">
                    <div className="bg-white/90 backdrop-blur-3xl rounded-[39px] p-10 lg:p-16 border border-white shadow-xl overflow-hidden relative">
-                      {/* Decorative Background Icon */}
                       <div className="absolute top-0 right-0 p-12 opacity-[0.03] pointer-events-none">
                          <GraduationCap className="h-64 w-64 text-violet-950" />
                       </div>
@@ -516,18 +816,14 @@ export default function LearnPage() {
                          <div className="flex-1">
                             <h3 className="text-3xl font-black text-zinc-950 uppercase italic tracking-tight mb-6">Mastery Requirements</h3>
                             <p className="text-lg font-semibold text-zinc-600 leading-relaxed mb-10">
-                               The capstone requirement is a **full AI product** with all the features taught in the course—autonomous agents, RAG, usage-based billing, and deep observability. Every project is **personally tested by our team** for production-grade reliability and architectural integrity.
+                              {activeTrack === "ai" 
+                                ? "The capstone requirement is a **full AI product** with all the features taught in the course—autonomous agents, RAG, usage-based billing, and deep observability. Every project is **personally tested by our team** for production-grade reliability and architectural integrity."
+                                : "The capstone requirement is a **full enterprise Power Platform solution** spanning Power Apps, Power Automate, Power BI analytics, and Copilot integration. Every solution is **personally assessed** for governance, data architecture, and real-world business impact."
+                              }
                             </p>
                             
                             <div className="grid grid-cols-2 gap-x-8 gap-y-4 mb-10">
-                               {[
-                                 "Multi-Agent Orchestration",
-                                 "Vector-driven Memory (RAG)",
-                                 "Stripe Token-Billing",
-                                 "Azure/Vercel Auto-Scaling",
-                                 "Observability & Analytics",
-                                 "Production README & Case Study"
-                               ].map((feat, fi) => (
+                               {cfg.mastery.map((feat, fi) => (
                                  <div key={fi} className="flex items-center gap-3">
                                     <div className="h-1.5 w-1.5 rounded-full bg-violet-400" />
                                     <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">{feat}</span>
@@ -550,19 +846,20 @@ export default function LearnPage() {
                                className="cursor-pointer relative group"
                             >
                                <div className="absolute -inset-4 bg-violet-400/20 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                               {/* PREVIEW CARD */}
-                               <div className="relative aspect-[1/1] rounded-24 overflow-hidden border-8 border-white shadow-2xl bg-zinc-950 p-6 flex flex-col justify-between">
+                               <div className="relative aspect-[1/1] rounded-24 overflow-hidden border-8 border-white shadow-2xl p-6 flex flex-col justify-between" style={{ backgroundColor: activeTrack === "ai" ? "#18181b" : "#002642" }}>
                                   <div className="flex justify-between items-start">
                                      <div className="h-8 w-8 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center">
-                                        <div className="h-4 w-4 rounded-full bg-violet-500 animate-pulse" />
+                                        <div className="h-4 w-4 rounded-full animate-pulse" style={{ backgroundColor: cfg.color }} />
                                      </div>
-                                     <span className="text-[8px] font-black text-white/40 uppercase tracking-[0.3em]">SXAI-V26-04</span>
+                                     <span className="text-[8px] font-black text-white/40 uppercase tracking-[0.3em]">{cfg.certTag}</span>
                                   </div>
                                   <div className="space-y-2">
-                                     <p className="text-[8px] font-black text-violet-400 uppercase tracking-widest">Mastery Level 04</p>
-                                     <p className="text-sm font-black text-white uppercase italic tracking-tighter">Applied AI Engineer</p>
+                                     <p className="text-[8px] font-black uppercase tracking-widest" style={{ color: cfg.color }}>
+                                       {activeTrack === "ai" ? "Mastery Level 04" : "Mastery Level 01"}
+                                     </p>
+                                     <p className="text-sm font-black text-white uppercase italic tracking-tighter">{cfg.certTitle}</p>
                                   </div>
-                                  <div className="h-1 w-full bg-gradient-to-r from-violet-500 via-white/20 to-transparent" />
+                                  <div className="h-1 w-full" style={{ background: `linear-gradient(to right, ${cfg.color}, rgba(255,255,255,0.2), transparent)` }} />
                                </div>
                             </motion.div>
                          </div>
@@ -593,27 +890,26 @@ export default function LearnPage() {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="w-full h-full relative border-[12px] border-double border-zinc-100 p-8 lg:p-12 flex flex-col justify-between items-center text-zinc-950">
-                 {/* Elegant Frame Outline */}
                  <div className="absolute inset-4 border border-zinc-200 pointer-events-none" />
                  
-                 {/* HEADER SECTION */}
                  <div className="flex flex-col items-center gap-2 relative z-10 w-full mb-2">
                     <div className="relative h-20 w-56">
                        <Image 
                           src="/standexailogo.png" 
-                          alt="StandexAI Logo" 
+                          alt="Standex Digital Logo" 
                           fill 
                           className="object-contain"
                           unoptimized 
                        />
                     </div>
                     <div className="flex flex-col items-center gap-1">
-                       <span className="text-[11px] font-black uppercase tracking-[0.4em] text-violet-600">Applied AI Engineering Hub</span>
+                       <span className="text-[11px] font-black uppercase tracking-[0.4em]" style={{ color: cfg.color }}>
+                        {activeTrack === "ai" ? "Applied AI Engineering Hub" : "Power Platform Development Hub"}
+                       </span>
                        <div className="h-[1px] w-32 bg-zinc-200 mt-1" />
                     </div>
                  </div>
 
-                 {/* BODY SECTION */}
                  <div className="flex flex-col items-center text-center gap-6 relative z-10 w-full">
                     <div className="space-y-2">
                        <p className="text-[12px] font-medium uppercase tracking-[0.3em] text-zinc-400">This is to certify that</p>
@@ -623,14 +919,16 @@ export default function LearnPage() {
                     </div>
 
                     <div className="flex flex-col items-center gap-4 max-w-2xl px-12">
-                       <p className="text-[14px] font-black text-zinc-900 uppercase tracking-[0.4em]">Applied AI Engineer</p>
+                       <p className="text-[14px] font-black text-zinc-900 uppercase tracking-[0.4em]">{cfg.certTitle}</p>
                        <p className="text-zinc-500 font-medium text-base leading-relaxed">
-                          Awarded for mastering Multi-Agent Orchestration, production-grade RAG architectures, and the deployment of scalable AI systems.
+                         {activeTrack === "ai"
+                           ? "Awarded for mastering Multi-Agent Orchestration, production-grade RAG architectures, and the deployment of scalable AI systems."
+                           : "Awarded for mastering the Microsoft Power Platform stack, enterprise data modelling, and the delivery of production-grade business solutions."
+                         }
                        </p>
                     </div>
                  </div>
 
-                 {/* FOOTER SECTION (SIGNATURES & DATE) */}
                  <div className="w-full flex justify-between items-end relative z-10 px-8 pt-4">
                     <div className="flex flex-col items-center gap-1">
                        <div className="h-[1px] w-40 bg-zinc-300" />
@@ -638,7 +936,6 @@ export default function LearnPage() {
                        <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest italic">October 24, 2026</p>
                     </div>
 
-                    {/* Official Seal Placeholder */}
                     <div className="relative group">
                        <div className="h-20 w-20 rounded-full border-4 border-double border-violet-100 flex items-center justify-center bg-violet-50/30 transform rotate-12 transition-transform group-hover:rotate-0">
                           <ShieldCheck className="h-8 w-8 text-violet-600/30" />
@@ -650,9 +947,9 @@ export default function LearnPage() {
 
                     <div className="flex flex-col items-center gap-1">
                        <div className="h-[1px] w-40 bg-zinc-300" />
-                       <p className="text-[10px] font-black uppercase tracking-widest text-zinc-950">SXAI Verification</p>
+                       <p className="text-[10px] font-black uppercase tracking-widest text-zinc-950">Verification</p>
                        <code className="text-[8px] font-mono text-violet-500/50 font-bold tracking-tighter">
-                          8K2N9M-V26-04
+                          {cfg.certTag}
                        </code>
                     </div>
                  </div>
@@ -673,15 +970,15 @@ export default function LearnPage() {
       <footer className="max-w-7xl mx-auto px-12 py-24 border-t border-zinc-100 flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3">
-             <div className="h-2 w-2 rounded-full bg-[#7C5CFC]" />
-             <p className="text-sm font-black uppercase tracking-[0.3em] text-zinc-950">StandexAI</p>
+             <div className="h-2 w-2 rounded-full" style={{ backgroundColor: cfg.color }} />
+             <p className="text-sm font-black uppercase tracking-[0.3em] text-zinc-950">Standex Digital</p>
           </div>
           <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">© 2026 Applied Engineering Hub • All Rights Reserved</p>
         </div>
         <div className="flex items-center gap-12">
-          <Link href="/presentation/ai" className="text-[11px] font-black uppercase tracking-[0.3em] text-zinc-400 hover:text-[#7C5CFC] transition-colors">Course Deck</Link>
-          <Link href="#" className="text-[11px] font-black uppercase tracking-[0.3em] text-zinc-400 hover:text-[#7C5CFC] transition-colors">Privacy</Link>
-          <Link href="#" className="text-[11px] font-black uppercase tracking-[0.3em] text-zinc-950 border-b-2 border-[#7C5CFC]">Applied Cohort 04</Link>
+          <Link href={cfg.deckLink} className="text-[11px] font-black uppercase tracking-[0.3em] text-zinc-400 hover:text-zinc-900 transition-colors">Course Deck</Link>
+          <Link href="#" className="text-[11px] font-black uppercase tracking-[0.3em] text-zinc-400 hover:text-zinc-900 transition-colors">Privacy</Link>
+          <Link href="#" className="text-[11px] font-black uppercase tracking-[0.3em] text-zinc-950 border-b-2" style={{ borderColor: cfg.color }}>{cfg.cohortLabel}</Link>
         </div>
       </footer>
     </div>

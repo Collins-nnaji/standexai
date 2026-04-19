@@ -76,7 +76,7 @@ export function PrimeClient() {
             <div className="flex items-center gap-4 mb-6">
               <Image 
                 src="/standexailogo.png" 
-                alt="StandexAI" 
+                alt="Standex Digital" 
                 width={140} 
                 height={32} 
                 className="h-6 sm:h-7 w-auto contrast-150"

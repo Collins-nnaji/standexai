@@ -3,7 +3,7 @@ import { createChatCompletionsRequest, isLlmConfigured } from "@/lib/llm-client"
 
 export const dynamic = "force-dynamic";
 
-const SYSTEM_PROMPT = `You are the StandexAI Assessment Hub. You evaluate AI engineering and research knowledge.
+const SYSTEM_PROMPT = `You are the Standex Digital Assessment Hub. You evaluate AI engineering and research knowledge.
 Your goal is to generate high-level technical questions and evaluate responses.
 
 Modes:

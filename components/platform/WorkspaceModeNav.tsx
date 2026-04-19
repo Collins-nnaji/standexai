@@ -6,7 +6,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import type { ConsoleTheme, ConsoleThemeMode } from "@/components/console/console-theme";
 
-type Active = "skills" | "console" | "eval-lab";
+type Active = "console" | "eval-lab";
 
 type Props = {
   active: Active;
@@ -45,7 +45,7 @@ export function WorkspaceModeNav({ active, consoleTheme, consoleThemeMode = "lig
       <Link href="/" className="flex shrink-0 items-center transition-opacity hover:opacity-90">
         <Image
           src="/standexailogo.png"
-          alt="StandexAI"
+          alt="Standex Digital"
           width={130}
           height={36}
           className={cn(
@@ -67,28 +67,12 @@ export function WorkspaceModeNav({ active, consoleTheme, consoleThemeMode = "lig
         )}
       >
         {pill(
-          "/cognitive-audit",
-          <>
-            <span className="sm:hidden">Skills</span>
-            <span className="hidden sm:inline">Skills lab</span>
-          </>,
-          active === "skills",
-        )}
-        {pill(
           "/console",
           <>
-            <span className="sm:hidden">Speech</span>
-            <span className="hidden sm:inline">Speech & Text Console</span>
+            <span className="sm:hidden">AI Tools</span>
+            <span className="hidden sm:inline">AI Tools Console</span>
           </>,
           active === "console",
-        )}
-        {pill(
-          "/eval-lab",
-          <>
-            <span className="sm:hidden">Vision</span>
-            <span className="hidden sm:inline">Image & Video Console</span>
-          </>,
-          active === "eval-lab",
         )}
       </div>
     </div>

@@ -145,7 +145,7 @@ export async function POST(req: Request) {
     const response = await fetch(normalizedUrl, {
       method: "GET",
       headers: {
-        "User-Agent": "StandexAI-Scanner/1.0",
+        "User-Agent": "Standex Digital-Scanner/1.0",
         Accept: "text/html,application/xhtml+xml",
       },
     });

@@ -176,7 +176,12 @@ export function ThreeArmSection() {
           className="overflow-hidden border-y border-emerald-500/10 py-3 -mx-4 sm:-mx-6 mb-10"
           style={{ maskImage: "linear-gradient(to right, transparent, black 8%, black 92%, transparent)" }}
         >
-          <div className="flex gap-2.5 w-max" style={{ animation: "marquee 22s linear infinite" }}>
+          <div className="flex gap-2.5 w-max" style={{ 
+            animationName: "marquee",
+            animationDuration: "22s",
+            animationTimingFunction: "linear",
+            animationIterationCount: "infinite"
+          }}>
             {[...openProjectPathTags, ...openProjectPathTags].map((tag, i) => (
               <span
                 key={i}

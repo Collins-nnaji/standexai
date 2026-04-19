@@ -45,7 +45,7 @@ export function CollabInvitePanel({ collabId }: CollabInvitePanelProps) {
         <UserPlus className="h-4 w-4 text-[#7C5CFC]" />
         Invite Researcher
       </h3>
-      <p className="mb-3 text-xs text-zinc-500">Add a collaborator by their StandexAI email address.</p>
+      <p className="mb-3 text-xs text-zinc-500">Add a collaborator by their Standex Digital email address.</p>
       <div className="flex gap-2">
         <input
           id="collab-invite-email"

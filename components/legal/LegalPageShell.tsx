@@ -18,7 +18,7 @@ export function LegalPageShell({
           <Link href="/" className="flex items-center gap-3 transition-opacity hover:opacity-90">
             <Image
               src="/standexailogo.png"
-              alt="StandexAI"
+              alt="Standex Digital"
               width={120}
               height={32}
               className="h-7 w-auto object-contain brightness-0 invert opacity-95"

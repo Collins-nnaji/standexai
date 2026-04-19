@@ -118,7 +118,7 @@ export function AuthForm({ mode: initialMode }: AuthFormProps) {
           <div className="mx-auto mb-4 flex h-10 w-full max-w-[180px] items-center justify-center sm:h-11 sm:max-w-[200px]">
             <Image
               src="/standexailogo.png"
-              alt="StandexAI"
+              alt="Standex Digital"
               width={180}
               height={48}
               className="h-full w-auto max-h-11 object-contain object-center"

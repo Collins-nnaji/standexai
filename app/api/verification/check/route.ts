@@ -34,7 +34,7 @@ async function ensureVerificationTable() {
 async function fetchHtml(domain: string) {
   const response = await fetch(`https://${domain}`, {
     method: "GET",
-    headers: { "User-Agent": "StandexAI-Verification/1.0", Accept: "text/html,application/xhtml+xml" },
+    headers: { "User-Agent": "Standex Digital-Verification/1.0", Accept: "text/html,application/xhtml+xml" },
   });
   if (!response.ok) return "";
   const contentType = response.headers.get("content-type") ?? "";
@@ -46,7 +46,7 @@ async function verify(row: VerificationRow) {
   if (row.method === "llms") {
     const response = await fetch(`https://${row.domain}/llms.txt`, {
       method: "GET",
-      headers: { "User-Agent": "StandexAI-Verification/1.0", Accept: "text/plain,text/*" },
+      headers: { "User-Agent": "Standex Digital-Verification/1.0", Accept: "text/plain,text/*" },
     });
     if (!response.ok) return { verified: false, evidence: "llms.txt not reachable" };
     const text = await response.text();

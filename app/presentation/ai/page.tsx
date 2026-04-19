@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { BuildProductionAIDeck } from "@/components/presentation/build-production-ai/BuildProductionAIDeck";
 
 export const metadata: Metadata = {
-  title: "Build Production AI — Presentation | StandexAI",
+  title: "Build Production AI — Presentation | Standex Digital",
   description:
     "Slide deck for the Build Production AI program: stack, cohort, and call to action.",
 };
