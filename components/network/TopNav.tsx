@@ -76,8 +76,8 @@ export function TopNav({ user }: TopNavProps) {
       transition={{ duration: 0.3, ease: "easeInOut" }}
       className={cn(
         "fixed top-0 left-0 right-0 z-[100] w-full transition-all duration-300",
-        isScrolled 
-          ? "border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-xl shadow-[0_1px_3px_rgba(0,0,0,0.4)]" 
+        isScrolled || mobileMenuOpen
+          ? "border-b border-zinc-800 bg-zinc-950 shadow-[0_1px_3px_rgba(0,0,0,0.4)]" 
           : "bg-zinc-950/50 backdrop-blur-sm border-transparent"
       )}
     >

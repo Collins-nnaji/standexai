@@ -45,7 +45,7 @@ export function PrimeClient() {
 
       {/* Breadcrumbs: compact on mobile, full trail on sm+ */}
       <nav className="relative z-10 mb-8 min-w-0 sm:mb-12" aria-label="Breadcrumb">
-        <div className="flex min-w-0 flex-col gap-1 sm:hidden">
+        <div className="flex min-w-0 flex-col gap-1 sm:hidden bg-white/80 backdrop-blur-md px-5 py-4 rounded-3xl border border-zinc-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] w-fit">
           <Link
             href="/"
             className="flex w-fit items-center gap-1 text-[10px] font-black uppercase tracking-widest text-zinc-400 transition-all hover:text-zinc-900"

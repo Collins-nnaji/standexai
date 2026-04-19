@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
 
 const Footer = () => {
   const [animationStarted, setAnimationStarted] = useState(false);
@@ -41,7 +42,7 @@ const Footer = () => {
               animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
             }`}
           >
-            <img src="/StandexLogo.webp" alt="Standex Logo" className="h-14" />
+            <img src="/StandexLogo.webp" alt="Standex Logo" className="h-9 opacity-90 mx-auto md:mx-0" />
           </div>
           
           <div className="flex space-x-6">
@@ -99,118 +100,43 @@ const Footer = () => {
           animationStarted ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0'
         }`} />
         
-        {/* Footer Links */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          {/* Quick Links */}
-          <div 
-            className={`transform transition-all duration-700 ${
-              animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
-            }`}
-            style={{ transitionDelay: '400ms' }}
-          >
-            <h3 className="text-xl font-black mb-6 text-emerald-500">Quick Links</h3>
-            <ul className="space-y-4">
-              <li><a href="/About" className="hover:text-emerald-500 transition-colors">About Us</a></li>
-              <li><a href="/Contact" className="hover:text-emerald-500 transition-colors">Contact Us</a></li>
-            </ul>
-          </div>
-          
-          {/* Services */}
-          <div 
-            className={`transform transition-all duration-700 ${
-              animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
-            }`}
-            style={{ transitionDelay: '500ms' }}
-          >
-            <h3 className="text-xl font-black mb-6 text-emerald-500">Solutions</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-              <ul className="space-y-4">
-                <li className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2">AI Strategy</li>
-                <li><a href="/solutions/ai-agents" className="hover:text-emerald-500 transition-colors">AI Agents & Swarms</a></li>
-                <li><a href="/solutions/ai-integration" className="hover:text-emerald-500 transition-colors">Enterprise AI Integration</a></li>
-                <li><a href="/console" className="hover:text-emerald-500 transition-colors">AI Tools Console</a></li>
-              </ul>
-              <ul className="space-y-4">
-                <li className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2">Power Platform</li>
-                <li><a href="/solutions/power-platform" className="hover:text-emerald-500 transition-colors">Strategy & Governance</a></li>
-                <li><a href="/solutions/power-apps" className="hover:text-emerald-500 transition-colors">Power Apps</a></li>
-                <li><a href="/solutions/power-automate" className="hover:text-emerald-500 transition-colors">Power Automate</a></li>
-              </ul>
-            </div>
-          </div>
-          
-          {/* Stay In Touch */}
-          <div 
-            className={`transform transition-all duration-700 ${
-              animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
-            }`}
-            style={{ transitionDelay: '600ms' }}
-          >
-            <h3 className="text-xl font-black mb-6 text-emerald-500">Stay In Touch</h3>
-            <ul className="space-y-4">
-              <li className="flex items-start group">
-                <svg className="w-6 h-6 text-emerald-500 mr-3 mt-1 flex-shrink-0 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                </svg>
-                <a href="mailto:support@standexdigital.com" className="hover:text-emerald-500 transition-colors">support@standexdigital.com</a>
-              </li>
-              <li className="flex items-start group">
-                <svg className="w-6 h-6 text-emerald-500 mr-3 mt-1 flex-shrink-0 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                </svg>
-                <address className="not-italic group-hover:text-emerald-500 transition-colors">
-                  London, United Kingdom
-                </address>
-              </li>
-            </ul>
-          </div>
-        </div>
-        
-        <hr className={`border-zinc-800 my-12 transition-all duration-1000 ${
-          animationStarted ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0'
-        }`} style={{ transitionDelay: '700ms' }} />
-        
-        {/* Microsoft Partner Logos */}
-        <div 
-          className={`flex flex-wrap justify-center items-center gap-2 mb-8 transition-all duration-1000 ${
-            animationStarted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-          }`}
-          style={{ transitionDelay: '800ms' }}
-        >
-          {[
-            "/Microsoft-Data-AI-Azure-Partner-300x183.webp",
-            "/Microsoft-Digital-App-Innovation-Azure-Partner-300x183.webp",
-            "/Microsoft-Infrastructure-Solution-Partner-300x183.webp",
-            "/Microsoft-Solution-Partner-300x183.webp"
-          ].map((logo, index) => (
-            <div 
-              key={index} 
-              className="transform transition-all duration-700 hover:scale-105"
-              style={{ transitionDelay: `${800 + (index * 100)}ms` }}
-            >
-              <img 
-                src={logo} 
-                alt="Microsoft Partner" 
-                className={`h-16 object-contain transition-all duration-700 ${
-                  animationStarted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-                }`} 
-              />
-            </div>
-          ))}
-        </div>
-        
-        {/* Copyright and Legal Links */}
-        <div 
-          className={`flex flex-col md:flex-row justify-center items-center pt-8 transform transition-all duration-700 ${
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-10">
+          <div className={`space-y-4 transition-all duration-700 delay-100 ${
             animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
-          }`}
-          style={{ transitionDelay: '1000ms' }}
-        >
-          <div className="mb-4 md:mb-0">
-            <p className="text-sm">Copyright © 2025 Standex Ltd. All Rights Reserved</p>
+          }`}>
+            <div className="flex flex-col gap-1">
+              <p className="text-[10px] font-black uppercase tracking-[0.4em] text-zinc-500">Engineering Intake</p>
+              <div className="flex flex-col gap-2">
+                <a href="mailto:support@standexdigital.com" className="text-[11px] font-bold text-zinc-400 hover:text-emerald-500 transition-colors">support@standexdigital.com</a>
+                <a href="mailto:hr@standexdigital.com" className="text-[11px] font-bold text-emerald-500 hover:text-white transition-colors">hr@standexdigital.com</a>
+              </div>
+            </div>
           </div>
-          
+
+          <div className={`grid grid-cols-2 gap-12 md:gap-20 transition-all duration-700 delay-200 ${
+            animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
+          }`}>
+            <div className="space-y-4">
+              <p className="text-[10px] font-black uppercase tracking-[0.4em] text-zinc-600">Company</p>
+              <nav className="flex flex-col gap-2.5">
+                <Link href="/About" className="text-[11px] font-bold text-zinc-400 hover:text-emerald-500 transition-colors">Mission</Link>
+                <Link href="/Contact" className="text-[11px] font-bold text-zinc-400 hover:text-emerald-500 transition-colors">Contact</Link>
+              </nav>
+            </div>
+            <div className="space-y-4">
+              <p className="text-[10px] font-black uppercase tracking-[0.4em] text-zinc-600">Resources</p>
+              <nav className="flex flex-col gap-2.5">
+                <Link href="/Training" className="text-[11px] font-bold text-zinc-400 hover:text-emerald-500 transition-colors">Academy</Link>
+                <Link href="/console" className="text-[11px] font-bold text-zinc-400 hover:text-emerald-500 transition-colors">Console</Link>
+              </nav>
+            </div>
+          </div>
+        </div>
+        
+        <div className={`mt-12 flex flex-col md:flex-row justify-between items-center gap-4 transition-all duration-700 delay-500 border-t border-white/[0.03] pt-8 ${
+          animationStarted ? 'opacity-100' : 'opacity-0'
+        }`}>
+          <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">© 2025 Standex Ltd • Applied Engineering Hub</p>
         </div>
       </div>
     </footer>
