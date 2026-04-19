@@ -12,7 +12,7 @@ const ContactLocation = () => {
           
           {/* Left Side: Contact Info */}
           <div className="flex flex-col">
-            <h2 className="text-3xl md:text-5xl font-black uppercase italic tracking-tighter text-zinc-950 leading-[0.9] mb-8">
+            <h2 className="text-3xl md:text-5xl font-black tracking-tight text-zinc-950 leading-tight mb-8">
               Let's Engineer <br /> Your Future.
             </h2>
             <p className="text-base font-semibold text-zinc-500 leading-relaxed mb-12 max-w-md">
@@ -47,7 +47,7 @@ const ContactLocation = () => {
                     <Globe className="h-5 w-5 text-[#7C5CFC]" />
                     <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#7C5CFC]">Global Operations</span>
                  </div>
-                 <h3 className="text-xl font-black uppercase italic mb-2 tracking-tight">London, UK</h3>
+                 <h3 className="text-xl font-black mb-2 tracking-tight">London, UK</h3>
                  <p className="text-sm font-medium text-zinc-400">Serving global enterprise clients from the heart of tech innovation.</p>
                </div>
                <div className="absolute -bottom-10 -right-10 h-32 w-32 bg-[#7C5CFC]/20 blur-[50px] pointer-events-none" />
@@ -60,7 +60,7 @@ const ContactLocation = () => {
                 <div className="h-10 w-10 flex items-center justify-center rounded-xl bg-[#7C5CFC]/10 text-[#7C5CFC]">
                   <MessageSquare className="h-5 w-5" />
                 </div>
-                <h3 className="text-lg font-black uppercase italic text-zinc-950 tracking-tight">Diagnostic Intake</h3>
+                <h3 className="text-lg font-black text-zinc-950 tracking-tight">Diagnostic Intake</h3>
              </div>
 
              <form className="space-y-6" onSubmit={(e: React.FormEvent) => e.preventDefault()}>

@@ -60,6 +60,7 @@ export function TopNav({ user }: TopNavProps) {
 
   const isAiRoute = 
     pathname.startsWith("/learn") ||
+    pathname.startsWith("/Training") ||
     pathname.startsWith("/projects") ||
     pathname.startsWith("/console");
 
@@ -145,20 +146,12 @@ export function TopNav({ user }: TopNavProps) {
           </div>
 
           {/* Standalone Links */}
-          {/* Standalone Links */}
           <Link 
-            href="/console" 
+            href="/Training" 
             className="rounded-xl px-4 py-2 text-sm font-bold text-white hover:bg-white/10 transition-all border border-transparent hover:border-white/20"
             style={{ color: '#FFFFFF' }}
           >
-            AI Tools
-          </Link>
-          <Link 
-            href="/learn" 
-            className="rounded-xl px-4 py-2 text-sm font-bold text-white hover:bg-white/10 transition-all border border-transparent hover:border-white/20"
-            style={{ color: '#FFFFFF' }}
-          >
-            Learn
+            Training
           </Link>
 
           
@@ -172,6 +165,15 @@ export function TopNav({ user }: TopNavProps) {
 
         {/* Right: Actions */}
         <div className="flex flex-1 items-center justify-end gap-2 sm:gap-3">
+          {/* AI Console Stylish Button */}
+          <Link
+            href="/console"
+            className="hidden sm:inline-flex items-center gap-2 overflow-hidden rounded-xl bg-gradient-to-r from-[#7C5CFC] to-[#A892FF] px-5 py-2.5 text-sm font-black uppercase tracking-widest text-white shadow-[0_0_20px_-5px_rgba(124,92,252,0.5)] transition-all hover:shadow-[0_0_30px_-5px_rgba(124,92,252,0.8)] hover:scale-[1.02] active:scale-95"
+          >
+            AI Console
+            <Zap className="h-4 w-4" />
+          </Link>
+
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -222,11 +224,11 @@ export function TopNav({ user }: TopNavProps) {
                 
                 <div className="my-4 h-px w-full bg-zinc-800" />
                 
-                <Link href="/console" className="flex items-center justify-between rounded-xl px-4 py-3 text-sm font-bold text-white hover:bg-zinc-800 transition-all">
-                   AI Tools <Zap className="h-4 w-4 text-emerald-500" />
+                <Link href="/Training" className="flex items-center justify-between rounded-xl px-4 py-3 text-sm font-bold text-white hover:bg-zinc-800 transition-all">
+                   Training <ChevronRight className="h-4 w-4 opacity-50" />
                 </Link>
-                <Link href="/learn" className="flex items-center justify-between rounded-xl px-4 py-3 text-sm font-bold text-white hover:bg-zinc-800 transition-all">
-                   Learn <ChevronRight className="h-4 w-4 opacity-50" />
+                <Link href="/console" className="flex items-center justify-between rounded-xl px-4 py-3 text-sm font-bold text-white hover:bg-zinc-800 transition-all">
+                   AI Console <Zap className="h-4 w-4 text-emerald-500" />
                 </Link>
 
                 <Link href="/Contact" className="flex items-center justify-between rounded-xl px-4 py-3 text-sm font-bold text-white hover:bg-zinc-800 transition-all">
@@ -239,7 +241,7 @@ export function TopNav({ user }: TopNavProps) {
                   <p className="text-[10px] font-bold uppercase tracking-widest text-white/50">Engineering Tools</p>
                 </div>
                 <Link href="/console" className="flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-bold text-white hover:bg-zinc-800 transition-all">
-                  <Zap className="h-5 w-5 text-emerald-500" /> AI Tools Console
+                  <Zap className="h-5 w-5 text-emerald-500" /> AI Console
                 </Link>
               </nav>
             </motion.div>

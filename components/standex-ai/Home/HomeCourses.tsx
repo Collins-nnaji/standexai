@@ -48,7 +48,7 @@ export default function HomeCourses() {
             <Sparkles className="h-3.5 w-3.5 text-[#7C5CFC]" />
             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#7C5CFC]">Standex Digital Academy</span>
           </div>
-          <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-zinc-950 leading-[0.9] uppercase italic">
+          <h2 className="text-4xl md:text-6xl font-black tracking-tight text-zinc-950 leading-tight">
             Accelerate your <br className="hidden md:block" /> Engineering Career.
           </h2>
           <p className="mt-8 text-lg font-medium text-zinc-500 max-w-2xl">
@@ -89,7 +89,7 @@ export default function HomeCourses() {
                       {track.tag}
                     </span>
                   </div>
-                  <h3 className="text-3xl md:text-4xl font-black text-zinc-950 uppercase italic tracking-tight mb-6 leading-none">
+                  <h3 className="text-3xl md:text-4xl font-black text-zinc-950 tracking-tight mb-6 leading-none">
                     {track.label}
                   </h3>
                   
@@ -109,7 +109,7 @@ export default function HomeCourses() {
                   </p>
 
                   <div className="flex items-baseline gap-3 mb-2">
-                    <h4 className="text-4xl font-black tracking-tighter text-zinc-950 uppercase italic leading-none">
+                    <h4 className="text-4xl font-black tracking-tighter text-zinc-950 leading-none">
                       {track.price}
                     </h4>
                     <span className="text-sm font-black text-zinc-400 uppercase tracking-widest line-through decoration-zinc-950/20">
