@@ -1,6 +1,6 @@
-import PowerPlatform from "@/components/standex-digital/PowerPlatform";
+import PowerPlatform from "@/components/standex-ai/PowerPlatform";
 import { TopNav } from "@/components/network/TopNav";
-import Footer from "@/components/standex-digital/Footer";
+import Footer from "@/components/standex-ai/Footer";
 
 export default function Page() {
   return (

@@ -1,16 +1,16 @@
 import { TopNav } from "@/components/network/TopNav";
-import Footer from "@/components/standex-digital/Footer";
+import Footer from "@/components/standex-ai/Footer";
 
 // AI Platform Base Components
 import { LandingHero } from "@/components/ui/LandingHero";
-import HomeCourses from "@/components/standex-digital/Home/HomeCourses";
+import HomeCourses from "@/components/standex-ai/Home/HomeCourses";
 
 // Standex Digital Integrated Components
-import HomeAbout from "@/components/standex-digital/Home/HomeAbout";
-import HomeServices from "@/components/standex-digital/Home/HomeServices";
-import WhyChooseUs from "@/components/standex-digital/Home/WhyChooseUs";
-import AIImplementation from "@/components/standex-digital/Home/AIImplementation";
-import Testimonials from "@/components/standex-digital/Testimonials";
+import HomeAbout from "@/components/standex-ai/Home/HomeAbout";
+import HomeServices from "@/components/standex-ai/Home/HomeServices";
+import WhyChooseUs from "@/components/standex-ai/Home/WhyChooseUs";
+import AIImplementation from "@/components/standex-ai/Home/AIImplementation";
+import Testimonials from "@/components/standex-ai/Testimonials";
 
 export default function Page() {
   return (

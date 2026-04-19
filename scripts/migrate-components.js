@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const dir = path.join(__dirname, '../components/standex-digital');
+const dir = path.join(__dirname, '../components/standex-ai');
 
 function processDir(currentDir) {
   const items = fs.readdirSync(currentDir);

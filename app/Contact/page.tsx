@@ -1,6 +1,6 @@
-import Contact from "@/components/standex-digital/Contact";
+import Contact from "@/components/standex-ai/Contact";
 import { TopNav } from "@/components/network/TopNav";
-import Footer from "@/components/standex-digital/Footer";
+import Footer from "@/components/standex-ai/Footer";
 
 export default function Page() {
   return (

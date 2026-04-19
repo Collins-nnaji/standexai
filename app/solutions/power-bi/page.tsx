@@ -1,6 +1,6 @@
-import PowerBi from "@/components/standex-digital/PowerBi";
+import PowerBi from "@/components/standex-ai/PowerBi";
 import { TopNav } from "@/components/network/TopNav";
-import Footer from "@/components/standex-digital/Footer";
+import Footer from "@/components/standex-ai/Footer";
 import { neonAuth } from "@/lib/neon/auth-server";
 
 export default async function Page() {

@@ -1,6 +1,6 @@
-import CloudAICourse from "@/components/standex-digital/Training/CloudAICourse";
+import CloudAICourse from "@/components/standex-ai/Training/CloudAICourse";
 import { TopNav } from "@/components/network/TopNav";
-import Footer from "@/components/standex-digital/Footer";
+import Footer from "@/components/standex-ai/Footer";
 import { neonAuth } from "@/lib/neon/auth-server";
 
 export default async function Page() {

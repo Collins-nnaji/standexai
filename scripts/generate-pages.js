@@ -33,7 +33,7 @@ for (const [route, component] of Object.entries(routes)) {
   const depth = route ? route.split('/').length : 0;
   const relativePrefix = depth === 0 ? '.' : '../'.repeat(depth);
   
-  const content = `import ${component.split('/').pop()} from '@/components/standex-digital/${component}';
+  const content = `import ${component.split('/').pop()} from '@/components/standex-ai/${component}';
 
 export default function Page() {
   return <${component.split('/').pop()} />;

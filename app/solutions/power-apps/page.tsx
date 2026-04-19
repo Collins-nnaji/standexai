@@ -1,6 +1,6 @@
-import PowerApps from "@/components/standex-digital/PowerApps";
+import PowerApps from "@/components/standex-ai/PowerApps";
 import { TopNav } from "@/components/network/TopNav";
-import Footer from "@/components/standex-digital/Footer";
+import Footer from "@/components/standex-ai/Footer";
 import { neonAuth } from "@/lib/neon/auth-server";
 
 export default async function Page() {

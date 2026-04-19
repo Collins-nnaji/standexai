@@ -1,6 +1,6 @@
-import PowerPlatformCourse from "@/components/standex-digital/Training/PowerPlatformCourse";
+import PowerPlatformCourse from "@/components/standex-ai/Training/PowerPlatformCourse";
 import { TopNav } from "@/components/network/TopNav";
-import Footer from "@/components/standex-digital/Footer";
+import Footer from "@/components/standex-ai/Footer";
 import { neonAuth } from "@/lib/neon/auth-server";
 
 export default async function Page() {

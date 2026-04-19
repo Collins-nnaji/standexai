@@ -1,5 +1,5 @@
 import { TopNav } from "@/components/network/TopNav";
-import Footer from "@/components/standex-digital/Footer";
+import Footer from "@/components/standex-ai/Footer";
 import { Bot, Sparkles, Zap, Shield, ZapIcon, CpuIcon, Binary, Share2 } from "lucide-react";
 
 export default function Page() {

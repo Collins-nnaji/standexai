@@ -1,5 +1,5 @@
 import { TopNav } from "@/components/network/TopNav";
-import Footer from "@/components/standex-digital/Footer";
+import Footer from "@/components/standex-ai/Footer";
 import Link from "next/link";
 import { Bot, Zap, Cpu, GraduationCap, ArrowRight, Sparkles, Building2, Code2 } from "lucide-react";
 

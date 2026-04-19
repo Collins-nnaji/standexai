@@ -6,7 +6,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import type { ConsoleTheme, ConsoleThemeMode } from "@/components/console/console-theme";
 
-type Active = "console" | "eval-lab";
+type Active = "console" | "eval-lab" | "skills";
 
 type Props = {
   active: Active;

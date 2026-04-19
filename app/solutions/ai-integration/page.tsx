@@ -1,5 +1,5 @@
 import { TopNav } from "@/components/network/TopNav";
-import Footer from "@/components/standex-digital/Footer";
+import Footer from "@/components/standex-ai/Footer";
 import { Cpu, Database, Network, Shield, Link, Blocks, Layers, Globe } from "lucide-react";
 
 export default function Page() {
