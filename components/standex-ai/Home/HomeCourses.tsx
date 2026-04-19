@@ -17,7 +17,7 @@ const tracks = [
     cohortDate: "May 5",
     description: "Master Multi-Agent Orchestration, production-grade RAG architectures, and the deployment of scalable AI systems.",
     enrollLink: "https://buy.stripe.com/28E4gB0JK6Z8dDi697fnO0j",
-    color: "#7C5CFC",
+    color: "#049DCB",
     icon: Bot,
     image: "/ArtificialIntelligence.png",
   },
@@ -27,7 +27,7 @@ const tracks = [
     tag: "Developer Curriculum 2026",
     price: "$1500",
     oldPrice: "$3000",
-    cohort: "Cohort 01 — Now Enrolling",
+    cohort: "Cohort 04 — Now Enrolling",
     cohortDate: "Jun 2",
     description: "Master the Microsoft Power Platform stack, enterprise data modelling, and the delivery of production-grade business solutions.",
     enrollLink: "https://buy.stripe.com/bIY1693YAcFMbx66os",
@@ -126,7 +126,7 @@ export default function HomeCourses() {
                   <Link
                     href={track.enrollLink}
                     className="flex-1 inline-flex items-center justify-center gap-3 rounded-2xl p-5 text-[11px] font-black uppercase tracking-[0.2em] text-white shadow-[0_12px_32px_-8px_rgba(0,0,0,0.2)] transition-all hover:scale-[1.02] active:scale-95"
-                    style={{ backgroundColor: track.id === "ai" ? "#18181b" : track.color }}
+                    style={{ backgroundColor: track.color }}
                   >
                     Enroll Now <ArrowRight className="h-4 w-4" />
                   </Link>

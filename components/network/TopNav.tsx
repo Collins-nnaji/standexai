@@ -168,7 +168,7 @@ export function TopNav({ user }: TopNavProps) {
           {/* AI Console Stylish Button */}
           <Link
             href="/console"
-            className="hidden sm:inline-flex items-center gap-2 overflow-hidden rounded-xl bg-gradient-to-r from-[#7C5CFC] to-[#A892FF] px-5 py-2.5 text-sm font-black uppercase tracking-widest text-white shadow-[0_0_20px_-5px_rgba(124,92,252,0.5)] transition-all hover:shadow-[0_0_30px_-5px_rgba(124,92,252,0.8)] hover:scale-[1.02] active:scale-95"
+            className="hidden sm:inline-flex items-center gap-2 overflow-hidden rounded-xl bg-zinc-800 px-5 py-2.5 text-sm font-black uppercase tracking-widest text-white shadow-lg transition-all hover:bg-zinc-700 hover:scale-[1.02] active:scale-95"
           >
             AI Console
             <Zap className="h-4 w-4" />
