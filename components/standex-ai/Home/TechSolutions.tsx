@@ -100,7 +100,7 @@ const TechSolutions = () => {
       <div ref={sectionRef} className="max-w-7xl mx-auto text-center">
         
         <h2 
-          className={`text-4xl font-black tracking-tight text-white mb-4 transform transition-all duration-700 ${
+          className={`text-4xl font-bold tracking-tight text-white mb-4 transform transition-all duration-700 ${
             animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
           }`}
         >
@@ -133,7 +133,7 @@ const TechSolutions = () => {
                 {solution.icon}
               </div>
               
-              <h3 className="text-2xl font-black tracking-tight text-white mb-4">
+              <h3 className="text-2xl font-bold tracking-tight text-white mb-4">
                 {solution.title}
               </h3>
               

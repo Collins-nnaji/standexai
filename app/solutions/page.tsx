@@ -14,9 +14,9 @@ export default function Page() {
           <div className="flex flex-col items-center text-center">
             <div className="inline-flex items-center gap-2 rounded-full border border-violet-500/20 bg-violet-500/10 px-4 py-1.5 mb-8">
               <Sparkles className="h-3.5 w-3.5 text-[#7C5CFC]" />
-              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#7C5CFC]">Enterprise Solutions</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#7C5CFC]">Enterprise Solutions</span>
             </div>
-            <h1 className="text-5xl md:text-8xl font-black tracking-tighter text-white uppercase italic leading-[0.85] mb-10">
+            <h1 className="text-5xl md:text-8xl font-bold tracking-tight text-white leading-[0.95] mb-10">
               Future-Proof <br /> Engineering.
             </h1>
             <p className="text-xl font-medium text-zinc-400 max-w-2xl">
@@ -36,10 +36,10 @@ export default function Page() {
                 <div className="h-14 w-14 flex items-center justify-center rounded-2xl bg-[#7C5CFC]/10 text-[#7C5CFC]">
                   <Bot className="h-7 w-7" />
                 </div>
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Pillar 01</span>
+                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500">Pillar 01</span>
               </div>
               
-              <h2 className="text-4xl font-black text-white uppercase italic tracking-tight mb-6">
+              <h2 className="text-4xl font-bold text-white tracking-tight mb-6">
                 Artificial <br /> Intelligence.
               </h2>
               <p className="text-base font-semibold text-zinc-400 leading-relaxed mb-10 flex-1">
@@ -48,12 +48,16 @@ export default function Page() {
               </p>
 
               <div className="grid grid-cols-1 gap-3">
+                <Link href="/solutions/data-readiness" className="flex items-center justify-between p-4 rounded-2xl border border-white/10 bg-emerald-500/5 hover:border-emerald-500 transition-all group/item ring-1 ring-emerald-500/20">
+                  <span className="text-sm font-bold tracking-tight text-[#34D399]">Data Readiness & Audit</span>
+                  <ArrowRight className="h-4 w-4 text-[#34D399]" />
+                </Link>
                 <Link href="/solutions/ai-agents" className="flex items-center justify-between p-4 rounded-2xl border border-white/5 bg-white/5 hover:border-[#7C5CFC] hover:bg-white/10 transition-all group/item">
-                  <span className="text-sm font-black uppercase tracking-widest text-white group-hover/item:text-[#7C5CFC]">AI Agents & Swarms</span>
+                  <span className="text-sm font-bold tracking-tight text-white group-hover/item:text-[#7C5CFC]">Autonomous AI Swarms</span>
                   <ArrowRight className="h-4 w-4 text-zinc-500 group-hover/item:translate-x-1 group-hover/item:text-[#7C5CFC] transition-all" />
                 </Link>
                 <Link href="/solutions/ai-integration" className="flex items-center justify-between p-4 rounded-2xl border border-white/5 bg-white/5 hover:border-[#7C5CFC] hover:bg-white/10 transition-all group/item">
-                  <span className="text-sm font-black uppercase tracking-widest text-white group-hover/item:text-[#7C5CFC]">Enterprise Integration</span>
+                  <span className="text-sm font-bold uppercase tracking-widest text-white group-hover/item:text-[#7C5CFC]">Enterprise Integration</span>
                   <ArrowRight className="h-4 w-4 text-zinc-500 group-hover/item:translate-x-1 group-hover/item:text-[#7C5CFC] transition-all" />
                 </Link>
               </div>
@@ -67,10 +71,10 @@ export default function Page() {
                 <div className="h-14 w-14 flex items-center justify-center rounded-2xl bg-[#049DCB]/10 text-[#049DCB]">
                   <Cpu className="h-7 w-7" />
                 </div>
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Pillar 02</span>
+                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500">Pillar 02</span>
               </div>
               
-              <h2 className="text-4xl font-black text-white uppercase italic tracking-tight mb-6">
+              <h2 className="text-4xl font-bold text-white tracking-tight mb-6">
                 Power <br /> Platform.
               </h2>
               <p className="text-base font-semibold text-zinc-400 leading-relaxed mb-10 flex-1">
@@ -79,17 +83,21 @@ export default function Page() {
               </p>
 
               <div className="grid grid-cols-2 gap-3">
+                <Link href="/solutions/power-platform-ai" className="col-span-2 flex items-center justify-between p-4 rounded-2xl border border-[#049DCB]/40 bg-[#049DCB]/5 hover:border-[#049DCB] transition-all group/item ring-1 ring-[#049DCB]/20">
+                  <span className="text-sm font-bold tracking-tight text-[#049DCB]">Power Platform + AI</span>
+                  <ArrowRight className="h-4 w-4 text-[#049DCB]" />
+                </Link>
                 <Link href="/solutions/power-apps" className="flex items-center justify-between p-4 rounded-2xl border border-white/5 bg-white/5 hover:border-[#049DCB] hover:bg-white/10 transition-all group/item">
-                  <span className="text-[11px] font-black uppercase tracking-widest text-white group-hover/item:text-[#049DCB]">Power Apps</span>
+                  <span className="text-[11px] font-bold uppercase tracking-widest text-white group-hover/item:text-[#049DCB]">Power Apps</span>
                 </Link>
                 <Link href="/solutions/power-automate" className="flex items-center justify-between p-4 rounded-2xl border border-white/5 bg-white/5 hover:border-[#049DCB] hover:bg-white/10 transition-all group/item">
-                  <span className="text-[11px] font-black uppercase tracking-widest text-white group-hover/item:text-[#049DCB]">Automate</span>
+                  <span className="text-[11px] font-bold uppercase tracking-widest text-white group-hover/item:text-[#049DCB]">Automate</span>
                 </Link>
                 <Link href="/solutions/power-bi" className="flex items-center justify-between p-4 rounded-2xl border border-white/5 bg-white/5 hover:border-[#049DCB] hover:bg-white/10 transition-all group/item">
-                  <span className="text-[11px] font-black uppercase tracking-widest text-white group-hover/item:text-[#049DCB]">Power BI</span>
+                  <span className="text-[11px] font-bold uppercase tracking-widest text-white group-hover/item:text-[#049DCB]">Power BI</span>
                 </Link>
                 <Link href="/solutions/copilot-studio" className="flex items-center justify-between p-4 rounded-2xl border border-white/5 bg-white/5 hover:border-[#049DCB] hover:bg-white/10 transition-all group/item">
-                  <span className="text-[11px] font-black uppercase tracking-widest text-white group-hover/item:text-[#049DCB]">Copilot</span>
+                  <span className="text-[11px] font-bold uppercase tracking-widest text-white group-hover/item:text-[#049DCB]">Copilot</span>
                 </Link>
               </div>
             </div>

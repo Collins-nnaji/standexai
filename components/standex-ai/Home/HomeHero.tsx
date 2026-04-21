@@ -151,7 +151,7 @@ const HomeHero = () => {
                             <div className="rounded-md shadow">
                                 <a
                                     href="#"
-                                    className="hero-button inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-black rounded-md text-white bg-[#7C5CFC] hover:bg-[#6B4FE0] transition-colors duration-200 md:py-3 md:text-lg md:px-10"
+                                    className="hero-button inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-bold rounded-md text-white bg-[#7C5CFC] hover:bg-[#6B4FE0] transition-colors duration-200 md:py-3 md:text-lg md:px-10"
                                 >
                                     See How We Can Help →
                                 </a>

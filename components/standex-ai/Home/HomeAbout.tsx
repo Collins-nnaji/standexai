@@ -104,10 +104,10 @@ const HomeAbout = () => {
         <div className="flex flex-col items-center text-center mb-12 sm:mb-16">
           <div className="inline-flex items-center gap-2 rounded-full border border-violet-100 bg-violet-50 px-3 py-1 mb-4">
             <div className="h-1.5 w-1.5 rounded-full bg-violet-500 animate-pulse" />
-            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-violet-600">Company Overview</span>
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-violet-600">Company Overview</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-[-0.03em] text-zinc-900 leading-[1.1]">
-            Experts In Consulting <br className="hidden sm:block" /> & Digital Development
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-zinc-900 leading-[1.1]">
+            Global Engineering <br className="hidden sm:block" /> & Digital Strategy.
           </h2>
         </div>
         
@@ -125,7 +125,7 @@ const HomeAbout = () => {
             <div className="hidden lg:block mt-8">
               <Link
                 href="/#about"
-                className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-2xl bg-zinc-900 px-6 py-3.5 text-[11px] font-black tracking-tight uppercase tracking-widest text-white shadow-lg transition-all active:scale-95"
+                className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-2xl bg-zinc-900 px-6 py-3.5 text-[11px] font-bold tracking-tight uppercase tracking-widest text-white shadow-lg transition-all active:scale-95"
               >
                 Learn More
                 <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -135,7 +135,7 @@ const HomeAbout = () => {
           
           <div className="flex flex-col gap-8">
             <p 
-              className={`text-zinc-500 text-lg font-black tracking-tight leading-relaxed transform transition-all duration-1000 delay-300 ${
+              className={`text-zinc-500 text-lg font-semibold tracking-tight leading-relaxed transform transition-all duration-1000 delay-300 ${
                 animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
               }`}
             >
@@ -165,12 +165,12 @@ const HomeAbout = () => {
                     <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${stat.color}`}></div>
                     <div className="p-6">
                       <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-[10px] font-black uppercase tracking-widest text-zinc-400">{stat.title}</h3>
+                        <h3 className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">{stat.title}</h3>
                         <div className={`rounded-xl p-2 bg-zinc-50 border border-zinc-100`}>
                           <IconComponent className="w-4 h-4 text-zinc-900" />
                         </div>
                       </div>
-                      <div className="text-3xl font-black tracking-tight text-zinc-950">
+                      <div className="text-3xl font-bold tracking-tight text-zinc-950">
                         {stat.isPercentage ? 
                           `${stat.value}%` : 
                           stat.value.toLocaleString()}

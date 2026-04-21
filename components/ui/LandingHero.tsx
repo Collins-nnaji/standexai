@@ -57,7 +57,7 @@ export function LandingHero() {
             <div className="space-y-6">
 
               
-              <h1 className="text-6xl md:text-8xl font-extrabold tracking-tight leading-[0.9] text-white">
+              <h1 className="text-6xl md:text-8xl font-bold tracking-tight leading-[0.95] text-white">
                 Architecting <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-emerald-300 to-teal-400">
                   Intelligent
@@ -153,19 +153,11 @@ function CodeBackground() {
   return (
     <div className="absolute inset-0 pointer-events-none select-none opacity-[0.1]">
       {Array.from({ length: 8 }).map((_, i) => (
-        <motion.div
-          key={i}
-          initial={{ opacity: 0, x: -100 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.1 * i, duration: 1.2 }}
-          className="absolute text-[10px] font-mono text-emerald-500/50 whitespace-nowrap"
-          style={{ 
-            top: `${10 + (i * 12)}%`, 
-            left: `${2 + (i * 2)}%`,
-          }}
-        >
-          {lines[i % lines.length]}
-        </motion.div>
+          <div className="absolute flex items-center gap-4 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full" 
+               style={{ top: `${15 + (i * 12)}%`, left: `${4 + (i * 2)}%` }}>
+             <div className="h-1 w-1 rounded-full bg-emerald-500 animate-pulse" />
+             <span className="text-[8px] font-bold text-emerald-500/80 tracking-widest uppercase">{lines[i % lines.length]}</span>
+          </div>
       ))}
       
       {Array.from({ length: 8 }).map((_, i) => (

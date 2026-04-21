@@ -46,9 +46,9 @@ export default function HomeCourses() {
         <div className="flex flex-col items-center text-center mb-20">
           <div className="inline-flex items-center gap-2 rounded-full border border-violet-100 bg-violet-50 px-4 py-1.5 mb-6">
             <Sparkles className="h-3.5 w-3.5 text-[#7C5CFC]" />
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#7C5CFC]">Standex Digital Academy</span>
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#7C5CFC]">Standex Digital Academy</span>
           </div>
-          <h2 className="text-4xl md:text-6xl font-black tracking-tight text-zinc-950 leading-tight">
+          <h2 className="text-4xl md:text-6xl font-bold tracking-tight text-zinc-950 leading-tight">
             Accelerate your <br className="hidden md:block" /> Engineering Career.
           </h2>
           <p className="mt-8 text-lg font-medium text-zinc-500 max-w-2xl">
@@ -73,7 +73,7 @@ export default function HomeCourses() {
                 <div className="flex items-center justify-between mb-8">
                   <div className="flex items-center gap-2.5">
                     <div className="h-2 w-2 rounded-full animate-pulse" style={{ backgroundColor: track.color }} />
-                    <span className="text-[10px] font-black uppercase tracking-[0.3em]" style={{ color: track.color }}>
+                    <span className="text-[10px] font-bold uppercase tracking-[0.3em]" style={{ color: track.color }}>
                       {track.cohort}
                     </span>
                   </div>
@@ -85,11 +85,11 @@ export default function HomeCourses() {
                 {/* Label & Title Area */}
                 <div className="flex-1 mb-8">
                   <div className="mb-4">
-                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-zinc-400">
+                    <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-zinc-400">
                       {track.tag}
                     </span>
                   </div>
-                  <h3 className="text-3xl md:text-4xl font-black text-zinc-950 tracking-tight mb-6 leading-none">
+                  <h3 className="text-3xl md:text-4xl font-bold text-zinc-950 tracking-tight mb-6 leading-none">
                     {track.label}
                   </h3>
                   
@@ -109,14 +109,14 @@ export default function HomeCourses() {
                   </p>
 
                   <div className="flex items-baseline gap-3 mb-2">
-                    <h4 className="text-4xl font-black tracking-tighter text-zinc-950 leading-none">
+                    <h4 className="text-4xl font-bold tracking-tighter text-zinc-950 leading-none">
                       {track.price}
                     </h4>
-                    <span className="text-sm font-black text-zinc-400 uppercase tracking-widest line-through decoration-zinc-950/20">
+                    <span className="text-sm font-bold text-zinc-400 uppercase tracking-widest line-through decoration-zinc-950/20">
                       {track.oldPrice}
                     </span>
                   </div>
-                  <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">
                     Starts {track.cohortDate} • 6 Weeks Intensive
                   </p>
                 </div>
@@ -125,14 +125,14 @@ export default function HomeCourses() {
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Link
                     href={track.enrollLink}
-                    className="flex-1 inline-flex items-center justify-center gap-3 rounded-2xl p-5 text-[11px] font-black uppercase tracking-[0.2em] text-white shadow-[0_12px_32px_-8px_rgba(0,0,0,0.2)] transition-all hover:scale-[1.02] active:scale-95"
+                    className="flex-1 inline-flex items-center justify-center gap-3 rounded-2xl p-5 text-[11px] font-bold uppercase tracking-[0.2em] text-white shadow-[0_12px_32px_-8px_rgba(0,0,0,0.2)] transition-all hover:scale-[1.02] active:scale-95"
                     style={{ backgroundColor: track.color }}
                   >
                     Enroll Now <ArrowRight className="h-4 w-4" />
                   </Link>
                   <Link
                     href="/Training"
-                    className="flex-1 inline-flex items-center justify-center gap-3 rounded-2xl p-5 text-[11px] font-black uppercase tracking-[0.2em] text-zinc-900 bg-zinc-50 border border-zinc-200 hover:bg-zinc-100 transition-all"
+                    className="flex-1 inline-flex items-center justify-center gap-3 rounded-2xl p-5 text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-900 bg-zinc-50 border border-zinc-200 hover:bg-zinc-100 transition-all"
                   >
                     View Syllabus
                   </Link>

@@ -560,7 +560,7 @@ export default function TrainingPage() {
                 <button
                   key={track}
                   onClick={() => handleTrackSwitch(track)}
-                  className={`relative px-6 py-3.5 rounded-[16px] text-[11px] font-black uppercase tracking-[0.2em] transition-all duration-500 overflow-hidden ${
+                  className={`relative px-6 py-3.5 rounded-[16px] text-[11px] font-bold uppercase tracking-[0.2em] transition-all duration-500 overflow-hidden ${
                     activeTrack === track
                       ? "text-white"
                       : "text-zinc-400 hover:text-zinc-600 hover:bg-zinc-50"
@@ -592,7 +592,7 @@ export default function TrainingPage() {
               <div className="mb-14">
                 <div className="flex items-center gap-3 mb-8">
                   <span className="h-[1px] w-12 bg-zinc-200" />
-                  <span className="text-[10px] font-black uppercase tracking-[0.4em]" style={{ color: cfg.color }}>
+                  <span className="text-[10px] font-bold uppercase tracking-[0.4em]" style={{ color: cfg.color }}>
                     {cfg.tag}
                   </span>
                 </div>
@@ -603,7 +603,7 @@ export default function TrainingPage() {
                     <button
                       key={weekData.week}
                       onClick={() => setActiveWeek(weekData.week)}
-                      className={`relative px-4 py-4 rounded-[18px] text-[11px] font-black uppercase tracking-[0.2em] transition-all duration-500 overflow-hidden flex-1 ${
+                      className={`relative px-4 py-4 rounded-[18px] text-[11px] font-bold uppercase tracking-[0.2em] transition-all duration-500 overflow-hidden flex-1 ${
                         activeWeek === weekData.week
                           ? "text-white"
                           : "text-zinc-400 hover:text-zinc-600 hover:bg-zinc-50"
@@ -633,7 +633,7 @@ export default function TrainingPage() {
                 >
                   {/* HERO SECTION FOR ACTIVE WEEK */}
                   <div className="mb-16">
-                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-zinc-950 tracking-tighter leading-[0.9] mb-8 uppercase italic">
+                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-zinc-950 tracking-tight leading-[0.95] mb-8 italic">
                       {w.title}
                     </h2>
                     
@@ -644,7 +644,7 @@ export default function TrainingPage() {
 
                   {/* MASTERCLASS SYLLABUS CARDS */}
                   <div className="space-y-10">
-                    <div className="flex items-center gap-4 text-[11px] font-black uppercase tracking-[0.3em] text-zinc-400 mb-6">
+                    <div className="flex items-center gap-4 text-[11px] font-bold uppercase tracking-[0.3em] text-zinc-400 mb-6">
                       <Layers className="h-4 w-4" /> Syllabus Architecture
                     </div>
                     
@@ -656,7 +656,7 @@ export default function TrainingPage() {
                           <div className="flex flex-col md:flex-row gap-8 items-start">
                             <div className="flex flex-col items-center shrink-0">
                                <div 
-                                 className="h-12 w-12 rounded-2xl flex items-center justify-center text-lg font-black text-white shadow-[0_8px_20px_rgba(0,0,0,0.1)] transition-colors duration-500"
+                                 className="h-12 w-12 rounded-2xl flex items-center justify-center text-lg font-bold text-white shadow-[0_8px_20px_rgba(0,0,0,0.1)] transition-colors duration-500"
                                  style={{ backgroundColor: activeTrack === "ai" ? "#18181b" : "#049DCB" }}
                                >
                                  {gi + 1}
@@ -666,11 +666,11 @@ export default function TrainingPage() {
                             
                             <div className="flex-1 pt-1">
                                <div className="flex items-center gap-3 mb-4">
-                                 <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: cfg.color }}>Session 0{gi + 1} Intensive</span>
+                                 <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: cfg.color }}>Session 0{gi + 1} Intensive</span>
                                  <span className="h-1 w-1 rounded-full bg-zinc-300" />
-                                 <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400 underline decoration-violet-200 underline-offset-4">Live Lab</span>
+                                 <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 underline decoration-violet-200 underline-offset-4">Live Lab</span>
                                </div>
-                               <h3 className="text-3xl md:text-4xl font-black text-zinc-950 tracking-tight leading-tight mb-8">
+                               <h3 className="text-3xl md:text-4xl font-bold text-zinc-950 tracking-tight leading-tight mb-8">
                                  {group.session}
                                </h3>
                                
@@ -697,14 +697,14 @@ export default function TrainingPage() {
               
               {/* TECH STACK CARD */}
               <div className="bg-zinc-50/50 backdrop-blur-xl rounded-[32px] border border-zinc-200/50 p-6 flex flex-col gap-6">
-                <p className="text-[9px] font-black uppercase tracking-[0.3em]" style={{ color: cfg.color }}>Module Toolchain</p>
+                <p className="text-[9px] font-bold uppercase tracking-[0.3em]" style={{ color: cfg.color }}>Module Toolchain</p>
                 <div className="grid grid-cols-2 gap-4">
                    {w.tools.map((tool, ti) => (
                       <div key={ti} className="flex items-center gap-3 bg-white/80 p-3 rounded-2xl border border-zinc-100 shadow-sm transition-all hover:border-zinc-300 group">
                          <div className="h-10 w-10 shrink-0 relative p-1">
                             <Image src={tool.src} alt={tool.name} fill className="object-contain" unoptimized />
                          </div>
-                         <span className="text-[9px] font-black uppercase tracking-widest text-zinc-500 group-hover:text-zinc-950 truncate">{tool.name}</span>
+                         <span className="text-[9px] font-bold uppercase tracking-widest text-zinc-500 group-hover:text-zinc-950 truncate">{tool.name}</span>
                       </div>
                    ))}
                 </div>
@@ -721,27 +721,27 @@ export default function TrainingPage() {
                   <div className="flex items-center justify-between mb-8">
                     <div className="flex items-center gap-2.5">
                       <div className="h-2 w-2 rounded-full animate-pulse" style={{ backgroundColor: cfg.color }} />
-                      <span className="text-[10px] font-black uppercase tracking-[0.3em]" style={{ color: cfg.color }}>
+                      <span className="text-[10px] font-bold uppercase tracking-[0.3em]" style={{ color: cfg.color }}>
                         {cfg.cohort}
                       </span>
                     </div>
                   </div>
 
                   <div className="flex flex-col gap-1 mb-8">
-                    <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Early Access Pricing</span>
+                    <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Early Access Pricing</span>
                     <div className="flex items-baseline gap-3">
-                      <h3 className="text-5xl font-black tracking-tighter text-zinc-950 uppercase italic leading-none">
+                      <h3 className="text-5xl font-bold tracking-tight text-zinc-950 leading-none">
                         {cfg.price}
                       </h3>
-                      <span className="text-base font-black text-zinc-400 uppercase tracking-widest line-through decoration-zinc-950/20">{cfg.oldPrice}</span>
+                      <span className="text-base font-bold text-zinc-400 uppercase tracking-widest line-through decoration-zinc-950/20">{cfg.oldPrice}</span>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 gap-1 mb-8 bg-zinc-50/50 rounded-2xl p-2">
                     {stats.map(s => (
                       <div key={s.id} className="flex items-center justify-between py-3 border-b border-zinc-100 last:border-0 hover:translate-x-1 transition-transform px-3">
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-70" style={{ color: cfg.color }}>{s.label}</span>
-                        <span className="text-xs font-black text-zinc-950 uppercase tracking-tight">{s.value}</span>
+                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-70" style={{ color: cfg.color }}>{s.label}</span>
+                        <span className="text-xs font-bold text-zinc-950 uppercase tracking-tight">{s.value}</span>
                       </div>
                     ))}
                   </div>
@@ -754,12 +754,12 @@ export default function TrainingPage() {
                       className="absolute inset-0 rounded-[20px] transition-all duration-500 hover:opacity-90"
                       style={{ backgroundColor: cfg.color }}
                     />
-                    <span className="relative z-30 text-[13px] font-black uppercase tracking-[0.2em] text-white">Enroll Now</span> 
+                    <span className="relative z-30 text-[13px] font-bold uppercase tracking-[0.2em] text-white">Enroll Now</span> 
                     <ArrowRight className="h-5 w-5 text-white group-hover:translate-x-2 transition-transform relative z-30" />
                   </MagneticLink>
 
                   <div className="flex items-center justify-center gap-2 pt-2">
-                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-400 italic">
+                    <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-zinc-400 italic">
                       Verified {cfg.cohortLabel} Graduation Path
                     </span>
                   </div>
@@ -768,7 +768,7 @@ export default function TrainingPage() {
 
               {/* Graduate Trust Segment */}
               <div className="px-10 py-6 bg-zinc-50/50 rounded-[32px] border border-zinc-100 flex flex-col gap-4">
-                 <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400">
+                 <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">
                    {activeTrack === "ai" ? "Trusted by Engineering Teams" : "Microsoft Learning Partner"}
                  </p>
                  <div className="flex gap-4 opacity-30 grayscale saturate-0">
@@ -798,9 +798,9 @@ export default function TrainingPage() {
              <div className="flex flex-col items-center text-center mb-16">
                 <div className="inline-flex items-center gap-2 rounded-full border border-violet-100 bg-violet-50 px-3 py-1 mb-4">
                    <Sparkles className="h-3.5 w-3.5 text-violet-500" />
-                   <span className="text-[10px] font-black uppercase tracking-[0.2em] text-violet-600">Verification Phase</span>
+                   <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-violet-600">Verification Phase</span>
                 </div>
-                <h2 className="text-4xl md:text-5xl font-black tracking-[-0.03em] text-zinc-950 mb-4 italic uppercase">Capstone Graduation Mastery</h2>
+                <h2 className="text-4xl md:text-5xl font-bold tracking-[-0.03em] text-zinc-950 mb-4 italic uppercase">Capstone Graduation Mastery</h2>
                 <p className="text-zinc-500 font-medium max-w-2xl px-4">Demonstrate your engineering expertise to the world.</p>
              </div>
 
@@ -813,7 +813,7 @@ export default function TrainingPage() {
 
                       <div className="relative z-10 flex flex-col md:flex-row gap-12 items-center">
                          <div className="flex-1">
-                            <h3 className="text-3xl font-black text-zinc-950 uppercase italic tracking-tight mb-6">Mastery Requirements</h3>
+                            <h3 className="text-3xl font-bold text-zinc-950 uppercase italic tracking-tight mb-6">Mastery Requirements</h3>
                             <p className="text-lg font-semibold text-zinc-600 leading-relaxed mb-10">
                                {activeTrack === "ai" 
                                  ? "The capstone requirement is a **full AI product** with all the features taught in the course—autonomous agents, RAG, usage-based billing, and deep observability. Every project is **personally tested by our team** for production-grade reliability and architectural integrity."
@@ -825,14 +825,14 @@ export default function TrainingPage() {
                                {cfg.mastery.map((feat, fi) => (
                                  <div key={fi} className="flex items-center gap-3">
                                     <div className="h-1.5 w-1.5 rounded-full bg-violet-400" />
-                                    <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">{feat}</span>
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">{feat}</span>
                                  </div>
                                ))}
                             </div>
 
                             <button 
                                onClick={() => setShowCertificate(true)}
-                               className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-violet-50 border border-violet-100 text-[11px] font-black uppercase tracking-[0.2em] text-violet-600 hover:bg-violet-100 transition-all group"
+                               className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-violet-50 border border-violet-100 text-[11px] font-bold uppercase tracking-[0.2em] text-violet-600 hover:bg-violet-100 transition-all group"
                             >
                                View Digital Mastery Badge <Sparkles className="h-4 w-4 group-hover:rotate-12 transition-transform" />
                             </button>
@@ -850,13 +850,13 @@ export default function TrainingPage() {
                                      <div className="h-8 w-8 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center">
                                         <div className="h-4 w-4 rounded-full animate-pulse" style={{ backgroundColor: cfg.color }} />
                                      </div>
-                                     <span className="text-[8px] font-black text-white/40 uppercase tracking-[0.3em]">{cfg.certTag}</span>
+                                     <span className="text-[8px] font-bold text-white/40 uppercase tracking-[0.3em]">{cfg.certTag}</span>
                                   </div>
                                   <div className="space-y-2">
-                                     <p className="text-[8px] font-black uppercase tracking-widest" style={{ color: cfg.color }}>
+                                     <p className="text-[8px] font-bold uppercase tracking-widest" style={{ color: cfg.color }}>
                                        {activeTrack === "ai" ? "Mastery Level 04" : "Mastery Level 01"}
                                      </p>
-                                     <p className="text-sm font-black text-white uppercase italic tracking-tighter">{cfg.certTitle}</p>
+                                     <p className="text-sm font-bold text-white uppercase italic tracking-tighter">{cfg.certTitle}</p>
                                   </div>
                                   <div className="h-1 w-full" style={{ background: `linear-gradient(to right, ${cfg.color}, rgba(255,255,255,0.2), transparent)` }} />
                                </div>
@@ -902,7 +902,7 @@ export default function TrainingPage() {
                        />
                     </div>
                     <div className="flex flex-col items-center gap-1">
-                       <span className="text-[11px] font-black uppercase tracking-[0.4em]" style={{ color: cfg.color }}>
+                       <span className="text-[11px] font-bold uppercase tracking-[0.4em]" style={{ color: cfg.color }}>
                         {activeTrack === "ai" ? "Applied AI Engineering Hub" : "Power Platform Development Hub"}
                        </span>
                        <div className="h-[1px] w-32 bg-zinc-200 mt-1" />
@@ -912,13 +912,13 @@ export default function TrainingPage() {
                  <div className="flex flex-col items-center text-center gap-6 relative z-10 w-full">
                     <div className="space-y-2">
                        <p className="text-[12px] font-medium uppercase tracking-[0.3em] text-zinc-400">This is to certify that</p>
-                       <h2 className="text-5xl md:text-7xl font-black text-zinc-950 uppercase tracking-tighter leading-none font-serif pt-2 pb-6 border-b-2 border-zinc-100 px-12 min-w-[450px]">
+                       <h2 className="text-5xl md:text-7xl font-bold text-zinc-950 uppercase tracking-tighter leading-none font-serif pt-2 pb-6 border-b-2 border-zinc-100 px-12 min-w-[450px]">
                           John Doe
                        </h2>
                     </div>
 
                     <div className="flex flex-col items-center gap-4 max-w-2xl px-12">
-                       <p className="text-[14px] font-black text-zinc-900 uppercase tracking-[0.4em]">{cfg.certTitle}</p>
+                       <p className="text-[14px] font-bold text-zinc-900 uppercase tracking-[0.4em]">{cfg.certTitle}</p>
                        <p className="text-zinc-500 font-medium text-base leading-relaxed">
                          {activeTrack === "ai"
                            ? "Awarded for mastering Multi-Agent Orchestration, production-grade RAG architectures, and the deployment of scalable AI systems."
@@ -931,7 +931,7 @@ export default function TrainingPage() {
                  <div className="w-full flex justify-between items-end relative z-10 px-8 pt-4">
                     <div className="flex flex-col items-center gap-1">
                        <div className="h-[1px] w-40 bg-zinc-300" />
-                       <p className="text-[10px] font-black uppercase tracking-widest text-zinc-950">Issuance Date</p>
+                       <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-950">Issuance Date</p>
                        <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest italic">October 24, 2026</p>
                     </div>
 
@@ -939,14 +939,14 @@ export default function TrainingPage() {
                        <div className="h-20 w-20 rounded-full border-4 border-double border-violet-100 flex items-center justify-center bg-violet-50/30 transform rotate-12 transition-transform group-hover:rotate-0">
                           <ShieldCheck className="h-8 w-8 text-violet-600/30" />
                           <div className="absolute inset-0 flex items-center justify-center">
-                             <span className="text-[5px] font-black text-violet-600/20 uppercase tracking-tighter leading-none transform -rotate-45">Certified SXAI Engineer</span>
+                             <span className="text-[5px] font-bold text-violet-600/20 uppercase tracking-tighter leading-none transform -rotate-45">Certified SXAI Engineer</span>
                           </div>
                        </div>
                     </div>
 
                     <div className="flex flex-col items-center gap-1">
                        <div className="h-[1px] w-40 bg-zinc-300" />
-                       <p className="text-[10px] font-black uppercase tracking-widest text-zinc-950">Verification</p>
+                       <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-950">Verification</p>
                        <code className="text-[8px] font-mono text-violet-500/50 font-bold tracking-tighter">
                           {cfg.certTag}
                        </code>

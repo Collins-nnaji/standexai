@@ -37,11 +37,11 @@ const WhyChooseUs = () => {
       <div className="w-full lg:w-1/2 py-20 px-6 md:px-12 lg:px-16 flex flex-col justify-center relative z-10">
         <div className="inline-flex items-center gap-2 rounded-full border border-violet-100 bg-violet-50 px-3 py-1 mb-6 self-start">
           <div className="h-1.5 w-1.5 rounded-full bg-violet-500 animate-pulse" />
-          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-violet-600">Why Standex Digital</span>
+          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-violet-600">Why Standex Digital</span>
         </div>
         
         <h2 
-          className={`text-3xl sm:text-4xl lg:text-5xl font-black tracking-[-0.03em] text-zinc-900 leading-[1.1] mb-8 transform transition-all duration-700 ${
+          className={`text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-zinc-900 leading-[1.1] mb-8 transform transition-all duration-700 ${
             animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
           }`}
         >
@@ -72,12 +72,12 @@ const WhyChooseUs = () => {
               alt="Microsoft Solutions Partner" 
               className="h-12 mb-4 grayscale group-hover:grayscale-0 transition-all duration-500"
             />
-            <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 text-center">Certified Solutions Partner</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 text-center">Certified Solutions Partner</p>
           </div>
           
           {/* Stats Card */}
           <div className="bg-zinc-50 rounded-[24px] border border-zinc-200 p-6 transition-all hover:bg-white hover:shadow-lg">
-            <h4 className="text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-6">Network Health</h4>
+            <h4 className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 mb-6">Network Health</h4>
             <div className="space-y-4">
               <div className="flex items-center">
                 <div className="w-8 h-8 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center mr-4">
@@ -85,7 +85,7 @@ const WhyChooseUs = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <span className="text-xs font-black uppercase tracking-tight text-zinc-800">250+ Deployments</span>
+                <span className="text-xs font-bold uppercase tracking-tight text-zinc-800">250+ Deployments</span>
               </div>
               
               <div className="flex items-center">
@@ -94,7 +94,7 @@ const WhyChooseUs = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <span className="text-xs font-black uppercase tracking-tight text-zinc-800">100% Reliability</span>
+                <span className="text-xs font-bold uppercase tracking-tight text-zinc-800">100% Reliability</span>
               </div>
             </div>
           </div>

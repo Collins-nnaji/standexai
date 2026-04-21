@@ -74,9 +74,9 @@ const HomeServices = () => {
         <div className="flex flex-col items-center text-center mb-12 sm:mb-16">
           <div className="inline-flex items-center gap-2 rounded-full border border-zinc-100 bg-zinc-50 px-3 py-1 mb-4">
             <div className="h-1.5 w-1.5 rounded-full bg-[#7C5CFC] animate-pulse" />
-            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#7C5CFC]">Microsoft Solutions</span>
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#7C5CFC]">Microsoft Solutions</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-[-0.03em] text-zinc-900 leading-[1.1]">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-zinc-900 leading-[1.1]">
             Our Services
           </h2>
         </div>
@@ -86,10 +86,12 @@ const HomeServices = () => {
             animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
           }`}
         >
-          <p className="text-sm sm:text-base font-semibold text-zinc-500 leading-relaxed">
-            We are experts in Microsoft Power Platform services and also specialize in Intelligent Cloud Solutions, 
-            Web & App Development, and Digital Marketing. Our comprehensive expertise ensures that 
-            we can deliver optimal solutions tailored to your specific needs, regardless of your current technology stack.
+          <p className="text-sm sm:text-base font-semibold text-zinc-500 leading-relaxed italic">
+            Transforming legacy ecosystems into intelligent workspaces. We specialize in 
+            <span className="text-[#7C5CFC]"> Data Readiness Audits</span>, 
+            <span className="text-[#7C5CFC]"> Autonomous AI Swarms</span>, and 
+            <span className="text-[#7C5CFC]"> Intelligent Power Platform Transformation</span>. 
+            Professional engineering for the modern enterprise.
           </p>
         </div>
         
@@ -118,10 +120,9 @@ const HomeServices = () => {
                     animationIterationCount: 'infinite'
                   }}
                 >
-                  <div className="text-center text-white font-black text-[10px] uppercase tracking-widest">
-                    <div>Power</div>
-                    <div>Platform</div>
+                  <div className="text-center text-white font-bold text-[10px] uppercase tracking-widest">
                     <div>Solutions</div>
+                    <div>& Engineering</div>
                   </div>
                 </div>
                 
@@ -327,7 +328,7 @@ const HomeServices = () => {
                     <rect x="14" y="14" width="6" height="6" fill="currentColor" />
                   </svg>
                 </div>
-                <h3 className="text-2xl font-black tracking-tight text-zinc-950">Power Platform Solutions</h3>
+                <h3 className="text-2xl font-bold tracking-tight text-zinc-950">Intelligent Solutions</h3>
               </div>
               
               <p className="mb-8 text-sm sm:text-base font-semibold text-zinc-500 leading-relaxed">
@@ -347,10 +348,10 @@ const HomeServices = () => {
                 }`}
               >
                 <a 
-                  href="/solutions/power-platform" 
-                  className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-2xl bg-gradient-to-r from-[#7C5CFC] to-[#A892FF] px-8 py-4 text-[12px] font-black uppercase tracking-widest text-white shadow-[0_0_30px_-10px_rgba(124,92,252,0.8)] hover:shadow-[0_0_50px_-15px_rgba(124,92,252,1)] transition-all active:scale-95"
+                  href="/solutions/power-platform-ai" 
+                  className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-2xl bg-gradient-to-r from-[#049DCB] to-[#7C5CFC] px-8 py-4 text-[12px] font-bold uppercase tracking-widest text-white shadow-[0_20px_40px_-5px_rgba(4,157,203,0.4)] transition-all active:scale-95"
                 >
-                  Explore Power Platform
+                  Intelligent Transformation
                   <svg className="h-4 w-4 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
