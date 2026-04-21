@@ -133,10 +133,26 @@ const Footer = () => {
           </div>
         </div>
         
-        <div className={`mt-12 flex flex-col md:flex-row justify-between items-center gap-4 transition-all duration-700 delay-500 border-t border-white/[0.03] pt-8 ${
+        <div className={`mt-12 flex flex-col md:flex-row justify-between items-center gap-6 transition-all duration-700 delay-500 border-t border-white/[0.03] pt-8 ${
           animationStarted ? 'opacity-100' : 'opacity-0'
         }`}>
-          <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">© 2025 Standex Ltd • Applied Engineering Hub</p>
+          <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">© 2026 Standex Ltd • Applied Engineering Hub</p>
+          
+          {/* System Diagnostics Bar */}
+          <div className="flex flex-wrap items-center justify-center gap-6 px-6 py-2 rounded-full bg-white/[0.02] border border-white/[0.05]">
+            <div className="flex items-center gap-2">
+              <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest">Latency: 14ms</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest">AI Engine: Online</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest">DB Ops: Optimized</span>
+            </div>
+          </div>
         </div>
       </div>
     </footer>
