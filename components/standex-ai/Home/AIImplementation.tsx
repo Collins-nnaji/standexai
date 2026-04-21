@@ -125,8 +125,11 @@ const AIImplementation = () => {
                       <Terminal className="h-4 w-4 text-zinc-500" />
                       <span className="text-zinc-500 font-bold tracking-tight uppercase tracking-widest">standex-core v4.1</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+                        <div className="h-1 w-1 rounded-full bg-emerald-500 animate-pulse" />
+                        <span className="text-[8px] font-bold text-emerald-500 uppercase tracking-widest">p99: 2.4ms</span>
+                      </div>
                       <span className="text-emerald-500 font-bold tracking-tight">ALIGNED</span>
                     </div>
                   </div>
