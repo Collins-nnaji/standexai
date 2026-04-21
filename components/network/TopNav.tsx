@@ -84,12 +84,17 @@ export function TopNav({ user }: TopNavProps) {
     >
       <div className="mx-auto flex h-20 min-h-[5rem] max-w-7xl items-center gap-2 px-3 sm:gap-3 sm:px-6">
         {/* Left: Logo */}
-        <div className="flex min-w-0 flex-1 items-center">
+        <div className="flex min-w-0 flex-1 items-center gap-4">
           <Link href="/" className="flex min-w-0 items-center gap-2">
             <div className="transition-all duration-300">
               <Logo />
             </div>
           </Link>
+          
+          <div className="hidden md:flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+            <div className="h-1 w-1 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-[9px] font-bold uppercase tracking-widest text-emerald-500">v.2026.4 [LIVE]</span>
+          </div>
         </div>
 
         {/* Center: Desktop Nav */}
