@@ -245,7 +245,7 @@ export function TopNav({ forceDark }: TopNavProps) {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -18 }}
                 transition={{ duration: 0.22, ease: "easeOut" }}
-                className="fixed inset-x-0 top-20 bottom-0 z-[200] flex flex-col overflow-hidden border-t border-zinc-800 bg-zinc-950 md:hidden"
+                className="fixed inset-x-0 top-20 bottom-0 z-[200] flex flex-col overflow-hidden border-t border-zinc-800 bg-zinc-950 text-white md:hidden"
                 role="dialog"
                 aria-modal="true"
                 aria-label="Mobile navigation"
