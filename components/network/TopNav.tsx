@@ -1,10 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import Image from "next/image";
-import { Menu, X, ChevronRight, ChevronDown, Zap, Cpu, ArrowRight } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
+import { Menu, X, ChevronRight, ChevronDown, Zap } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -12,11 +11,13 @@ import { cn } from "@/lib/utils";
 function Logo() {
   return (
     <div className="flex min-w-0 items-center">
-      <img
+      <Image
         src="/StandexLogo.webp"
         alt="Standex Digital Logo"
+        width={176}
+        height={44}
         className="h-11 w-auto max-h-11 object-contain"
-        loading="eager"
+        priority
       />
     </div>
   );
@@ -33,7 +34,20 @@ export interface TopNavProps {
   forceDark?: boolean;
 }
 
-export function TopNav({ user, forceDark }: TopNavProps) {
+const solutionLinks = [
+  { href: "/solutions/ai-agents", label: "Artificial Intelligence", accent: "#049DCB" },
+  { href: "/solutions/power-apps", label: "Power Apps", accent: "#D25BB1" },
+  { href: "/solutions/power-automate", label: "Power Automate", accent: "#0078D4" },
+  { href: "/solutions/power-bi", label: "Power BI", accent: "#F2C811" },
+  { href: "/solutions/power-platform", label: "Power Platform Governance", accent: "#7C5CFC" },
+  { href: "/solutions/data-readiness", label: "Data Engineering & Analytics", accent: "#10b981" },
+];
+
+const primaryLinks = [
+  { href: "/Training", label: "Training" },
+];
+
+export function TopNav({ forceDark }: TopNavProps) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -60,16 +74,36 @@ export function TopNav({ user, forceDark }: TopNavProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY, mobileMenuOpen]);
 
-  const isAiRoute = 
-    pathname.startsWith("/learn") ||
-    pathname.startsWith("/Training") ||
-    pathname.startsWith("/projects") ||
-    pathname.startsWith("/console");
-
-  // Close mobile menu on path change
   useEffect(() => {
-    setMobileMenuOpen(false);
-  }, [pathname]);
+    if (!mobileMenuOpen) {
+      document.body.style.overflow = "";
+      return;
+    }
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleEscape);
+    };
+  }, [mobileMenuOpen]);
+
+  const isActivePath = (href: string) => {
+    if (href === "/") {
+      return pathname === href;
+    }
+
+    return pathname === href || pathname.startsWith(`${href}/`);
+  };
 
   return (
     <motion.header 
@@ -163,12 +197,14 @@ export function TopNav({ user, forceDark }: TopNavProps) {
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className={cn(
-              "flex h-10 w-10 items-center justify-center rounded-xl shadow-sm transition-all active:scale-95 sm:hidden",
+              "flex h-11 w-11 items-center justify-center rounded-2xl border shadow-sm transition-all active:scale-95 sm:hidden",
               mobileMenuOpen 
-                ? "bg-white text-zinc-950 hover:bg-zinc-100" 
-                : "bg-zinc-800 text-white hover:bg-zinc-700"
+                ? "border-white bg-white text-zinc-950 hover:bg-zinc-100" 
+                : "border-zinc-700 bg-zinc-800 text-white hover:bg-zinc-700"
             )}
-            aria-label="Toggle Menu"
+            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-navigation"
           >
             {mobileMenuOpen ? (
               <X className="h-5 w-5" strokeWidth={2.5} />
@@ -179,66 +215,119 @@ export function TopNav({ user, forceDark }: TopNavProps) {
         </div>
       </div>
 
-      {/* Mobile Menu — full screen from top */}
+      {/* Mobile Menu */}
       <AnimatePresence>
         {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
-            className="fixed inset-0 top-20 z-[100] bg-zinc-950 flex flex-col sm:hidden overflow-y-auto"
-          >
-            {/* Scrollable nav area */}
-            <div className="flex-1 px-5 pt-6 pb-4">
-              <p className="text-[9px] font-black uppercase tracking-[0.3em] text-zinc-600 mb-3 px-1">Solutions</p>
-              <div className="flex flex-col gap-1">
-                {[
-                  { href: "/solutions/ai-agents", label: "Artificial Intelligence", accent: "#049DCB" },
-                  { href: "/solutions/power-apps", label: "Power Apps", accent: "#D25BB1" },
-                  { href: "/solutions/power-automate", label: "Power Automate", accent: "#0078D4" },
-                  { href: "/solutions/power-bi", label: "Power BI", accent: "#F2C811" },
-                  { href: "/solutions/power-platform", label: "Power Platform Governance", accent: "#7C5CFC" },
-                  { href: "/solutions/data-readiness", label: "Data Engineering & Analytics", accent: "#10b981" },
-                ].map((item) => (
+          <>
+            <motion.button
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 top-20 z-[95] bg-black/60 backdrop-blur-sm sm:hidden"
+              aria-label="Close mobile navigation overlay"
+              onClick={() => setMobileMenuOpen(false)}
+            />
+
+            <motion.div
+              id="mobile-navigation"
+              initial={{ opacity: 0, x: "100%" }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: "100%" }}
+              transition={{ duration: 0.28, ease: "easeOut" }}
+              className="fixed inset-y-20 right-0 z-[100] flex w-full max-w-sm flex-col overflow-hidden border-l border-zinc-800 bg-zinc-950 shadow-[-24px_0_80px_-24px_rgba(0,0,0,0.85)] sm:hidden"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Mobile navigation"
+            >
+              <div className="border-b border-zinc-800 px-5 pb-5 pt-6">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.32em] text-emerald-500">Navigation</p>
+                    <p className="mt-2 max-w-[16rem] text-sm font-semibold leading-6 text-zinc-400">
+                      Browse solutions, training, and the AI console with one-handed mobile navigation.
+                    </p>
+                  </div>
+                  <div className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-400">
+                    Menu
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex-1 overflow-y-auto px-4 py-5">
+                <div className="rounded-[28px] border border-zinc-800 bg-zinc-900/60 p-2">
+                  <p className="px-3 pb-2 text-[10px] font-black uppercase tracking-[0.28em] text-zinc-500">Primary</p>
+                  <div className="flex flex-col gap-1">
+                    {primaryLinks.map((item) => {
+                      const isActive = isActivePath(item.href);
+                      return (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className={cn(
+                            "flex min-h-14 items-center justify-between rounded-2xl px-4 py-3 text-[15px] font-bold tracking-tight transition-all",
+                            isActive
+                              ? "bg-white text-zinc-950 shadow-[0_10px_30px_-15px_rgba(255,255,255,0.65)]"
+                              : "bg-transparent text-white hover:bg-zinc-800 active:bg-zinc-800"
+                          )}
+                        >
+                          <span>{item.label}</span>
+                          <ChevronRight className={cn("h-4 w-4", isActive ? "text-zinc-950/60" : "text-zinc-500")} />
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div className="mt-4 rounded-[28px] border border-zinc-800 bg-zinc-900/60 p-2">
+                  <p className="px-3 pb-2 text-[10px] font-black uppercase tracking-[0.28em] text-zinc-500">Solutions</p>
+                  <div className="flex flex-col gap-1">
+                    {solutionLinks.map((item) => {
+                      const isActive = isActivePath(item.href);
+                      return (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className={cn(
+                            "flex min-h-14 items-center justify-between rounded-2xl px-4 py-3 transition-all",
+                            isActive ? "bg-white text-zinc-950" : "bg-transparent text-white hover:bg-zinc-800 active:bg-zinc-800"
+                          )}
+                        >
+                          <div className="flex min-w-0 items-center gap-3">
+                            <div className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: item.accent }} />
+                            <span className="text-[15px] font-bold tracking-tight">{item.label}</span>
+                          </div>
+                          <ChevronRight className={cn("h-4 w-4 shrink-0", isActive ? "text-zinc-950/60" : "text-zinc-500")} />
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+
+              <div className="border-t border-zinc-800 bg-zinc-950/95 px-4 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-4">
+                <div className="grid grid-cols-2 gap-3">
                   <Link
-                    key={item.href}
-                    href={item.href}
-                    className="flex items-center justify-between rounded-2xl px-5 py-4 bg-zinc-900 active:bg-zinc-800 transition-colors"
+                    href="/Contact"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex min-h-14 items-center justify-center rounded-2xl bg-emerald-500 px-4 py-4 text-[15px] font-bold text-white shadow-lg shadow-emerald-500/20 transition-all active:scale-[0.98]"
                   >
-                    <span className="text-[15px] font-bold text-white tracking-tight">{item.label}</span>
-                    <div className="h-2 w-2 rounded-full shrink-0" style={{ backgroundColor: item.accent }} />
+                    Contact
                   </Link>
-                ))}
+                  <Link
+                    href="/console"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex min-h-14 items-center justify-center gap-2 rounded-2xl border border-zinc-700 bg-zinc-900 px-4 py-4 text-[15px] font-bold text-white transition-all active:scale-[0.98]"
+                  >
+                    <Zap className="h-5 w-5 text-emerald-400" />
+                    Console
+                  </Link>
+                </div>
               </div>
-
-              <div className="my-5 h-px bg-zinc-800" />
-
-              <div className="flex flex-col gap-1">
-                <Link href="/Training" className="flex items-center justify-between rounded-2xl px-5 py-4 bg-zinc-900 active:bg-zinc-800 transition-colors">
-                  <span className="text-[15px] font-bold text-white tracking-tight">Training</span>
-                  <ChevronRight className="h-4 w-4 text-zinc-600" />
-                </Link>
-              </div>
-            </div>
-
-            {/* Action buttons pinned at bottom */}
-            <div className="px-5 pb-8 pt-4 border-t border-zinc-800 flex flex-col gap-3">
-              <Link
-                href="/Contact"
-                className="flex items-center justify-center gap-2 rounded-2xl bg-emerald-500 px-6 py-4 text-[15px] font-bold text-white shadow-lg shadow-emerald-500/20 active:scale-95 transition-all"
-              >
-                Contact Us
-              </Link>
-              <Link
-                href="/console"
-                className="flex items-center justify-center gap-2 rounded-2xl bg-zinc-800 px-6 py-4 text-[15px] font-bold text-white active:scale-95 transition-all"
-              >
-                <Zap className="h-5 w-5 text-emerald-400" />
-                AI Console
-              </Link>
-            </div>
-          </motion.div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </motion.header>
