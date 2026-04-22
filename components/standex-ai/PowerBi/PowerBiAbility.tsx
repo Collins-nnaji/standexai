@@ -105,19 +105,19 @@ const PowerBiAbility = () => {
   ];
 
   return (
-    <section className="py-16 bg-zinc-950 w-full">
-      <div ref={sectionRef} className="container mx-auto px-4 max-w-7xl">
+    <section className="py-24 bg-zinc-950 w-full">
+      <div ref={sectionRef} className="container mx-auto px-6 lg:px-12 max-w-7xl">
         {/* Section header */}
         <div className="text-center mb-16">
-          <h2 
-            className={`text-3xl md:text-4xl lg:text-5xl font-black text-white tracking-tight mb-6 transform transition-all duration-700 ${
+          <h2
+            className={`text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight mb-6 transform transition-all duration-700 ${
               animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
             }`}
           >
             What Can Power BI Do?
           </h2>
-          <p 
-            className={`text-lg text-zinc-400 max-w-3xl mx-auto transform transition-all duration-700 delay-100 ${
+          <p
+            className={`text-xl text-zinc-300 max-w-3xl mx-auto transform transition-all duration-700 delay-100 leading-relaxed ${
               animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
             }`}
           >
@@ -128,15 +128,15 @@ const PowerBiAbility = () => {
         {/* Capabilities grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
           {capabilities.map((capability, index) => (
-            <div 
-              key={capability.id} 
-              className={`text-center bg-zinc-900 rounded-lg p-6 border border-zinc-800 transform transition-all duration-700 hover:-translate-y-1 hover:shadow-lg hover:border-[#7C5CFC] ${
+            <div
+              key={capability.id}
+              className={`text-center bg-zinc-900 rounded-2xl p-10 border border-zinc-800 transform transition-all duration-700 hover:-translate-y-1 hover:shadow-lg hover:border-[#F2C811]/30 ${
                 animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
               }`}
               style={{ transitionDelay: `${200 + index * 100}ms` }}
             >
-              <div 
-                className="flex justify-center mb-4"
+              <div
+                className="flex justify-center mb-6"
                 style={{ 
                   animationName: animationStarted ? 'float' : 'none',
                       animationDuration: '3s',
@@ -147,10 +147,10 @@ const PowerBiAbility = () => {
               >
                 {capability.icon}
               </div>
-              <h3 className="text-xl font-black text-white tracking-tight mb-3">
+              <h3 className="text-2xl font-bold text-white tracking-tight mb-4">
                 {capability.title}
               </h3>
-              <p className="text-zinc-400">
+              <p className="text-zinc-300 leading-relaxed">
                 {capability.description}
               </p>
             </div>

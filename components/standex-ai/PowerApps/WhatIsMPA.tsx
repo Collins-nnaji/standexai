@@ -91,27 +91,27 @@ const WhatIsMPA = () => {
   return (
     <div>
       {/* What Is Power Apps Section */}
-      <div className="w-full bg-zinc-950 py-16 px-4">
-        <div ref={sectionRef} className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-10">
+      <div className="w-full bg-zinc-950 py-24 px-6 lg:px-12">
+        <div ref={sectionRef} className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">
           {/* Left content section */}
-          <div 
+          <div
             className={`lg:w-1/2 transform transition-all duration-1000 ${
               animationStarted ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0'
             }`}
           >
-            <p className="text-[#7C5CFC] font-medium mb-2">Easy To Use, Easy To Maintain</p>
-            <h2 className="text-4xl font-black text-white tracking-tight mb-4">What Is Microsoft Power Apps?</h2>
-            
-            <p className="text-zinc-400 mb-6">
-              Power Apps is an innovative low-code cloud service that empowers businesses to build 
-              custom applications and integrate data from multiple systems, without the need for 
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#D25BB1] mb-4">Easy To Use, Easy To Maintain</p>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-tight mb-8">What Is Microsoft Power Apps?</h2>
+
+            <p className="text-zinc-300 mb-6 text-lg leading-relaxed">
+              Power Apps is an innovative low-code cloud service that empowers businesses to build
+              custom applications and integrate data from multiple systems, without the need for
               custom development.
             </p>
-            
-            <p className="text-zinc-400 mb-8">
-              The limitless implementation of Power Apps makes it an extremely powerful tool that can 
-              excel any business. Whether you need a custom app to improve internal productivity by 
-              automating manual and repetitive tasks, or connect to thousands of customers externally 
+
+            <p className="text-zinc-300 mb-8 text-lg leading-relaxed">
+              The limitless implementation of Power Apps makes it an extremely powerful tool that can
+              excel any business. Whether you need a custom app to improve internal productivity by
+              automating manual and repetitive tasks, or connect to thousands of customers externally
               with your data via a login portal, Power Apps can provide the solution.
             </p>
           </div>
@@ -139,19 +139,19 @@ const WhatIsMPA = () => {
       </div>
 
       {/* Features Section */}
-      <div className="w-full bg-zinc-900 py-16">
-        <div ref={featuresRef} className="max-w-6xl mx-auto px-4">
+      <div className="w-full bg-zinc-900 py-24 px-6 lg:px-12">
+        <div ref={featuresRef} className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
-              <div 
-                key={index} 
-                className={`flex flex-col items-center text-center bg-zinc-800 p-6 rounded-lg border border-zinc-700 transform transition-all duration-700 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#7C5CFC20] hover:border-[#7C5CFC] ${
+              <div
+                key={index}
+                className={`flex flex-col items-center text-center bg-zinc-800 p-8 rounded-2xl border border-zinc-700 transform transition-all duration-700 hover:-translate-y-1 hover:shadow-lg hover:border-[#D25BB1]/30 ${
                   animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
                 }`}
                 style={{ transitionDelay: `${300 + (index * 100)}ms` }}
               >
-                <div 
-                  className="bg-gray-600 p-4 rounded-full mb-4 text-[#7C5CFC]"
+                <div
+                  className="bg-zinc-700 p-4 rounded-full mb-6 text-[#D25BB1]"
                   style={{ 
                     animationName: animationStarted ? 'float' : 'none',
                       animationDuration: '3s',
@@ -162,8 +162,8 @@ const WhatIsMPA = () => {
                 >
                   {feature.icon}
                 </div>
-                <h3 className="text-xl font-black text-[#7C5CFC] mb-4">{feature.title}</h3>
-                <p className="text-zinc-400">{feature.description}</p>
+                <h3 className="text-xl font-bold text-white mb-4">{feature.title}</h3>
+                <p className="text-zinc-300 leading-relaxed">{feature.description}</p>
               </div>
             ))}
           </div>

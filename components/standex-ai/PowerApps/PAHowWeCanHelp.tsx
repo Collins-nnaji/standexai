@@ -84,45 +84,45 @@ const PAHowWeCanHelp = () => {
   ];
 
   return (
-    <div className="w-full bg-zinc-950 py-16 px-4">
-      <div ref={sectionRef} className="max-w-6xl mx-auto text-center">
+    <div className="w-full bg-zinc-950 py-24 px-6 lg:px-12">
+      <div ref={sectionRef} className="max-w-7xl mx-auto text-center">
         {/* Section Header */}
-        <p 
-          className={`text-[#7C5CFC] mb-2 font-medium transform transition-all duration-700 ${
+        <p
+          className={`text-[10px] font-bold uppercase tracking-[0.3em] text-[#D25BB1] mb-4 transform transition-all duration-700 ${
             animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
           }`}
         >
           How We Can Help
         </p>
-        <h2 
-          className={`text-4xl font-black text-white tracking-tight mb-4 transform transition-all duration-700 delay-100 ${
+        <h2
+          className={`text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight mb-6 transform transition-all duration-700 delay-100 ${
             animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
           }`}
         >
-          Choose The Right Service For<br />Your Business
+          Choose The Right Service For Your Business
         </h2>
-        <p 
-          className={`text-zinc-400 max-w-3xl mx-auto mb-12 transform transition-all duration-700 delay-200 ${
+        <p
+          className={`text-zinc-300 text-xl max-w-3xl mx-auto mb-16 transform transition-all duration-700 delay-200 leading-relaxed ${
             animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
           }`}
         >
-          Our team is dedicated to customising app solutions that fit your unique business 
+          Our team is dedicated to customising app solutions that fit your unique business
           needs, ensuring a smarter, faster, and more efficient way of working.
         </p>
-        
+
         {/* Service Cards */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {services.map((service, index) => (
-            <div 
-              key={index} 
-              className={`bg-zinc-900 p-6 rounded-lg border border-zinc-800 shadow-md flex flex-col h-full transition-all duration-500 transform hover:-translate-y-1 hover:shadow-lg hover:border-[#7C5CFC] ${
+            <div
+              key={index}
+              className={`bg-zinc-900 p-8 rounded-2xl border border-zinc-800 shadow-md flex flex-col h-full transition-all duration-500 transform hover:-translate-y-1 hover:shadow-lg hover:border-[#D25BB1]/30 ${
                 animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
               }`}
               style={{ transitionDelay: `${300 + index * 100}ms` }}
             >
               {/* Icon Circle */}
-              <div 
-                className="mb-4 self-center"
+              <div
+                className="mb-6 self-center"
                 style={{ 
                   animationName: animationStarted ? 'float' : 'none',
                       animationDuration: '3s',
@@ -137,10 +137,10 @@ const PAHowWeCanHelp = () => {
               </div>
               
               {/* Service Title */}
-              <h3 className="text-xl font-black text-white tracking-tight mb-3">{service.title}</h3>
-              
+              <h3 className="text-xl font-bold text-white tracking-tight mb-4">{service.title}</h3>
+
               {/* Service Description */}
-              <p className="text-zinc-400 mb-6 flex-grow">{service.description}</p>
+              <p className="text-zinc-300 mb-6 flex-grow leading-relaxed">{service.description}</p>
               
               {/* Link */}
               <button 

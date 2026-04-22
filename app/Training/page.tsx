@@ -421,7 +421,7 @@ const trackConfig = {
     cohortDate: "Jun 2",
     duration: "6 Weeks",
     sessions: "2h 30m / session",
-    enrollLink: "https://buy.stripe.com/bIY1693YAcFMbx66os",
+    enrollLink: "https://buy.stripe.com/dRmeVfdwwcjsdDigNLfnO0k",
     certTitle: "Certified Power Platform Developer",
     certTag: "SXPP-V26-04",
     deckLink: "/pp-deck",
@@ -540,7 +540,7 @@ export default function TrainingPage() {
 
   return (
     <div className="min-h-screen bg-[#FDFDFF] selection:bg-[#7C5CFC]/15 font-sans pb-24 overflow-x-hidden">
-      <TopNav />
+      <TopNav forceDark />
 
       {/* ── PREMIUM BACKGROUND ARCHITECTURE ── */}
       <div className="fixed inset-0 pointer-events-none z-0">

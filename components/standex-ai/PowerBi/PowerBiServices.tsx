@@ -119,19 +119,19 @@ const PowerBiServices = () => {
   };
 
   return (
-    <section className="py-20 bg-zinc-950 w-full">
-      <div ref={sectionRef} className="container mx-auto px-4 max-w-7xl">
+    <section className="py-24 bg-zinc-950 w-full">
+      <div ref={sectionRef} className="container mx-auto px-6 lg:px-12 max-w-7xl">
         {/* Section header */}
         <div className="text-center mb-16">
-          <p 
-            className={`text-[#7C5CFC] font-medium mb-3 transform transition-all duration-700 ${
+          <p
+            className={`text-[10px] font-bold uppercase tracking-[0.3em] text-[#F2C811] mb-4 transform transition-all duration-700 ${
               animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
             }`}
           >
             Power BI Services
           </p>
-          <h2 
-            className={`text-3xl md:text-4xl lg:text-5xl font-black text-white tracking-tight max-w-4xl mx-auto leading-tight transform transition-all duration-700 delay-100 ${
+          <h2
+            className={`text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight max-w-4xl mx-auto leading-tight transform transition-all duration-700 delay-100 ${
               animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
             }`}
           >
@@ -142,27 +142,16 @@ const PowerBiServices = () => {
         {/* Service cards grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
           {serviceCards.map((card, index) => (
-            <div 
-              key={card.id} 
-              className={`bg-zinc-900 border border-zinc-800 rounded-lg p-6 flex flex-col h-full transform transition-all duration-700 hover:-translate-y-1 hover:shadow-lg hover:border-[#7C5CFC] ${
+            <div
+              key={card.id}
+              className={`bg-zinc-900 border border-zinc-800 rounded-2xl p-8 flex flex-col h-full transform transition-all duration-700 hover:-translate-y-1 hover:shadow-lg hover:border-[#F2C811]/30 ${
                 animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
               }`}
               style={{ transitionDelay: `${200 + index * 100}ms` }}
             >
-              <div 
-                className="mb-4"
-                style={{ 
-                  animationName: animationStarted ? 'float' : 'none',
-                      animationDuration: '3s',
-                      animationTimingFunction: 'ease-in-out',
-                      animationIterationCount: 'infinite',
-                  animationDelay: `${index * 0.5}s`
-                }}
-              >
-                {getServiceIcon(card.id)}
-              </div>
-              <h3 className="text-xl font-black text-white tracking-tight mt-5 mb-3">{card.title}</h3>
-              <p className="text-zinc-400 flex-grow mb-5">{card.description}</p>
+              <div className="mb-6">{getServiceIcon(card.id)}</div>
+              <h3 className="text-xl font-bold text-white tracking-tight mt-2 mb-4">{card.title}</h3>
+              <p className="text-zinc-300 flex-grow mb-6 leading-relaxed">{card.description}</p>
               <a 
                 href="#contact-form" 
                 onClick={scrollToContactForm}

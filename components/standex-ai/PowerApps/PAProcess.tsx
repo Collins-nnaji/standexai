@@ -6,7 +6,7 @@ const ProcessStep = ({ number, title, description }: { number: string; title: st
   <div className="mb-12">
     <div className="flex items-center mb-4">
       <div className="text-2xl font-black tracking-tight text-teal-400 mr-3">{number}</div>
-      <h3 className="text-2xl font-black text-white tracking-tight">{title}</h3>
+      <h3 className="text-2xl font-bold text-white tracking-tight">{title}</h3>
     </div>
     <p className="text-white text-sm leading-relaxed">{description}</p>
   </div>
@@ -27,10 +27,10 @@ const PAProcess = () => {
         </svg>
       </div>
       
-      <div className="max-w-6xl mx-auto px-4 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
           <div className="col-span-1 md:pr-8">
-            <h2 className="text-4xl font-black text-white tracking-tight mb-6">Our Process</h2>
+            <h2 className="text-4xl font-bold text-white tracking-tight mb-6">Our Process</h2>
             <p className="text-white mb-4">
               Our Power Apps team will work closely with you to come up with a bespoke application to meet your business's needs.
             </p>

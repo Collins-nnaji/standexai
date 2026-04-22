@@ -84,19 +84,19 @@ const AutomateServices = () => {
   ];
 
   return (
-    <div className="w-full bg-zinc-950 py-16 px-4">
-      <div ref={sectionRef} className="max-w-6xl mx-auto">
+    <div className="w-full bg-zinc-950 py-24 px-6 lg:px-12">
+      <div ref={sectionRef} className="max-w-7xl mx-auto">
         {/* Section Header */}
-        <div className="text-center mb-12">
-          <h3 
-            className={`text-[#7C5CFC] font-medium mb-3 transform transition-all duration-700 ${
+        <div className="text-center mb-16">
+          <p
+            className={`text-[10px] font-bold uppercase tracking-[0.3em] text-[#0078D4] mb-4 transform transition-all duration-700 ${
               animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
             }`}
           >
             Power Automate Services
-          </h3>
-          <h2 
-            className={`text-3xl md:text-4xl font-black text-white tracking-tight max-w-3xl mx-auto transform transition-all duration-700 delay-100 ${
+          </p>
+          <h2
+            className={`text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight max-w-4xl mx-auto transform transition-all duration-700 delay-100 leading-tight ${
               animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
             }`}
           >
@@ -107,18 +107,18 @@ const AutomateServices = () => {
         {/* Service Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {serviceCards.map((card, index) => (
-            <div 
+            <div
               key={index}
-              className={`bg-zinc-900 border border-zinc-800 rounded-lg p-6 flex flex-col h-full transition-all duration-500 transform hover:-translate-y-1 hover:shadow-lg hover:border-[#7C5CFC] ${
+              className={`bg-zinc-900 border border-zinc-800 rounded-2xl p-8 flex flex-col h-full transition-all duration-500 transform hover:-translate-y-1 hover:shadow-lg hover:border-[#0078D4]/30 ${
                 animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
               }`}
-              style={{ 
+              style={{
                 transitionDelay: `${300 + index * 100}ms`,
                 transitionDuration: '700ms'
               }}
             >
-              <div 
-                className="bg-[#7C5CFC] w-16 h-16 rounded-full flex items-center justify-center mb-5"
+              <div
+                className="bg-[#0078D4] w-16 h-16 rounded-full flex items-center justify-center mb-6"
                 style={{ 
                   animationName: animationStarted ? 'float' : 'none',
                       animationDuration: '3s',
@@ -129,8 +129,8 @@ const AutomateServices = () => {
               >
                 {card.icon}
               </div>
-              <h3 className="text-xl font-black text-white tracking-tight mb-3">{card.title}</h3>
-              <p className="text-zinc-400 mb-6 flex-grow">{card.description}</p>
+              <h3 className="text-xl font-bold text-white tracking-tight mb-4">{card.title}</h3>
+              <p className="text-zinc-300 mb-6 flex-grow leading-relaxed">{card.description}</p>
               <a 
                 href="#" 
                 onClick={scrollToContactForm} 

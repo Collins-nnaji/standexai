@@ -79,10 +79,10 @@ const Footer = () => {
             </a>
             
             {/* X (Twitter) */}
-            <a 
-              href="https://x.com/standexdigital" 
-              target="_blank" 
-              rel="noopener noreferrer" 
+            <a
+              href="https://x.com/standexdigital"
+              target="_blank"
+              rel="noopener noreferrer"
               aria-label="X (Twitter)"
               className={`transform transition-all duration-500 hover:scale-110 ${
                 animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
@@ -91,6 +91,22 @@ const Footer = () => {
             >
               <svg className="w-6 h-6 text-white hover:text-emerald-500" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+              </svg>
+            </a>
+
+            {/* YouTube */}
+            <a
+              href="https://www.youtube.com/@StandexDigital"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="YouTube"
+              className={`transform transition-all duration-500 hover:scale-110 ${
+                animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
+              }`}
+              style={{ transitionDelay: '400ms' }}
+            >
+              <svg className="w-6 h-6 text-white hover:text-emerald-500" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
               </svg>
             </a>
           </div>
@@ -128,6 +144,10 @@ const Footer = () => {
               <nav className="flex flex-col gap-2.5">
                 <Link href="/#academy" className="text-[11px] font-bold text-zinc-400 hover:text-emerald-500 transition-all duration-300">Academy</Link>
                 <Link href="/console" className="text-[11px] font-bold text-zinc-400 hover:text-emerald-500 transition-all duration-300">Console</Link>
+                <a href="https://www.youtube.com/@StandexDigital" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-[11px] font-bold text-zinc-400 hover:text-emerald-500 transition-all duration-300">
+                  <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                  Learn
+                </a>
               </nav>
             </div>
           </div>

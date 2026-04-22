@@ -90,19 +90,19 @@ const AutomateAbility = () => {
   ];
 
   return (
-    <div className="w-full bg-zinc-950 py-16 px-4">
-      <div ref={sectionRef} className="max-w-6xl mx-auto">
+    <div className="w-full bg-zinc-950 py-24 px-6 lg:px-12">
+      <div ref={sectionRef} className="max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-8">
           <h2 
-            className={`text-3xl md:text-4xl font-black text-white tracking-tight mb-6 transform transition-all duration-700 ${
+            className={`text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight mb-6 transform transition-all duration-700 ${
               animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
             }`}
           >
             What Can Power Automate Do?
           </h2>
           <p 
-            className={`text-zinc-400 text-lg max-w-4xl mx-auto transform transition-all duration-700 delay-100 ${
+            className={`text-zinc-300 text-lg max-w-4xl mx-auto transform transition-all duration-700 delay-100 ${
               animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
             }`}
           >
@@ -115,7 +115,7 @@ const AutomateAbility = () => {
           {capabilities.map((capability, index) => (
             <div 
               key={index} 
-              className={`bg-zinc-900 rounded-lg p-6 text-center border border-zinc-800 transform transition-all duration-700 hover:-translate-y-1 hover:shadow-lg hover:border-[#7C5CFC] ${
+              className={`bg-zinc-900 rounded-2xl p-8 text-center border border-zinc-800 transform transition-all duration-700 hover:-translate-y-1 hover:shadow-lg hover:border-[#0078D4]/30 ${
                 animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
               }`}
               style={{ transitionDelay: `${200 + index * 100}ms` }}
@@ -134,10 +134,10 @@ const AutomateAbility = () => {
                   {capability.icon}
                 </div>
               </div>
-              <h3 className="text-xl font-black text-white tracking-tight mb-3">
+              <h3 className="text-xl font-bold text-white tracking-tight mb-3">
                 {capability.title}
               </h3>
-              <p className="text-zinc-400 px-2">
+              <p className="text-zinc-300 px-2">
                 {capability.description}
               </p>
             </div>

@@ -22,7 +22,7 @@ const ContactHeader = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1 }}
-          className="text-5xl md:text-8xl font-black tracking-tight leading-tight mb-10"
+          className="text-5xl md:text-8xl font-black tracking-tight leading-tight mb-10 text-white"
         >
           Engineering <br /> Intake.
         </motion.h1>

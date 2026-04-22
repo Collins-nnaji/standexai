@@ -14,16 +14,15 @@ export default function Page() {
         {/* Hero Section */}
         <section className="max-w-7xl mx-auto px-6 lg:px-12 w-full mb-32 relative">
           <div className="max-w-4xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-4 py-1.5 mb-8">
-              <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" />
-              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-emerald-500">Governance & Compliance</span>
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#F2C811]/20 bg-[#F2C811]/10 px-4 py-1.5 mb-8">
+              <BarChart3 className="h-3.5 w-3.5 text-[#F2C811]" />
+              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#F2C811]">Data Engineering & Analytics</span>
             </div>
             <h1 className="text-6xl md:text-8xl font-bold tracking-tight text-white leading-[0.95] mb-12">
-              Data Readiness <br /><span className="text-zinc-600">&</span> Audit.
+              Data Engineering<br /><span className="text-zinc-600">&</span> Analytics.
             </h1>
-            <p className="text-xl md:text-2xl font-medium text-zinc-400 max-w-2xl leading-relaxed">
-              Don&apos;t build on toxic data. We provide the industry&apos;s most rigorous 
-              AI-readiness diagnostics for regulated healthcare and finance sectors.
+            <p className="text-xl md:text-2xl font-medium text-zinc-300 max-w-2xl leading-relaxed">
+              From raw data ingestion to AI-ready pipelines. We engineer the data infrastructure that powers intelligent, compliant, and high-performance organisations.
             </p>
           </div>
         </section>

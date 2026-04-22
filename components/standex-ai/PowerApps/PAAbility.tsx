@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 
 const FeatureCard = ({ icon, title, description, delay, isVisible }: { icon: React.ReactNode; title: string; description: string; delay: number; isVisible: boolean }) => (
   <div 
-    className={`flex flex-col items-center text-center bg-zinc-900 rounded-lg p-6 border border-zinc-800 transition-all duration-700 transform hover:-translate-y-1 hover:shadow-lg hover:shadow-[#7C5CFC25] ${
+    className={`flex flex-col items-center text-center bg-zinc-900 rounded-2xl p-8 border border-zinc-800 transition-all duration-700 transform hover:-translate-y-1 hover:shadow-lg hover:shadow-[#7C5CFC25] ${
       isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
     }`}
     style={{ transitionDelay: `${delay}ms` }}
@@ -12,8 +12,8 @@ const FeatureCard = ({ icon, title, description, delay, isVisible }: { icon: Rea
     <div className="text-[#7C5CFC] text-4xl mb-4">
       {icon}
     </div>
-    <h3 className="text-xl font-black text-white tracking-tight mb-4">{title}</h3>
-    <p className="text-sm text-zinc-400">{description}</p>
+    <h3 className="text-xl font-bold text-white tracking-tight mb-4">{title}</h3>
+    <p className="text-sm text-zinc-300">{description}</p>
   </div>
 );
 
@@ -93,9 +93,9 @@ const PAAbility = () => {
 
   return (
     <div className="w-full bg-zinc-950 py-16">
-      <div ref={sectionRef} className="max-w-6xl mx-auto px-4">
+      <div ref={sectionRef} className="max-w-7xl mx-auto px-4">
         <h1 
-          className={`text-4xl font-black tracking-tight text-center text-white mb-4 transform transition-all duration-700 ${
+          className={`text-4xl md:text-5xl font-bold tracking-tight text-center text-white mb-4 transform transition-all duration-700 ${
             animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
           }`}
         >
@@ -103,7 +103,7 @@ const PAAbility = () => {
         </h1>
         
         <p 
-          className={`text-center text-zinc-400 mb-12 max-w-4xl mx-auto transform transition-all duration-700 delay-100 ${
+          className={`text-center text-zinc-300 mb-12 max-w-4xl mx-auto transform transition-all duration-700 delay-100 ${
             animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
           }`}
         >

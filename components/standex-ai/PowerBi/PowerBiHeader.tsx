@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 
 const PowerBiHeader = () => {
-  // Stats data
   const stats = [
     {
       end: 300,
@@ -24,98 +23,65 @@ const PowerBiHeader = () => {
     }
   ];
 
-  // Count animation component
   const CountUp = ({ end, duration = 2000, suffix = '' }: { end: number; duration?: number; suffix?: string }) => {
     const [count, setCount] = useState(0);
-    
     useEffect(() => {
       let startTime: number = 0;
       let animationFrame: number;
-      
       const animate = (timestamp: number) => {
         if (startTime === 0) startTime = timestamp;
         const progress = timestamp - startTime;
         const percentage = Math.min(progress / duration, 1);
-        
         setCount(Math.floor(percentage * end));
-        
-        if (percentage < 1) {
-          animationFrame = requestAnimationFrame(animate);
-        }
+        if (percentage < 1) animationFrame = requestAnimationFrame(animate);
       };
-      
       animationFrame = requestAnimationFrame(animate);
-      
-      return () => {
-        cancelAnimationFrame(animationFrame);
-      };
+      return () => cancelAnimationFrame(animationFrame);
     }, [end, duration]);
-    
     return <span>{count}{suffix}</span>;
   };
 
   return (
-    <header className="w-full bg-gradient-to-b from-zinc-950 to-zinc-900 text-white py-16 relative overflow-hidden pt-32">
-      {/* Background Decorative Elements */}
-      <div className="absolute top-0 left-0 w-full h-full">
-        <div className="absolute top-20 left-10 w-40 h-40 bg-zinc-800 rounded-full opacity-10"></div>
-        <div className="absolute bottom-10 right-20 w-60 h-60 bg-zinc-800 rounded-full opacity-10"></div>
-      </div>
-      
-      <div className="container mx-auto px-4 relative z-10 max-w-7xl">
-        {/* Top Navigation Text */}
+    <header className="w-full bg-zinc-950 text-white py-24 relative overflow-hidden pt-36">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] bg-[radial-gradient(circle_at_50%_0%,rgba(242,200,17,0.07),transparent_70%)] pointer-events-none" />
+
+      <div className="container mx-auto px-6 lg:px-12 relative z-10 max-w-7xl">
         <div className="text-center mb-6">
-          <p className="text-[#7C5CFC] text-lg">Microsoft Power BI Consulting Services</p>
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#F2C811]/20 bg-[#F2C811]/10 px-4 py-1.5 mb-8">
+            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#F2C811]">Microsoft Power BI Consulting Services</span>
+          </div>
         </div>
-        
-        {/* Main Heading */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter mb-6">
-            Bring Your Data To Life With Power BI
+
+        <div className="text-center mb-10">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white leading-[0.95] mb-8">
+            Bring Your Data<br />To Life With Power BI
           </h1>
-          <p className="max-w-3xl mx-auto text-lg">
-            Expert Power BI solutions to unlock hidden insights in your data and empower your 
+          <p className="max-w-3xl mx-auto text-xl md:text-2xl font-medium text-zinc-300 leading-relaxed">
+            Expert Power BI solutions to unlock hidden insights in your data and empower your
             business to make data-driven decisions.
           </p>
         </div>
-        
-        {/* CTA Button */}
-        <div className="text-center mb-16">
-          <a 
+
+        <div className="text-center mb-20">
+          <a
             href="/Contact"
-            className="inline-flex items-center px-6 py-3 bg-[#7C5CFC] text-zinc-900 rounded-md font-medium transition-all hover:bg-[#7C5CFC]"
+            className="inline-flex items-center gap-3 rounded-2xl bg-[#F2C811] px-10 py-5 text-sm font-bold uppercase tracking-widest text-zinc-900 hover:bg-[#D4AF0E] transition-all active:scale-95 shadow-[0_20px_40px_-5px_rgba(242,200,17,0.4)]"
           >
             Book A Free Consultation Call
-            <svg 
-              className="ml-2 w-5 h-5" 
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24" 
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                strokeWidth="2" 
-                d="M14 5l7 7m0 0l-7 7m7-7H3"
-              />
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
             </svg>
           </a>
         </div>
 
-        {/* Stats Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 border-t border-white/10 pt-16">
           {stats.map((stat, index) => (
             <div key={index} className="text-center">
-              <div className="text-5xl md:text-6xl font-black tracking-tighter text-purple-600">
-                {stat.value ? (
-                  <span>{stat.value}</span>
-                ) : (
-                  <CountUp end={stat.end ?? 0} suffix={stat.suffix} />
-                )}
+              <div className="text-6xl md:text-7xl font-bold tracking-tight text-[#F2C811]">
+                {stat.value ? <span>{stat.value}</span> : <CountUp end={stat.end ?? 0} suffix={stat.suffix} />}
               </div>
-              <h3 className="text-xl font-medium mt-2 mb-3">{stat.title}</h3>
-              <p className="text-zinc-300 mx-auto max-w-xs">{stat.description}</p>
+              <h3 className="text-lg font-bold uppercase tracking-widest mt-3 mb-2 text-white">{stat.title}</h3>
+              <p className="text-zinc-400 mx-auto max-w-xs text-sm leading-relaxed">{stat.description}</p>
             </div>
           ))}
         </div>
