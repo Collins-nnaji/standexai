@@ -129,21 +129,6 @@ export default function Page() {
               It is cleaner systems, clearer decisions, and infrastructure your organisation can grow on.
             </p>
 
-            <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-              <Link
-                href="/Contact"
-                className="inline-flex min-h-14 items-center justify-center gap-3 rounded-2xl bg-[#F2C811] px-8 py-4 text-sm font-bold uppercase tracking-[0.2em] text-zinc-950 shadow-[0_24px_60px_-18px_rgba(242,200,17,0.45)] transition-all hover:bg-[#ddb60f] active:scale-[0.98]"
-              >
-                Start A Data Project
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link
-                href="/Contact"
-                className="inline-flex min-h-14 items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-8 py-4 text-sm font-bold uppercase tracking-[0.2em] text-white transition-all hover:border-[#F2C811]/40 hover:bg-white/10 active:scale-[0.98]"
-              >
-                Talk Through Your Data Stack
-              </Link>
-            </div>
           </div>
 
           <div className="relative">
@@ -359,19 +344,13 @@ export default function Page() {
                 we can help map the right architecture and deliver it.
               </p>
 
-              <div className="mt-10 flex flex-col justify-center gap-4 sm:flex-row">
+              <div className="mt-10 flex justify-center">
                 <Link
                   href="/Contact"
                   className="inline-flex min-h-14 items-center justify-center gap-3 rounded-2xl bg-[#F2C811] px-8 py-4 text-sm font-bold uppercase tracking-[0.2em] text-zinc-950 transition-all hover:bg-[#ddb60f] active:scale-[0.98]"
                 >
                   Speak With Standex
                   <ArrowRight className="h-4 w-4" />
-                </Link>
-                <Link
-                  href="/solutions/power-bi"
-                  className="inline-flex min-h-14 items-center justify-center rounded-2xl border border-white/10 bg-zinc-950/60 px-8 py-4 text-sm font-bold uppercase tracking-[0.2em] text-white transition-all hover:bg-zinc-900 active:scale-[0.98]"
-                >
-                  Explore Power BI Services
                 </Link>
               </div>
             </div>
