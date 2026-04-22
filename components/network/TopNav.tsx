@@ -5,6 +5,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu, X, ChevronRight, ChevronDown } from "lucide-react";
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -54,6 +55,9 @@ export function TopNav({ forceDark }: TopNavProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -119,7 +123,8 @@ export function TopNav({ forceDark }: TopNavProps) {
   };
 
   return (
-    <motion.header 
+    <>
+    <motion.header
       initial={{ y: 0 }}
       animate={{ y: isVisible ? 0 : -100 }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
@@ -217,113 +222,118 @@ export function TopNav({ forceDark }: TopNavProps) {
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <>
-            <motion.button
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.18 }}
-              className="fixed inset-0 z-[95] bg-black/70 backdrop-blur-sm md:hidden"
-              aria-label="Close mobile navigation overlay"
-              onClick={() => setMobileMenuOpen(false)}
-            />
-
-            <motion.div
-              id="mobile-navigation"
-              initial={{ opacity: 0, y: -18 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -18 }}
-              transition={{ duration: 0.22, ease: "easeOut" }}
-              className="fixed inset-x-0 top-20 bottom-0 z-[100] flex flex-col overflow-hidden border-t border-zinc-800 bg-zinc-950 md:hidden"
-              role="dialog"
-              aria-modal="true"
-              aria-label="Mobile navigation"
-            >
-              <div className="flex items-center justify-between border-b border-zinc-800 px-5 py-5">
-                <div>
-                  <p className="text-[10px] font-black uppercase tracking-[0.32em] text-emerald-500">Navigation</p>
-                  <p className="mt-2 text-sm font-semibold text-zinc-400">Everything important, one tap away.</p>
-                </div>
-                <button
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex h-11 w-11 items-center justify-center rounded-2xl border border-zinc-700 bg-zinc-900 text-white transition-all active:scale-[0.98]"
-                  aria-label="Close mobile navigation"
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
-
-              <div className="flex-1 overflow-y-auto px-4 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-5">
-                <div className="rounded-[28px] border border-zinc-800 bg-zinc-900/60 p-3">
-                  <p className="px-3 pb-2 text-[10px] font-black uppercase tracking-[0.28em] text-zinc-500">Main</p>
-                  <div className="flex flex-col gap-1">
-                    {primaryLinks.map((item) => {
-                      const isActive = isActivePath(item.href);
-                      return (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          onClick={() => setMobileMenuOpen(false)}
-                          className={cn(
-                            "flex min-h-14 items-center justify-between rounded-2xl px-4 py-3 text-[15px] font-bold tracking-tight transition-all",
-                            isActive
-                              ? "bg-white text-zinc-950 shadow-[0_10px_30px_-15px_rgba(255,255,255,0.65)]"
-                              : "bg-zinc-950/40 text-white hover:bg-zinc-800 active:bg-zinc-800"
-                          )}
-                        >
-                          <span>{item.label}</span>
-                          <ChevronRight className={cn("h-4 w-4", isActive ? "text-zinc-950/60" : "text-zinc-500")} />
-                        </Link>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                <div className="mt-4 rounded-[28px] border border-zinc-800 bg-zinc-900/60 p-3">
-                  <p className="px-3 pb-2 text-[10px] font-black uppercase tracking-[0.28em] text-zinc-500">Solutions</p>
-                  <div className="flex flex-col gap-1">
-                    {solutionLinks.map((item) => {
-                      const isActive = isActivePath(item.href);
-                      return (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          onClick={() => setMobileMenuOpen(false)}
-                          className={cn(
-                            "flex min-h-14 items-center justify-between rounded-2xl px-4 py-3 transition-all",
-                            isActive ? "bg-white text-zinc-950" : "bg-zinc-950/40 text-white hover:bg-zinc-800 active:bg-zinc-800"
-                          )}
-                        >
-                          <div className="flex min-w-0 items-center gap-3">
-                            <div className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: item.accent }} />
-                            <span className="text-[15px] font-bold tracking-tight">{item.label}</span>
-                          </div>
-                          <ChevronRight className={cn("h-4 w-4 shrink-0", isActive ? "text-zinc-950/60" : "text-zinc-500")} />
-                        </Link>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-
-              <div className="border-t border-zinc-800 bg-zinc-950/95 px-4 py-4">
-                <div className="grid grid-cols-1 gap-3">
-                  <Link
-                    href="/Contact"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex min-h-14 items-center justify-center rounded-2xl bg-emerald-500 px-4 py-4 text-[15px] font-bold text-white shadow-lg shadow-emerald-500/20 transition-all active:scale-[0.98]"
-                  >
-                    Contact Standex
-                  </Link>
-                </div>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
     </motion.header>
+
+      {/* Mobile Menu — portalled to body to escape header's stacking context */}
+      {mounted && createPortal(
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <>
+              <motion.button
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.18 }}
+                className="fixed inset-0 z-[150] bg-black/70 backdrop-blur-sm md:hidden"
+                aria-label="Close mobile navigation overlay"
+                onClick={() => setMobileMenuOpen(false)}
+              />
+
+              <motion.div
+                id="mobile-navigation"
+                initial={{ opacity: 0, y: -18 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -18 }}
+                transition={{ duration: 0.22, ease: "easeOut" }}
+                className="fixed inset-x-0 top-20 bottom-0 z-[200] flex flex-col overflow-hidden border-t border-zinc-800 bg-zinc-950 md:hidden"
+                role="dialog"
+                aria-modal="true"
+                aria-label="Mobile navigation"
+              >
+                <div className="flex items-center justify-between border-b border-zinc-800 px-5 py-5">
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.32em] text-emerald-500">Navigation</p>
+                    <p className="mt-2 text-sm font-semibold text-zinc-400">Everything important, one tap away.</p>
+                  </div>
+                  <button
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex h-11 w-11 items-center justify-center rounded-2xl border border-zinc-700 bg-zinc-900 text-white transition-all active:scale-[0.98]"
+                    aria-label="Close mobile navigation"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
+
+                <div className="flex-1 overflow-y-auto px-4 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-5">
+                  <div className="rounded-[28px] border border-zinc-800 bg-zinc-900/60 p-3">
+                    <p className="px-3 pb-2 text-[10px] font-black uppercase tracking-[0.28em] text-zinc-500">Main</p>
+                    <div className="flex flex-col gap-1">
+                      {primaryLinks.map((item) => {
+                        const isActive = isActivePath(item.href);
+                        return (
+                          <Link
+                            key={item.href}
+                            href={item.href}
+                            onClick={() => setMobileMenuOpen(false)}
+                            className={cn(
+                              "flex min-h-14 items-center justify-between rounded-2xl px-4 py-3 text-[15px] font-bold tracking-tight transition-all",
+                              isActive
+                                ? "bg-white text-zinc-950 shadow-[0_10px_30px_-15px_rgba(255,255,255,0.65)]"
+                                : "bg-zinc-950/40 text-white hover:bg-zinc-800 active:bg-zinc-800"
+                            )}
+                          >
+                            <span>{item.label}</span>
+                            <ChevronRight className={cn("h-4 w-4", isActive ? "text-zinc-950/60" : "text-zinc-500")} />
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="mt-4 rounded-[28px] border border-zinc-800 bg-zinc-900/60 p-3">
+                    <p className="px-3 pb-2 text-[10px] font-black uppercase tracking-[0.28em] text-zinc-500">Solutions</p>
+                    <div className="flex flex-col gap-1">
+                      {solutionLinks.map((item) => {
+                        const isActive = isActivePath(item.href);
+                        return (
+                          <Link
+                            key={item.href}
+                            href={item.href}
+                            onClick={() => setMobileMenuOpen(false)}
+                            className={cn(
+                              "flex min-h-14 items-center justify-between rounded-2xl px-4 py-3 transition-all",
+                              isActive ? "bg-white text-zinc-950" : "bg-zinc-950/40 text-white hover:bg-zinc-800 active:bg-zinc-800"
+                            )}
+                          >
+                            <div className="flex min-w-0 items-center gap-3">
+                              <div className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: item.accent }} />
+                              <span className="text-[15px] font-bold tracking-tight">{item.label}</span>
+                            </div>
+                            <ChevronRight className={cn("h-4 w-4 shrink-0", isActive ? "text-zinc-950/60" : "text-zinc-500")} />
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="border-t border-zinc-800 bg-zinc-950/95 px-4 py-4">
+                  <div className="grid grid-cols-1 gap-3">
+                    <Link
+                      href="/Contact"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex min-h-14 items-center justify-center rounded-2xl bg-emerald-500 px-4 py-4 text-[15px] font-bold text-white shadow-lg shadow-emerald-500/20 transition-all active:scale-[0.98]"
+                    >
+                      Contact Standex
+                    </Link>
+                  </div>
+                </div>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
+    </>
   );
 }

@@ -14,7 +14,7 @@ import Testimonials from "@/components/standex-ai/Testimonials";
 
 export default function Page() {
   return (
-    <div className="flex min-h-[100dvh] flex-col overflow-hidden selection:bg-[#7C5CFC]/20 bg-white">
+    <div className="flex min-h-[100dvh] flex-col selection:bg-[#7C5CFC]/20 bg-white">
       <TopNav />
       
       <main className="relative flex-1 flex flex-col items-center z-10 antialiased">
