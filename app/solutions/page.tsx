@@ -1,7 +1,7 @@
 import { TopNav } from "@/components/network/TopNav";
 import Footer from "@/components/standex-ai/Footer";
 import Link from "next/link";
-import { Bot, Zap, Cpu, GraduationCap, ArrowRight, Sparkles, Building2, Code2 } from "lucide-react";
+import { Bot, Cpu, ArrowRight, Sparkles } from "lucide-react";
 
 export default function Page() {
   return (
@@ -52,7 +52,7 @@ export default function Page() {
                   <span className="text-sm font-bold tracking-tight text-[#34D399]">Data Readiness & Audit</span>
                   <ArrowRight className="h-4 w-4 text-[#34D399]" />
                 </Link>
-                <Link href="/solutions/ai-agents" className="flex items-center justify-between p-4 rounded-2xl border border-white/5 bg-white/5 hover:border-[#7C5CFC] hover:bg-white/10 transition-all group/item">
+                <Link href="/solutions/artificial-intelligence" className="flex items-center justify-between p-4 rounded-2xl border border-white/5 bg-white/5 hover:border-[#7C5CFC] hover:bg-white/10 transition-all group/item">
                   <span className="text-sm font-bold tracking-tight text-white group-hover/item:text-[#7C5CFC]">Autonomous AI Swarms</span>
                   <ArrowRight className="h-4 w-4 text-zinc-500 group-hover/item:translate-x-1 group-hover/item:text-[#7C5CFC] transition-all" />
                 </Link>

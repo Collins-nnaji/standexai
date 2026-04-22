@@ -153,7 +153,9 @@ function CodeBackground() {
   return (
     <div className="absolute inset-0 pointer-events-none select-none opacity-[0.1]">
       {Array.from({ length: 8 }).map((_, i) => (
-          <div className="absolute flex items-center gap-4 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full" 
+          <div
+               key={`code-pill-${i}`}
+               className="absolute flex items-center gap-4 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full" 
                style={{ top: `${15 + (i * 12)}%`, left: `${4 + (i * 2)}%` }}>
              <div className="h-1 w-1 rounded-full bg-emerald-500 animate-pulse" />
              <span className="text-[8px] font-bold text-emerald-500/80 tracking-widest uppercase">{lines[i % lines.length]}</span>

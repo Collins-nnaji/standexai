@@ -19,7 +19,7 @@ const services = [
     subtitle: "Autonomous AI Agents & Swarms",
     desc: "We build production-grade AI agents that reason, act, and orchestrate across complex enterprise workflows. Multi-agent systems, RAG pipelines, and real-time decisioning — deployed infrastructure, not demos.",
     accent: "#049DCB",
-    href: "/solutions/ai-agents",
+    href: "/solutions/artificial-intelligence",
     cta: "Explore AI Solutions",
   },
   {

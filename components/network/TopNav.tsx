@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Menu, X, ChevronRight, ChevronDown, Zap } from "lucide-react";
+import { Menu, X, ChevronRight, ChevronDown } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -35,7 +35,7 @@ export interface TopNavProps {
 }
 
 const solutionLinks = [
-  { href: "/solutions/ai-agents", label: "Artificial Intelligence", accent: "#049DCB" },
+  { href: "/solutions/artificial-intelligence", label: "Artificial Intelligence", accent: "#049DCB" },
   { href: "/solutions/power-apps", label: "Power Apps", accent: "#D25BB1" },
   { href: "/solutions/power-automate", label: "Power Automate", accent: "#0078D4" },
   { href: "/solutions/power-bi", label: "Power BI", accent: "#F2C811" },
@@ -45,6 +45,7 @@ const solutionLinks = [
 
 const primaryLinks = [
   { href: "/Training", label: "Training" },
+  { href: "/Contact", label: "Contact" },
 ];
 
 export function TopNav({ forceDark }: TopNavProps) {
@@ -57,19 +58,20 @@ export function TopNav({ forceDark }: TopNavProps) {
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      
-      // Hide on scroll down, show on scroll up
-      // DISABLE hiding if mobile menu is open
-      if (currentScrollY > lastScrollY && currentScrollY > 100 && !mobileMenuOpen) {
+
+      // Keep the header stable on mobile and while the menu is open.
+      if (window.innerWidth < 768 || mobileMenuOpen) {
+        setIsVisible(true);
+      } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
         setIsVisible(false);
       } else {
         setIsVisible(true);
       }
-      
+
       setLastScrollY(currentScrollY);
-      setIsScrolled(currentScrollY > 20);
+      setIsScrolled(currentScrollY > 12);
     };
-    
+
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY, mobileMenuOpen]);
@@ -97,6 +99,17 @@ export function TopNav({ forceDark }: TopNavProps) {
     };
   }, [mobileMenuOpen]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const isActivePath = (href: string) => {
     if (href === "/") {
       return pathname === href;
@@ -111,10 +124,8 @@ export function TopNav({ forceDark }: TopNavProps) {
       animate={{ y: isVisible ? 0 : -100 }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
       className={cn(
-        "fixed top-0 left-0 right-0 z-[100] w-full transition-all duration-300",
-        isScrolled || mobileMenuOpen || forceDark
-          ? "border-b border-zinc-800 bg-zinc-950/95 backdrop-blur-md shadow-[0_4px_20px_-5px_rgba(0,0,0,0.5)]"
-          : "bg-zinc-950/50 backdrop-blur-sm border-transparent"
+        "fixed top-0 left-0 right-0 z-[100] w-full border-b border-zinc-800/90 bg-zinc-950/92 backdrop-blur-xl shadow-[0_8px_30px_-12px_rgba(0,0,0,0.72)] transition-all duration-300",
+        (isScrolled || mobileMenuOpen || forceDark) && "bg-zinc-950/96"
       )}
     >
       <div className="mx-auto flex h-20 min-h-[5rem] max-w-7xl items-center gap-2 px-3 sm:gap-3 sm:px-6">
@@ -133,7 +144,7 @@ export function TopNav({ forceDark }: TopNavProps) {
         </div>
 
         {/* Center: Desktop Nav */}
-        <nav className="hidden items-center gap-1 sm:flex">
+        <nav className="hidden items-center gap-1 md:flex">
           {/* Solutions Dropdown */}
           <div className="relative group">
             <button className="flex items-center gap-1 rounded-xl px-4 py-2 text-sm font-bold text-white hover:bg-zinc-800 transition-all duration-300 border border-zinc-800/50 hover:border-[#7C5CFC]/30">
@@ -142,7 +153,7 @@ export function TopNav({ forceDark }: TopNavProps) {
             </button>
             <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
               <div className="w-[280px] rounded-3xl border border-zinc-800 bg-zinc-900 p-3 shadow-[0_20px_80px_-15px_rgba(0,0,0,0.5)] flex flex-col gap-0.5">
-                <Link href="/solutions/ai-agents" className="flex flex-col rounded-2xl px-4 py-3 transition-all hover:bg-zinc-800/60">
+                <Link href="/solutions/artificial-intelligence" className="flex flex-col rounded-2xl px-4 py-3 transition-all hover:bg-zinc-800/60">
                   <span className="text-sm font-bold text-white tracking-tight">Artificial Intelligence</span>
                 </Link>
                 <Link href="/solutions/power-apps" className="flex flex-col rounded-2xl px-4 py-3 transition-all hover:bg-zinc-800/60">
@@ -184,20 +195,11 @@ export function TopNav({ forceDark }: TopNavProps) {
 
         {/* Right: Actions */}
         <div className="flex flex-1 items-center justify-end gap-2 sm:gap-3">
-          {/* AI Console Stylish Button */}
-          <Link
-            href="/console"
-            className="hidden sm:inline-flex items-center gap-2 overflow-hidden rounded-xl bg-zinc-800 px-5 py-2.5 text-sm font-bold uppercase tracking-widest text-white shadow-lg transition-all hover:bg-zinc-700 hover:scale-[1.02] active:scale-95"
-          >
-            AI Console
-            <Zap className="h-4 w-4" />
-          </Link>
-
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className={cn(
-              "flex h-11 w-11 items-center justify-center rounded-2xl border shadow-sm transition-all active:scale-95 sm:hidden",
+              "flex h-11 w-11 items-center justify-center rounded-2xl border shadow-sm transition-all active:scale-95 md:hidden",
               mobileMenuOpen 
                 ? "border-white bg-white text-zinc-950 hover:bg-zinc-100" 
                 : "border-zinc-700 bg-zinc-800 text-white hover:bg-zinc-700"
@@ -223,40 +225,40 @@ export function TopNav({ forceDark }: TopNavProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 top-20 z-[95] bg-black/60 backdrop-blur-sm sm:hidden"
+              transition={{ duration: 0.18 }}
+              className="fixed inset-0 z-[95] bg-black/70 backdrop-blur-sm md:hidden"
               aria-label="Close mobile navigation overlay"
               onClick={() => setMobileMenuOpen(false)}
             />
 
             <motion.div
               id="mobile-navigation"
-              initial={{ opacity: 0, x: "100%" }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: "100%" }}
-              transition={{ duration: 0.28, ease: "easeOut" }}
-              className="fixed inset-y-20 right-0 z-[100] flex w-full max-w-sm flex-col overflow-hidden border-l border-zinc-800 bg-zinc-950 shadow-[-24px_0_80px_-24px_rgba(0,0,0,0.85)] sm:hidden"
+              initial={{ opacity: 0, y: -18 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -18 }}
+              transition={{ duration: 0.22, ease: "easeOut" }}
+              className="fixed inset-x-0 top-20 bottom-0 z-[100] flex flex-col overflow-hidden border-t border-zinc-800 bg-zinc-950 md:hidden"
               role="dialog"
               aria-modal="true"
               aria-label="Mobile navigation"
             >
-              <div className="border-b border-zinc-800 px-5 pb-5 pt-6">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="text-[10px] font-black uppercase tracking-[0.32em] text-emerald-500">Navigation</p>
-                    <p className="mt-2 max-w-[16rem] text-sm font-semibold leading-6 text-zinc-400">
-                      Browse solutions, training, and the AI console with one-handed mobile navigation.
-                    </p>
-                  </div>
-                  <div className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-400">
-                    Menu
-                  </div>
+              <div className="flex items-center justify-between border-b border-zinc-800 px-5 py-5">
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-[0.32em] text-emerald-500">Navigation</p>
+                  <p className="mt-2 text-sm font-semibold text-zinc-400">Everything important, one tap away.</p>
                 </div>
+                <button
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex h-11 w-11 items-center justify-center rounded-2xl border border-zinc-700 bg-zinc-900 text-white transition-all active:scale-[0.98]"
+                  aria-label="Close mobile navigation"
+                >
+                  <X className="h-5 w-5" />
+                </button>
               </div>
 
-              <div className="flex-1 overflow-y-auto px-4 py-5">
-                <div className="rounded-[28px] border border-zinc-800 bg-zinc-900/60 p-2">
-                  <p className="px-3 pb-2 text-[10px] font-black uppercase tracking-[0.28em] text-zinc-500">Primary</p>
+              <div className="flex-1 overflow-y-auto px-4 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-5">
+                <div className="rounded-[28px] border border-zinc-800 bg-zinc-900/60 p-3">
+                  <p className="px-3 pb-2 text-[10px] font-black uppercase tracking-[0.28em] text-zinc-500">Main</p>
                   <div className="flex flex-col gap-1">
                     {primaryLinks.map((item) => {
                       const isActive = isActivePath(item.href);
@@ -269,7 +271,7 @@ export function TopNav({ forceDark }: TopNavProps) {
                             "flex min-h-14 items-center justify-between rounded-2xl px-4 py-3 text-[15px] font-bold tracking-tight transition-all",
                             isActive
                               ? "bg-white text-zinc-950 shadow-[0_10px_30px_-15px_rgba(255,255,255,0.65)]"
-                              : "bg-transparent text-white hover:bg-zinc-800 active:bg-zinc-800"
+                              : "bg-zinc-950/40 text-white hover:bg-zinc-800 active:bg-zinc-800"
                           )}
                         >
                           <span>{item.label}</span>
@@ -280,7 +282,7 @@ export function TopNav({ forceDark }: TopNavProps) {
                   </div>
                 </div>
 
-                <div className="mt-4 rounded-[28px] border border-zinc-800 bg-zinc-900/60 p-2">
+                <div className="mt-4 rounded-[28px] border border-zinc-800 bg-zinc-900/60 p-3">
                   <p className="px-3 pb-2 text-[10px] font-black uppercase tracking-[0.28em] text-zinc-500">Solutions</p>
                   <div className="flex flex-col gap-1">
                     {solutionLinks.map((item) => {
@@ -292,7 +294,7 @@ export function TopNav({ forceDark }: TopNavProps) {
                           onClick={() => setMobileMenuOpen(false)}
                           className={cn(
                             "flex min-h-14 items-center justify-between rounded-2xl px-4 py-3 transition-all",
-                            isActive ? "bg-white text-zinc-950" : "bg-transparent text-white hover:bg-zinc-800 active:bg-zinc-800"
+                            isActive ? "bg-white text-zinc-950" : "bg-zinc-950/40 text-white hover:bg-zinc-800 active:bg-zinc-800"
                           )}
                         >
                           <div className="flex min-w-0 items-center gap-3">
@@ -307,22 +309,14 @@ export function TopNav({ forceDark }: TopNavProps) {
                 </div>
               </div>
 
-              <div className="border-t border-zinc-800 bg-zinc-950/95 px-4 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-4">
-                <div className="grid grid-cols-2 gap-3">
+              <div className="border-t border-zinc-800 bg-zinc-950/95 px-4 py-4">
+                <div className="grid grid-cols-1 gap-3">
                   <Link
                     href="/Contact"
                     onClick={() => setMobileMenuOpen(false)}
                     className="flex min-h-14 items-center justify-center rounded-2xl bg-emerald-500 px-4 py-4 text-[15px] font-bold text-white shadow-lg shadow-emerald-500/20 transition-all active:scale-[0.98]"
                   >
-                    Contact
-                  </Link>
-                  <Link
-                    href="/console"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex min-h-14 items-center justify-center gap-2 rounded-2xl border border-zinc-700 bg-zinc-900 px-4 py-4 text-[15px] font-bold text-white transition-all active:scale-[0.98]"
-                  >
-                    <Zap className="h-5 w-5 text-emerald-400" />
-                    Console
+                    Contact Standex
                   </Link>
                 </div>
               </div>
