@@ -57,14 +57,14 @@ const AIImplementation = () => {
   ];
 
   return (
-    <section ref={sectionRef} className="relative py-24 px-4 bg-white overflow-hidden">
+    <section ref={sectionRef} className="relative py-16 sm:py-20 lg:py-24 px-4 sm:px-6 bg-white overflow-hidden">
       {/* Background Grid Pattern */}
       <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none">
         <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="flex flex-col lg:flex-row gap-16 lg:items-center">
+        <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 lg:items-center">
           
           {/* Left Side: Content */}
           <div className="lg:w-1/2">
@@ -74,12 +74,12 @@ const AIImplementation = () => {
                 <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#7C5CFC]">System Implementation</span>
               </div>
               
-              <h2 className="text-4xl lg:text-5xl font-bold tracking-tight text-zinc-900 leading-tight mb-6">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-zinc-900 leading-tight mb-4 sm:mb-6">
                 AI Implementation <br />
                 <span className="text-zinc-400">Solution</span>
               </h2>
               
-              <p className="text-lg font-medium text-zinc-500 leading-relaxed max-w-xl mb-10">
+              <p className="text-base sm:text-lg font-medium text-zinc-500 leading-relaxed max-w-xl mb-8 sm:mb-10">
                 We deliver production-grade engineering for leading organizations, specializing in the deployment 
                 of proprietary AI engines tuned for citation, hallucination risk, and semantic alignment.
               </p>
@@ -117,7 +117,7 @@ const AIImplementation = () => {
               
               {/* Main Terminal Frame */}
               <div className="rounded-3xl border border-zinc-200 bg-white p-2 shadow-[0_32px_100px_-20px_rgba(0,0,0,0.1)] overflow-hidden">
-                <div className="bg-zinc-950 rounded-2xl p-6 h-[480px] font-mono text-[11px] relative overflow-hidden">
+                <div className="bg-zinc-950 rounded-2xl p-4 sm:p-6 h-[280px] sm:h-[360px] lg:h-[480px] font-mono text-[10px] sm:text-[11px] relative overflow-hidden">
                   
                   {/* Status Bar */}
                   <div className="flex items-center justify-between mb-6 border-b border-zinc-800 pb-3">
@@ -185,7 +185,7 @@ const AIImplementation = () => {
 
               {/* Float Tags */}
               <div 
-                className="absolute -top-6 -right-6 h-28 w-28 rounded-3xl bg-white border border-zinc-200 shadow-xl flex flex-col items-center justify-center p-4 transform rotate-12 transition-all duration-700 delay-700"
+                className="absolute -top-4 -right-4 sm:-top-6 sm:-right-6 h-20 w-20 sm:h-28 sm:w-28 rounded-2xl sm:rounded-3xl bg-white border border-zinc-200 shadow-xl hidden sm:flex flex-col items-center justify-center p-3 sm:p-4 transform rotate-12 transition-all duration-700 delay-700"
                 style={{ opacity: animationStarted ? 1 : 0, transform: animationStarted ? 'rotate(12deg)' : 'rotate(0deg)' }}
               >
                 <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-1">Impact</span>

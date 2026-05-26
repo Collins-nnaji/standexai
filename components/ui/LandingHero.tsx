@@ -33,7 +33,7 @@ const toolLogos = [
 
 export function LandingHero() {
   return (
-    <section className="relative min-h-[100vh] w-full overflow-hidden bg-zinc-950">
+    <section className="relative min-h-[100dvh] w-full overflow-hidden bg-zinc-950">
       {/* ── Background: Dark Emerald Diagnostic Texture ── */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.12),transparent_70%)]" />
@@ -44,20 +44,20 @@ export function LandingHero() {
              style={{ backgroundImage: "radial-gradient(#10b981 1px, transparent 1px)", backgroundSize: "32px 32px" }} />
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 h-full flex flex-col justify-center min-h-[90vh] pt-24">
-        <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-24 items-center py-8">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 h-full flex flex-col justify-center min-h-[85vh] sm:min-h-[90vh] pt-20 sm:pt-24 pb-12 sm:pb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-10 sm:gap-16 lg:gap-24 items-center py-6 sm:py-8">
           
           {/* ── Left Column: Engineering-Grade Messaging ── */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="flex flex-col gap-10 z-10 lg:-ml-8"
+            className="flex flex-col gap-6 sm:gap-8 lg:gap-10 z-10 lg:-ml-8 text-center lg:text-left"
           >
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
 
               
-              <h1 className="text-6xl md:text-8xl font-bold tracking-tight leading-[0.95] text-white">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight leading-[0.95] text-white">
                 Architecting <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-emerald-300 to-teal-400">
                   Intelligent
@@ -66,7 +66,7 @@ export function LandingHero() {
               </h1>
             </div>
 
-            <p className="max-w-xl text-xl md:text-2xl font-medium leading-relaxed text-zinc-400">
+            <p className="max-w-xl mx-auto lg:mx-0 text-base sm:text-lg md:text-xl lg:text-2xl font-medium leading-relaxed text-zinc-400">
               Transforming enterprise complexity into high-performance 
               <span className="text-white font-bold border-b-2 border-emerald-500/30 mx-1">AI Agents</span> 
               and 
@@ -74,10 +74,10 @@ export function LandingHero() {
               innovations. We implement the future, then train your team to own it.
             </p>
 
-            <div className="flex flex-wrap gap-5">
+            <div className="flex flex-wrap gap-4 sm:gap-5 justify-center lg:justify-start">
               <Link 
                 href="/Contact"
-                className="group relative flex h-16 items-center gap-4 overflow-hidden rounded-2xl bg-emerald-500 px-10 text-sm font-bold tracking-widest text-white transition-all hover:bg-emerald-600 shadow-lg shadow-emerald-200"
+                className="group relative flex h-12 sm:h-14 lg:h-16 w-full sm:w-auto items-center justify-center gap-3 sm:gap-4 overflow-hidden rounded-2xl bg-emerald-500 px-6 sm:px-8 lg:px-10 text-xs sm:text-sm font-bold tracking-widest text-white transition-all hover:bg-emerald-600 shadow-lg shadow-emerald-200"
               >
                 <span>ENGINEER A SOLUTION</span>
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -88,13 +88,13 @@ export function LandingHero() {
           </motion.div>
 
           {/* ── Right Column: Dual Vertical Icon Columns ── */}
-          <div className="relative h-[600px] lg:h-[750px] grid grid-cols-2 gap-6 overflow-hidden">
+          <div className="relative h-[320px] sm:h-[450px] md:h-[550px] lg:h-[750px] grid grid-cols-2 gap-4 sm:gap-6 overflow-hidden max-w-md sm:max-w-none mx-auto lg:mx-0 w-full">
             <div className="relative h-full">
               <VerticalIconColumn icons={powerPlatformIcons} direction="up" speed={40} />
               <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-zinc-950 to-transparent z-10" />
               <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-zinc-950 to-transparent z-10" />
             </div>
-            <div className="relative h-full translate-y-20">
+            <div className="relative h-full translate-y-8 sm:translate-y-12 lg:translate-y-20">
               <VerticalIconColumn icons={aiCloudIcons} direction="down" speed={35} />
               <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-zinc-950 to-transparent z-10" />
               <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-zinc-950 to-transparent z-10" />
@@ -126,7 +126,7 @@ function VerticalIconColumn({ icons, direction = "up", speed = 30 }: { icons: an
       >
         {[...icons, ...icons, ...icons, ...icons].map((icon, i) => (
           <div key={i} className="group relative">
-            <div className="h-28 w-28 flex items-center justify-center p-4 transition-all">
+            <div className="h-20 w-20 sm:h-24 sm:w-24 lg:h-28 lg:w-28 flex items-center justify-center p-3 sm:p-4 transition-all">
               <img src={icon.src} alt={icon.name} className="h-full w-full object-contain filter brightness-110 opacity-60 group-hover:opacity-100 transition-opacity" />
             </div>
           </div>

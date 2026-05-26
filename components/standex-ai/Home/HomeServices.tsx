@@ -102,7 +102,7 @@ const HomeServices = () => {
         }
       `}</style>
 
-      <section ref={sectionRef} className="relative py-24 px-6 lg:px-12 max-w-7xl mx-auto">
+      <section ref={sectionRef} className="relative py-16 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto">
 
         {/* Header */}
         <div className={`mb-16 transition-all duration-700 ${animationStarted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
@@ -154,10 +154,10 @@ const HomeServices = () => {
             animationStarted ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-10 opacity-0 scale-95'
           } hover:shadow-[0_48px_100px_-20px_rgba(0,0,0,0.12)] hover:border-zinc-300`}
         >
-          <div className="p-8 md:p-12 flex flex-col lg:flex-row gap-12 lg:gap-16">
+          <div className="p-6 sm:p-8 md:p-12 flex flex-col lg:flex-row gap-8 sm:gap-12 lg:gap-16">
             {/* Diagram */}
             <div className={`w-full lg:w-1/2 flex items-center justify-center transform transition-all duration-1000 delay-400 ${animationStarted ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'}`}>
-              <div className="relative w-full max-w-md aspect-square">
+              <div className="relative w-full max-w-[280px] sm:max-w-md mx-auto aspect-square">
                 {/* Center */}
                 <div
                   className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#7C5CFC] rounded-full w-2/5 h-2/5 flex items-center justify-center z-10 transition-all duration-1000 delay-800 ${animationStarted ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}`}

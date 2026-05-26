@@ -10,7 +10,7 @@ const BusinessIntelligenceCourse = () => {
     title: 'Business Intelligence',
     description: 'Transform raw data into meaningful insights. Learn to use BI tools to create powerful visualizations, reports, and dashboards that drive informed business decisions.',
     image: '/BusinessIntelligenceCourse.svg',
-    enrollLink: 'https://buy.stripe.com/bIYaGJeDe0X47gQ5kn',
+    enrollLink: '/Training',
     duration: '12 weeks (part-time)',
     format: 'Online',
     topics: [
@@ -177,14 +177,12 @@ const BusinessIntelligenceCourse = () => {
           
           {/* Enroll Button */}
           <div className="mb-8">
-            <a 
+            <Link 
               href={course.enrollLink}
-              target="_blank"
-              rel="noopener noreferrer"
               className="block w-full max-w-md mx-auto bg-[#7C5CFC] hover:bg-[#6B4FE0] text-white px-8 py-4 rounded-lg transition duration-150 text-center font-semibold text-lg"
             >
-              Enroll Now →
-            </a>
+              View Training & Enroll →
+            </Link>
           </div>
 
           {/* Contact */}

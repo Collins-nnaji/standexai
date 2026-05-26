@@ -34,7 +34,7 @@ const WhyChooseUs = () => {
   return (
     <div ref={sectionRef} className="flex flex-col lg:flex-row w-full bg-white border-y border-zinc-100 overflow-hidden">
       {/* Left Section - Clean Zinc/White Background with Text */}
-      <div className="w-full lg:w-1/2 py-20 px-6 md:px-12 lg:px-16 flex flex-col justify-center relative z-10">
+      <div className="w-full lg:w-1/2 py-12 sm:py-16 lg:py-20 px-4 sm:px-6 md:px-12 lg:px-16 flex flex-col justify-center relative z-10">
         <div className="inline-flex items-center gap-2 rounded-full border border-violet-100 bg-violet-50 px-3 py-1 mb-6 self-start">
           <div className="h-1.5 w-1.5 rounded-full bg-violet-500 animate-pulse" />
           <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-violet-600">Why Standex Digital</span>
@@ -102,7 +102,7 @@ const WhyChooseUs = () => {
       </div>
       
       {/* Right Section - Image with overlay */}
-      <div className="w-full lg:w-1/2 h-[400px] lg:h-auto relative overflow-hidden">
+      <div className="w-full lg:w-1/2 h-[280px] sm:h-[350px] lg:h-auto relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-white via-transparent to-transparent z-10 lg:block hidden" />
         <img 
           src="/Woman-consulting.webp" 

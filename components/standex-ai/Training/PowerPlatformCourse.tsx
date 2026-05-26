@@ -10,7 +10,7 @@ const PowerPlatformCourse = () => {
     title: 'Standex Certified Power Platform & Business Intelligence Practitioner (SCPBE)',
     description: 'End-to-end Power Platform and BI mastery: Power Apps, Power Automate, Power BI, Copilot Studio, SQL, Dataverse, data modelling, integration, and full enterprise solution delivery.',
     image: '/PowerPlatform.png',
-    enrollLink: 'https://buy.stripe.com/bIY1693YAcFMbx66os',
+    enrollLink: 'https://buy.stripe.com/dRmeVfdwwcjsdDigNLfnO0k',
     duration: '12 weeks (part-time)',
     format: 'Online',
     topics: [

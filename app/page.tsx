@@ -17,7 +17,7 @@ export default function Page() {
     <div className="flex min-h-[100dvh] flex-col selection:bg-[#7C5CFC]/20 bg-white">
       <TopNav />
       
-      <main className="relative flex-1 flex flex-col items-center z-10 antialiased">
+      <main className="relative flex-1 flex flex-col items-center z-10 antialiased overflow-x-hidden">
         
         {/* 1. HERO (AI Platform Base) */}
         <div className="w-full">
