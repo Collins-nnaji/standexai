@@ -111,7 +111,7 @@ const TrainingConnect = () => {
 
             <div className="flex flex-col sm:flex-row gap-4">
               <a 
-                href="https://www.linkedin.com/company/standex-tech-elevate" 
+                href="https://www.linkedin.com/company/standex-digital" 
                 className="flex items-center justify-center gap-2 bg-[#7C5CFC] hover:bg-[#6B4FE0] text-white px-6 py-3 rounded-md transition duration-200"
               >
                 <Linkedin size={20} />

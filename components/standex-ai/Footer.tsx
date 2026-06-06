@@ -48,7 +48,7 @@ const Footer = () => {
           <div className="flex space-x-6">
             {/* LinkedIn */}
             <a 
-              href="https://www.linkedin.com/company/standex-ai" 
+              href="https://www.linkedin.com/company/standex-digital" 
               target="_blank" 
               rel="noopener noreferrer" 
               aria-label="LinkedIn"
