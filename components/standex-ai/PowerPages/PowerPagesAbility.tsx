@@ -91,19 +91,19 @@ const PowerPagesAbility = () => {
   ];
 
   return (
-    <div className="py-16 px-4 w-full bg-zinc-950">
+    <div className="py-16 px-4 w-full bg-[#f6fbf8]">
       <div ref={sectionRef} className="max-w-7xl mx-auto">
         {/* Heading Section */}
         <div className="text-center mb-10">
           <h2 
-            className={`text-4xl font-black text-white tracking-tight mb-6 transform transition-all duration-700 ${
+            className={`text-4xl font-black text-zinc-900 tracking-tight mb-6 transform transition-all duration-700 ${
               animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
             }`}
           >
             What Can Power Pages Do?
           </h2>
           <p 
-            className={`text-zinc-400 max-w-4xl mx-auto transform transition-all duration-700 delay-100 ${
+            className={`text-zinc-500 max-w-4xl mx-auto transform transition-all duration-700 delay-100 ${
               animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
             }`}
           >
@@ -117,7 +117,7 @@ const PowerPagesAbility = () => {
           {useCases.slice(0, 3).map((useCase, index) => (
             <div 
               key={index} 
-              className={`text-center flex flex-col items-center bg-zinc-900 p-6 rounded-lg border border-zinc-800 transform transition-all duration-700 hover:-translate-y-1 hover:shadow-lg hover:border-[#7C5CFC] ${
+              className={`text-center flex flex-col items-center bg-white p-6 rounded-lg border border-zinc-200 transform transition-all duration-700 hover:-translate-y-1 hover:shadow-lg hover:border-[#7C5CFC] ${
                 animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
               }`}
               style={{ transitionDelay: `${200 + index * 100}ms` }}
@@ -134,8 +134,8 @@ const PowerPagesAbility = () => {
               >
                 {useCase.icon}
               </div>
-              <h3 className="text-xl font-black text-white tracking-tight mb-3">{useCase.title}</h3>
-              <p className="text-zinc-400">
+              <h3 className="text-xl font-black text-zinc-900 tracking-tight mb-3">{useCase.title}</h3>
+              <p className="text-zinc-500">
                 {useCase.description}
               </p>
             </div>
@@ -147,7 +147,7 @@ const PowerPagesAbility = () => {
           {useCases.slice(3).map((useCase, index) => (
             <div 
               key={index + 3} 
-              className={`text-center flex flex-col items-center bg-zinc-900 p-6 rounded-lg border border-zinc-800 transform transition-all duration-700 hover:-translate-y-1 hover:shadow-lg hover:border-[#7C5CFC] ${
+              className={`text-center flex flex-col items-center bg-white p-6 rounded-lg border border-zinc-200 transform transition-all duration-700 hover:-translate-y-1 hover:shadow-lg hover:border-[#7C5CFC] ${
                 animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
               }`}
               style={{ transitionDelay: `${500 + index * 100}ms` }}
@@ -164,8 +164,8 @@ const PowerPagesAbility = () => {
               >
                 {useCase.icon}
               </div>
-              <h3 className="text-xl font-black text-white tracking-tight mb-3">{useCase.title}</h3>
-              <p className="text-zinc-400">
+              <h3 className="text-xl font-black text-zinc-900 tracking-tight mb-3">{useCase.title}</h3>
+              <p className="text-zinc-500">
                 {useCase.description}
               </p>
             </div>

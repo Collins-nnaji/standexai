@@ -25,7 +25,7 @@ const PowerAppsHeader = () => {
   }, []);
 
   return (
-    <div className="bg-zinc-950 text-white py-24 px-6 lg:px-12 pt-36 relative overflow-hidden">
+    <div className="bg-[#f6fbf8] text-zinc-900 py-24 px-6 lg:px-12 pt-36 relative overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-[600px] bg-[radial-gradient(circle_at_20%_0%,rgba(210,91,177,0.07),transparent_70%)] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto text-center relative z-10">
@@ -33,11 +33,11 @@ const PowerAppsHeader = () => {
           <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#D25BB1]">Microsoft Power Apps Consulting Services</span>
         </div>
 
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white leading-[0.95] mb-8">
+        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-zinc-900 leading-[0.95] mb-8">
           Low Code<br />Application Development
         </h1>
 
-        <p className="max-w-3xl mx-auto text-xl md:text-2xl font-medium text-zinc-300 leading-relaxed mb-12">
+        <p className="max-w-3xl mx-auto text-xl md:text-2xl font-medium text-zinc-600 leading-relaxed mb-12">
           Revolutionise your business processes with a custom app that connects to all of
           your data, built specifically for you, and is accessible across all of your devices.
         </p>
@@ -52,25 +52,25 @@ const PowerAppsHeader = () => {
           </svg>
         </a>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-20 border-t border-white/10 pt-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-20 border-t border-zinc-200 pt-16">
           <div className="flex flex-col items-center">
             <div className="text-6xl md:text-7xl font-bold tracking-tight text-[#D25BB1]">{connectorsCount}+</div>
-            <p className="font-bold text-lg uppercase tracking-widest mt-3 mb-2 text-white">Connectors</p>
-            <p className="text-sm text-zinc-400 max-w-xs leading-relaxed">
+            <p className="font-bold text-lg uppercase tracking-widest mt-3 mb-2 text-zinc-900">Connectors</p>
+            <p className="text-sm text-zinc-500 max-w-xs leading-relaxed">
               With over 300 out-of-the-box connectors, easily integrate data from all of your systems taking the capabilities of your apps further.
             </p>
           </div>
           <div className="flex flex-col items-center">
             <div className="text-6xl md:text-7xl font-bold tracking-tight text-[#D25BB1]">{fortuneCount}%</div>
-            <p className="font-bold text-lg uppercase tracking-widest mt-3 mb-2 text-white">of the Fortune 500</p>
-            <p className="text-sm text-zinc-400 max-w-xs leading-relaxed">
+            <p className="font-bold text-lg uppercase tracking-widest mt-3 mb-2 text-zinc-900">of the Fortune 500</p>
+            <p className="text-sm text-zinc-500 max-w-xs leading-relaxed">
               Have simplified their processes and enhanced user experience by transforming ideas into applications.
             </p>
           </div>
           <div className="flex flex-col items-center">
             <div className="text-6xl md:text-7xl font-bold tracking-tight text-[#D25BB1]">{costCount}%</div>
-            <p className="font-bold text-lg uppercase tracking-widest mt-3 mb-2 text-white">Lower Costs</p>
-            <p className="text-sm text-zinc-400 max-w-xs leading-relaxed">
+            <p className="font-bold text-lg uppercase tracking-widest mt-3 mb-2 text-zinc-900">Lower Costs</p>
+            <p className="text-sm text-zinc-500 max-w-xs leading-relaxed">
               Custom apps are available in DAYS with up to 74% lower costs than hiring an external custom application developer.
             </p>
           </div>

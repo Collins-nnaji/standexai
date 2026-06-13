@@ -8,11 +8,8 @@ import { TopNav } from "@/components/network/TopNav";
 import { ImpactCard } from "@/components/network/ImpactCard";
 import { WorkItemCard } from "@/components/network/WorkItemCard";
 import { ExternalLink, Users, FileText, Share2, Eye, MessageSquare } from "lucide-react";
-import { neonAuth } from "@/lib/neon/auth-server";
-
 export default async function WorkItemPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const { data: session } = await neonAuth.getSession();
 
   const work = await prisma.workItem.findUnique({
     where: { id },
@@ -30,9 +27,7 @@ export default async function WorkItemPage({ params }: { params: Promise<{ id: s
 
   // Increment view (in a real app, this would be a client side fetch or done safely via a specialized route to avoid cache busting)
   // For demo logic we'll just increment it lazily if someone visits
-  const isOwner = session?.user?.email 
-    ? await prisma.user.findFirst({ where: { email: session.user.email, id: work.userId } }) !== null
-    : false;
+  const isOwner = false;
   
   await prisma.workItem.update({ where: { id: work.id }, data: { views: { increment: 1 } } }) as any;
 
@@ -51,7 +46,7 @@ export default async function WorkItemPage({ params }: { params: Promise<{ id: s
 
   return (
     <div className="min-h-screen text-zinc-600">
-      <TopNav user={session?.user} />
+      <TopNav />
       
       <main className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
         <div className="mb-8">

@@ -84,7 +84,7 @@ const PAHowWeCanHelp = () => {
   ];
 
   return (
-    <div className="w-full bg-zinc-950 py-24 px-6 lg:px-12">
+    <div className="w-full bg-[#f6fbf8] py-24 px-6 lg:px-12">
       <div ref={sectionRef} className="max-w-7xl mx-auto text-center">
         {/* Section Header */}
         <p
@@ -95,14 +95,14 @@ const PAHowWeCanHelp = () => {
           How We Can Help
         </p>
         <h2
-          className={`text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight mb-6 transform transition-all duration-700 delay-100 ${
+          className={`text-4xl md:text-5xl lg:text-6xl font-bold text-zinc-900 tracking-tight mb-6 transform transition-all duration-700 delay-100 ${
             animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
           }`}
         >
           Choose The Right Service For Your Business
         </h2>
         <p
-          className={`text-zinc-300 text-xl max-w-3xl mx-auto mb-16 transform transition-all duration-700 delay-200 leading-relaxed ${
+          className={`text-zinc-600 text-xl max-w-3xl mx-auto mb-16 transform transition-all duration-700 delay-200 leading-relaxed ${
             animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
           }`}
         >
@@ -115,7 +115,7 @@ const PAHowWeCanHelp = () => {
           {services.map((service, index) => (
             <div
               key={index}
-              className={`bg-zinc-900 p-8 rounded-2xl border border-zinc-800 shadow-md flex flex-col h-full transition-all duration-500 transform hover:-translate-y-1 hover:shadow-lg hover:border-[#D25BB1]/30 ${
+              className={`bg-white p-8 rounded-2xl border border-zinc-200 shadow-md flex flex-col h-full transition-all duration-500 transform hover:-translate-y-1 hover:shadow-lg hover:border-[#D25BB1]/30 ${
                 animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
               }`}
               style={{ transitionDelay: `${300 + index * 100}ms` }}
@@ -131,16 +131,16 @@ const PAHowWeCanHelp = () => {
                   animationDelay: `${index * 0.5}s`
                 }}
               >
-                <div className="w-16 h-16 rounded-full bg-zinc-800 text-[#7C5CFC] flex items-center justify-center">
+                <div className="w-16 h-16 rounded-full bg-[#D25BB1]/10 text-[#D25BB1] flex items-center justify-center">
                   {service.icon}
                 </div>
               </div>
               
               {/* Service Title */}
-              <h3 className="text-xl font-bold text-white tracking-tight mb-4">{service.title}</h3>
+              <h3 className="text-xl font-bold text-zinc-900 tracking-tight mb-4">{service.title}</h3>
 
               {/* Service Description */}
-              <p className="text-zinc-300 mb-6 flex-grow leading-relaxed">{service.description}</p>
+              <p className="text-zinc-600 mb-6 flex-grow leading-relaxed">{service.description}</p>
               
               {/* Link */}
               <button 

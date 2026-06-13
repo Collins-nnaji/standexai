@@ -29,7 +29,8 @@ export const metadata: Metadata = {
   description:
     "Premier Applied AI, Microsoft Power Platform engineering, and professional training solutions for modern digital infrastructure.",
   icons: {
-    icon: "/StandexLogo.webp",
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
   },
 };
 

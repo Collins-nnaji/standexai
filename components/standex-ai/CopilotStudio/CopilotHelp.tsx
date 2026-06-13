@@ -72,7 +72,7 @@ const CopilotHelp = () => {
   ];
 
   return (
-    <section className="py-16 bg-zinc-950 w-full">
+    <section className="py-16 bg-[#f6fbf8] w-full">
       <div ref={sectionRef} className="container mx-auto px-4 max-w-6xl">
         {/* Main section with image and text */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
@@ -86,7 +86,7 @@ const CopilotHelp = () => {
               Simplify and Streamline
             </h3>
             
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-white tracking-tight mb-6">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-zinc-900 tracking-tight mb-6">
               How Can Copilot Studio Transform Your Business?
             </h2>
             
@@ -103,7 +103,7 @@ const CopilotHelp = () => {
                 <img 
                   src="/Copilot-Help.webp" 
                   alt="Data center with blue digital visualization" 
-                  className="rounded-lg shadow-lg w-full border border-zinc-800 relative z-10"
+                  className="rounded-lg shadow-lg w-full border border-zinc-200 relative z-10"
                 />
               </div>
             </div>
@@ -120,7 +120,7 @@ const CopilotHelp = () => {
               Engaging Experiences for Customers, Clients, and Staff
             </h3>
             
-            <p className="text-zinc-400 mb-6">
+            <p className="text-zinc-500 mb-6">
               Copilot Studio offers a robust, low-code solution to create and deploy interactive 
               chatbots (AI Copilots) effortlessly. Leveraging its extensive set of connectors, you can 
               easily connect with various data sources and applications to deliver engaging and 
@@ -136,8 +136,8 @@ const CopilotHelp = () => {
               >
                 <span className="text-[#7C5CFC] font-black tracking-tight mr-2">•</span>
                 <div>
-                  <span className="font-black tracking-tight text-white">Customisable Conversations:</span>
-                  <span className="text-zinc-400"> Design tailored conversation flows that reflect your 
+                  <span className="font-black tracking-tight text-zinc-900">Customisable Conversations:</span>
+                  <span className="text-zinc-500"> Design tailored conversation flows that reflect your 
                   business processes and customer interactions.</span>
                 </div>
               </li>
@@ -150,8 +150,8 @@ const CopilotHelp = () => {
               >
                 <span className="text-[#7C5CFC] font-black tracking-tight mr-2">•</span>
                 <div>
-                  <span className="font-black tracking-tight text-white">Multi-Channel Deployment:</span>
-                  <span className="text-zinc-400"> Deploy copilots across multiple channels to ensure 
+                  <span className="font-black tracking-tight text-zinc-900">Multi-Channel Deployment:</span>
+                  <span className="text-zinc-500"> Deploy copilots across multiple channels to ensure 
                   they are accessible where your users are.</span>
                 </div>
               </li>
@@ -164,8 +164,8 @@ const CopilotHelp = () => {
               >
                 <span className="text-[#7C5CFC] font-black tracking-tight mr-2">•</span>
                 <div>
-                  <span className="font-black tracking-tight text-white">Advanced Analytics:</span>
-                  <span className="text-zinc-400"> Leverage insights and recommendations to continuously 
+                  <span className="font-black tracking-tight text-zinc-900">Advanced Analytics:</span>
+                  <span className="text-zinc-500"> Leverage insights and recommendations to continuously 
                   improve the performance and relevance of your AI copilots.</span>
                 </div>
               </li>
@@ -178,7 +178,7 @@ const CopilotHelp = () => {
           {benefits.map((benefit, index) => (
             <div 
               key={index}
-              className={`p-6 bg-zinc-900 rounded-lg border border-zinc-800 transform transition-all duration-700 hover:-translate-y-1 hover:shadow-lg hover:border-[#7C5CFC] text-center md:text-left ${
+              className={`p-6 bg-white rounded-lg border border-zinc-200 transform transition-all duration-700 hover:-translate-y-1 hover:shadow-lg hover:border-[#7C5CFC] text-center md:text-left ${
                 animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
               }`}
               style={{ transitionDelay: `${700 + index * 100}ms` }}
@@ -195,8 +195,8 @@ const CopilotHelp = () => {
               >
                 {benefit.icon}
               </div>
-              <h3 className="text-xl font-black text-white mb-3">{benefit.title}</h3>
-              <p className="text-zinc-400">
+              <h3 className="text-xl font-black text-zinc-900 mb-3">{benefit.title}</h3>
+              <p className="text-zinc-500">
                 {benefit.description}
               </p>
             </div>

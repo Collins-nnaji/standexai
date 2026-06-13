@@ -4,7 +4,7 @@ import React from 'react';
 
 const PowerPagesProcess = () => {
   return (
-    <div className="py-16 px-4 bg-zinc-950 text-white relative overflow-hidden">
+    <div className="py-16 px-4 bg-[#f6fbf8] text-zinc-900 relative overflow-hidden">
       {/* Background grid lines - decorative */}
       <div className="absolute inset-0 opacity-10">
         <div className="w-full h-full" style={{
@@ -28,7 +28,7 @@ const PowerPagesProcess = () => {
           {/* Step 1: Consultation */}
           <div className="relative">
             <div className="flex items-start">
-              <div className="w-12 h-12 bg-zinc-900 rounded-full flex items-center justify-center text-white font-black tracking-tight text-xl mr-4 flex-shrink-0">
+              <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-zinc-900 font-black tracking-tight text-xl mr-4 flex-shrink-0">
                 1
               </div>
               <div>
@@ -43,7 +43,7 @@ const PowerPagesProcess = () => {
           {/* Step 2: Proposal */}
           <div className="relative">
             <div className="flex items-start">
-              <div className="w-12 h-12 bg-zinc-900 rounded-full flex items-center justify-center text-white font-black tracking-tight text-xl mr-4 flex-shrink-0">
+              <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-zinc-900 font-black tracking-tight text-xl mr-4 flex-shrink-0">
                 2
               </div>
               <div>
@@ -58,7 +58,7 @@ const PowerPagesProcess = () => {
           {/* Step 3: Implementation */}
           <div className="relative">
             <div className="flex items-start">
-              <div className="w-12 h-12 bg-zinc-900 rounded-full flex items-center justify-center text-white font-black tracking-tight text-xl mr-4 flex-shrink-0">
+              <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-zinc-900 font-black tracking-tight text-xl mr-4 flex-shrink-0">
                 3
               </div>
               <div>
@@ -73,7 +73,7 @@ const PowerPagesProcess = () => {
           {/* Step 4: Delivery */}
           <div className="relative">
             <div className="flex items-start">
-              <div className="w-12 h-12 bg-zinc-900 rounded-full flex items-center justify-center text-white font-black tracking-tight text-xl mr-4 flex-shrink-0">
+              <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-zinc-900 font-black tracking-tight text-xl mr-4 flex-shrink-0">
                 4
               </div>
               <div>

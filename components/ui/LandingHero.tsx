@@ -6,8 +6,15 @@ import Link from "next/link";
 import { ArrowRight, Zap, Settings, CheckCircle2, TerminalSquare, Cpu } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+type MarqueeIcon = {
+  src: string;
+  name: string;
+  /** Dark logo assets — invert to white for the dark hero background */
+  lightOnDark?: boolean;
+};
+
 // ── Icons for the Vertical Marquees ──
-const powerPlatformIcons = [
+const powerPlatformIcons: MarqueeIcon[] = [
   { src: "/PowerApps.svg", name: "Power Apps" },
   { src: "/PowerAutomate.svg", name: "Power Automate" },
   { src: "/PowerBi.svg", name: "Power BI" },
@@ -15,11 +22,11 @@ const powerPlatformIcons = [
   { src: "/CopilotStudio.svg", name: "Copilot Studio" },
 ];
 
-const aiCloudIcons = [
-  { src: "/images/openai%20logo.svg", name: "OpenAI" },
+const aiCloudIcons: MarqueeIcon[] = [
+  { src: "/images/openai%20logo.svg", name: "OpenAI", lightOnDark: true },
   { src: "/images/azure%20logo.png", name: "Azure AI" },
   { src: "/images/claude%20logo.svg", name: "Anthropic" },
-  { src: "/images/nextjslogo.png", name: "Next.js" },
+  { src: "/images/nextjslogo.png", name: "Next.js", lightOnDark: true },
 ];
 
 const toolLogos = [
@@ -33,7 +40,7 @@ const toolLogos = [
 
 export function LandingHero() {
   return (
-    <section className="relative min-h-[100dvh] w-full overflow-hidden bg-zinc-950">
+    <section className="relative min-h-[100dvh] w-full overflow-hidden bg-zinc-950 px-3 sm:px-5 md:px-8 py-3 sm:py-4 md:py-5">
       {/* ── Background: Dark Emerald Diagnostic Texture ── */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.12),transparent_70%)]" />
@@ -44,15 +51,15 @@ export function LandingHero() {
              style={{ backgroundImage: "radial-gradient(#10b981 1px, transparent 1px)", backgroundSize: "32px 32px" }} />
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 h-full flex flex-col justify-center min-h-[85vh] sm:min-h-[90vh] pt-20 sm:pt-24 pb-12 sm:pb-8">
-        <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-10 sm:gap-16 lg:gap-24 items-center py-6 sm:py-8">
+      <div className="relative mx-auto max-w-7xl h-full flex flex-col justify-center min-h-[calc(100dvh-1.5rem)] sm:min-h-[calc(100dvh-2rem)] md:min-h-[calc(100dvh-2.5rem)] pt-16 sm:pt-20 pb-8 sm:pb-10">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-10 sm:gap-16 lg:gap-24 items-center py-4 sm:py-6">
           
           {/* ── Left Column: Engineering-Grade Messaging ── */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="flex flex-col gap-6 sm:gap-8 lg:gap-10 z-10 lg:-ml-8 text-center lg:text-left"
+            className="flex flex-col gap-6 sm:gap-8 lg:gap-10 z-10 text-center lg:text-left"
           >
             <div className="space-y-4 sm:space-y-6">
 
@@ -64,6 +71,9 @@ export function LandingHero() {
                 </span><br />
                 Systems.
               </h1>
+              <p className="text-lg sm:text-xl md:text-2xl font-semibold text-emerald-400/90 tracking-tight">
+                Automate and save cost.
+              </p>
             </div>
 
             <p className="max-w-xl mx-auto lg:mx-0 text-base sm:text-lg md:text-xl lg:text-2xl font-medium leading-relaxed text-zinc-400">
@@ -74,14 +84,21 @@ export function LandingHero() {
               innovations. We implement the future, then train your team to own it.
             </p>
 
-            <div className="flex flex-wrap gap-4 sm:gap-5 justify-center lg:justify-start">
-              <Link 
-                href="/Contact"
-                className="group relative flex h-12 sm:h-14 lg:h-16 w-full sm:w-auto items-center justify-center gap-3 sm:gap-4 overflow-hidden rounded-2xl bg-emerald-500 px-6 sm:px-8 lg:px-10 text-xs sm:text-sm font-bold tracking-widest text-white transition-all hover:bg-emerald-600 shadow-lg shadow-emerald-200"
-              >
-                <span>ENGINEER A SOLUTION</span>
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Link>
+            <div className="flex flex-col items-center lg:items-start gap-4">
+              <div className="flex flex-wrap gap-4 sm:gap-5 justify-center lg:justify-start w-full">
+                <Link 
+                  href="/Contact"
+                  className="group relative flex h-12 sm:h-14 lg:h-16 w-full sm:w-auto items-center justify-center gap-3 sm:gap-4 overflow-hidden rounded-2xl bg-emerald-500 px-6 sm:px-8 lg:px-10 text-xs sm:text-sm font-bold tracking-widest text-white transition-all hover:bg-emerald-600 shadow-lg shadow-emerald-200"
+                >
+                  <span>ENGINEER A SOLUTION</span>
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </div>
+
+              <p className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-2 text-[11px] sm:text-xs font-semibold">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shrink-0" aria-hidden />
+                <span className="text-white">Free 30-minute business consultation call</span>
+              </p>
             </div>
 
 
@@ -110,7 +127,7 @@ export function LandingHero() {
 
 // ── Supporting Components ──
 
-function VerticalIconColumn({ icons, direction = "up", speed = 30 }: { icons: any[], direction?: "up" | "down", speed?: number }) {
+function VerticalIconColumn({ icons, direction = "up", speed = 30 }: { icons: MarqueeIcon[]; direction?: "up" | "down"; speed?: number }) {
   return (
     <div className="flex flex-col gap-6 py-6 h-full">
       <motion.div
@@ -127,7 +144,16 @@ function VerticalIconColumn({ icons, direction = "up", speed = 30 }: { icons: an
         {[...icons, ...icons, ...icons, ...icons].map((icon, i) => (
           <div key={i} className="group relative">
             <div className="h-20 w-20 sm:h-24 sm:w-24 lg:h-28 lg:w-28 flex items-center justify-center p-3 sm:p-4 transition-all">
-              <img src={icon.src} alt={icon.name} className="h-full w-full object-contain filter brightness-110 opacity-60 group-hover:opacity-100 transition-opacity" />
+              <img
+                src={icon.src}
+                alt={icon.name}
+                className={cn(
+                  "h-full w-full object-contain transition-opacity",
+                  icon.lightOnDark
+                    ? "brightness-0 invert opacity-75 group-hover:opacity-100"
+                    : "brightness-110 opacity-60 group-hover:opacity-100"
+                )}
+              />
             </div>
           </div>
         ))}

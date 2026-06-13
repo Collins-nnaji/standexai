@@ -7,14 +7,14 @@ const PASolutions = () => {
     <div className="w-full relative">
       <div className="flex flex-col md:flex-row">
         {/* Left side with background and text */}
-        <div className="md:w-1/2 bg-zinc-950 flex items-center justify-end">
+        <div className="md:w-1/2 bg-[#f6fbf8] flex items-center justify-end">
           <div className="py-24 px-8 md:pl-0 md:pr-16 max-w-xl">
             <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#D25BB1] mb-4">Custom App Solutions</p>
-            <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight leading-tight mb-8">
+            <h2 className="text-4xl md:text-5xl font-bold text-zinc-900 tracking-tight leading-tight mb-8">
               How Can Power Apps Help?
             </h2>
 
-            <p className="text-zinc-300 mb-6 text-lg leading-relaxed">
+            <p className="text-zinc-600 mb-6 text-lg leading-relaxed">
               Microsoft Power Apps offers an innovative, cost-effective alternative to
               organisations that wish to digitise their business processes. There is no need to
               compromise on customisability with off-the-shelf solutions which fail to meet
@@ -22,7 +22,7 @@ const PASolutions = () => {
               difficult to maintain.
             </p>
 
-            <p className="text-zinc-300 text-lg leading-relaxed">
+            <p className="text-zinc-600 text-lg leading-relaxed">
               Power App applications give organisations the ability to quickly launch and roll
               out an application, and then maximise its potential as needed. Multiple
               functionalities can be added, application capabilities can be extended, and they

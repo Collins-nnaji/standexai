@@ -48,7 +48,7 @@ const PowerBiHelp = () => {
   ];
 
   return (
-    <section className="py-24 bg-zinc-900 w-full">
+    <section className="py-24 bg-white w-full">
       <div ref={sectionRef} className="container mx-auto px-6 lg:px-12 max-w-7xl">
         {/* Section header */}
         <div className="text-center mb-16">
@@ -60,7 +60,7 @@ const PowerBiHelp = () => {
             How Our Power BI Services Can Help You
           </p>
           <h2
-            className={`text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight max-w-3xl mx-auto leading-tight transform transition-all duration-700 delay-100 ${
+            className={`text-4xl md:text-5xl lg:text-6xl font-bold text-zinc-900 tracking-tight max-w-3xl mx-auto leading-tight transform transition-all duration-700 delay-100 ${
               animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
             }`}
           >
@@ -73,20 +73,20 @@ const PowerBiHelp = () => {
           {benefits.map((benefit, index) => (
             <div
               key={index}
-              className={`bg-zinc-800 rounded-2xl shadow-md p-10 border border-zinc-700 transform transition-all duration-700 hover:-translate-y-1 hover:shadow-lg hover:border-[#F2C811]/30 ${
+              className={`bg-white rounded-2xl shadow-sm p-10 border border-zinc-200 transform transition-all duration-700 hover:-translate-y-1 hover:shadow-lg hover:border-[#F2C811]/30 ${
                 animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
               }`}
               style={{ transitionDelay: `${200 + index * 100}ms` }}
             >
-              <h3 className="text-2xl font-bold text-white tracking-tight mb-4">{benefit.title}</h3>
-              <p className="text-zinc-300 leading-relaxed text-base">{benefit.description}</p>
+              <h3 className="text-2xl font-bold text-zinc-900 tracking-tight mb-4">{benefit.title}</h3>
+              <p className="text-zinc-600 leading-relaxed text-base">{benefit.description}</p>
             </div>
           ))}
         </div>
 
         {/* Dashboard Example */}
         <div 
-          className={`bg-zinc-800 rounded-lg shadow-md p-6 border border-zinc-700 transform transition-all duration-1000 delay-500 ${
+          className={`bg-white rounded-lg shadow-sm p-6 border border-zinc-200 transform transition-all duration-1000 delay-500 ${
             animationStarted ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-10 opacity-0 scale-95'
           }`}
         >

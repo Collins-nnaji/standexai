@@ -105,19 +105,19 @@ const PowerBiAbility = () => {
   ];
 
   return (
-    <section className="py-24 bg-zinc-950 w-full">
+    <section className="py-24 bg-[#f6fbf8] w-full">
       <div ref={sectionRef} className="container mx-auto px-6 lg:px-12 max-w-7xl">
         {/* Section header */}
         <div className="text-center mb-16">
           <h2
-            className={`text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight mb-6 transform transition-all duration-700 ${
+            className={`text-4xl md:text-5xl lg:text-6xl font-bold text-zinc-900 tracking-tight mb-6 transform transition-all duration-700 ${
               animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
             }`}
           >
             What Can Power BI Do?
           </h2>
           <p
-            className={`text-xl text-zinc-300 max-w-3xl mx-auto transform transition-all duration-700 delay-100 leading-relaxed ${
+            className={`text-xl text-zinc-600 max-w-3xl mx-auto transform transition-all duration-700 delay-100 leading-relaxed ${
               animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
             }`}
           >
@@ -130,7 +130,7 @@ const PowerBiAbility = () => {
           {capabilities.map((capability, index) => (
             <div
               key={capability.id}
-              className={`text-center bg-zinc-900 rounded-2xl p-10 border border-zinc-800 transform transition-all duration-700 hover:-translate-y-1 hover:shadow-lg hover:border-[#F2C811]/30 ${
+              className={`text-center bg-white rounded-2xl p-10 border border-zinc-200 transform transition-all duration-700 hover:-translate-y-1 hover:shadow-lg hover:border-[#F2C811]/30 ${
                 animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
               }`}
               style={{ transitionDelay: `${200 + index * 100}ms` }}
@@ -147,10 +147,10 @@ const PowerBiAbility = () => {
               >
                 {capability.icon}
               </div>
-              <h3 className="text-2xl font-bold text-white tracking-tight mb-4">
+              <h3 className="text-2xl font-bold text-zinc-900 tracking-tight mb-4">
                 {capability.title}
               </h3>
-              <p className="text-zinc-300 leading-relaxed">
+              <p className="text-zinc-600 leading-relaxed">
                 {capability.description}
               </p>
             </div>

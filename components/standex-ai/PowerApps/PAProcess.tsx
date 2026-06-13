@@ -6,15 +6,15 @@ const ProcessStep = ({ number, title, description }: { number: string; title: st
   <div className="mb-12">
     <div className="flex items-center mb-4">
       <div className="text-2xl font-black tracking-tight text-teal-400 mr-3">{number}</div>
-      <h3 className="text-2xl font-bold text-white tracking-tight">{title}</h3>
+      <h3 className="text-2xl font-bold text-zinc-900 tracking-tight">{title}</h3>
     </div>
-    <p className="text-white text-sm leading-relaxed">{description}</p>
+    <p className="text-zinc-900 text-sm leading-relaxed">{description}</p>
   </div>
 );
 
 const PAProcess = () => {
   return (
-    <div className="bg-zinc-950 py-16 relative overflow-hidden">
+    <div className="bg-[#f6fbf8] py-16 relative overflow-hidden">
       {/* Background wave pattern - simplified representation */}
       <div className="absolute inset-0 opacity-10">
         <svg width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 1440 800" xmlns="http://www.w3.org/2000/svg">
@@ -30,8 +30,8 @@ const PAProcess = () => {
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
           <div className="col-span-1 md:pr-8">
-            <h2 className="text-4xl font-bold text-white tracking-tight mb-6">Our Process</h2>
-            <p className="text-white mb-4">
+            <h2 className="text-4xl font-bold text-zinc-900 tracking-tight mb-6">Our Process</h2>
+            <p className="text-zinc-900 mb-4">
               Our Power Apps team will work closely with you to come up with a bespoke application to meet your business's needs.
             </p>
           </div>

@@ -32,7 +32,7 @@ const PPabout = () => {
   }, []);
 
   return (
-    <div className="bg-zinc-950 py-16 px-4 pt-32 w-full">
+    <div className="bg-[#f6fbf8] py-16 px-4 pt-32 w-full">
       <div ref={sectionRef} className="max-w-7xl mx-auto">
         {/* About label */}
         <div 
@@ -49,7 +49,7 @@ const PPabout = () => {
             animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
           }`}
         >
-          <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight">
+          <h1 className="text-4xl md:text-5xl font-black text-zinc-900 tracking-tight">
             What Is The Microsoft Power Platform?
           </h1>
         </div>
@@ -62,13 +62,13 @@ const PPabout = () => {
               animationStarted ? 'translate-x-0 opacity-100' : 'translate-x-(-10) opacity-0'
             }`}
           >
-            <p className="text-lg text-zinc-400 mb-6">
+            <p className="text-lg text-zinc-500 mb-6">
               The Microsoft Power Platform is a suite of tools designed to enhance business
               operations. It comprises Power BI, Power Apps, Power Automate, and Power Pages, each
               powerful on its own and even more so when combined.
             </p>
             
-            <p className="text-lg text-zinc-400 mb-8">
+            <p className="text-lg text-zinc-500 mb-8">
               At the heart of the Power Platform is its ability to unify analytics, automation, application
               development, and artificial intelligence. It streamlines operations, reducing dependency
               on third-party tools, and manual migrations.
@@ -106,7 +106,7 @@ const PPabout = () => {
                   transition: 'transform 1s, opacity 1s, box-shadow 1s'
                 }}
               >
-                <div className="text-center text-white font-medium text-sm">
+                <div className="text-center text-zinc-900 font-medium text-sm">
                   <div>Power</div>
                   <div>Platform</div>
                   <div>Solutions</div>

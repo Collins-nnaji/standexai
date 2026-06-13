@@ -103,7 +103,7 @@ const useCases = [
 
 export default function Page() {
   return (
-    <div className="flex min-h-[100dvh] flex-col overflow-hidden bg-zinc-950 text-white selection:bg-[#049DCB]/25">
+    <div className="flex min-h-[100dvh] flex-col overflow-hidden bg-[#f6fbf8] text-zinc-900 selection:bg-[#049DCB]/15">
       <TopNav />
 
       <main className="relative z-10 flex flex-1 flex-col overflow-hidden pt-32 pb-24">
@@ -118,13 +118,13 @@ export default function Page() {
               </span>
             </div>
 
-            <h1 className="max-w-4xl text-5xl font-bold leading-[0.92] tracking-tight text-white md:text-7xl lg:text-8xl">
+            <h1 className="max-w-4xl text-5xl font-bold leading-[0.92] tracking-tight text-zinc-900 md:text-7xl lg:text-8xl">
               Artificial Intelligence
               <br />
               Built For Real Work.
             </h1>
 
-            <p className="mt-8 max-w-3xl text-lg font-medium leading-relaxed text-zinc-300 md:text-2xl">
+            <p className="mt-8 max-w-3xl text-lg font-medium leading-relaxed text-zinc-600 md:text-2xl">
               We design and deploy practical AI systems for organisations that need more than a chatbot.
               From grounded assistants and autonomous workflows to multi-agent orchestration and secure
               enterprise integrations, we build intelligence that fits operational reality.
@@ -140,7 +140,7 @@ export default function Page() {
               </Link>
               <Link
                 href="/Contact"
-                className="inline-flex min-h-14 items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-8 py-4 text-sm font-bold uppercase tracking-[0.2em] text-white transition-all hover:border-emerald-500/40 hover:bg-white/10 active:scale-[0.98]"
+                className="inline-flex min-h-14 items-center justify-center gap-3 rounded-2xl border border-zinc-200 bg-emerald-50/70 px-8 py-4 text-sm font-bold uppercase tracking-[0.2em] text-zinc-900 transition-all hover:border-emerald-500/40 hover:bg-emerald-50/80 active:scale-[0.98]"
               >
                 Book A Consultation
               </Link>
@@ -148,11 +148,11 @@ export default function Page() {
           </div>
 
           <div className="relative">
-            <div className="rounded-[36px] border border-white/10 bg-white/5 p-6 shadow-[0_40px_120px_-35px_rgba(0,0,0,0.75)] backdrop-blur-sm md:p-8">
-              <div className="flex items-center justify-between border-b border-white/10 pb-4">
+            <div className="rounded-[36px] border border-zinc-200 bg-emerald-50/70 p-6 shadow-[0_40px_120px_-35px_rgba(0,0,0,0.75)] backdrop-blur-sm md:p-8">
+              <div className="flex items-center justify-between border-b border-zinc-200 pb-4">
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-500">AI Delivery Stack</p>
-                  <p className="mt-2 text-lg font-bold tracking-tight text-white">Production-first deployment model</p>
+                  <p className="mt-2 text-lg font-bold tracking-tight text-zinc-900">Production-first deployment model</p>
                 </div>
                 <div className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-400">
                   Live
@@ -166,9 +166,9 @@ export default function Page() {
                   { label: "Control Layer", value: "Permissions, approvals, tracing, evals, guardrails, logs", icon: Lock, color: "text-amber-400" },
                   { label: "Outcome Layer", value: "Assistants, automations, summaries, decisions, actions", icon: Wrench, color: "text-violet-400" },
                 ].map((item, index) => (
-                  <div key={item.label} className="rounded-3xl border border-white/10 bg-zinc-950/80 p-4">
+                  <div key={item.label} className="rounded-3xl border border-zinc-200 bg-white p-4">
                     <div className="flex items-start gap-4">
-                      <div className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/5">
+                      <div className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-zinc-200 bg-emerald-50/70">
                         <item.icon className={`h-5 w-5 ${item.color}`} />
                       </div>
                       <div className="min-w-0">
@@ -176,11 +176,11 @@ export default function Page() {
                           <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500">
                             0{index + 1}
                           </span>
-                          <span className="text-sm font-bold uppercase tracking-[0.16em] text-white">
+                          <span className="text-sm font-bold uppercase tracking-[0.16em] text-zinc-900">
                             {item.label}
                           </span>
                         </div>
-                        <p className="mt-2 text-sm font-medium leading-relaxed text-zinc-400">{item.value}</p>
+                        <p className="mt-2 text-sm font-medium leading-relaxed text-zinc-500">{item.value}</p>
                       </div>
                     </div>
                   </div>
@@ -193,11 +193,11 @@ export default function Page() {
         <section className="mx-auto mt-20 w-full max-w-7xl px-6 lg:px-12">
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
             {outcomeCards.map((item) => (
-              <div key={item} className="rounded-[28px] border border-white/10 bg-white/5 p-6">
+              <div key={item} className="rounded-[28px] border border-zinc-200 bg-emerald-50/70 p-6">
                 <div className="mb-4 h-10 w-10 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
                   <Sparkles className="h-5 w-5" />
                 </div>
-                <p className="text-sm font-semibold leading-relaxed text-zinc-300">{item}</p>
+                <p className="text-sm font-semibold leading-relaxed text-zinc-600">{item}</p>
               </div>
             ))}
           </div>
@@ -206,10 +206,10 @@ export default function Page() {
         <section className="mx-auto mt-24 w-full max-w-7xl px-6 lg:px-12">
           <div className="mb-12 max-w-3xl">
             <span className="text-[10px] font-bold uppercase tracking-[0.35em] text-[#049DCB]">Capabilities</span>
-            <h2 className="mt-4 text-4xl font-bold tracking-tight text-white md:text-6xl">
+            <h2 className="mt-4 text-4xl font-bold tracking-tight text-zinc-900 md:text-6xl">
               What We Actually Build.
             </h2>
-            <p className="mt-5 text-lg font-medium leading-relaxed text-zinc-400">
+            <p className="mt-5 text-lg font-medium leading-relaxed text-zinc-500">
               Our AI work is focused on business systems, operating workflows, and measurable outcomes.
               We build the surrounding infrastructure too: retrieval, permissions, integration, evaluation,
               observability, and rollout strategy.
@@ -220,13 +220,13 @@ export default function Page() {
             {capabilityAreas.map((item) => (
               <div
                 key={item.title}
-                className="group rounded-[32px] border border-white/10 bg-white/5 p-8 transition-all hover:border-[#049DCB]/30 hover:bg-white/[0.08]"
+                className="group rounded-[32px] border border-zinc-200 bg-emerald-50/70 p-8 transition-all hover:border-[#049DCB]/30 hover:bg-emerald-50"
               >
-                <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-zinc-900/80">
+                <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-zinc-200 bg-white">
                   <item.icon className="h-6 w-6 text-[#049DCB]" />
                 </div>
-                <h3 className="text-2xl font-bold tracking-tight text-white">{item.title}</h3>
-                <p className="mt-4 text-sm font-medium leading-7 text-zinc-400">{item.description}</p>
+                <h3 className="text-2xl font-bold tracking-tight text-zinc-900">{item.title}</h3>
+                <p className="mt-4 text-sm font-medium leading-7 text-zinc-500">{item.description}</p>
               </div>
             ))}
           </div>
@@ -236,23 +236,23 @@ export default function Page() {
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-[0.85fr_1.15fr]">
             <div>
               <span className="text-[10px] font-bold uppercase tracking-[0.35em] text-emerald-400">Delivery Model</span>
-              <h2 className="mt-4 text-4xl font-bold tracking-tight text-white md:text-5xl">
+              <h2 className="mt-4 text-4xl font-bold tracking-tight text-zinc-900 md:text-5xl">
                 From Use Case To Operating System.
               </h2>
-              <p className="mt-5 text-lg font-medium leading-relaxed text-zinc-400">
+              <p className="mt-5 text-lg font-medium leading-relaxed text-zinc-500">
                 Strong AI delivery is not only about models. It is about choosing the right process,
                 data boundaries, evaluation criteria, escalation paths, and implementation approach for
                 your organisation.
               </p>
 
-              <div className="mt-8 rounded-[32px] border border-white/10 bg-white/5 p-7">
+              <div className="mt-8 rounded-[32px] border border-zinc-200 bg-emerald-50/70 p-7">
                 <div className="flex items-start gap-4">
                   <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-500/10">
                     <Eye className="h-5 w-5 text-emerald-400" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-white">Built for accountable deployment</h3>
-                    <p className="mt-3 text-sm font-medium leading-7 text-zinc-400">
+                    <h3 className="text-xl font-bold text-zinc-900">Built for accountable deployment</h3>
+                    <p className="mt-3 text-sm font-medium leading-7 text-zinc-500">
                       We prioritise grounded outputs, clear permissions, human review where required,
                       structured logs, and measurable quality checks so AI can be used confidently in live operations.
                     </p>
@@ -263,12 +263,12 @@ export default function Page() {
 
             <div className="grid grid-cols-1 gap-4">
               {deliveryStages.map((item) => (
-                <div key={item.step} className="rounded-[28px] border border-white/10 bg-zinc-900/80 p-6">
+                <div key={item.step} className="rounded-[28px] border border-zinc-200 bg-white p-6">
                   <div className="flex items-start gap-5">
                     <div className="min-w-12 text-2xl font-bold tracking-tight text-[#049DCB]">{item.step}</div>
                     <div>
-                      <h3 className="text-xl font-bold tracking-tight text-white">{item.title}</h3>
-                      <p className="mt-3 text-sm font-medium leading-7 text-zinc-400">{item.description}</p>
+                      <h3 className="text-xl font-bold tracking-tight text-zinc-900">{item.title}</h3>
+                      <p className="mt-3 text-sm font-medium leading-7 text-zinc-500">{item.description}</p>
                     </div>
                   </div>
                 </div>
@@ -278,30 +278,30 @@ export default function Page() {
         </section>
 
         <section className="mx-auto mt-24 w-full max-w-7xl px-6 lg:px-12">
-          <div className="rounded-[40px] border border-white/10 bg-white/5 p-8 md:p-12">
+          <div className="rounded-[40px] border border-zinc-200 bg-emerald-50/70 p-8 md:p-12">
             <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_0.9fr]">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-[0.35em] text-violet-400">Use Cases</span>
-                <h2 className="mt-4 text-4xl font-bold tracking-tight text-white md:text-5xl">
+                <h2 className="mt-4 text-4xl font-bold tracking-tight text-zinc-900 md:text-5xl">
                   Where Enterprise AI Creates Real Leverage.
                 </h2>
-                <p className="mt-5 max-w-2xl text-lg font-medium leading-relaxed text-zinc-400">
+                <p className="mt-5 max-w-2xl text-lg font-medium leading-relaxed text-zinc-500">
                   We focus on workflows where intelligence needs to be useful, traceable, and connected to
                   systems of record rather than isolated in a novelty interface.
                 </p>
               </div>
 
-              <div className="rounded-[32px] border border-white/10 bg-zinc-950/70 p-6">
+              <div className="rounded-[32px] border border-zinc-200 bg-white p-6">
                 <div className="flex items-center gap-3">
                   <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-violet-500/10">
                     <Users className="h-5 w-5 text-violet-400" />
                   </div>
                   <div>
                     <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-zinc-500">Best Fit</p>
-                    <p className="text-lg font-bold text-white">Operations-heavy teams with fragmented workflows</p>
+                    <p className="text-lg font-bold text-zinc-900">Operations-heavy teams with fragmented workflows</p>
                   </div>
                 </div>
-                <p className="mt-4 text-sm font-medium leading-7 text-zinc-400">
+                <p className="mt-4 text-sm font-medium leading-7 text-zinc-500">
                   AI works best when it reduces repetitive thinking, accelerates review, improves access to knowledge,
                   and helps teams act faster across existing systems without sacrificing governance.
                 </p>
@@ -310,9 +310,9 @@ export default function Page() {
 
             <div className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-2">
               {useCases.map((item) => (
-                <div key={item} className="flex items-start gap-4 rounded-[28px] border border-white/10 bg-zinc-950/60 p-5">
+                <div key={item} className="flex items-start gap-4 rounded-[28px] border border-zinc-200 bg-white p-5">
                   <MessagesSquare className="mt-0.5 h-5 w-5 shrink-0 text-[#049DCB]" />
-                  <p className="text-sm font-semibold leading-7 text-zinc-300">{item}</p>
+                  <p className="text-sm font-semibold leading-7 text-zinc-600">{item}</p>
                 </div>
               ))}
             </div>
@@ -338,24 +338,24 @@ export default function Page() {
                 icon: Database,
               },
             ].map((item) => (
-              <div key={item.title} className="rounded-[28px] border border-white/10 bg-white/5 p-7">
+              <div key={item.title} className="rounded-[28px] border border-zinc-200 bg-emerald-50/70 p-7">
                 <item.icon className="h-6 w-6 text-emerald-400" />
-                <h3 className="mt-5 text-2xl font-bold tracking-tight text-white">{item.title}</h3>
-                <p className="mt-3 text-sm font-medium leading-7 text-zinc-400">{item.description}</p>
+                <h3 className="mt-5 text-2xl font-bold tracking-tight text-zinc-900">{item.title}</h3>
+                <p className="mt-3 text-sm font-medium leading-7 text-zinc-500">{item.description}</p>
               </div>
             ))}
           </div>
         </section>
 
         <section className="mx-auto mt-24 w-full max-w-5xl px-6 text-center lg:px-12">
-          <div className="relative overflow-hidden rounded-[48px] border border-white/10 bg-white/5 px-8 py-14 md:px-14 md:py-20">
+          <div className="relative overflow-hidden rounded-[48px] border border-zinc-200 bg-emerald-50/70 px-8 py-14 md:px-14 md:py-20">
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(4,157,203,0.12),transparent_55%)]" />
             <div className="relative">
               <span className="text-[10px] font-bold uppercase tracking-[0.35em] text-[#049DCB]">Next Step</span>
-              <h2 className="mt-4 text-4xl font-bold tracking-tight text-white md:text-6xl">
+              <h2 className="mt-4 text-4xl font-bold tracking-tight text-zinc-900 md:text-6xl">
                 Build AI That Improves How The Business Runs.
               </h2>
-              <p className="mx-auto mt-6 max-w-2xl text-lg font-medium leading-relaxed text-zinc-400">
+              <p className="mx-auto mt-6 max-w-2xl text-lg font-medium leading-relaxed text-zinc-500">
                 If you need a serious AI partner for assistants, workflow automation, retrieval systems,
                 or enterprise deployment strategy, we can help design the right architecture and deliver it.
               </p>
@@ -370,7 +370,7 @@ export default function Page() {
                 </Link>
                 <Link
                   href="/Contact"
-                  className="inline-flex min-h-14 items-center justify-center rounded-2xl border border-white/10 bg-zinc-950/60 px-8 py-4 text-sm font-bold uppercase tracking-[0.2em] text-white transition-all hover:bg-zinc-900 active:scale-[0.98]"
+                  className="inline-flex min-h-14 items-center justify-center rounded-2xl border border-zinc-200 bg-white px-8 py-4 text-sm font-bold uppercase tracking-[0.2em] text-zinc-900 transition-all hover:bg-white active:scale-[0.98]"
                 >
                   Discuss Your AI Use Case
                 </Link>

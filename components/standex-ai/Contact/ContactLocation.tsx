@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from "framer-motion";
-import { Mail, Globe } from 'lucide-react';
+import { Globe } from 'lucide-react';
 
 const channels = [
   {
@@ -81,15 +81,15 @@ const channels = [
 
 const ContactLocation = () => {
   return (
-    <section className="bg-zinc-950 py-24 px-6 lg:px-12" id="strategy-intake">
+    <section className="bg-zinc-950 py-16 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-12 border-t border-white/5" id="reach-us">
       <div className="max-w-7xl mx-auto">
 
-        <div className="mb-16">
-          <h2 className="text-4xl md:text-6xl font-bold tracking-tight text-white leading-tight mb-6">
+        <div className="mb-12 sm:mb-16">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white leading-tight mb-4">
             Reach Us Directly.
           </h2>
-          <p className="text-lg font-medium text-zinc-400 max-w-2xl leading-relaxed">
-            No forms. No waiting. Pick the channel that works for you and we'll respond within one business day.
+          <p className="text-sm sm:text-base font-medium text-zinc-400 max-w-2xl leading-relaxed">
+            Prefer a direct channel? Pick the option that works for you — we respond within one business day.
           </p>
         </div>
 

@@ -28,7 +28,7 @@ const CopilotProcess = () => {
   ];
 
   return (
-    <section className="py-16 bg-gradient-to-b from-zinc-950 to-zinc-900 text-white relative overflow-hidden">
+    <section className="py-16 bg-gradient-to-b from-zinc-950 to-zinc-900 text-zinc-900 relative overflow-hidden">
       {/* Background graphic lines - simplified representation */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute w-full h-full border-t border-zinc-700"></div>
@@ -41,7 +41,7 @@ const CopilotProcess = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left column - Main heading and intro */}
           <div className="lg:col-span-1">
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-white tracking-tight mb-6">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-zinc-900 tracking-tight mb-6">
               Our Process
             </h2>
             
@@ -66,7 +66,7 @@ const CopilotProcess = () => {
                     </h3>
                   </div>
                   
-                  <p className="text-white ml-13 pl-13">
+                  <p className="text-zinc-900 ml-13 pl-13">
                     {step.description}
                   </p>
                 </div>

@@ -6,7 +6,7 @@ import { ShieldCheck, Database, Lock, Settings, BarChart3, Sparkles } from "luci
 
 export default function Page() {
   return (
-    <div className="flex min-h-[100dvh] flex-col overflow-hidden bg-zinc-950 text-white selection:bg-emerald-500/20">
+    <div className="flex min-h-[100dvh] flex-col overflow-hidden bg-[#f6fbf8] text-zinc-900 selection:bg-emerald-500/15">
       <TopNav />
 
       <main className="relative flex-1 flex flex-col z-10">
@@ -17,10 +17,10 @@ export default function Page() {
             <ShieldCheck className="h-3.5 w-3.5 text-[#7C5CFC]" />
             <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#7C5CFC]">Governance, Compliance & AI Readiness</span>
           </div>
-          <h1 className="text-6xl md:text-8xl font-bold tracking-tight text-white leading-[0.95] mb-12">
+          <h1 className="text-6xl md:text-8xl font-bold tracking-tight text-zinc-900 leading-[0.95] mb-12">
             Power Platform<br />Governance.
           </h1>
-          <p className="text-xl md:text-2xl font-medium text-zinc-300 max-w-3xl leading-relaxed">
+          <p className="text-xl md:text-2xl font-medium text-zinc-600 max-w-3xl leading-relaxed">
             End-to-end governance for the Microsoft Power Platform — from tenant security and DLP policy to AI-readiness audits, data compliance, and enterprise-grade data engineering.
           </p>
         </section>
@@ -39,7 +39,7 @@ export default function Page() {
                   className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#7C5CFC] rounded-full w-2/5 h-2/5 flex items-center justify-center z-10"
                   style={{ boxShadow: '0 0 40px rgba(124,92,252,0.4)' }}
                 >
-                  <div className="text-center text-white font-medium text-sm">
+                  <div className="text-center text-zinc-900 font-medium text-sm">
                     <div>Power</div>
                     <div>Platform</div>
                     <div>Solutions</div>
@@ -87,13 +87,13 @@ export default function Page() {
             {/* Right: Overview text */}
             <div>
               <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#7C5CFC] mb-4 block">Platform Overview</span>
-              <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-white leading-tight mb-8">
+              <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-zinc-900 leading-tight mb-8">
                 What Is The Microsoft Power Platform?
               </h2>
-              <p className="text-lg font-semibold text-zinc-300 leading-relaxed mb-6">
+              <p className="text-lg font-semibold text-zinc-600 leading-relaxed mb-6">
                 The Microsoft Power Platform is a suite of tools — Power Apps, Power Automate, Power BI, and Power Pages — each powerful independently and transformative when unified.
               </p>
-              <p className="text-lg font-semibold text-zinc-400 leading-relaxed mb-10">
+              <p className="text-lg font-semibold text-zinc-500 leading-relaxed mb-10">
                 At its heart is the ability to unify analytics, automation, application development, and AI. It streamlines operations, reduces dependency on third-party tools, and eliminates manual migrations across your enterprise.
               </p>
               <ul className="space-y-3">
@@ -105,7 +105,7 @@ export default function Page() {
                   "Centre of Excellence (CoE) toolkit deployment",
                   "Connector governance & licensing compliance",
                 ].map((item, i) => (
-                  <li key={i} className="flex items-center gap-3 text-sm font-bold uppercase tracking-widest text-white">
+                  <li key={i} className="flex items-center gap-3 text-sm font-bold uppercase tracking-widest text-zinc-900">
                     <Sparkles className="h-4 w-4 text-[#7C5CFC] shrink-0" /> {item}
                   </li>
                 ))}
@@ -118,17 +118,17 @@ export default function Page() {
         <section className="max-w-7xl mx-auto px-6 lg:px-12 w-full pb-24">
           <div className="text-center mb-16">
             <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#7C5CFC] mb-4 block">Platform Governance</span>
-            <h2 className="text-4xl md:text-6xl font-bold tracking-tight text-white leading-tight">
+            <h2 className="text-4xl md:text-6xl font-bold tracking-tight text-zinc-900 leading-tight">
               Govern With Confidence.
             </h2>
           </div>
 
           {/* Tenant Health Monitor */}
-          <div className="rounded-[40px] border border-white/10 bg-zinc-900 overflow-hidden mb-12">
-            <div className="p-8 border-b border-white/5 bg-white/[0.02] flex items-center justify-between">
+          <div className="rounded-[40px] border border-zinc-200 bg-white overflow-hidden mb-12">
+            <div className="p-8 border-b border-zinc-100 bg-white/[0.02] flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Settings className="h-5 w-5 text-emerald-500" />
-                <span className="text-sm font-bold uppercase tracking-widest italic text-white">Tenant Health Monitor</span>
+                <span className="text-sm font-bold uppercase tracking-widest italic text-zinc-900">Tenant Health Monitor</span>
               </div>
               <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-500 text-[10px] font-bold uppercase tracking-widest">Live</span>
             </div>
@@ -155,13 +155,13 @@ export default function Page() {
               { title: "Environment Strategy", desc: "Architect Dev, Test, and Production environments with proper isolation and ALM pipelines.", icon: Database, spec: "Azure DevOps" },
               { title: "Licence Optimisation", desc: "Right-size your Power Platform licences and avoid costly overprovision.", icon: BarChart3, spec: "Cost Reduction" },
             ].map((f, i) => (
-              <div key={i} className="p-8 rounded-[32px] border border-white/5 bg-white/5 hover:bg-white/[0.08] hover:border-emerald-500/30 transition-all group">
+              <div key={i} className="p-8 rounded-[32px] border border-zinc-100 bg-emerald-50/70 hover:bg-emerald-50 hover:border-emerald-500/30 transition-all group">
                 <div className="h-12 w-12 rounded-xl bg-emerald-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                   <f.icon className="h-5 w-5 text-emerald-500" />
                 </div>
-                <h3 className="text-sm font-bold text-white uppercase italic tracking-widest mb-3">{f.title}</h3>
-                <p className="text-[13px] font-semibold text-zinc-300 leading-relaxed mb-6">{f.desc}</p>
-                <div className="pt-4 border-t border-white/5 flex items-center justify-between">
+                <h3 className="text-sm font-bold text-zinc-900 uppercase italic tracking-widest mb-3">{f.title}</h3>
+                <p className="text-[13px] font-semibold text-zinc-600 leading-relaxed mb-6">{f.desc}</p>
+                <div className="pt-4 border-t border-zinc-100 flex items-center justify-between">
                   <span className="text-[9px] font-bold uppercase tracking-widest text-zinc-600">Spec:</span>
                   <span className="text-[9px] font-bold uppercase tracking-widest text-emerald-500">{f.spec}</span>
                 </div>
@@ -172,14 +172,14 @@ export default function Page() {
 
         {/* AI & Data Readiness */}
         <section className="max-w-7xl mx-auto px-6 lg:px-12 w-full pb-24">
-          <div className="rounded-[48px] border border-white/10 bg-zinc-900/50 p-12 md:p-20 relative overflow-hidden">
+          <div className="rounded-[48px] border border-zinc-200 bg-emerald-50/80 p-12 md:p-20 relative overflow-hidden">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#7C5CFC] mb-4 block">AI & Data Readiness</span>
-                <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-white leading-tight mb-8">
+                <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-zinc-900 leading-tight mb-8">
                   Don&apos;t Build On<br />Toxic Data.
                 </h2>
-                <p className="text-lg font-semibold text-zinc-300 leading-relaxed mb-8">
+                <p className="text-lg font-semibold text-zinc-600 leading-relaxed mb-8">
                   Before any AI or automation can be trusted, your data must be audited. We run rigorous AI-readiness diagnostics — schema profiling, compliance mapping, and quality scoring — across your entire data estate.
                 </p>
                 <ul className="space-y-4">
@@ -189,7 +189,7 @@ export default function Page() {
                     "HIPAA / GDPR / SEC compliance guardrails",
                     "Gap analysis & missingness reporting",
                   ].map((l, i) => (
-                    <li key={i} className="flex items-center gap-3 text-sm font-bold uppercase tracking-widest text-white italic">
+                    <li key={i} className="flex items-center gap-3 text-sm font-bold uppercase tracking-widest text-zinc-900 italic">
                       <Sparkles className="h-4 w-4 text-[#7C5CFC] shrink-0" /> {l}
                     </li>
                   ))}
@@ -201,12 +201,12 @@ export default function Page() {
                   { name: "Quality Score", val: 92, hex: "#10b981", desc: "Outlier detection & distribution drift." },
                   { name: "Governance Score", val: 78, hex: "#f59e0b", desc: "Regulatory adherence (HIPAA / SEC / GDPR)." },
                 ].map((s, i) => (
-                  <div key={i} className="p-6 rounded-2xl bg-white/5 border border-white/5 hover:border-white/10 transition-all">
+                  <div key={i} className="p-6 rounded-2xl bg-emerald-50/70 border border-zinc-100 hover:border-zinc-200 transition-all">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-xs font-bold uppercase tracking-widest text-zinc-500">{s.name}</span>
                       <span className="text-xl font-bold" style={{ color: s.hex }}>{s.val}%</span>
                     </div>
-                    <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                    <div className="h-1.5 w-full bg-emerald-50/70 rounded-full overflow-hidden">
                       <div className="h-full rounded-full" style={{ width: `${s.val}%`, backgroundColor: s.hex }} />
                     </div>
                     <p className="mt-3 text-[11px] font-bold text-zinc-500 uppercase tracking-wider">{s.desc}</p>
@@ -221,7 +221,7 @@ export default function Page() {
         <section className="max-w-7xl mx-auto px-6 lg:px-12 w-full pb-24">
           <div className="text-center mb-16">
             <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#7C5CFC] mb-4 block">Regulatory Alignment</span>
-            <h2 className="text-4xl md:text-6xl font-bold tracking-tight text-white leading-tight">
+            <h2 className="text-4xl md:text-6xl font-bold tracking-tight text-zinc-900 leading-tight">
               Built For Regulated Industries.
             </h2>
           </div>
@@ -234,14 +234,14 @@ export default function Page() {
               { r: "ISO 27001", s: "ALIGNED", d: "Encrypted-at-rest requirements for vector-store embeddings." },
               { r: "FTC Safeguard", s: "ALIGNED", d: "Brute-force resistant model-exposure guardrails." },
             ].map((p, i) => (
-              <div key={i} className="p-6 rounded-2xl bg-zinc-900 border border-white/10 flex flex-col justify-between hover:bg-zinc-800 transition-colors">
+              <div key={i} className="p-6 rounded-2xl bg-white border border-zinc-200 flex flex-col justify-between hover:bg-emerald-50 transition-colors">
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-xl font-bold text-white italic tracking-tighter">{p.r}</span>
+                  <span className="text-xl font-bold text-zinc-900 italic tracking-tighter">{p.r}</span>
                   <span className={`text-[8px] font-bold px-2 py-0.5 rounded-full border ${p.s === "ALIGNED" ? "border-emerald-500/30 text-emerald-500 bg-emerald-500/10" : "border-amber-500/30 text-amber-500 bg-amber-500/10"}`}>
                     {p.s}
                   </span>
                 </div>
-                <p className="text-[11px] font-semibold text-zinc-400 leading-relaxed uppercase tracking-tight">{p.d}</p>
+                <p className="text-[11px] font-semibold text-zinc-500 leading-relaxed uppercase tracking-tight">{p.d}</p>
               </div>
             ))}
           </div>
@@ -249,14 +249,14 @@ export default function Page() {
 
         {/* Audit Process */}
         <section className="max-w-7xl mx-auto px-6 lg:px-12 w-full pb-24">
-          <div className="rounded-[48px] border border-white/10 bg-zinc-900/30 p-10 md:p-16">
+          <div className="rounded-[48px] border border-zinc-200 bg-emerald-50/60 p-10 md:p-16">
             <div className="flex flex-col lg:flex-row gap-16">
               <div className="lg:w-1/3">
                 <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-[#7C5CFC] mb-4 block">Audit Architecture</span>
-                <h2 className="text-3xl md:text-5xl font-bold uppercase italic tracking-tighter text-white leading-none mb-8">
+                <h2 className="text-3xl md:text-5xl font-bold uppercase italic tracking-tighter text-zinc-900 leading-none mb-8">
                   Audit-Native<br />Engineering.
                 </h2>
-                <p className="text-base font-semibold text-zinc-400 leading-relaxed">
+                <p className="text-base font-semibold text-zinc-500 leading-relaxed">
                   We don&apos;t just scan data. We build the infrastructure to keep your platform and data model-ready, compliant, and governed continuously.
                 </p>
               </div>
@@ -267,9 +267,9 @@ export default function Page() {
                   { l: "Phase 03", t: "Compliance Guardrails", d: "Real-time PII/PHI sanitisation and regulatory alignment across all data flows." },
                   { l: "Phase 04", t: "Readiness Certification", d: "Final scoring, gap report, and readiness certification for AI and automation deployment." },
                 ].map((step, i) => (
-                  <div key={i} className="p-6 rounded-3xl bg-white/5 border border-white/5 hover:bg-white/10 transition-all">
+                  <div key={i} className="p-6 rounded-3xl bg-emerald-50/70 border border-zinc-100 hover:bg-emerald-50/80 transition-all">
                     <span className="text-[9px] font-bold uppercase tracking-widest text-[#7C5CFC] block mb-2">{step.l}</span>
-                    <h4 className="text-md font-bold text-white uppercase italic mb-2">{step.t}</h4>
+                    <h4 className="text-md font-bold text-zinc-900 uppercase italic mb-2">{step.t}</h4>
                     <p className="text-[12px] font-medium text-zinc-500 leading-snug">{step.d}</p>
                   </div>
                 ))}

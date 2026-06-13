@@ -32,7 +32,7 @@ const WhatIsPowerBi = () => {
   }, []);
 
   return (
-    <section className="py-24 bg-zinc-950 w-full">
+    <section className="py-24 bg-[#f6fbf8] w-full">
       <div ref={sectionRef} className="container mx-auto px-6 lg:px-12 max-w-7xl">
         <div className="flex flex-col lg:flex-row items-center gap-16">
           {/* Left Content */}
@@ -42,9 +42,9 @@ const WhatIsPowerBi = () => {
             }`}
           >
             <div className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#F2C811] mb-4">About</div>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-tight mb-8">What is Power BI?</h2>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-zinc-900 tracking-tight leading-tight mb-8">What is Power BI?</h2>
 
-            <div className="space-y-6 text-zinc-300 text-lg leading-relaxed">
+            <div className="space-y-6 text-zinc-600 text-lg leading-relaxed">
               <p>
                 Power BI is a reporting and dashboard design tool designed to transform your
                 complex data into visually stunning, interactive reports that inform & inspire smarter
@@ -67,7 +67,7 @@ const WhatIsPowerBi = () => {
             }`}
             style={{ transitionDelay: '200ms' }}
           >
-            <div className="rounded-lg overflow-hidden shadow-lg border border-zinc-800 relative">
+            <div className="rounded-lg overflow-hidden shadow-lg border border-zinc-200 relative">
               {/* Subtle glow effect behind the image */}
               <div 
                 className={`absolute inset-0 bg-[#7C5CFC] opacity-0 blur-2xl transition-all duration-1500 ${

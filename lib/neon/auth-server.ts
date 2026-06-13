@@ -1,19 +1,25 @@
-import { createNeonAuth } from "@neondatabase/neon-js/auth/next/server";
+import { NextResponse } from "next/server";
 
-const baseUrl = process.env.NEON_AUTH_BASE_URL ?? process.env.NEON_AUTH_URL;
-const cookieSecret =
-  process.env.NEON_AUTH_COOKIE_SECRET ??
-  process.env.NEXTAUTH_SECRET ??
-  "standexai-dev-cookie-secret-change-me-32-plus";
+export type NeonAuthUser = {
+  id: string;
+  email: string;
+  name?: string | null;
+  role?: string | null;
+};
 
-if (!baseUrl) {
-  throw new Error("NEON_AUTH_URL (or NEON_AUTH_BASE_URL) is required for Neon Auth.");
-}
+export type NeonAuthSession = {
+  user?: NeonAuthUser | null;
+} | null;
 
-export const neonAuth = createNeonAuth({
-  baseUrl,
-  cookies: {
-    secret: cookieSecret,
-    sessionDataTtl: 300,
-  },
-});
+/** Auth is disabled — app runs with DATABASE_URL only. */
+export const neonAuth = {
+  getSession: async (): Promise<{ data: NeonAuthSession }> => ({ data: null }),
+  middleware: () => () => NextResponse.next(),
+  handler: () => ({
+    GET: () => NextResponse.json({ error: "Authentication is not configured." }, { status: 501 }),
+    POST: () => NextResponse.json({ error: "Authentication is not configured." }, { status: 501 }),
+    PUT: () => NextResponse.json({ error: "Authentication is not configured." }, { status: 501 }),
+    DELETE: () => NextResponse.json({ error: "Authentication is not configured." }, { status: 501 }),
+    PATCH: () => NextResponse.json({ error: "Authentication is not configured." }, { status: 501 }),
+  }),
+};

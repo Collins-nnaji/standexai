@@ -71,7 +71,7 @@ const CopilotSolutions = () => {
   ];
 
   return (
-    <section className="py-20 bg-zinc-950 w-full">
+    <section className="py-20 bg-[#f6fbf8] w-full">
       <div ref={sectionRef} className="container mx-auto px-4 max-w-6xl">
         {/* Section header */}
         <div 
@@ -83,11 +83,11 @@ const CopilotSolutions = () => {
             Copilot Studio Services
           </h3>
           
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-white tracking-tight mb-6">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-zinc-900 tracking-tight mb-6">
             Copilot Studio solutions for all your<br />chatbot requirements
           </h2>
           
-          <p className="text-zinc-400 max-w-4xl mx-auto">
+          <p className="text-zinc-500 max-w-4xl mx-auto">
             Our team specialises in customising AI copilot solutions that cater to your unique business needs, 
             ensuring a smarter, faster, and more efficient way of working.
           </p>
@@ -98,7 +98,7 @@ const CopilotSolutions = () => {
           {services.map((service, index) => (
             <div 
               key={service.id} 
-              className={`bg-zinc-900 rounded-lg border border-zinc-800 p-6 h-full flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-[#7C5CFC] transform transition-all duration-700 ${
+              className={`bg-white rounded-lg border border-zinc-200 p-6 h-full flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-[#7C5CFC] transform transition-all duration-700 ${
                 animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
               }`}
               style={{ transitionDelay: `${300 + index * 100}ms` }}
@@ -118,12 +118,12 @@ const CopilotSolutions = () => {
               </div>
               
               {/* Title */}
-              <h3 className="text-xl font-black text-white mb-3">
+              <h3 className="text-xl font-black text-zinc-900 mb-3">
                 {service.title}
               </h3>
               
               {/* Description */}
-              <p className="text-zinc-400 mb-6 flex-grow">
+              <p className="text-zinc-500 mb-6 flex-grow">
                 {service.description}
               </p>
               

@@ -67,7 +67,7 @@ const PPservices = () => {
   ];
 
   return (
-    <div className="w-full bg-zinc-950 py-16">
+    <div className="w-full bg-[#f6fbf8] py-16">
       <div ref={sectionRef} className="max-w-7xl mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-12">
@@ -79,7 +79,7 @@ const PPservices = () => {
             Our Services
           </p>
           <h2 
-            className={`text-4xl md:text-5xl font-black text-white tracking-tight max-w-4xl mx-auto leading-tight transform transition-all duration-700 delay-100 ${
+            className={`text-4xl md:text-5xl font-black text-zinc-900 tracking-tight max-w-4xl mx-auto leading-tight transform transition-all duration-700 delay-100 ${
               animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
             }`}
           >
@@ -92,7 +92,7 @@ const PPservices = () => {
           {serviceCards.map((card, index) => (
             <div 
               key={index}
-              className={`bg-zinc-900 rounded-lg border border-zinc-800 p-8 flex flex-col h-full hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 hover:border-[${card.colorAccent}] ${
+              className={`bg-white rounded-lg border border-zinc-200 p-8 flex flex-col h-full hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 hover:border-[${card.colorAccent}] ${
                 animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
               }`}
               style={{ 
@@ -113,8 +113,8 @@ const PPservices = () => {
                 <div className="absolute inset-0 bg-gradient-to-r from-gray-800 to-gray-800 opacity-0 hover:opacity-10 rounded-full transition-opacity duration-300"></div>
                 <img src={card.icon} alt={card.title} className="w-12 h-12" />
               </div>
-              <h3 className="text-2xl font-black text-white tracking-tight mb-4">{card.title}</h3>
-              <p className="text-zinc-400 mb-6 flex-grow">
+              <h3 className="text-2xl font-black text-zinc-900 tracking-tight mb-4">{card.title}</h3>
+              <p className="text-zinc-500 mb-6 flex-grow">
                 {card.description}
               </p>
               <a 

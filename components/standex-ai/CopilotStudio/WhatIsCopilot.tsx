@@ -32,7 +32,7 @@ const WhatIsCopilot = () => {
   }, []);
 
   return (
-    <section className="py-16 bg-zinc-950 w-full">
+    <section className="py-16 bg-[#f6fbf8] w-full">
       <div ref={sectionRef} className="container mx-auto px-4 max-w-6xl">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
           {/* Left column - Text content */}
@@ -45,11 +45,11 @@ const WhatIsCopilot = () => {
               Revolutionise Your Customer And Employee Experiences
             </h3>
             
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-white tracking-tight mb-6">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-zinc-900 tracking-tight mb-6">
               What Is Microsoft Copilot Studio?
             </h2>
             
-            <p className="text-zinc-400 mb-4">
+            <p className="text-zinc-500 mb-4">
               Microsoft Copilot Studio (formerly Power Virtual Agents) is a cutting-edge platform that 
               enables businesses to create and deploy intelligent chatbots with ease. These AI-powered 
               virtual agents can engage with customers and employees across various platforms, enhancing 
@@ -76,7 +76,7 @@ const WhatIsCopilot = () => {
               <img 
                 src="/Copilot.webp" 
                 alt="Person using laptop with AI chatbot interface" 
-                className="rounded-lg shadow-lg w-full border border-zinc-800 relative z-10"
+                className="rounded-lg shadow-lg w-full border border-zinc-200 relative z-10"
               />
             </div>
           </div>

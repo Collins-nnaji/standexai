@@ -112,14 +112,14 @@ const PowerBiServices = () => {
       default:
         return (
           <div className="bg-[#7C5CFC] rounded-full p-4 flex items-center justify-center w-16 h-16">
-            <span className="text-white text-xl font-black">{serviceId.charAt(0).toUpperCase()}</span>
+            <span className="text-zinc-900 text-xl font-black">{serviceId.charAt(0).toUpperCase()}</span>
           </div>
         );
     }
   };
 
   return (
-    <section className="py-24 bg-zinc-950 w-full">
+    <section className="py-24 bg-[#f6fbf8] w-full">
       <div ref={sectionRef} className="container mx-auto px-6 lg:px-12 max-w-7xl">
         {/* Section header */}
         <div className="text-center mb-16">
@@ -131,7 +131,7 @@ const PowerBiServices = () => {
             Power BI Services
           </p>
           <h2
-            className={`text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight max-w-4xl mx-auto leading-tight transform transition-all duration-700 delay-100 ${
+            className={`text-4xl md:text-5xl lg:text-6xl font-bold text-zinc-900 tracking-tight max-w-4xl mx-auto leading-tight transform transition-all duration-700 delay-100 ${
               animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
             }`}
           >
@@ -144,14 +144,14 @@ const PowerBiServices = () => {
           {serviceCards.map((card, index) => (
             <div
               key={card.id}
-              className={`bg-zinc-900 border border-zinc-800 rounded-2xl p-8 flex flex-col h-full transform transition-all duration-700 hover:-translate-y-1 hover:shadow-lg hover:border-[#F2C811]/30 ${
+              className={`bg-white border border-zinc-200 rounded-2xl p-8 flex flex-col h-full transform transition-all duration-700 hover:-translate-y-1 hover:shadow-lg hover:border-[#F2C811]/30 ${
                 animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
               }`}
               style={{ transitionDelay: `${200 + index * 100}ms` }}
             >
               <div className="mb-6">{getServiceIcon(card.id)}</div>
-              <h3 className="text-xl font-bold text-white tracking-tight mt-2 mb-4">{card.title}</h3>
-              <p className="text-zinc-300 flex-grow mb-6 leading-relaxed">{card.description}</p>
+              <h3 className="text-xl font-bold text-zinc-900 tracking-tight mt-2 mb-4">{card.title}</h3>
+              <p className="text-zinc-600 flex-grow mb-6 leading-relaxed">{card.description}</p>
               <a 
                 href="#contact-form" 
                 onClick={scrollToContactForm}

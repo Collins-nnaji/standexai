@@ -4,7 +4,7 @@ import React from 'react';
 
 const CopilotHeader = () => {
   return (
-    <div className="w-full bg-gradient-to-b from-zinc-950 to-zinc-900 text-white py-16 pt-32">
+    <div className="w-full bg-gradient-to-b from-zinc-950 to-zinc-900 text-zinc-900 py-16 pt-32">
       <div className="container mx-auto px-4 max-w-6xl">
         {/* Top header with company name */}
         <div className="text-center mb-6">

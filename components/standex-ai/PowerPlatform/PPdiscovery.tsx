@@ -32,10 +32,10 @@ const PPdiscovery = () => {
   }, []);
   
   return (
-    <div className="w-full bg-zinc-950 py-16">
+    <div className="w-full bg-[#f6fbf8] py-16">
       <div ref={sectionRef} className="max-w-7xl mx-auto px-4">
         <div 
-          className={`bg-zinc-900 rounded-2xl p-12 relative overflow-hidden transform transition-all duration-1000 ${
+          className={`bg-white rounded-2xl p-12 relative overflow-hidden transform transition-all duration-1000 ${
             animationStarted ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-10 opacity-0 scale-95'
           }`}
         >
@@ -66,7 +66,7 @@ const PPdiscovery = () => {
           <div className="relative z-10 text-center max-w-3xl mx-auto">
             {/* Main heading */}
             <h2 
-              className={`text-4xl md:text-5xl font-black text-white tracking-tight mb-6 leading-tight transform transition-all duration-700 ${
+              className={`text-4xl md:text-5xl font-black text-zinc-900 tracking-tight mb-6 leading-tight transform transition-all duration-700 ${
                 animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
               }`}
               style={{ transitionDelay: '200ms' }}
@@ -76,7 +76,7 @@ const PPdiscovery = () => {
             
             {/* Subtext */}
             <p 
-              className={`text-zinc-400 text-lg mb-10 transform transition-all duration-700 ${
+              className={`text-zinc-500 text-lg mb-10 transform transition-all duration-700 ${
                 animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
               }`}
               style={{ transitionDelay: '400ms' }}

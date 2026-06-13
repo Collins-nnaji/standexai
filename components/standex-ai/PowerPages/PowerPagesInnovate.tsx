@@ -73,7 +73,7 @@ const PowerPagesInnovate = () => {
   ];
 
   return (
-    <div className="py-16 px-4 w-full bg-zinc-950">
+    <div className="py-16 px-4 w-full bg-[#f6fbf8]">
       <div ref={sectionRef} className="max-w-7xl mx-auto">
         {/* Main Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
@@ -87,11 +87,11 @@ const PowerPagesInnovate = () => {
               Build, Innovate, and Thrive
             </p>
             
-            <h2 className="text-4xl font-black text-white tracking-tight mb-6">
+            <h2 className="text-4xl font-black text-zinc-900 tracking-tight mb-6">
               Empower Your Web Presence with Power Pages
             </h2>
             
-            <div className="rounded-lg overflow-hidden shadow-lg border border-zinc-800">
+            <div className="rounded-lg overflow-hidden shadow-lg border border-zinc-200">
               <img 
                 src="/Power-Pages-Innovate.webp" 
                 alt="Person analyzing data on computer" 
@@ -111,7 +111,7 @@ const PowerPagesInnovate = () => {
               Transforming Data into Dynamic Websites
             </h3>
             
-            <div className="space-y-4 text-zinc-400">
+            <div className="space-y-4 text-zinc-500">
               <p>
                 Power Pages is a versatile and powerful tool that can significantly benefit businesses
                 looking to establish or enhance their online presence. Its ease of use, combined
@@ -142,7 +142,7 @@ const PowerPagesInnovate = () => {
           {features.map((feature, index) => (
             <div 
               key={index} 
-              className={`flex flex-col items-center text-center bg-zinc-900 rounded-lg p-6 border border-zinc-800 transform transition-all duration-700 hover:-translate-y-1 hover:shadow-lg hover:border-[#7C5CFC] ${
+              className={`flex flex-col items-center text-center bg-white rounded-lg p-6 border border-zinc-200 transform transition-all duration-700 hover:-translate-y-1 hover:shadow-lg hover:border-[#7C5CFC] ${
                 animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
               }`}
               style={{ transitionDelay: `${400 + index * 100}ms` }}
@@ -159,8 +159,8 @@ const PowerPagesInnovate = () => {
               >
                 {feature.icon}
               </div>
-              <h3 className="text-xl font-black text-white tracking-tight mb-3">{feature.title}</h3>
-              <p className="text-zinc-400">
+              <h3 className="text-xl font-black text-zinc-900 tracking-tight mb-3">{feature.title}</h3>
+              <p className="text-zinc-500">
                 {feature.description}
               </p>
             </div>

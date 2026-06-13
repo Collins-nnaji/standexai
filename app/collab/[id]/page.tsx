@@ -7,7 +7,6 @@ import { CollabRoom } from "@/components/network/CollabRoom";
 import { CollabPublishPanel } from "@/components/network/CollabPublishPanel";
 import { CollabInvitePanel } from "@/components/network/CollabInvitePanel";
 import { CollabDiscussion } from "@/components/network/CollabDiscussion";
-import { neonAuth } from "@/lib/neon/auth-server";
 import Link from "next/link";
 import {
   Users, FileText, CheckCircle, Share2,
@@ -16,7 +15,6 @@ import {
 
 export default async function CollabRoomPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const { data: session } = await neonAuth.getSession();
 
   const collab = await prisma.collaboration.findUnique({
     where: { id },
@@ -39,17 +37,9 @@ export default async function CollabRoomPage({ params }: { params: Promise<{ id:
 
   if (!collab) return notFound();
 
-  const currentUser = session?.user?.email
-    ? await prisma.user.findUnique({ where: { email: session.user.email }, select: { id: true, name: true } })
-    : null;
-
-  const isMember = currentUser
-    ? collab.members.some((m: any) => m.userId === currentUser.id)
-    : false;
-
-  const isOwner = currentUser
-    ? collab.members.some((m: any) => m.userId === currentUser.id && m.role === "owner")
-    : false;
+  const currentUser = null;
+  const isMember = false;
+  const isOwner = false;
 
   if (collab.visibility === "private" && !isMember) {
     return (
@@ -67,7 +57,7 @@ export default async function CollabRoomPage({ params }: { params: Promise<{ id:
 
   return (
     <div className="min-h-screen text-zinc-700">
-      <TopNav user={session?.user} />
+      <TopNav />
 
       {/* Room Header */}
       <header className="border-b border-zinc-200/60 bg-white/70 backdrop-blur-xl shadow-[0_2px_10px_rgba(0,0,0,0.02)]">

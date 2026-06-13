@@ -1,13 +1,5 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 
-if (!process.env.DATABASE_URL && process.env.NEON_DATABASE_URL) {
-  process.env.DATABASE_URL = process.env.NEON_DATABASE_URL;
-}
-
-if (!process.env.NEON_DATABASE_URL && process.env.DATABASE_URL) {
-  process.env.NEON_DATABASE_URL = process.env.DATABASE_URL;
-}
-
 function normalizePoolerUrl(rawUrl: string | undefined) {
   if (!rawUrl) return rawUrl;
   if (!rawUrl.startsWith("postgres://") && !rawUrl.startsWith("postgresql://")) return rawUrl;
@@ -32,7 +24,6 @@ function normalizePoolerUrl(rawUrl: string | undefined) {
 }
 
 process.env.DATABASE_URL = normalizePoolerUrl(process.env.DATABASE_URL);
-process.env.NEON_DATABASE_URL = normalizePoolerUrl(process.env.NEON_DATABASE_URL);
 
 declare global {
   var prisma: PrismaClient | undefined;

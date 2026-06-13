@@ -102,7 +102,7 @@ const useCases = [
 
 export default function Page() {
   return (
-    <div className="flex min-h-[100dvh] flex-col overflow-hidden bg-zinc-950 text-white selection:bg-[#F2C811]/20">
+    <div className="flex min-h-[100dvh] flex-col overflow-hidden bg-[#f6fbf8] text-zinc-900 selection:bg-[#F2C811]/15">
       <TopNav />
 
       <main className="relative z-10 flex flex-1 flex-col overflow-hidden pt-32 pb-24">
@@ -117,13 +117,13 @@ export default function Page() {
               </span>
             </div>
 
-            <h1 className="max-w-4xl text-5xl font-bold leading-[0.92] tracking-tight text-white md:text-7xl lg:text-8xl">
+            <h1 className="max-w-4xl text-5xl font-bold leading-[0.92] tracking-tight text-zinc-900 md:text-7xl lg:text-8xl">
               Data Foundations
               <br />
               Built To Scale.
             </h1>
 
-            <p className="mt-8 max-w-3xl text-lg font-medium leading-relaxed text-zinc-300 md:text-2xl">
+            <p className="mt-8 max-w-3xl text-lg font-medium leading-relaxed text-zinc-600 md:text-2xl">
               We design the data pipelines, models, integrations, and reporting layers that turn
               disconnected information into usable business intelligence. The goal is not more data.
               It is cleaner systems, clearer decisions, and infrastructure your organisation can grow on.
@@ -132,11 +132,11 @@ export default function Page() {
           </div>
 
           <div className="relative">
-            <div className="rounded-[36px] border border-white/10 bg-white/5 p-6 shadow-[0_40px_120px_-35px_rgba(0,0,0,0.75)] backdrop-blur-sm md:p-8">
-              <div className="flex items-center justify-between border-b border-white/10 pb-4">
+            <div className="rounded-[36px] border border-zinc-200 bg-emerald-50/70 p-6 shadow-[0_40px_120px_-35px_rgba(0,0,0,0.75)] backdrop-blur-sm md:p-8">
+              <div className="flex items-center justify-between border-b border-zinc-200 pb-4">
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-500">Delivery Stack</p>
-                  <p className="mt-2 text-lg font-bold tracking-tight text-white">Operational data architecture</p>
+                  <p className="mt-2 text-lg font-bold tracking-tight text-zinc-900">Operational data architecture</p>
                 </div>
                 <div className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-400">
                   Active
@@ -150,9 +150,9 @@ export default function Page() {
                   { label: "Model Layer", value: "Analytics models, semantic structure, warehouse-ready outputs", icon: Blocks, color: "text-sky-400" },
                   { label: "Decision Layer", value: "Dashboards, reports, alerting, automation, AI-ready retrieval", icon: Binary, color: "text-violet-400" },
                 ].map((item, index) => (
-                  <div key={item.label} className="rounded-3xl border border-white/10 bg-zinc-950/80 p-4">
+                  <div key={item.label} className="rounded-3xl border border-zinc-200 bg-white p-4">
                     <div className="flex items-start gap-4">
-                      <div className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/5">
+                      <div className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-zinc-200 bg-emerald-50/70">
                         <item.icon className={`h-5 w-5 ${item.color}`} />
                       </div>
                       <div className="min-w-0">
@@ -160,11 +160,11 @@ export default function Page() {
                           <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500">
                             0{index + 1}
                           </span>
-                          <span className="text-sm font-bold uppercase tracking-[0.16em] text-white">
+                          <span className="text-sm font-bold uppercase tracking-[0.16em] text-zinc-900">
                             {item.label}
                           </span>
                         </div>
-                        <p className="mt-2 text-sm font-medium leading-relaxed text-zinc-400">{item.value}</p>
+                        <p className="mt-2 text-sm font-medium leading-relaxed text-zinc-500">{item.value}</p>
                       </div>
                     </div>
                   </div>
@@ -177,11 +177,11 @@ export default function Page() {
         <section className="mx-auto mt-20 w-full max-w-7xl px-6 lg:px-12">
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
             {outcomes.map((item) => (
-              <div key={item} className="rounded-[28px] border border-white/10 bg-white/5 p-6">
+              <div key={item} className="rounded-[28px] border border-zinc-200 bg-emerald-50/70 p-6">
                 <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-500/10 text-emerald-400">
                   <Sparkles className="h-5 w-5" />
                 </div>
-                <p className="text-sm font-semibold leading-relaxed text-zinc-300">{item}</p>
+                <p className="text-sm font-semibold leading-relaxed text-zinc-600">{item}</p>
               </div>
             ))}
           </div>
@@ -190,10 +190,10 @@ export default function Page() {
         <section className="mx-auto mt-24 w-full max-w-7xl px-6 lg:px-12">
           <div className="mb-12 max-w-3xl">
             <span className="text-[10px] font-bold uppercase tracking-[0.35em] text-[#F2C811]">Capabilities</span>
-            <h2 className="mt-4 text-4xl font-bold tracking-tight text-white md:text-6xl">
+            <h2 className="mt-4 text-4xl font-bold tracking-tight text-zinc-900 md:text-6xl">
               What We Build In The Data Layer.
             </h2>
-            <p className="mt-5 text-lg font-medium leading-relaxed text-zinc-400">
+            <p className="mt-5 text-lg font-medium leading-relaxed text-zinc-500">
               We help organisations move from scattered information and fragile reporting to connected,
               dependable data operations. That includes the engineering underneath analytics, automation,
               and future AI adoption.
@@ -204,13 +204,13 @@ export default function Page() {
             {capabilityAreas.map((item) => (
               <div
                 key={item.title}
-                className="rounded-[32px] border border-white/10 bg-white/5 p-8 transition-all hover:border-[#F2C811]/30 hover:bg-white/[0.08]"
+                className="rounded-[32px] border border-zinc-200 bg-emerald-50/70 p-8 transition-all hover:border-[#F2C811]/30 hover:bg-emerald-50"
               >
-                <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-zinc-900/80">
+                <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-zinc-200 bg-white">
                   <item.icon className="h-6 w-6 text-[#F2C811]" />
                 </div>
-                <h3 className="text-2xl font-bold tracking-tight text-white">{item.title}</h3>
-                <p className="mt-4 text-sm font-medium leading-7 text-zinc-400">{item.description}</p>
+                <h3 className="text-2xl font-bold tracking-tight text-zinc-900">{item.title}</h3>
+                <p className="mt-4 text-sm font-medium leading-7 text-zinc-500">{item.description}</p>
               </div>
             ))}
           </div>
@@ -220,23 +220,23 @@ export default function Page() {
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-[0.85fr_1.15fr]">
             <div>
               <span className="text-[10px] font-bold uppercase tracking-[0.35em] text-emerald-400">Delivery Model</span>
-              <h2 className="mt-4 text-4xl font-bold tracking-tight text-white md:text-5xl">
+              <h2 className="mt-4 text-4xl font-bold tracking-tight text-zinc-900 md:text-5xl">
                 From Source Systems To Decision Systems.
               </h2>
-              <p className="mt-5 text-lg font-medium leading-relaxed text-zinc-400">
+              <p className="mt-5 text-lg font-medium leading-relaxed text-zinc-500">
                 Better analytics is usually not a dashboard problem. It is a systems problem. We focus
                 on the movement, structure, and quality of data so the reporting layer becomes dependable,
                 scalable, and useful across the business.
               </p>
 
-              <div className="mt-8 rounded-[32px] border border-white/10 bg-white/5 p-7">
+              <div className="mt-8 rounded-[32px] border border-zinc-200 bg-emerald-50/70 p-7">
                 <div className="flex items-start gap-4">
                   <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-500/10">
                     <Lock className="h-5 w-5 text-emerald-400" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-white">Designed for trust and control</h3>
-                    <p className="mt-3 text-sm font-medium leading-7 text-zinc-400">
+                    <h3 className="text-xl font-bold text-zinc-900">Designed for trust and control</h3>
+                    <p className="mt-3 text-sm font-medium leading-7 text-zinc-500">
                       We build with permissions, consistency, lineage, and operational visibility in mind
                       so business teams can depend on the outputs instead of second-guessing them.
                     </p>
@@ -247,12 +247,12 @@ export default function Page() {
 
             <div className="grid grid-cols-1 gap-4">
               {deliveryStages.map((item) => (
-                <div key={item.step} className="rounded-[28px] border border-white/10 bg-zinc-900/80 p-6">
+                <div key={item.step} className="rounded-[28px] border border-zinc-200 bg-white p-6">
                   <div className="flex items-start gap-5">
                     <div className="min-w-12 text-2xl font-bold tracking-tight text-[#F2C811]">{item.step}</div>
                     <div>
-                      <h3 className="text-xl font-bold tracking-tight text-white">{item.title}</h3>
-                      <p className="mt-3 text-sm font-medium leading-7 text-zinc-400">{item.description}</p>
+                      <h3 className="text-xl font-bold tracking-tight text-zinc-900">{item.title}</h3>
+                      <p className="mt-3 text-sm font-medium leading-7 text-zinc-500">{item.description}</p>
                     </div>
                   </div>
                 </div>
@@ -262,30 +262,30 @@ export default function Page() {
         </section>
 
         <section className="mx-auto mt-24 w-full max-w-7xl px-6 lg:px-12">
-          <div className="rounded-[40px] border border-white/10 bg-white/5 p-8 md:p-12">
+          <div className="rounded-[40px] border border-zinc-200 bg-emerald-50/70 p-8 md:p-12">
             <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_0.9fr]">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-[0.35em] text-sky-400">Use Cases</span>
-                <h2 className="mt-4 text-4xl font-bold tracking-tight text-white md:text-5xl">
+                <h2 className="mt-4 text-4xl font-bold tracking-tight text-zinc-900 md:text-5xl">
                   Where Better Data Infrastructure Pays Off.
                 </h2>
-                <p className="mt-5 max-w-2xl text-lg font-medium leading-relaxed text-zinc-400">
+                <p className="mt-5 max-w-2xl text-lg font-medium leading-relaxed text-zinc-500">
                   The biggest gains usually come from removing reporting friction, reconnecting systems,
                   and giving teams a dependable data layer for planning, action, and automation.
                 </p>
               </div>
 
-              <div className="rounded-[32px] border border-white/10 bg-zinc-950/70 p-6">
+              <div className="rounded-[32px] border border-zinc-200 bg-white p-6">
                 <div className="flex items-center gap-3">
                   <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-sky-500/10">
                     <FileSpreadsheet className="h-5 w-5 text-sky-400" />
                   </div>
                   <div>
                     <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-zinc-500">Best Fit</p>
-                    <p className="text-lg font-bold text-white">Teams relying on manual reporting and disconnected data</p>
+                    <p className="text-lg font-bold text-zinc-900">Teams relying on manual reporting and disconnected data</p>
                   </div>
                 </div>
-                <p className="mt-4 text-sm font-medium leading-7 text-zinc-400">
+                <p className="mt-4 text-sm font-medium leading-7 text-zinc-500">
                   If reporting depends on exports, spreadsheet logic, duplicate records, or slow reconciliation
                   across systems, the business usually needs engineering at the data layer before it needs more dashboards.
                 </p>
@@ -294,9 +294,9 @@ export default function Page() {
 
             <div className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-2">
               {useCases.map((item) => (
-                <div key={item} className="flex items-start gap-4 rounded-[28px] border border-white/10 bg-zinc-950/60 p-5">
+                <div key={item} className="flex items-start gap-4 rounded-[28px] border border-zinc-200 bg-white p-5">
                   <Database className="mt-0.5 h-5 w-5 shrink-0 text-[#F2C811]" />
-                  <p className="text-sm font-semibold leading-7 text-zinc-300">{item}</p>
+                  <p className="text-sm font-semibold leading-7 text-zinc-600">{item}</p>
                 </div>
               ))}
             </div>
@@ -322,24 +322,24 @@ export default function Page() {
                 icon: Sparkles,
               },
             ].map((item) => (
-              <div key={item.title} className="rounded-[28px] border border-white/10 bg-white/5 p-7">
+              <div key={item.title} className="rounded-[28px] border border-zinc-200 bg-emerald-50/70 p-7">
                 <item.icon className="h-6 w-6 text-emerald-400" />
-                <h3 className="mt-5 text-2xl font-bold tracking-tight text-white">{item.title}</h3>
-                <p className="mt-3 text-sm font-medium leading-7 text-zinc-400">{item.description}</p>
+                <h3 className="mt-5 text-2xl font-bold tracking-tight text-zinc-900">{item.title}</h3>
+                <p className="mt-3 text-sm font-medium leading-7 text-zinc-500">{item.description}</p>
               </div>
             ))}
           </div>
         </section>
 
         <section className="mx-auto mt-24 w-full max-w-5xl px-6 text-center lg:px-12">
-          <div className="relative overflow-hidden rounded-[48px] border border-white/10 bg-white/5 px-8 py-14 md:px-14 md:py-20">
+          <div className="relative overflow-hidden rounded-[48px] border border-zinc-200 bg-emerald-50/70 px-8 py-14 md:px-14 md:py-20">
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(242,200,17,0.12),transparent_55%)]" />
             <div className="relative">
               <span className="text-[10px] font-bold uppercase tracking-[0.35em] text-[#F2C811]">Next Step</span>
-              <h2 className="mt-4 text-4xl font-bold tracking-tight text-white md:text-6xl">
+              <h2 className="mt-4 text-4xl font-bold tracking-tight text-zinc-900 md:text-6xl">
                 Build A Data Layer Your Business Can Trust.
               </h2>
-              <p className="mx-auto mt-6 max-w-2xl text-lg font-medium leading-relaxed text-zinc-400">
+              <p className="mx-auto mt-6 max-w-2xl text-lg font-medium leading-relaxed text-zinc-500">
                 If you need cleaner reporting, better pipeline design, or a more reliable analytics foundation,
                 we can help map the right architecture and deliver it.
               </p>

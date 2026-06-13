@@ -42,7 +42,7 @@ const PowerBiHeader = () => {
   };
 
   return (
-    <header className="w-full bg-zinc-950 text-white py-24 relative overflow-hidden pt-36">
+    <header className="w-full bg-[#f6fbf8] text-zinc-900 py-24 relative overflow-hidden pt-36">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] bg-[radial-gradient(circle_at_50%_0%,rgba(242,200,17,0.07),transparent_70%)] pointer-events-none" />
 
       <div className="container mx-auto px-6 lg:px-12 relative z-10 max-w-7xl">
@@ -53,10 +53,10 @@ const PowerBiHeader = () => {
         </div>
 
         <div className="text-center mb-10">
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white leading-[0.95] mb-8">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-zinc-900 leading-[0.95] mb-8">
             Bring Your Data<br />To Life With Power BI
           </h1>
-          <p className="max-w-3xl mx-auto text-xl md:text-2xl font-medium text-zinc-300 leading-relaxed">
+          <p className="max-w-3xl mx-auto text-xl md:text-2xl font-medium text-zinc-600 leading-relaxed">
             Expert Power BI solutions to unlock hidden insights in your data and empower your
             business to make data-driven decisions.
           </p>
@@ -74,14 +74,14 @@ const PowerBiHeader = () => {
           </a>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 border-t border-white/10 pt-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 border-t border-zinc-200 pt-16">
           {stats.map((stat, index) => (
             <div key={index} className="text-center">
               <div className="text-6xl md:text-7xl font-bold tracking-tight text-[#F2C811]">
                 {stat.value ? <span>{stat.value}</span> : <CountUp end={stat.end ?? 0} suffix={stat.suffix} />}
               </div>
-              <h3 className="text-lg font-bold uppercase tracking-widest mt-3 mb-2 text-white">{stat.title}</h3>
-              <p className="text-zinc-400 mx-auto max-w-xs text-sm leading-relaxed">{stat.description}</p>
+              <h3 className="text-lg font-bold uppercase tracking-widest mt-3 mb-2 text-zinc-900">{stat.title}</h3>
+              <p className="text-zinc-500 mx-auto max-w-xs text-sm leading-relaxed">{stat.description}</p>
             </div>
           ))}
         </div>

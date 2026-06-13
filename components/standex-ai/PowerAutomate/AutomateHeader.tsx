@@ -43,7 +43,7 @@ const AutomateHeader = () => {
   };
 
   return (
-    <div className="w-full bg-zinc-950 text-white py-24 px-6 lg:px-12 pt-36 relative overflow-hidden">
+    <div className="w-full bg-[#f6fbf8] text-zinc-900 py-24 px-6 lg:px-12 pt-36 relative overflow-hidden">
       <div className="absolute top-0 right-0 w-full h-[600px] bg-[radial-gradient(circle_at_80%_0%,rgba(0,120,212,0.07),transparent_70%)] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto text-center relative z-10">
@@ -51,11 +51,11 @@ const AutomateHeader = () => {
           <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#0078D4]">Microsoft Power Automate Consulting Services</span>
         </div>
 
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white leading-[0.95] mb-8">
+        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-zinc-900 leading-[0.95] mb-8">
           Optimise Your Business<br />Processes With Power Automate
         </h1>
 
-        <p className="text-xl md:text-2xl font-medium text-zinc-300 leading-relaxed mb-12 max-w-3xl mx-auto">
+        <p className="text-xl md:text-2xl font-medium text-zinc-600 leading-relaxed mb-12 max-w-3xl mx-auto">
           Our team of automation specialists will streamline your processes and workflows to
           eliminate repetitive manual tasks, saving you time and money.
         </p>
@@ -71,15 +71,15 @@ const AutomateHeader = () => {
         </a>
       </div>
 
-      <div className="max-w-7xl mx-auto mt-20 border-t border-white/10 pt-16 relative z-10">
+      <div className="max-w-7xl mx-auto mt-20 border-t border-zinc-200 pt-16 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {stats.map((stat, index) => (
             <div key={index} className="text-center">
               <div className="text-6xl md:text-7xl font-bold tracking-tight text-[#0078D4]">
                 <CountUp end={stat.end} suffix={stat.suffix} />
               </div>
-              <h3 className="text-lg font-bold uppercase tracking-widest mt-3 mb-2 text-white">{stat.title}</h3>
-              <p className="text-zinc-400 mx-auto max-w-xs text-sm leading-relaxed">{stat.description}</p>
+              <h3 className="text-lg font-bold uppercase tracking-widest mt-3 mb-2 text-zinc-900">{stat.title}</h3>
+              <p className="text-zinc-500 mx-auto max-w-xs text-sm leading-relaxed">{stat.description}</p>
             </div>
           ))}
         </div>

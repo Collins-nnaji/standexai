@@ -72,7 +72,7 @@ const CopilotAbility = () => {
   ];
 
   return (
-    <section className="py-20 bg-zinc-950 w-full">
+    <section className="py-20 bg-[#f6fbf8] w-full">
       <div ref={sectionRef} className="container mx-auto px-4 max-w-6xl">
         {/* Section header */}
         <div 
@@ -84,11 +84,11 @@ const CopilotAbility = () => {
             Copilot Studio Features
           </h3>
           
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-white tracking-tight mb-6">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-zinc-900 tracking-tight mb-6">
             What Can Copilot Chatbots Do?
           </h2>
           
-          <p className="text-zinc-400 max-w-4xl mx-auto mb-12">
+          <p className="text-zinc-500 max-w-4xl mx-auto mb-12">
             Microsoft Copilot Studio offers a versatile platform that can transform how businesses interact with customers and streamline internal processes. 
             From handling customer inquiries to automating data retrieval, Copilot Studio's AI capabilities provide a wide range of applications tailored to meet diverse business needs.
           </p>
@@ -99,7 +99,7 @@ const CopilotAbility = () => {
           {capabilities.map((capability, index) => (
             <div 
               key={capability.id} 
-              className={`bg-zinc-900 rounded-lg border border-zinc-800 p-6 transform transition-all duration-700 hover:-translate-y-1 hover:shadow-lg hover:border-[#7C5CFC] ${
+              className={`bg-white rounded-lg border border-zinc-200 p-6 transform transition-all duration-700 hover:-translate-y-1 hover:shadow-lg hover:border-[#7C5CFC] ${
                 animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
               }`}
               style={{ transitionDelay: `${300 + index * 100}ms` }}
@@ -119,12 +119,12 @@ const CopilotAbility = () => {
               </div>
               
               {/* Title */}
-              <h3 className="text-xl font-black text-white mb-3 text-center">
+              <h3 className="text-xl font-black text-zinc-900 mb-3 text-center">
                 {capability.title}
               </h3>
               
               {/* Description */}
-              <p className="text-zinc-400 text-center">
+              <p className="text-zinc-500 text-center">
                 {capability.description}
               </p>
             </div>

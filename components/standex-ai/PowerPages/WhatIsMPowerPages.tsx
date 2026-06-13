@@ -32,7 +32,7 @@ const WhatIsMPowerPages = () => {
   }, []);
 
   return (
-    <div className="py-16 px-4 w-full bg-zinc-950">
+    <div className="py-16 px-4 w-full bg-[#f6fbf8]">
       <div ref={sectionRef} className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
           {/* Left Column - Text Content */}
@@ -45,11 +45,11 @@ const WhatIsMPowerPages = () => {
               Transform Digital Experiences, One Page At A Time
             </p>
             
-            <h2 className="text-4xl font-black text-white tracking-tight mb-6">
+            <h2 className="text-4xl font-black text-zinc-900 tracking-tight mb-6">
               What Is Microsoft Power Pages?
             </h2>
             
-            <div className="space-y-4 text-zinc-400">
+            <div className="space-y-4 text-zinc-500">
               <p>
                 Microsoft Power Pages stands as a robust, low-code SaaS (Software as a Service)
                 platform, catering to the development, hosting, and management of contemporary
@@ -76,7 +76,7 @@ const WhatIsMPowerPages = () => {
             }`}
             style={{ transitionDelay: '200ms' }}
           >
-            <div className="rounded-lg overflow-hidden shadow-xl border border-zinc-800 relative">
+            <div className="rounded-lg overflow-hidden shadow-xl border border-zinc-200 relative">
               {/* Subtle glow effect behind the image */}
               <div 
                 className={`absolute inset-0 bg-[#7C5CFC] opacity-0 blur-2xl transition-all duration-1500 ${

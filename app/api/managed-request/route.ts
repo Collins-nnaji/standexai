@@ -1,10 +1,7 @@
-import { neonAuth } from "@/lib/neon/auth-server";
 import { prismaDb as prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
-  const { data: session } = await neonAuth.getSession();
-
   try {
     const body = await req.json();
     const { companyName, contactName, email, description, budgetRange, timeline } = body;

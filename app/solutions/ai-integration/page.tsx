@@ -4,7 +4,7 @@ import { Cpu, Database, Network, Shield, Link, Blocks, Layers, Globe } from "luc
 
 export default function Page() {
   return (
-    <div className="flex min-h-[100dvh] flex-col overflow-hidden bg-zinc-950 text-white">
+    <div className="flex min-h-[100dvh] flex-col overflow-hidden bg-[#f6fbf8] text-zinc-900">
       <TopNav />
       
       <main className="relative flex-1 flex flex-col z-10 pt-32 pb-24">
@@ -15,10 +15,10 @@ export default function Page() {
               <Network className="h-3.5 w-3.5 text-[#7C5CFC]" />
               <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#7C5CFC]">Enterprise Systems</span>
             </div>
-            <h1 className="text-5xl md:text-8xl font-bold tracking-tighter text-white uppercase italic leading-[0.85] mb-10">
+            <h1 className="text-5xl md:text-8xl font-bold tracking-tighter text-zinc-900 uppercase italic leading-[0.85] mb-10">
               AI <br /> Integration.
             </h1>
-            <p className="text-xl font-medium text-zinc-400 max-w-2xl">
+            <p className="text-xl font-medium text-zinc-500 max-w-2xl">
               Architecting the bridge between your enterprise data and the next generation of artificial intelligence. 
               Secure, scalable, and built for production.
             </p>
@@ -28,44 +28,44 @@ export default function Page() {
         {/* Integration Pillars */}
         <section className="max-w-7xl mx-auto px-6 lg:px-12 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 mb-24">
           <div className="space-y-12">
-            <div className="p-8 rounded-[32px] bg-white/5 border border-white/10">
+            <div className="p-8 rounded-[32px] bg-emerald-50/70 border border-zinc-200">
               <div className="flex items-center gap-3 mb-4">
                 <Database className="h-6 w-6 text-[#7C5CFC]" />
-                <h3 className="text-2xl font-bold text-white uppercase italic tracking-tight">Data Ingestion</h3>
+                <h3 className="text-2xl font-bold text-zinc-900 uppercase italic tracking-tight">Data Ingestion</h3>
               </div>
-              <p className="text-base font-semibold text-zinc-400 leading-relaxed">
+              <p className="text-base font-semibold text-zinc-500 leading-relaxed">
                 We design high-throughput pipelines to ingest structured and unstructured enterprise data 
                 into vector databases and AI-ready stores, ensuring your models are always grounded in fact.
               </p>
             </div>
-            <div className="p-8 rounded-[32px] bg-white/5 border border-white/10">
+            <div className="p-8 rounded-[32px] bg-emerald-50/70 border border-zinc-200">
               <div className="flex items-center gap-3 mb-4">
                 <Shield className="h-6 w-6 text-[#7C5CFC]" />
-                <h3 className="text-2xl font-bold text-white uppercase italic tracking-tight">Security & Privacy</h3>
+                <h3 className="text-2xl font-bold text-zinc-900 uppercase italic tracking-tight">Security & Privacy</h3>
               </div>
-              <p className="text-base font-semibold text-zinc-400 leading-relaxed">
+              <p className="text-base font-semibold text-zinc-500 leading-relaxed">
                 Implementing enterprise-grade PII filtering, data masking, and private cloud deployments 
                 (Azure OpenAI, AWS Bedrock) to keep your intellectual property secure.
               </p>
             </div>
           </div>
           <div className="space-y-12">
-            <div className="p-8 rounded-[32px] bg-white/5 border border-white/10">
+            <div className="p-8 rounded-[32px] bg-emerald-50/70 border border-zinc-200">
               <div className="flex items-center gap-3 mb-4">
                 <Blocks className="h-6 w-6 text-[#7C5CFC]" />
-                <h3 className="text-2xl font-bold text-white uppercase italic tracking-tight">API & Middleware</h3>
+                <h3 className="text-2xl font-bold text-zinc-900 uppercase italic tracking-tight">API & Middleware</h3>
               </div>
-              <p className="text-base font-semibold text-zinc-400 leading-relaxed">
+              <p className="text-base font-semibold text-zinc-500 leading-relaxed">
                 Developing custom LLM middleware to manage rate limits, context windows, and model routing 
                 transparently across your entire application ecosystem.
               </p>
             </div>
-            <div className="p-8 rounded-[32px] bg-white/5 border border-white/10">
+            <div className="p-8 rounded-[32px] bg-emerald-50/70 border border-zinc-200">
               <div className="flex items-center gap-3 mb-4">
                 <Globe className="h-6 w-6 text-[#7C5CFC]" />
-                <h3 className="text-2xl font-bold text-white uppercase italic tracking-tight">Legacy Connectivity</h3>
+                <h3 className="text-2xl font-bold text-zinc-900 uppercase italic tracking-tight">Legacy Connectivity</h3>
               </div>
-              <p className="text-base font-semibold text-zinc-400 leading-relaxed">
+              <p className="text-base font-semibold text-zinc-500 leading-relaxed">
                 Connecting modern AI agentic workflows to your legacy ERP, CRM, and SQL systems 
                 through secure custom connectors and orchestration layers.
               </p>
@@ -75,18 +75,18 @@ export default function Page() {
 
         {/* Architecture Visual */}
         <section className="max-w-7xl mx-auto px-6 lg:px-12 w-full mb-24">
-           <div className="relative rounded-[40px] border border-white/10 bg-white/5 p-12 overflow-hidden flex flex-col items-center text-center">
-             <div className="bg-zinc-900 rounded-[32px] p-8 md:p-12 shadow-sm border border-white/10 max-w-2xl w-full">
+           <div className="relative rounded-[40px] border border-zinc-200 bg-emerald-50/70 p-12 overflow-hidden flex flex-col items-center text-center">
+             <div className="bg-white rounded-[32px] p-8 md:p-12 shadow-sm border border-zinc-200 max-w-2xl w-full">
                <Layers className="h-10 w-10 text-zinc-500 mb-6 mx-auto" strokeWidth={1.5} />
-               <h3 className="text-xl font-bold text-white uppercase italic mb-4">Unified AI Architecture</h3>
-               <p className="text-sm font-semibold text-zinc-400">
+               <h3 className="text-xl font-bold text-zinc-900 uppercase italic mb-4">Unified AI Architecture</h3>
+               <p className="text-sm font-semibold text-zinc-500">
                  Our integration methodology ensures that your AI investment is not a silo, 
                  but a core component of your digital engineering stack.
                </p>
              </div>
              
              {/* Decorative Background Icon */}
-             <Network className="absolute -bottom-20 -right-20 h-80 w-80 text-white opacity-[0.03] pointer-events-none" />
+             <Network className="absolute -bottom-20 -right-20 h-80 w-80 text-zinc-900 opacity-[0.03] pointer-events-none" />
            </div>
         </section>
 
@@ -94,7 +94,7 @@ export default function Page() {
         <section className="max-w-7xl mx-auto px-6 lg:px-12 w-full mb-32">
           <div className="flex flex-col items-center text-center mb-16">
             <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-[#7C5CFC] mb-4">Architecture Workflow</span>
-            <h2 className="text-3xl md:text-5xl font-bold uppercase italic tracking-tighter text-white leading-[0.9]">
+            <h2 className="text-3xl md:text-5xl font-bold uppercase italic tracking-tighter text-zinc-900 leading-[0.9]">
               The Data-to-Intelligence <br /> Journey.
             </h2>
           </div>
@@ -106,12 +106,12 @@ export default function Page() {
               { step: "03", label: "Embed", desc: "Dataverse to HBM Vector transformations." },
               { step: "04", label: "Deploy", desc: "Secure model exposure via managed API." }
             ].map((s, i) => (
-              <div key={i} className="relative p-6 rounded-3xl border border-white/5 bg-white/5 group hover:border-[#7C5CFC] transition-all duration-500">
+              <div key={i} className="relative p-6 rounded-3xl border border-zinc-100 bg-emerald-50/70 group hover:border-[#7C5CFC] transition-all duration-500">
                 <div className="text-[10px] font-bold text-zinc-600 mb-4 group-hover:text-[#7C5CFC] transition-colors">{s.step}</div>
-                <h4 className="text-lg font-bold uppercase italic text-white mb-2">{s.label}</h4>
+                <h4 className="text-lg font-bold uppercase italic text-zinc-900 mb-2">{s.label}</h4>
                 <p className="text-xs font-semibold text-zinc-500 leading-relaxed">{s.desc}</p>
                 {i < 3 && (
-                  <div className="hidden md:block absolute top-1/2 -right-2 w-4 h-4 bg-zinc-950 border-t border-r border-white/5 rotate-45 z-10 translate-y-[-50%]" />
+                  <div className="hidden md:block absolute top-1/2 -right-2 w-4 h-4 bg-[#f6fbf8] border-t border-r border-zinc-100 rotate-45 z-10 translate-y-[-50%]" />
                 )}
               </div>
             ))}
@@ -120,17 +120,17 @@ export default function Page() {
 
         {/* Call to Action */}
         <section className="max-w-4xl mx-auto px-6 w-full text-center">
-          <div className="bg-white/5 border border-white/10 rounded-[40px] p-12 text-white overflow-hidden relative">
+          <div className="bg-emerald-50/70 border border-zinc-200 rounded-[40px] p-12 text-zinc-900 overflow-hidden relative">
             <div className="relative z-10">
               <h2 className="text-3xl md:text-5xl font-bold uppercase italic tracking-tight mb-6 leading-none">
                 Ready to integrate <br /> enterprise AI?
               </h2>
-              <p className="text-zinc-400 mb-10 font-medium">Build your secure bridge to the intelligence era.</p>
+              <p className="text-zinc-500 mb-10 font-medium">Build your secure bridge to the intelligence era.</p>
               <a href="/Contact" className="inline-flex items-center gap-2 rounded-2xl bg-[#049DCB] px-8 py-4 text-sm font-bold uppercase tracking-widest text-white hover:opacity-90 transition-all active:scale-95 shadow-[0_20px_40px_-10px_rgba(4,157,203,0.3)]">
                 Request Architecture Review
               </a>
             </div>
-            <Cpu className="absolute -bottom-20 -left-20 h-80 w-80 text-white opacity-[0.05] pointer-events-none" />
+            <Cpu className="absolute -bottom-20 -left-20 h-80 w-80 text-zinc-900 opacity-[0.05] pointer-events-none" />
           </div>
         </section>
       </main>

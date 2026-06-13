@@ -53,7 +53,7 @@ const PowerPagesHeader = () => {
   }, []);
 
   return (
-    <div className="w-full bg-gradient-to-b from-zinc-900 to-zinc-950 text-white py-16 px-4 pt-32">
+    <div className="w-full bg-gradient-to-b from-zinc-900 to-zinc-950 text-zinc-900 py-16 px-4 pt-32">
       <div className="max-w-6xl mx-auto text-center">
         {/* Header Section */}
         <p className="text-[#7C5CFC] mb-2">Microsoft Power Pages Consulting Services</p>
