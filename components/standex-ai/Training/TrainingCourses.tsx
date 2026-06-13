@@ -37,7 +37,7 @@ const TrainingCourses = () => {
       id: 'ai-practitioner',
       title: 'Standex Certified Artificial Intelligence Practitioner',
       description: 'Design, deploy, and govern AI systems end-to-end: strategy, architecture, ML, generative AI, security, ethics, and applied capstone delivery.',
-      image: '/ArtificialIntelligence.png',
+      image: '/ArtificialIntelligence.webp',
       enrollLink: 'https://buy.stripe.com/28E4gB0JK6Z8dDi697fnO0j',
       duration: '12 weeks (part-time)',
       format: 'Online'
@@ -46,7 +46,7 @@ const TrainingCourses = () => {
       id: 'power-platform-bi',
       title: 'Standex Certified Power Platform & Business Intelligence Practitioner',
       description: 'Build enterprise-ready apps, automate workflows, model data, and deliver Power BI analytics with SQL, Dataverse, and Copilot Studio.',
-      image: '/PowerPlatform.png',
+      image: '/PowerPlatform.webp',
       enrollLink: 'https://buy.stripe.com/dRmeVfdwwcjsdDigNLfnO0k',
       duration: '12 weeks (part-time)',
       format: 'Online'

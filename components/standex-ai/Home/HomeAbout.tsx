@@ -120,6 +120,8 @@ const HomeAbout = () => {
             <img 
               src="/HomeAboutPic.webp"
               alt="Modern architecture"
+              loading="lazy"
+              decoding="async"
               className="rounded-lg w-full object-cover border border-gray-800"
             />
             <div className="hidden lg:block mt-8">

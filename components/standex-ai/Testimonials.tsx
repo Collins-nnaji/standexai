@@ -136,7 +136,9 @@ const Testimonials = () => {
                   <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mr-4 border border-zinc-200 p-2 shadow-sm shrink-0">
                     <img 
                       src={testimonial.logo} 
-                      alt={`${testimonial.company} logo`} 
+                      alt={`${testimonial.company} logo`}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-contain grayscale opacity-60"
                     />
                   </div>

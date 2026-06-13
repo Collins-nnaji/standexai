@@ -1,59 +1,62 @@
+import dynamic from "next/dynamic";
 import { TopNav } from "@/components/network/TopNav";
-import Footer from "@/components/standex-ai/Footer";
-
-// AI Platform Base Components
 import { LandingHero } from "@/components/ui/LandingHero";
-import HomeCourses from "@/components/standex-ai/Home/HomeCourses";
 
-// Standex Digital Integrated Components
-import HomeAbout from "@/components/standex-ai/Home/HomeAbout";
-import HomeServices from "@/components/standex-ai/Home/HomeServices";
-import WhyChooseUs from "@/components/standex-ai/Home/WhyChooseUs";
-import AIImplementation from "@/components/standex-ai/Home/AIImplementation";
-import Testimonials from "@/components/standex-ai/Testimonials";
+const HomeServices = dynamic(() => import("@/components/standex-ai/Home/HomeServices"), {
+  loading: () => <div className="min-h-[480px] w-full" aria-hidden />,
+});
+const AIImplementation = dynamic(() => import("@/components/standex-ai/Home/AIImplementation"), {
+  loading: () => <div className="min-h-[400px] w-full" aria-hidden />,
+});
+const HomeCourses = dynamic(() => import("@/components/standex-ai/Home/HomeCourses"), {
+  loading: () => <div className="min-h-[520px] w-full" aria-hidden />,
+});
+const HomeAbout = dynamic(() => import("@/components/standex-ai/Home/HomeAbout"), {
+  loading: () => <div className="min-h-[480px] w-full" aria-hidden />,
+});
+const WhyChooseUs = dynamic(() => import("@/components/standex-ai/Home/WhyChooseUs"), {
+  loading: () => <div className="min-h-[360px] w-full" aria-hidden />,
+});
+const Testimonials = dynamic(() => import("@/components/standex-ai/Testimonials"), {
+  loading: () => <div className="min-h-[400px] w-full" aria-hidden />,
+});
+const Footer = dynamic(() => import("@/components/standex-ai/Footer"), {
+  loading: () => <div className="min-h-[120px] w-full" aria-hidden />,
+});
 
 export default function Page() {
   return (
     <div className="flex min-h-[100dvh] flex-col selection:bg-[#7C5CFC]/20 bg-white">
       <TopNav />
-      
+
       <main className="relative flex-1 flex flex-col items-center z-10 antialiased overflow-x-hidden">
-        
-        {/* 1. HERO (AI Platform Base) */}
         <div className="w-full">
           <LandingHero />
         </div>
 
-        {/* 2. CORPORATE SERVICES (Restyled HomeServices) */}
         <div id="services" className="w-full">
           <HomeServices />
         </div>
 
-        {/* 3. AI IMPLEMENTATION SOLUTION */}
         <div className="w-full">
           <AIImplementation />
         </div>
 
-        {/* 4. ACADEMY CURRICULUM (HomeCourses) */}
         <div id="academy" className="w-full">
           <HomeCourses />
         </div>
 
-        {/* 5. ABOUT & EXPERTISE (Restyled HomeAbout) */}
         <div id="about" className="w-full">
           <HomeAbout />
         </div>
 
-        {/* 6. STRATEGIC ADVANTAGE (Restyled WhyChooseUs) */}
         <div className="w-full">
           <WhyChooseUs />
         </div>
 
-        {/* 7. SOCIAL PROOF (Testimonials) */}
         <div className="w-full bg-white">
           <Testimonials />
         </div>
-
       </main>
 
       <Footer />

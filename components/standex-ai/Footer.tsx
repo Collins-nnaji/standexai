@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
+import Image from "next/image";
 
 const Footer = () => {
   const [animationStarted, setAnimationStarted] = useState(false);
@@ -40,7 +41,14 @@ const Footer = () => {
               animationStarted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
             }`}
           >
-            <img src="/StandexLogo.webp" alt="Standex Logo" className="h-8 opacity-90" />
+            <Image
+              src="/StandexLogo.webp"
+              alt="Standex Logo"
+              width={140}
+              height={32}
+              loading="lazy"
+              className="h-8 w-auto opacity-90"
+            />
           </div>
           
           <div className="flex space-x-5">

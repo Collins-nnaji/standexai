@@ -736,6 +736,63 @@ section#how:not(.landing-how-revealed) .landing-how-flow-connector {
   animation: radial-breathe 8s ease-in-out infinite;
 }
 
+@keyframes landing-hero-enter {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes landing-code-enter {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes landing-marquee-up {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes landing-marquee-down {
+  from {
+    transform: translateY(-50%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.landing-hero-enter {
+  animation: landing-hero-enter 0.8s ease-out forwards;
+}
+
+.landing-code-enter {
+  animation: landing-code-enter 1.2s ease-out forwards;
+  opacity: 0;
+}
+
+.landing-marquee-up {
+  animation: landing-marquee-up 40s linear infinite;
+}
+
+.landing-marquee-down {
+  animation: landing-marquee-down 35s linear infinite;
+}
+
 /* Use Inter everywhere: legacy `font-syne` classes map to the same UI font */
 @layer utilities {
   .font-syne {

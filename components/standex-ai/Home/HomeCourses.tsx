@@ -18,7 +18,7 @@ const tracks = [
     description: "Master Multi-Agent Orchestration, production-grade RAG architectures, and the deployment of scalable AI systems.",
     color: "#049DCB",
     icon: Bot,
-    image: "/ArtificialIntelligence.png",
+    image: "/ArtificialIntelligence.webp",
   },
   {
     id: "pp",
@@ -31,7 +31,7 @@ const tracks = [
     description: "Master the Microsoft Power Platform stack, enterprise data modelling, and the delivery of production-grade business solutions.",
     color: "#049DCB",
     icon: GraduationCap,
-    image: "/PowerPlatform.png",
+    image: "/PowerPlatform.webp",
   }
 ];
 
@@ -96,9 +96,10 @@ export default function HomeCourses() {
                     <Image 
                       src={track.image} 
                       alt={track.label} 
-                      fill 
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      loading="lazy"
                       className="object-cover transition-transform duration-700 group-hover:scale-105" 
-                      unoptimized
                     />
                   </div>
 

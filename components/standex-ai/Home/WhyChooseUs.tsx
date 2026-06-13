@@ -69,7 +69,9 @@ const WhyChooseUs = () => {
           <div className="bg-zinc-50 rounded-[24px] border border-zinc-200 p-6 flex flex-col justify-center items-center transition-all hover:bg-white hover:shadow-lg group">
             <img 
               src="/Microsoft-Solution-Partner-300x183.webp" 
-              alt="Microsoft Solutions Partner" 
+              alt="Microsoft Solutions Partner"
+              loading="lazy"
+              decoding="async"
               className="h-12 mb-4 grayscale group-hover:grayscale-0 transition-all duration-500"
             />
             <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 text-center">Certified Solutions Partner</p>
@@ -106,7 +108,9 @@ const WhyChooseUs = () => {
         <div className="absolute inset-0 bg-gradient-to-r from-white via-transparent to-transparent z-10 lg:block hidden" />
         <img 
           src="/Woman-consulting.webp" 
-          alt="Digital presentation with team" 
+          alt="Digital presentation with team"
+          loading="lazy"
+          decoding="async"
           className={`w-full h-full object-cover grayscale-[0.5] contrast-[1.1] transition-all duration-1500 ${
             animationStarted ? 'scale-100 opacity-100' : 'scale-110 opacity-0'
           }`}

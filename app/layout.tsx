@@ -6,7 +6,7 @@ const fontSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-standex-sans",
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["400", "600", "700"],
 });
 
 
@@ -15,7 +15,7 @@ const fontConsoleMono = JetBrains_Mono({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-console-mono",
-  weight: ["400", "500"],
+  weight: ["400"],
 });
 
 export const viewport: Viewport = {

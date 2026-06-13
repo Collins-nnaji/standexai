@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import React from "react";
 import Link from "next/link";
-import { ArrowRight, Zap, Settings, CheckCircle2, TerminalSquare, Cpu } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type MarqueeIcon = {
@@ -13,7 +12,6 @@ type MarqueeIcon = {
   lightOnDark?: boolean;
 };
 
-// ── Icons for the Vertical Marquees ──
 const powerPlatformIcons: MarqueeIcon[] = [
   { src: "/PowerApps.svg", name: "Power Apps" },
   { src: "/PowerAutomate.svg", name: "Power Automate" },
@@ -29,46 +27,28 @@ const aiCloudIcons: MarqueeIcon[] = [
   { src: "/images/nextjslogo.png", name: "Next.js", lightOnDark: true },
 ];
 
-const toolLogos = [
-  { name: "Microsoft Power Platform", src: "/PowerPlatform.svg" },
-  { name: "Azure AI", src: "/images/azure%20logo.png" },
-  { name: "OpenAI", src: "/images/openai%20logo.svg" },
-  { name: "Anthropic", src: "/images/claude%20logo.svg" },
-  { name: "Copilot Studio", src: "/CopilotStudio.svg" },
-  { name: "Power Automate", src: "/PowerAutomate.svg" },
-];
-
 export function LandingHero() {
   return (
     <section className="relative min-h-[100dvh] w-full overflow-hidden bg-zinc-950 px-3 sm:px-5 md:px-8 py-3 sm:py-4 md:py-5">
-      {/* ── Background: Dark Emerald Diagnostic Texture ── */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.12),transparent_70%)]" />
         <CodeBackground />
-        
-        {/* Radial subtle grid */}
-        <div className="absolute inset-0 opacity-[0.08]" 
-             style={{ backgroundImage: "radial-gradient(#10b981 1px, transparent 1px)", backgroundSize: "32px 32px" }} />
+        <div
+          className="absolute inset-0 opacity-[0.08]"
+          style={{ backgroundImage: "radial-gradient(#10b981 1px, transparent 1px)", backgroundSize: "32px 32px" }}
+        />
       </div>
 
       <div className="relative mx-auto max-w-7xl h-full flex flex-col justify-center min-h-[calc(100dvh-1.5rem)] sm:min-h-[calc(100dvh-2rem)] md:min-h-[calc(100dvh-2.5rem)] pt-16 sm:pt-20 pb-8 sm:pb-10">
         <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-10 sm:gap-16 lg:gap-24 items-center py-4 sm:py-6">
-          
-          {/* ── Left Column: Engineering-Grade Messaging ── */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="flex flex-col gap-6 sm:gap-8 lg:gap-10 z-10 text-center lg:text-left"
-          >
+          <div className="landing-hero-enter flex flex-col gap-6 sm:gap-8 lg:gap-10 z-10 text-center lg:text-left">
             <div className="space-y-4 sm:space-y-6">
-
-              
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight leading-[0.95] text-white">
                 Architecting <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-emerald-300 to-teal-400">
                   Intelligent
-                </span><br />
+                </span>
+                <br />
                 Systems.
               </h1>
               <p className="text-lg sm:text-xl md:text-2xl font-semibold text-emerald-400/90 tracking-tight">
@@ -77,16 +57,16 @@ export function LandingHero() {
             </div>
 
             <p className="max-w-xl mx-auto lg:mx-0 text-base sm:text-lg md:text-xl lg:text-2xl font-medium leading-relaxed text-zinc-400">
-              Transforming enterprise complexity into high-performance 
-              <span className="text-white font-bold border-b-2 border-emerald-500/30 mx-1">AI Agents</span> 
-              and 
-              <span className="text-white font-bold border-b-2 border-emerald-500/30 mx-1">Power Platform</span> 
+              Transforming enterprise complexity into high-performance
+              <span className="text-white font-bold border-b-2 border-emerald-500/30 mx-1">AI Agents</span>
+              and
+              <span className="text-white font-bold border-b-2 border-emerald-500/30 mx-1">Power Platform</span>
               innovations. We implement the future, then train your team to own it.
             </p>
 
             <div className="flex flex-col items-center lg:items-start gap-4">
               <div className="flex flex-wrap gap-4 sm:gap-5 justify-center lg:justify-start w-full">
-                <Link 
+                <Link
                   href="/Contact"
                   className="group relative flex h-12 sm:h-14 lg:h-16 w-full sm:w-auto items-center justify-center gap-3 sm:gap-4 overflow-hidden rounded-2xl bg-emerald-500 px-6 sm:px-8 lg:px-10 text-xs sm:text-sm font-bold tracking-widest text-white transition-all hover:bg-emerald-600 shadow-lg shadow-emerald-200"
                 >
@@ -100,24 +80,19 @@ export function LandingHero() {
                 <span className="text-white">Free 30-minute business consultation call</span>
               </p>
             </div>
+          </div>
 
-
-          </motion.div>
-
-          {/* ── Right Column: Dual Vertical Icon Columns ── */}
           <div className="relative h-[320px] sm:h-[450px] md:h-[550px] lg:h-[750px] grid grid-cols-2 gap-4 sm:gap-6 overflow-hidden max-w-md sm:max-w-none mx-auto lg:mx-0 w-full">
             <div className="relative h-full">
-              <VerticalIconColumn icons={powerPlatformIcons} direction="up" speed={40} />
+              <VerticalIconColumn icons={powerPlatformIcons} direction="up" />
               <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-zinc-950 to-transparent z-10" />
               <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-zinc-950 to-transparent z-10" />
             </div>
             <div className="relative h-full translate-y-8 sm:translate-y-12 lg:translate-y-20">
-              <VerticalIconColumn icons={aiCloudIcons} direction="down" speed={35} />
+              <VerticalIconColumn icons={aiCloudIcons} direction="down" />
               <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-zinc-950 to-transparent z-10" />
               <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-zinc-950 to-transparent z-10" />
             </div>
-            
-
           </div>
         </div>
       </div>
@@ -125,28 +100,33 @@ export function LandingHero() {
   );
 }
 
-// ── Supporting Components ──
+function VerticalIconColumn({
+  icons,
+  direction = "up",
+}: {
+  icons: MarqueeIcon[];
+  direction?: "up" | "down";
+}) {
+  const loopIcons = [...icons, ...icons];
 
-function VerticalIconColumn({ icons, direction = "up", speed = 30 }: { icons: MarqueeIcon[]; direction?: "up" | "down"; speed?: number }) {
   return (
-    <div className="flex flex-col gap-6 py-6 h-full">
-      <motion.div
-        animate={{
-          y: direction === "up" ? [0, -1000] : [-1000, 0],
-        }}
-        transition={{
-          duration: speed,
-          repeat: Infinity,
-          ease: "linear",
-        }}
-        className="flex flex-col gap-6"
+    <div className="flex flex-col gap-6 py-6 h-full overflow-hidden">
+      <div
+        className={cn(
+          "flex flex-col gap-6 will-change-transform",
+          direction === "up" ? "landing-marquee-up" : "landing-marquee-down"
+        )}
       >
-        {[...icons, ...icons, ...icons, ...icons].map((icon, i) => (
-          <div key={i} className="group relative">
+        {loopIcons.map((icon, i) => (
+          <div key={`${icon.name}-${i}`} className="group relative">
             <div className="h-20 w-20 sm:h-24 sm:w-24 lg:h-28 lg:w-28 flex items-center justify-center p-3 sm:p-4 transition-all">
               <img
                 src={icon.src}
                 alt={icon.name}
+                width={112}
+                height={112}
+                loading={i < icons.length ? "eager" : "lazy"}
+                decoding="async"
                 className={cn(
                   "h-full w-full object-contain transition-opacity",
                   icon.lightOnDark
@@ -157,7 +137,7 @@ function VerticalIconColumn({ icons, direction = "up", speed = 30 }: { icons: Ma
             </div>
           </div>
         ))}
-      </motion.div>
+      </div>
     </div>
   );
 }
@@ -179,29 +159,30 @@ function CodeBackground() {
   return (
     <div className="absolute inset-0 pointer-events-none select-none opacity-[0.1]">
       {Array.from({ length: 8 }).map((_, i) => (
-          <div
-               key={`code-pill-${i}`}
-               className="absolute flex items-center gap-4 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full" 
-               style={{ top: `${15 + (i * 12)}%`, left: `${4 + (i * 2)}%` }}>
-             <div className="h-1 w-1 rounded-full bg-emerald-500 animate-pulse" />
-             <span className="text-[8px] font-bold text-emerald-500/80 tracking-widest uppercase">{lines[i % lines.length]}</span>
-          </div>
+        <div
+          key={`code-pill-${i}`}
+          className="absolute flex items-center gap-4 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full"
+          style={{ top: `${15 + i * 12}%`, left: `${4 + i * 2}%` }}
+        >
+          <div className="h-1 w-1 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="text-[8px] font-bold text-emerald-500/80 tracking-widest uppercase">
+            {lines[i % lines.length]}
+          </span>
+        </div>
       ))}
-      
+
       {Array.from({ length: 8 }).map((_, i) => (
-        <motion.div
-          key={i + 8}
-          initial={{ opacity: 0, x: 100 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.1 * i, duration: 1.2 }}
-          className="absolute text-[10px] font-mono text-emerald-500/50 whitespace-nowrap text-right"
-          style={{ 
-            bottom: `${10 + (i * 12)}%`, 
-            right: `${2 + (i * 2)}%`,
+        <div
+          key={`code-line-${i}`}
+          className="landing-code-enter absolute text-[10px] font-mono text-emerald-500/50 whitespace-nowrap text-right"
+          style={{
+            bottom: `${10 + i * 12}%`,
+            right: `${2 + i * 2}%`,
+            animationDelay: `${0.1 * i}s`,
           }}
         >
           {lines[(i + 4) % lines.length]}
-        </motion.div>
+        </div>
       ))}
     </div>
   );
