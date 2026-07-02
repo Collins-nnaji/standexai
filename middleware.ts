@@ -4,12 +4,6 @@ import { NextResponse } from "next/server";
 export default function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
 
-  if (path === "/console" || path.startsWith("/console/")) {
-    const url = req.nextUrl.clone();
-    url.pathname = "/";
-    return NextResponse.redirect(url);
-  }
-
   if (path === "/exam-prep" || path.startsWith("/exam-prep/")) {
     const url = req.nextUrl.clone();
     url.pathname = path.replace(/^\/exam-prep/, "/skills");

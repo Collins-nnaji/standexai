@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Image from "next/image";
+import Link from "next/link";
 
 const Footer = () => {
   const [animationStarted, setAnimationStarted] = useState(false);
@@ -122,6 +123,7 @@ const Footer = () => {
             <a href="mailto:support@standexdigital.com" className="text-[11px] font-bold text-zinc-400 hover:text-emerald-500 transition-colors">support@standexdigital.com</a>
             <a href="mailto:hr@standexdigital.com" className="text-[11px] font-bold text-emerald-500 hover:text-white transition-colors">hr@standexdigital.com</a>
           </div>
+          <Link href="/console" className="text-[11px] font-bold text-zinc-400 hover:text-emerald-500 transition-colors sm:ml-auto">Console</Link>
         </div>
       </div>
     </footer>
