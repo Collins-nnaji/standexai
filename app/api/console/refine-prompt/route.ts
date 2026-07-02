@@ -45,6 +45,7 @@ Rules:
     const res = await fetch(url, init);
     if (!res.ok) {
       const t = await res.text();
+      console.error(`Refine-prompt Azure OpenAI error (${res.status}):`, t);
       return NextResponse.json({ error: t.slice(0, 500) }, { status: 500 });
     }
     const data = (await res.json()) as { choices?: Array<{ message?: { content?: string } }> };
@@ -68,6 +69,7 @@ Rules:
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Refine failed";
+    console.error("Refine-prompt failed:", message);
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

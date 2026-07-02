@@ -172,6 +172,7 @@ export async function POST(req: Request) {
 
     if (!response.ok) {
       const errorText = await response.text();
+      console.error(`Studio assist Azure OpenAI error (${response.status}):`, errorText);
       return NextResponse.json({ error: `Azure OpenAI request failed: ${errorText}` }, { status: 500 });
     }
 
@@ -201,6 +202,7 @@ export async function POST(req: Request) {
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Studio AI assist failed";
+    console.error("Studio assist failed:", message);
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
