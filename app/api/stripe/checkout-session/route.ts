@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
-import { neonAuth } from "@/lib/neon/auth-server";
-import { prisma } from "@/lib/prisma";
+import { getOrCreateCurrentUserId } from "@/lib/server/current-user";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "sk_test_mock", {
   apiVersion: "2024-04-10" as any,
@@ -9,19 +8,11 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "sk_test_mock", {
 
 export async function POST(req: Request) {
   try {
-    const { data: session } = await neonAuth.getSession();
-    if (!session?.user?.email) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const userId = await getOrCreateCurrentUserId();
 
     const { tier } = await req.json(); // "pro" vs "lab"
 
-    const user = await prisma.user.findUnique({ where: { email: session.user.email }});
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
-
-    const priceId = tier === "lab" 
+    const priceId = tier === "lab"
       ? process.env.STRIPE_PRICE_ID_LAB || "price_mock_lab_299"
       : process.env.STRIPE_PRICE_ID_PRO || "price_mock_pro_12";
 
@@ -39,8 +30,8 @@ export async function POST(req: Request) {
       success_url: `${origin}/dashboard?success=true`,
       cancel_url: `${origin}/pricing?canceled=true`,
       metadata: {
-        userId: user.id,
-        tier: tier, 
+        userId,
+        tier: tier,
       },
     });
 

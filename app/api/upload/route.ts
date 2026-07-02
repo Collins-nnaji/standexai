@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { BlobServiceClient } from "@azure/storage-blob";
-import { neonAuth } from "@/lib/neon/auth-server";
 
 // To make this work, the user must add AZURE_STORAGE_CONNECTION_STRING in .env
 // And AZURE_STORAGE_CONTAINER_NAME (or default to "standexai-assets")
@@ -9,11 +8,6 @@ const CONTAINER_NAME = process.env.AZURE_STORAGE_CONTAINER_NAME || "standexai-as
 
 export async function POST(req: NextRequest) {
   try {
-    const { data: session } = await neonAuth.getSession();
-    if (!session?.user?.id && !session?.user?.email) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
     if (!AZURE_STORAGE_CONNECTION_STRING) {
       return NextResponse.json({ 
         error: "Azure Storage is not configured. Please add AZURE_STORAGE_CONNECTION_STRING to your .env file." 

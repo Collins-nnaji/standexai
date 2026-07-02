@@ -1,15 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prismaDb as prisma } from "@/lib/prisma";
-import { neonAuth } from "@/lib/neon/auth-server";
+import { getOrCreateCurrentUserId } from "@/lib/server/current-user";
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
-    const { data: session } = await neonAuth.getSession();
-    
-    if (!session?.user?.email) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const userId = await getOrCreateCurrentUserId();
 
     const body = await req.json();
     const { canvasContent } = body;
@@ -18,7 +14,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     const membership = await prisma.collabMember.findFirst({
       where: {
         collabId: id,
-        user: { email: session.user.email }
+        userId,
       }
     });
 
@@ -42,11 +38,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
-    const { data: session } = await neonAuth.getSession();
-    
-    if (!session?.user?.email) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const userId = await getOrCreateCurrentUserId();
 
     const collab = await prisma.collaboration.findUnique({
       where: { id },
@@ -62,7 +54,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     }
 
     // Check membership
-    const isMember = collab.members.some(m => m.user.email === session.user?.email);
+    const isMember = collab.members.some(m => m.user.id === userId);
     if (collab.visibility === "private" && !isMember) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }

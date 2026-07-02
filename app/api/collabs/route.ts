@@ -1,21 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prismaDb as prisma } from "@/lib/prisma";
-import { neonAuth } from "@/lib/neon/auth-server";
+import { getOrCreateCurrentUserId } from "@/lib/server/current-user";
 
 // POST /api/collabs — Create a new Collaboration (optionally linked to a brief)
 export async function POST(req: NextRequest) {
   try {
-    const { data: session } = await neonAuth.getSession();
-    if (!session?.user?.email) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-      select: { id: true }
-    });
-
-    if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
+    const userId = await getOrCreateCurrentUserId();
 
     const body = await req.json();
     const { title, description, briefId, visibility = "private", invitedUserId } = body;
@@ -44,16 +34,16 @@ export async function POST(req: NextRequest) {
 
     // Prepare initial members
     const initialMembers = [
-      { userId: user.id, role: "owner" }
+      { userId, role: "owner" }
     ];
 
     // If explicit invitedUserId provided (e.g. from a user hover/profile)
-    if (invitedUserId && invitedUserId !== user.id) {
+    if (invitedUserId && invitedUserId !== userId) {
        initialMembers.push({ userId: invitedUserId, role: "contributor" });
     }
 
     // If briefId provided, automatically invite the lab owner who posted it
-    if (briefOwnerId && briefOwnerId !== user.id && briefOwnerId !== invitedUserId) {
+    if (briefOwnerId && briefOwnerId !== userId && briefOwnerId !== invitedUserId) {
        initialMembers.push({ userId: briefOwnerId, role: "partner" });
     }
 

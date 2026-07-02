@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prismaDb as prisma } from "@/lib/prisma";
-import { neonAuth } from "@/lib/neon/auth-server";
+import { getOrCreateCurrentUserId } from "@/lib/server/current-user";
 
 // POST /api/collabs/[id]/publish — Co-publish work, mark collab complete, award reputation
 export async function POST(
@@ -9,16 +9,7 @@ export async function POST(
 ) {
   try {
     const { id: collabId } = await params;
-    const { data: session } = await neonAuth.getSession();
-    if (!session?.user?.email) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const requestingUser = await prisma.user.findUnique({
-      where: { email: session.user.email },
-      select: { id: true }
-    });
-    if (!requestingUser) return NextResponse.json({ error: "User not found" }, { status: 404 });
+    const requestingUserId = await getOrCreateCurrentUserId();
 
     // Fetch the collab with all members
     const collab = await prisma.collaboration.findUnique({
@@ -35,7 +26,7 @@ export async function POST(
     }
 
     // Only members can publish
-    const isMember = collab.members.some((m: any) => m.userId === requestingUser.id);
+    const isMember = collab.members.some((m: any) => m.userId === requestingUserId);
     if (!isMember) return NextResponse.json({ error: "You are not a member of this room" }, { status: 403 });
 
     const body = await req.json();
@@ -47,7 +38,7 @@ export async function POST(
 
     const allMemberIds = collab.members.map((m: any) => m.userId);
     const ownerMember = collab.members.find((m: any) => m.role === "owner");
-    const primaryAuthorId = ownerMember?.userId ?? requestingUser.id;
+    const primaryAuthorId = ownerMember?.userId ?? requestingUserId;
 
     // Build domain tags from linked brief + custom tags
     const briefDomains = collab.brief?.domain ?? [];
@@ -74,7 +65,7 @@ export async function POST(
     await prisma.reputationSignal.createMany({
       data: allMemberIds.map((memberId: string) => ({
         userId: memberId,
-        fromUserId: requestingUser.id,
+        fromUserId: requestingUserId,
         workItemId: workItem.id,
         signalType: "collab",
         value: 75 // Each collab contribution = 75 points

@@ -1,5 +1,5 @@
-import { neonAuth } from "@/lib/neon/auth-server";
 import { prismaDb as prisma } from "@/lib/prisma";
+import { getOrCreateCurrentUserId } from "@/lib/server/current-user";
 import { NextResponse } from "next/server";
 
 export async function PATCH(
@@ -7,15 +7,11 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const { data: session } = await neonAuth.getSession();
 
   try {
-    if (!session?.user?.email) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
+    const userId = await getOrCreateCurrentUserId();
     const admin = await prisma.user.findUnique({
-      where: { email: session.user.email },
+      where: { id: userId },
       select: { role: true }
     });
 

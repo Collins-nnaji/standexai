@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { neonAuth } from "@/lib/neon/auth-server";
+import { getOrCreateCurrentUserId } from "@/lib/server/current-user";
 
 // GET /api/collabs/[id]/messages — Fetch discussion for a room
 export async function GET(
@@ -9,7 +9,7 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const { data: session } = await neonAuth.getSession();
+    const userId = await getOrCreateCurrentUserId();
 
     const collab = await prisma.collaboration.findUnique({
       where: { id },
@@ -18,11 +18,7 @@ export async function GET(
 
     if (!collab) return NextResponse.json({ error: "Room not found" }, { status: 404 });
 
-    const currentUser = session?.user?.email
-      ? await prisma.user.findUnique({ where: { email: session.user.email }, select: { id: true } })
-      : null;
-
-    const isMember = currentUser ? collab.members.some(m => m.userId === currentUser.id) : false;
+    const isMember = collab.members.some(m => m.userId === userId);
 
     if (collab.visibility === "private" && !isMember) {
       return NextResponse.json({ error: "Private room" }, { status: 403 });
@@ -50,18 +46,7 @@ export async function POST(
 ) {
   try {
     const { id } = await params;
-    const { data: session } = await neonAuth.getSession();
-
-    if (!session?.user?.email) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-      select: { id: true }
-    });
-
-    if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
+    const userId = await getOrCreateCurrentUserId();
 
     const collab = await prisma.collaboration.findUnique({
       where: { id },
@@ -70,7 +55,7 @@ export async function POST(
 
     if (!collab) return NextResponse.json({ error: "Room not found" }, { status: 404 });
 
-    const isMember = collab.members.some(m => m.userId === user.id);
+    const isMember = collab.members.some(m => m.userId === userId);
     if (!isMember) return NextResponse.json({ error: "Must be a contributor to post" }, { status: 403 });
 
     const { content } = await req.json();
@@ -79,7 +64,7 @@ export async function POST(
     const message = await prisma.collabMessage.create({
       data: {
         collabId: id,
-        userId: user.id,
+        userId,
         content: content.trim()
       },
       include: {

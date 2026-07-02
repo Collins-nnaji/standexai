@@ -3,12 +3,10 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { TopNav } from "@/components/network/TopNav";
-import { neonAuthClient } from "@/lib/neon/auth-client";
 import { UploadCloud, Link as LinkIcon, Loader2, File, CheckCircle2 } from "lucide-react";
 
 export default function NewWorkPage() {
   const router = useRouter();
-  const session = neonAuthClient.useSession();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
@@ -90,7 +88,7 @@ export default function NewWorkPage() {
 
   return (
     <div className="min-h-screen text-zinc-900 pb-20">
-      <TopNav user={session.data?.user} />
+      <TopNav />
       <main className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
         <h1 className="font-syne text-3xl font-extrabold mb-2">Publish New Work</h1>
         <p className="text-zinc-500 mb-8 border-b border-black/5 pb-8">

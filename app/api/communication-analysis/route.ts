@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { neonAuth } from "@/lib/neon/auth-server";
 import {
   ensurePrismaConnected,
   prismaDb,
@@ -13,16 +12,7 @@ export const runtime = "nodejs";
 export async function GET() {
   try {
     await ensurePrismaConnected();
-    const { data: session } = await neonAuth.getSession();
-    const email = session?.user?.email?.trim().toLowerCase();
-    if (!email) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const userId = await getOrCreateCurrentUserId({
-      userEmailHeader: email,
-      userNameHeader: session?.user?.name ?? undefined,
-    });
+    const userId = await getOrCreateCurrentUserId();
 
     const rows = await withPrismaReconnect(() =>
       prismaDb.communicationAnalysis.findMany({
@@ -87,16 +77,7 @@ function clampTitle(raw: string): string {
 export async function POST(req: Request) {
   try {
     await ensurePrismaConnected();
-    const { data: session } = await neonAuth.getSession();
-    const email = session?.user?.email?.trim().toLowerCase();
-    if (!email) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const userId = await getOrCreateCurrentUserId({
-      userEmailHeader: email,
-      userNameHeader: session?.user?.name ?? undefined,
-    });
+    const userId = await getOrCreateCurrentUserId();
 
     const body = (await req.json()) as Body;
     const title = clampTitle(body.title ?? "");

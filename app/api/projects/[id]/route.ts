@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { neonAuth } from "@/lib/neon/auth-server";
 import { prismaDb as prisma } from "@/lib/prisma";
+import { getOrCreateCurrentUserId } from "@/lib/server/current-user";
 
 export async function PATCH(
   req: Request,
@@ -8,25 +8,22 @@ export async function PATCH(
 ) {
   try {
     const { id } = await params;
-    const { data: session } = await neonAuth.getSession();
-    if (!session?.user?.email) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const userId = await getOrCreateCurrentUserId();
 
     const body = await req.json();
     const { title, description, lookingFor, domain, active } = body;
 
     const brief = await prisma.researchBrief.findUnique({
       where: { id },
-      include: { company: true }
+      select: { companyId: true }
     });
 
     if (!brief) {
       return NextResponse.json({ error: "Project not found" }, { status: 404 });
     }
 
-    // Check ownership (only the person who posted it or an admin can edit)
-    if (brief.company.email !== session.user.email) {
+    // Check ownership (only the person who posted it can edit)
+    if (brief.companyId !== userId) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
@@ -54,21 +51,18 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const { data: session } = await neonAuth.getSession();
-    if (!session?.user?.email) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const userId = await getOrCreateCurrentUserId();
 
     const brief = await prisma.researchBrief.findUnique({
       where: { id },
-      include: { company: true }
+      select: { companyId: true }
     });
 
     if (!brief) {
       return NextResponse.json({ error: "Project not found" }, { status: 404 });
     }
 
-    if (brief.company.email !== session.user.email) {
+    if (brief.companyId !== userId) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 

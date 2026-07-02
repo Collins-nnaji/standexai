@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { neonAuth } from "@/lib/neon/auth-server";
 import { ensurePrismaConnected, prismaDb, withPrismaReconnect } from "@/lib/prisma";
 import { getOrCreateCurrentUserId } from "@/lib/server/current-user";
 
@@ -17,16 +16,7 @@ function clampName(raw: string): string {
 export async function GET() {
   try {
     await ensurePrismaConnected();
-    const { data: session } = await neonAuth.getSession();
-    const email = session?.user?.email?.trim().toLowerCase();
-    if (!email) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const userId = await getOrCreateCurrentUserId({
-      userEmailHeader: email,
-      userNameHeader: session?.user?.name ?? undefined,
-    });
+    const userId = await getOrCreateCurrentUserId();
 
     const rows = await withPrismaReconnect(() =>
       prismaDb.transformPersona.findMany({
@@ -48,16 +38,7 @@ type PostBody = { name?: string; instructions?: string };
 export async function POST(req: Request) {
   try {
     await ensurePrismaConnected();
-    const { data: session } = await neonAuth.getSession();
-    const email = session?.user?.email?.trim().toLowerCase();
-    if (!email) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const userId = await getOrCreateCurrentUserId({
-      userEmailHeader: email,
-      userNameHeader: session?.user?.name ?? undefined,
-    });
+    const userId = await getOrCreateCurrentUserId();
 
     const body = (await req.json()) as PostBody;
     const name = clampName(body.name ?? "");

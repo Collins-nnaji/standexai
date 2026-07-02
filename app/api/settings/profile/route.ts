@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { neonAuth } from "@/lib/neon/auth-server";
 import { ensurePrismaConnected, prisma, withPrismaReconnect } from "@/lib/prisma";
 import { getOrCreateCurrentUserId } from "@/lib/server/current-user";
 
@@ -27,31 +26,14 @@ function isRoleValue(value: string): value is RoleValue {
   return ROLE_VALUES.includes(value as RoleValue);
 }
 
-async function requireAuthedUser() {
-  const { data: session } = await neonAuth.getSession();
-  const authUser = session?.user;
-  const email = authUser?.email?.trim().toLowerCase();
-  if (!email) return null;
-
-  const userId = await getOrCreateCurrentUserId({
-    userEmailHeader: email,
-    userNameHeader: authUser?.name ?? undefined,
-  });
-
-  return { userId, authName: authUser?.name ?? null };
-}
-
 export async function GET() {
   try {
     await ensurePrismaConnected();
-    const authed = await requireAuthedUser();
-    if (!authed) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const userId = await getOrCreateCurrentUserId();
 
     const user = await withPrismaReconnect(() =>
       prisma.user.findUnique({
-        where: { id: authed.userId },
+        where: { id: userId },
         select: {
           id: true,
           email: true,
@@ -72,7 +54,7 @@ export async function GET() {
       profile: {
         id: user.id,
         email: user.email,
-        name: user.name ?? authed.authName ?? "",
+        name: user.name ?? "",
         role: user.role,
         industry: user.industry,
         companyName: user.companyName ?? "",
@@ -88,10 +70,7 @@ export async function GET() {
 export async function PATCH(req: Request) {
   try {
     await ensurePrismaConnected();
-    const authed = await requireAuthedUser();
-    if (!authed) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const userId = await getOrCreateCurrentUserId();
 
     const body = (await req.json()) as UpdatePayload;
 
@@ -113,7 +92,7 @@ export async function PATCH(req: Request) {
 
     const updated = await withPrismaReconnect(() =>
       prisma.user.update({
-        where: { id: authed.userId },
+        where: { id: userId },
         data: {
           name: name || null,
           companyName: companyName || null,

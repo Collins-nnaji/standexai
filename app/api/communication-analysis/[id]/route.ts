@@ -1,6 +1,5 @@
 import { Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
-import { neonAuth } from "@/lib/neon/auth-server";
 import { ensurePrismaConnected, prismaDb, withPrismaReconnect } from "@/lib/prisma";
 import { getOrCreateCurrentUserId } from "@/lib/server/current-user";
 
@@ -36,16 +35,7 @@ function isMissingContentTextColumn(error: unknown): boolean {
 export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> }) {
   try {
     await ensurePrismaConnected();
-    const { data: session } = await neonAuth.getSession();
-    const email = session?.user?.email?.trim().toLowerCase();
-    if (!email) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const userId = await getOrCreateCurrentUserId({
-      userEmailHeader: email,
-      userNameHeader: session?.user?.name ?? undefined,
-    });
+    const userId = await getOrCreateCurrentUserId();
 
     const { id } = await ctx.params;
     if (!id?.trim()) {

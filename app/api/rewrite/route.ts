@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { neonAuth } from "@/lib/neon/auth-server";
 import { isLlmConfigured, llmMissingConfigMessage } from "@/lib/llm-client";
 import {
   runRewriteLlm,
@@ -44,15 +43,7 @@ export async function POST(req: Request) {
     const personaId = body.personaId?.trim();
     if (personaId) {
       await ensurePrismaConnected();
-      const { data: session } = await neonAuth.getSession();
-      const email = session?.user?.email?.trim().toLowerCase();
-      if (!email) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-      }
-      const userId = await getOrCreateCurrentUserId({
-        userEmailHeader: email,
-        userNameHeader: session?.user?.name ?? undefined,
-      });
+      const userId = await getOrCreateCurrentUserId();
       const persona = await withPrismaReconnect(() =>
         prismaDb.transformPersona.findFirst({
           where: { id: personaId, userId },

@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { User, Sparkles, Briefcase, ChevronRight, UserPlus, Share2, ExternalLink, ShieldCheck } from "lucide-react";
 import { RankBadge } from "./RankBadge";
-import { neonAuthClient } from "@/lib/neon/auth-client";
 import { useState } from "react";
 import { InviteToCollabModal } from "./InviteToCollabModal";
 import { Avatar, Badge, Button, ButtonGroup, Separator } from "@heroui/react";
@@ -43,10 +42,9 @@ export function TalentCard({
   isScoutView = false,
 }: TalentCardProps) {
   const router = useRouter();
-  const { data: session } = neonAuthClient.useSession();
   const [isInviteOpen, setIsInviteOpen] = useState(false);
-  const isSelf = session?.user?.email && session.user.email === id ? true : false;
-  const canInvite = session?.user;
+  const isSelf = false;
+  const canInvite = true;
 
   return (
     <>

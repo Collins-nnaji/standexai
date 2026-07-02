@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { neonAuth } from "@/lib/neon/auth-server";
 import { isLlmConfigured, llmMissingConfigMessage } from "@/lib/llm-client";
 import { runGeneratePersonaFromDescription } from "@/lib/communication-llm";
 
@@ -9,12 +8,6 @@ type Body = { description?: string };
 
 export async function POST(req: Request) {
   try {
-    const { data: session } = await neonAuth.getSession();
-    const email = session?.user?.email?.trim().toLowerCase();
-    if (!email) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
     const body = (await req.json()) as Body;
     const description = body.description?.trim() ?? "";
     if (description.length < 8) {
