@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import {
   getAzureAudioSpeechUrl,
   azureSpeechTranscriptionHeaders,
+  getTtsDeploymentName,
   ttsMissingConfigMessage,
 } from "@/lib/llm-client";
 
@@ -24,9 +25,9 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Text is required" }, { status: 400 });
     }
 
-    // Azure OpenAI TTS request body
+    // Azure OpenAI TTS request body — model must match the deployed TTS model name.
     const body = {
-      model: "tts-1",
+      model: getTtsDeploymentName(),
       voice,
       input: text,
     };

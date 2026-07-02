@@ -25,8 +25,19 @@ function trimEnv(value: string | undefined): string | undefined {
   return v || undefined;
 }
 
+/**
+ * Azure portals sometimes surface the endpoint as the new unified `/openai/v1` base
+ * (e.g. `https://res.openai.azure.com/openai/v1`) instead of the bare resource host.
+ * Strip that suffix so the per-deployment URLs built below don't end up doubled
+ * (`.../openai/v1/openai/deployments/...`).
+ */
+function normalizeAzureBase(raw: string): string {
+  return raw.replace(/\/$/, "").replace(/\/openai\/v1$/i, "").replace(/\/openai$/i, "");
+}
+
 function azureEndpoint(): string | undefined {
-  return trimEnv(process.env.AZURE_OPENAI_ENDPOINT)?.replace(/\/$/, "");
+  const v = trimEnv(process.env.AZURE_OPENAI_ENDPOINT);
+  return v ? normalizeAzureBase(v) : undefined;
 }
 
 function azureApiKey(): string | undefined {
@@ -64,8 +75,8 @@ function hasDedicatedSpeechResource(): boolean {
 
 /** Base URL for audio transcriptions: dedicated speech resource, else same as chat. */
 function transcriptionEndpoint(): string | undefined {
-  const dedicated = trimEnv(process.env.AZURE_OPENAI_SPEECH_ENDPOINT)?.replace(/\/$/, "");
-  if (dedicated) return dedicated;
+  const dedicated = trimEnv(process.env.AZURE_OPENAI_SPEECH_ENDPOINT);
+  if (dedicated) return normalizeAzureBase(dedicated);
   return azureEndpoint();
 }
 

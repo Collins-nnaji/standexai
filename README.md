@@ -123,11 +123,17 @@ npm install
 Create `.env` file:
 ```env
 DATABASE_URL="postgresql://..."
+# Bare resource host only — do NOT include /openai or /openai/v1
 AZURE_OPENAI_ENDPOINT="https://YOUR_RESOURCE.openai.azure.com"
 AZURE_OPENAI_API_KEY="..."
 AZURE_OPENAI_DEPLOYMENT_TEXT="your-chat-deployment"
 # Optional: Whisper / speech transcription (separate deployment)
-# AZURE_OPENAI_DEPLOYMENT_AUDIO="your-whisper-deployment"
+# AZURE_OPENAI_DEPLOYMENT_SPEECH="your-whisper-deployment"
+# Optional: text-to-speech deployment (defaults to "tts-1" if unset)
+# AZURE_OPENAI_DEPLOYMENT_TTS="your-tts-deployment"
+# Optional: separate voice resource for speech/TTS (both required together)
+# AZURE_OPENAI_SPEECH_ENDPOINT="https://YOUR_VOICE_RESOURCE.openai.azure.com"
+# AZURE_OPENAI_SPEECH_API_KEY="..."
 # AZURE_OPENAI_API_VERSION="2024-08-01-preview"
 NEXTAUTH_SECRET="your-secret"  # For auth (optional)
 ```
