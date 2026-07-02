@@ -31,16 +31,6 @@ const nextConfig: NextConfig = {
         destination: '/cognitive-audit',
         permanent: true,
       },
-      {
-        source: '/console',
-        destination: '/',
-        permanent: false,
-      },
-      {
-        source: '/console/:path*',
-        destination: '/',
-        permanent: false,
-      },
     ];
   },
 };
