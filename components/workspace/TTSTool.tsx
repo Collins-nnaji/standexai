@@ -1,15 +1,12 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { Play, Download, Loader2, Volume2, X, VolumeX } from "lucide-react";
+import { Play, Download, Loader2, Volume2, X, VolumeX, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { type ConsoleThemeMode, CONSOLE_THEMES } from "@/components/console/console-theme";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 interface TTSToolProps {
   text: string;
@@ -18,12 +15,12 @@ interface TTSToolProps {
 }
 
 const VOICES = [
-  { id: "alloy", label: "Alloy", desc: "Neutral and balanced" },
-  { id: "echo", label: "Echo", desc: "Confidence and warmth" },
-  { id: "fable", label: "Fable", desc: "British, narrative" },
-  { id: "onyx", label: "Onyx", desc: "Deep and authoritative" },
-  { id: "nova", label: "Nova", desc: "Energetic and professional" },
-  { id: "shimmer", label: "Shimmer", desc: "Clear and expressive" },
+  { id: "alloy", label: "Alloy", desc: "Neutral & balanced", accent: "#6366f1" },
+  { id: "echo", label: "Echo", desc: "Confident, warm", accent: "#0ea5e9" },
+  { id: "fable", label: "Fable", desc: "British, narrative", accent: "#8b5cf6" },
+  { id: "onyx", label: "Onyx", desc: "Deep, authoritative", accent: "#334155" },
+  { id: "nova", label: "Nova", desc: "Energetic, pro", accent: "#ec4899" },
+  { id: "shimmer", label: "Shimmer", desc: "Clear, expressive", accent: "#14b8a6" },
 ];
 
 export function TTSTool({ text, themeMode, onClose }: TTSToolProps) {
@@ -77,67 +74,84 @@ export function TTSTool({ text, themeMode, onClose }: TTSToolProps) {
     document.body.removeChild(a);
   };
 
+  const isLight = themeMode === "light";
+
   return (
-    <Card
+    <div
       className={cn(
-        "animate-in fade-in slide-in-from-bottom-2 border shadow-xl",
-        t.borderSub,
-        t.s2,
+        "flex max-h-[85vh] flex-col overflow-hidden rounded-2xl border shadow-2xl",
+        isLight ? "border-zinc-200 bg-white" : "border-white/10 bg-[#1f1f1f]",
       )}
     >
-      <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
-        <div className="flex items-start gap-3">
-          <div
-            className={cn(
-              "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[var(--brand-teal)]/[0.12] text-[var(--brand-teal)]",
-            )}
-          >
+      {/* Header */}
+      <div className={cn("flex shrink-0 items-center justify-between gap-3 border-b px-5 py-4", isLight ? "border-zinc-100" : "border-white/[0.08]")}>
+        <div className="flex items-center gap-3">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[var(--brand-teal)]/[0.14] text-[var(--brand-teal)]">
             <Volume2 className="h-4 w-4" />
-          </div>
+          </span>
           <div>
-            <CardTitle className={cn("text-base font-semibold", t.text)}>Speech</CardTitle>
-            <CardDescription className={cn("text-xs", t.muted2)}>Turn your draft into MP3 audio</CardDescription>
+            <h2 className={cn("text-[15px] font-semibold leading-tight", t.text)}>Text to speech</h2>
+            <p className={cn("text-xs", t.muted2)}>Pick a voice and generate MP3 audio</p>
           </div>
         </div>
-        <Button type="button" variant="ghost" size="icon" className={cn("h-8 w-8 shrink-0", t.muted)} onClick={onClose}>
+        <Button type="button" variant="ghost" size="icon" className={cn("h-8 w-8 shrink-0", t.muted)} onClick={onClose} aria-label="Close">
           <X className="h-4 w-4" />
         </Button>
-      </CardHeader>
-      <CardContent className="space-y-4">
+      </div>
+
+      {/* Body */}
+      <div className="min-h-0 flex-1 space-y-4 overflow-y-auto px-5 py-4">
+        {/* Voice picker */}
         <div className="space-y-2">
-          <Label className={cn("text-xs font-medium", t.muted2)}>Voice</Label>
-          <ToggleGroup
-            type="single"
-            value={voice}
-            onValueChange={(v) => {
-              if (v) setVoice(v);
-            }}
-            variant="outline"
-            size="sm"
-            className={cn(
-              "grid w-full grid-cols-2 gap-2 rounded-lg border p-1 sm:grid-cols-3",
-              t.borderSub,
-              themeMode === "dark" ? "bg-white/[0.02]" : "bg-zinc-50/80",
-            )}
-          >
-            {VOICES.map((v) => (
-              <ToggleGroupItem
-                key={v.id}
-                value={v.id}
-                className={cn(
-                  "h-auto min-h-[3.25rem] flex-col items-start gap-0.5 border-0 px-2 py-2 text-left shadow-none data-[state=on]:bg-[var(--brand-teal)]/10 data-[state=on]:text-[var(--brand-teal)]",
-                  t.text,
-                )}
-              >
-                <span className="text-[11px] font-semibold">{v.label}</span>
-                <span className={cn("text-[9px] font-normal leading-tight opacity-80", t.muted2)}>{v.desc}</span>
-              </ToggleGroupItem>
-            ))}
-          </ToggleGroup>
+          <Label className={cn("text-[10px] font-bold uppercase tracking-wider", t.muted2)}>Voice</Label>
+          <div role="radiogroup" aria-label="Voice" className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">
+            {VOICES.map((v) => {
+              const active = voice === v.id;
+              return (
+                <button
+                  key={v.id}
+                  type="button"
+                  role="radio"
+                  aria-checked={active}
+                  onClick={() => setVoice(v.id)}
+                  className={cn(
+                    "group flex items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition-all",
+                    active
+                      ? "border-[var(--brand-teal)] ring-1 ring-[var(--brand-teal)]/40"
+                      : isLight
+                        ? "border-zinc-200 hover:border-zinc-300 hover:bg-zinc-50"
+                        : "border-white/[0.1] hover:border-white/20 hover:bg-white/[0.03]",
+                    active && (isLight ? "bg-[var(--brand-teal)]/[0.06]" : "bg-[var(--brand-teal)]/[0.1]"),
+                  )}
+                >
+                  <span
+                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white"
+                    style={{ backgroundColor: v.accent }}
+                    aria-hidden
+                  >
+                    {v.label[0]}
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className={cn("block text-[13px] font-semibold leading-tight", t.text)}>{v.label}</span>
+                    <span className={cn("block truncate text-[11px] leading-tight", t.muted2)}>{v.desc}</span>
+                  </span>
+                  <span
+                    className={cn(
+                      "flex h-4 w-4 shrink-0 items-center justify-center rounded-full border transition-colors",
+                      active ? "border-[var(--brand-teal)] bg-[var(--brand-teal)] text-white" : isLight ? "border-zinc-300" : "border-white/20",
+                    )}
+                  >
+                    {active ? <Check className="h-3 w-3" strokeWidth={3} /> : null}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
+        {/* Filename */}
         <div className="space-y-1.5">
-          <Label htmlFor="tts-filename" className={cn("text-xs font-medium", t.muted2)}>
+          <Label htmlFor="tts-filename" className={cn("text-[10px] font-bold uppercase tracking-wider", t.muted2)}>
             File name
           </Label>
           <div className="relative">
@@ -149,21 +163,28 @@ export function TTSTool({ text, themeMode, onClose }: TTSToolProps) {
               placeholder="speech-synthesis"
               className={cn("h-10 pr-14 text-[13px]", t.input)}
             />
-            <span className={cn("pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[11px] font-medium opacity-40", t.text)}>
+            <span className={cn("pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[11px] font-medium opacity-50", t.text)}>
               .mp3
             </span>
           </div>
         </div>
 
         {error ? (
-          <div className={cn("flex items-start gap-2 rounded-lg border border-rose-500/20 bg-rose-500/[0.06] p-2.5 text-xs", t.danger)}>
-            <VolumeX className="h-3.5 w-3.5 shrink-0 mt-0.5" />
+          <div className={cn("flex items-start gap-2 rounded-lg border border-rose-500/25 bg-rose-500/[0.07] p-2.5 text-xs", t.danger)}>
+            <VolumeX className="mt-0.5 h-3.5 w-3.5 shrink-0" />
             <span className="flex-1">{error}</span>
           </div>
         ) : null}
 
-        <Separator className={themeMode === "dark" ? "bg-white/10" : "bg-zinc-200"} />
+        {audioUrl ? (
+          <div className={cn("rounded-xl border p-2", isLight ? "border-zinc-200 bg-zinc-50" : "border-white/10 bg-white/[0.03]")}>
+            <audio ref={audioRef} src={audioUrl} className="h-9 w-full" controls autoPlay />
+          </div>
+        ) : null}
+      </div>
 
+      {/* Footer actions */}
+      <div className={cn("shrink-0 border-t px-5 py-3.5", isLight ? "border-zinc-100" : "border-white/[0.08]")}>
         {!audioUrl ? (
           <Button
             type="button"
@@ -171,41 +192,35 @@ export function TTSTool({ text, themeMode, onClose }: TTSToolProps) {
             onClick={() => void generateTTS()}
             disabled={loading || !text.trim()}
           >
-            {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Play className="h-3.5 w-3.5" />}
-            {loading ? "Synthesizing…" : "Generate audio"}
+            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Play className="h-4 w-4" />}
+            {loading ? "Synthesizing…" : !text.trim() ? "Add text first" : "Generate audio"}
           </Button>
         ) : (
-          <div className="space-y-3">
-            <div className={cn("rounded-lg border p-2", t.borderSub, t.s1)}>
-              <audio ref={audioRef} src={audioUrl} className="h-8 w-full" controls autoPlay />
-            </div>
-            <div className="flex gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                className={cn("flex-1 gap-2 shadow-none", t.borderSub, t.text)}
-                onClick={() => void generateTTS()}
-                disabled={loading}
-              >
-                {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Volume2 className="h-3.5 w-3.5" />}
-                Regenerate
-              </Button>
-              <Button
-                type="button"
-                className="flex-1 gap-2 border-0 bg-[var(--brand-teal)] text-[#0C0C0B] shadow-none hover:brightness-105"
-                onClick={downloadAudio}
-              >
-                <Download className="h-3.5 w-3.5" />
-                Download
-              </Button>
-            </div>
+          <div className="flex gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              className={cn("flex-1 gap-2 shadow-none", t.borderSub, t.text)}
+              onClick={() => void generateTTS()}
+              disabled={loading}
+            >
+              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Volume2 className="h-4 w-4" />}
+              Regenerate
+            </Button>
+            <Button
+              type="button"
+              className="flex-1 gap-2 border-0 bg-[var(--brand-teal)] text-[#0C0C0B] shadow-none hover:brightness-105"
+              onClick={downloadAudio}
+            >
+              <Download className="h-4 w-4" />
+              Download
+            </Button>
           </div>
         )}
-
-        <p className={cn("text-center text-[10px] leading-relaxed", t.muted2)}>
-          OpenAI <code className={cn("rounded px-1", t.s2)}>tts-1</code> via Azure. Audio is not stored on the server.
+        <p className={cn("mt-2.5 text-center text-[10px] leading-relaxed", t.muted2)}>
+          Audio is generated on demand and not stored on the server.
         </p>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

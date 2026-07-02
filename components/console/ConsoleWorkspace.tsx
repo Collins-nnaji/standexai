@@ -1,14 +1,12 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
 import {
   Moon,
   Sun,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { WritingLabCore } from "@/components/workspace/WritingLabCore";
+import { ConsoleStudio } from "@/components/console/ConsoleStudio";
 import {
   CONSOLE_THEMES,
   THEME_STORAGE_KEY,
@@ -22,8 +20,6 @@ import { Button } from "@/components/ui/button";
  * Removed: History sidebar, profile buttons, fetch/save logic.
  */
 export function ConsoleWorkspace() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
   const [themeMode, setThemeMode] = useState<ConsoleThemeMode>("light");
 
   const t = CONSOLE_THEMES[themeMode];
@@ -38,15 +34,6 @@ export function ConsoleWorkspace() {
     localStorage.setItem(THEME_STORAGE_KEY, m);
   };
 
-  /** Voice coach removed — normalize legacy tabs to Lab. */
-  useEffect(() => {
-    if (searchParams.get("tab") === "voice" || searchParams.get("voice") === "1" || searchParams.get("tab") === "gen") {
-      const q = new URLSearchParams(searchParams.toString());
-      q.delete("voice");
-      q.set("tab", "lab");
-      router.replace(`/console?${q.toString()}`, { scroll: false });
-    }
-  }, [searchParams, router]);
 
   return (
     <div
@@ -89,11 +76,7 @@ export function ConsoleWorkspace() {
       <div className="relative z-[1] flex min-h-0 min-w-0 flex-1 justify-center">
         <div className={cn("relative min-h-0 min-w-0 flex-1 max-w-7xl", t.workspaceSurface)}>
           <div className="flex h-full min-h-0 flex-col">
-            <WritingLabCore
-              themeMode={themeMode}
-              historySnapshot={null}
-              historySelectionId={null}
-            />
+            <ConsoleStudio themeMode={themeMode} />
           </div>
         </div>
       </div>

@@ -58,7 +58,10 @@ export async function POST(req: Request) {
       },
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "TTS failed";
-    return NextResponse.json({ error: message }, { status: 500 });
+    const err = error as Error & { cause?: { message?: string; code?: string; errno?: number } };
+    const message = err?.message ?? "TTS failed";
+    const cause = err?.cause ? (err.cause.message ?? err.cause.code ?? String(err.cause)) : null;
+    console.error("TTS route error:", message, "| cause:", cause, "| url:", getAzureAudioSpeechUrl());
+    return NextResponse.json({ error: message, cause }, { status: 500 });
   }
 }
