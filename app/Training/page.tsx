@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import Script from "next/script";
 import { TopNav } from "@/components/network/TopNav";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -540,6 +541,9 @@ export default function TrainingPage() {
 
   return (
     <div className="min-h-screen bg-[#FDFDFF] selection:bg-[#7C5CFC]/15 font-sans pb-24 overflow-x-hidden">
+      <Script id="training-page-conversion" strategy="afterInteractive">
+        {`gtag('event', 'conversion', {'send_to': 'AW-17962581203/ZfLnCM-w_vobENP5nPVC'});`}
+      </Script>
       <TopNav forceDark />
 
       {/* ── PREMIUM BACKGROUND ARCHITECTURE ── */}
