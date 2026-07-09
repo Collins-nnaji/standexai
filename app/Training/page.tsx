@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Script from "next/script";
 import { TopNav } from "@/components/network/TopNav";
+import ContactEnquiryForm from "@/components/standex-ai/Contact/ContactEnquiryForm";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowRight, Sparkles, Rocket,
@@ -870,6 +871,25 @@ export default function TrainingPage() {
                    </div>
                 </div>
              </div>
+          </section>
+
+          {/* TRAINING ENQUIRY SECTION */}
+          <section className="mt-4 mb-20 rounded-[40px] bg-zinc-950 px-6 py-16 sm:px-12 lg:px-16">
+            <div className="max-w-2xl mx-auto">
+              <div className="text-center mb-10">
+                <div className="inline-flex items-center gap-2 rounded-full border border-violet-400/20 bg-violet-500/10 px-3 py-1 mb-4">
+                  <GraduationCap className="h-3.5 w-3.5 text-violet-400" />
+                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-violet-400">Cohort Enquiry</span>
+                </div>
+                <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-white mb-3">Have questions about this track?</h2>
+                <p className="text-zinc-400 font-medium">Tell us what you&apos;re looking to build and we&apos;ll get back to you shortly.</p>
+              </div>
+              <ContactEnquiryForm
+                defaultEnquiryType="Training & Academy"
+                eyebrow="Training Enquiry"
+                heading="Reserve your seat or ask a question."
+              />
+            </div>
           </section>
 
         </div>
