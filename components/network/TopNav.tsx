@@ -152,47 +152,62 @@ export function TopNav({ forceDark }: TopNavProps) {
         <nav className="hidden items-center gap-1 md:flex">
           {/* Solutions Dropdown */}
           <div className="relative group">
-            <button className="flex items-center gap-1 rounded-xl px-4 py-2 text-sm font-bold text-white hover:bg-zinc-800 transition-all duration-300 border border-zinc-800/50 hover:border-[#7C5CFC]/30">
+            <button
+              className={cn(
+                "flex items-center gap-1 rounded-xl px-4 py-2 text-sm font-bold transition-all duration-300 border",
+                pathname.startsWith("/solutions")
+                  ? "bg-white/10 text-white border-[#7C5CFC]/50"
+                  : "text-white border-zinc-800/50 hover:bg-zinc-800 hover:border-[#7C5CFC]/30"
+              )}
+            >
               Solutions
+              {pathname.startsWith("/solutions") && (
+                <span className="h-1.5 w-1.5 rounded-full bg-[#7C5CFC]" />
+              )}
               <ChevronDown className="h-3.5 w-3.5 opacity-50 transition-transform group-hover:rotate-180" />
             </button>
             <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
               <div className="w-[280px] rounded-3xl border border-zinc-800 bg-zinc-900 p-3 shadow-[0_20px_80px_-15px_rgba(0,0,0,0.5)] flex flex-col gap-0.5">
-                <Link href="/solutions/artificial-intelligence" className="flex flex-col rounded-2xl px-4 py-3 transition-all hover:bg-zinc-800/60">
-                  <span className="text-sm font-bold text-white tracking-tight">Artificial Intelligence</span>
-                </Link>
-                <Link href="/solutions/power-apps" className="flex flex-col rounded-2xl px-4 py-3 transition-all hover:bg-zinc-800/60">
-                  <span className="text-sm font-bold text-white tracking-tight">Power Apps</span>
-                </Link>
-                <Link href="/solutions/power-automate" className="flex flex-col rounded-2xl px-4 py-3 transition-all hover:bg-zinc-800/60">
-                  <span className="text-sm font-bold text-white tracking-tight">Power Automate</span>
-                </Link>
-                <Link href="/solutions/power-bi" className="flex flex-col rounded-2xl px-4 py-3 transition-all hover:bg-zinc-800/60">
-                  <span className="text-sm font-bold text-white tracking-tight">Power BI</span>
-                </Link>
-                <Link href="/solutions/power-platform" className="flex flex-col rounded-2xl px-4 py-3 transition-all hover:bg-zinc-800/60">
-                  <span className="text-sm font-bold text-white tracking-tight">Power Platform Governance</span>
-                </Link>
-                <Link href="/solutions/data-readiness" className="flex flex-col rounded-2xl px-4 py-3 transition-all hover:bg-zinc-800/60">
-                  <span className="text-sm font-bold text-white tracking-tight">Data Engineering & Analytics</span>
-                </Link>
+                {solutionLinks.map((item) => {
+                  const isActive = isActivePath(item.href);
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={cn(
+                        "flex items-center justify-between rounded-2xl px-4 py-3 transition-all",
+                        isActive ? "bg-zinc-800/80" : "hover:bg-zinc-800/60"
+                      )}
+                    >
+                      <span className="text-sm font-bold text-white tracking-tight">{item.label}</span>
+                      {isActive && <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: item.accent }} />}
+                    </Link>
+                  );
+                })}
               </div>
             </div>
           </div>
 
           {/* Standalone Links */}
-          <Link 
-            href="/Training" 
-            className="rounded-xl px-4 py-2 text-sm font-bold text-white hover:bg-white/10 transition-all border border-transparent hover:border-white/20"
-            style={{ color: '#FFFFFF' }}
+          <Link
+            href="/Training"
+            className={cn(
+              "rounded-xl px-4 py-2 text-sm font-bold text-white transition-all border",
+              isActivePath("/Training")
+                ? "bg-white/10 border-white/30"
+                : "border-transparent hover:bg-white/10 hover:border-white/20"
+            )}
           >
             Training
           </Link>
 
-          
+
           <Link
             href="/Contact"
-            className="ml-2 inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-6 py-2.5 text-sm font-bold text-white shadow-lg shadow-emerald-500/20 transition-all hover:bg-emerald-600 active:scale-95"
+            className={cn(
+              "ml-2 inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-6 py-2.5 text-sm font-bold text-white shadow-lg shadow-emerald-500/20 transition-all hover:bg-emerald-600 active:scale-95",
+              isActivePath("/Contact") && "ring-2 ring-emerald-300 ring-offset-2 ring-offset-zinc-950"
+            )}
           >
             Contact
           </Link>
