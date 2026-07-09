@@ -771,6 +771,19 @@ export default function TrainingPage() {
                 </div>
               </motion.div>
 
+              {/* ENQUIRE BUTTON — scrolls to enquiry form below */}
+              <button
+                type="button"
+                onClick={() =>
+                  document.getElementById("training-enquiry")?.scrollIntoView({ behavior: "smooth", block: "start" })
+                }
+                className="w-full inline-flex items-center justify-center gap-3 rounded-2xl border-2 px-8 py-4 text-[12px] font-bold uppercase tracking-[0.2em] transition-all hover:opacity-70 active:scale-95"
+                style={{ borderColor: cfg.color, color: cfg.color }}
+              >
+                Enquire Now
+                <ArrowRight className="h-4 w-4" />
+              </button>
+
               {/* Graduate Trust Segment */}
               <div className="px-10 py-6 bg-zinc-50/50 rounded-[32px] border border-zinc-100 flex flex-col gap-4">
                  <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">
@@ -874,7 +887,10 @@ export default function TrainingPage() {
           </section>
 
           {/* TRAINING ENQUIRY SECTION */}
-          <section className="mt-4 mb-20 rounded-[40px] bg-zinc-950 px-6 py-16 sm:px-12 lg:px-16">
+          <section
+            id="training-enquiry"
+            className="mt-4 mb-20 scroll-mt-24 rounded-[40px] bg-zinc-950 px-6 py-16 sm:px-12 lg:px-16"
+          >
             <div className="max-w-2xl mx-auto">
               <div className="text-center mb-10">
                 <div className="inline-flex items-center gap-2 rounded-full border border-violet-400/20 bg-violet-500/10 px-3 py-1 mb-4">
